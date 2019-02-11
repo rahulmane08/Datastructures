@@ -3,8 +3,7 @@ package tree;
 import tree.TreeUtils.Traversals;
 
 public class Test {
-	public static void main(String[] args) 
-	{
+    public static void main(String[] args) {
 		/*BinarySearchTree bst = new BinarySearchTree();
 		bst.insert(bst.root, 10);
 		System.out.println(bst.root);
@@ -111,18 +110,18 @@ public class Test {
 		TreeUtils.fillNextSiblings(bt.root);
 		TreeUtils.Traversals.levelOrderTraversal(bt.root);
 		TreeUtils.printVerticalSum(bt.root);*/
-		
-		BinaryTree bt = new BinaryTree();
-		bt.insert(50);		
-		bt.insert(8);
-		bt.insert(2);
-		bt.insert(3);
-		bt.insert(5);
-		bt.insert(1);
-		bt.insert(30);
 
-		TreeUtils.convertToSumTree(bt.root);
-		Traversals.levelOrderTraversal(bt.root);
-		
-	}
+        BinaryTree bt = new BinaryTree();
+        bt.insert(50);
+        bt.insert(8);
+        bt.insert(2);
+        bt.insert(3);
+        bt.insert(5);
+        bt.insert(1);
+        bt.insert(30);
+
+        TreeUtils.convertToSumTree(bt.root);
+        Traversals.levelOrderTraversal(bt.root);
+
+    }
 }

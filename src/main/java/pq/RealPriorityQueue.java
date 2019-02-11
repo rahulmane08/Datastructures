@@ -1,10 +1,10 @@
 package pq;
 
-public class RealPriorityQueue<T extends Comparable<T>>  {
+public class RealPriorityQueue<T extends Comparable<T>> {
 
-	
-	public RealPriorityQueue(int capacity, boolean maxHeap) {
-		
-	}
+
+    public RealPriorityQueue(int capacity, boolean maxHeap) {
+
+    }
 
 }

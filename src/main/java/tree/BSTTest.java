@@ -1,11 +1,11 @@
 package tree;
 
 public class BSTTest {
-	public static void main(String[] args) {
-		BinarySearchTree bst = createbst();
-		Node root = bst.root;
+    public static void main(String[] args) {
+        BinarySearchTree bst = createbst();
+        Node root = bst.root;
 //		TreeUtils.MorrisTraversals.inOrderTraversal(root);
-		TreeUtils.MorrisTraversals.preOrderTraversal(root);
+        TreeUtils.MorrisTraversals.preOrderTraversal(root);
 		/*bst.delete(20);
 		TreeUtils.Traversals.inOrderIterative(root);
 		
@@ -83,19 +83,19 @@ public class BSTTest {
 		bstX.insert(bstX.root,7);
 		System.out.println("All internal nodes have 1 child = "+BSTUtils.hasOneChildForEachInternalNode(bstX));
 */
-	}
+    }
 
-	private static BinarySearchTree createbst() {
-		BinarySearchTree bst = new BinarySearchTree();
-		
-		bst.insert(bst.root, 10);
-		bst.insert(bst.root, 5);		
-		bst.insert(bst.root, 3);
-		bst.insert(bst.root, 6);
-		bst.insert(bst.root, 12);
-		bst.insert(bst.root, 11);
-		bst.insert(bst.root, 13);
-		
-		return bst;
-	}
+    private static BinarySearchTree createbst() {
+        BinarySearchTree bst = new BinarySearchTree();
+
+        bst.insert(bst.root, 10);
+        bst.insert(bst.root, 5);
+        bst.insert(bst.root, 3);
+        bst.insert(bst.root, 6);
+        bst.insert(bst.root, 12);
+        bst.insert(bst.root, 11);
+        bst.insert(bst.root, 13);
+
+        return bst;
+    }
 }

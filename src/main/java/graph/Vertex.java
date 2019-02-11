@@ -3,80 +3,83 @@ package graph;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adjacency List implementation.
+ *
+ * @param <T>
+ */
 public class Vertex<T> {
     final long id;
     private T data;
     private List<Edge<T>> edges = new ArrayList<>();
     private List<Vertex<T>> adjacentVertex = new ArrayList<>();
-    private int inDegree=0;
-    private int outDegree=0;
-    
-    
-    public Vertex(long id){
+    private int inDegree = 0;
+    private int outDegree = 0;
+
+
+    public Vertex(long id) {
         this.id = id;
     }
-    
-    public void incrementInDegree()
-    {
-    	++inDegree;
+
+    public void incrementInDegree() {
+        ++inDegree;
     }
-    public void incrementOutDegree()
-    {
-    	++outDegree;
+
+    public void incrementOutDegree() {
+        ++outDegree;
     }
-    
-    public void decrementInDegree()
-    {
-    	--inDegree;
+
+    public void decrementInDegree() {
+        --inDegree;
     }
-    public void decrementOutDegree()
-    {
-    	--outDegree;
+
+    public void decrementOutDegree() {
+        --outDegree;
     }
-    
+
     public int getInDegree() {
-		return inDegree;
-	}
+        return inDegree;
+    }
 
-	public int getOutDegree() {
-		return outDegree;
-	}
+    public int getOutDegree() {
+        return outDegree;
+    }
 
-	public long getId(){
+    public long getId() {
         return id;
     }
-    
-    public void setData(T data){
-        this.data = data;
-    }
-    
-    public T getData(){
+
+    public T getData() {
         return data;
     }
-    
-    public void addAdjacentVertex(Edge<T> e, Vertex<T> v){
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public void addAdjacentVertex(Edge<T> e, Vertex<T> v) {
         edges.add(e);
         this.incrementOutDegree();
         v.incrementInDegree();
         adjacentVertex.add(v);
     }
-    
-    public String toString(){
+
+    public String toString() {
         return String.valueOf(data);
     }
-    
-    public List<Vertex<T>> getAdjacentVertexes(){
+
+    public List<Vertex<T>> getAdjacentVertexes() {
         return adjacentVertex;
     }
-    
-    public List<Edge<T>> getEdges(){
+
+    public List<Edge<T>> getEdges() {
         return edges;
     }
-    
-    public int getDegree(){
+
+    public int getDegree() {
         return edges.size();
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;

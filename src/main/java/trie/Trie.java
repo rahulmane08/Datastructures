@@ -5,25 +5,18 @@ import java.util.Map;
 
 /**
  * Date 04/25/2016
+ *
  * @author Tushar Roy
- *
+ * <p>
  * Insert/delete/search into trie data structure
- *
+ * <p>
  * ReferenceputVal
  * https://en.wikipedia.org/wiki/Trie
  */
 public class Trie {
 
-    private class TrieNode {
-        Map<Character, TrieNode> children;
-        boolean endOfWord;
-        public TrieNode() {
-            children = new HashMap<>();
-            endOfWord = false;
-        }
-    }
-
     private final TrieNode root;
+
     public Trie() {
         root = new TrieNode();
     }
@@ -52,7 +45,6 @@ public class Trie {
     public void insertRecursive(String word) {
         insertRecursive(root, word, 0);
     }
-
 
     private void insertRecursive(TrieNode current, String word, int index) {
         if (index == word.length()) {
@@ -95,6 +87,7 @@ public class Trie {
     public boolean searchRecursive(String word) {
         return searchRecursive(root, word, 0);
     }
+
     private boolean searchRecursive(TrieNode current, String word, int index) {
         if (index == word.length()) {
             //return true of current's endOfWord is true else return false.
@@ -143,5 +136,15 @@ public class Trie {
             return current.children.size() == 0;
         }
         return false;
+    }
+
+    private class TrieNode {
+        Map<Character, TrieNode> children;
+        boolean endOfWord;
+
+        public TrieNode() {
+            children = new HashMap<>();
+            endOfWord = false;
+        }
     }
 }
