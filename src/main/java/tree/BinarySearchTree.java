@@ -1,5 +1,8 @@
 package tree;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class BinarySearchTree {
     Node root;
 
@@ -33,44 +36,15 @@ public class BinarySearchTree {
         reverse(node.right);
     }
 
-    public void insert(Node node, int data) {
-
-        Node newNode = new Node(null, null, data);
-        if (root == null) {
-            root = newNode;
-            System.out.println("root node created");
+    public void insert(int data) {
+        if (this.root == null) {
+            this.root = new Node(data);
             return;
         }
-
-        if (node.data == data) {
-            System.out.println(data + " already present");
-            return;
-        }
-
-        if (data < node.data) {
-            if (node.left == null)
-                node.left = newNode;
-            else
-                insert(node.left, data);
-        }
-
-
-        if (data > node.data) {
-            if (node.right == null)
-                node.right = newNode;
-            else
-                insert(node.right, data);
-        }
-
+        insert(this.root, data);
     }
 
-
-    public Node insert1(Node node, int data) {
-        if (root == null) {
-            root = new Node(null, null, data);
-            System.out.println("root node created");
-            return root;
-        }
+    private Node insert(Node node, int data) {
         if (node == null) {
             return new Node(null, null, data);
         }
@@ -79,9 +53,9 @@ public class BinarySearchTree {
             return node;
 
         if (node.data > data)
-            node.left = insert1(node.left, data);
+            node.left = insert(node.left, data);
         else if (node.data < data)
-            node.right = insert1(node.right, data);
+            node.right = insert(node.right, data);
 
         return node;
     }
@@ -94,19 +68,56 @@ public class BinarySearchTree {
 
     }
 
-    public Node max(Node rootNode) {
-        Node node = rootNode;
-        while (node != null && node.right != null)
-            node = node.right;
-        return node;
+    public Node max() {
+        Node curr = this.root;
+        while (curr != null && curr.right != null)
+            curr = curr.right;
+        return curr;
 
     }
 
+    public Node max1() {
+        if (this.root == null) {
+            return null;
+        }
 
-    public Node search(Node node, int data) {
+        // left only tree, max is root.
+        if (this.root.right == null) {
+            return this.root;
+        }
+
+        Queue<Node> queue = new LinkedList<>();
+        Node marker = new Node(-1);
+        queue.offer(root);
+        queue.offer(marker);
+        Node max = root;
+        while (!queue.isEmpty()) {
+            Node curr = queue.poll();
+            if (curr == marker) {
+                if (!queue.isEmpty())
+                    queue.offer(marker);
+                else
+                    return max;
+            } else {
+                if (curr.left != null){
+                    queue.offer(curr.left);
+                }
+                if (curr.right != null) {
+                    queue.offer(curr.right);
+                    max = curr.right;
+                }
+            }
+        }
+        return max;
+    }
+
+    public Node search(int data) {
+        return search(this.root, data);
+    }
+
+    private Node search(Node node, int data) {
         if (node == null)
             return null;
-
         if (node.data == data)
             return node;
         else if (data < node.data)
@@ -126,7 +137,9 @@ public class BinarySearchTree {
      * @return
      */
     private Node delete(Node root, int data) {
-        if (root == null || root.data == data)
+        if (root == null)
+            return null;
+        if (root.data == data)
             return root;
         Node nodeToDelete = null;
         if (data < root.data) {
@@ -156,5 +169,4 @@ public class BinarySearchTree {
 
         return root;
     }
-
 }

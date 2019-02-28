@@ -6,6 +6,22 @@ import java.util.Stack;
 import tree.TreeUtils.OrderedArrays;
 
 public class BSTUtils {
+
+    public static Node inorderPred(Node root, int data) {
+        if (root == null)
+            return null;
+        Node node = null;
+        if (data == root.data) {
+            return max(root.left);
+        }
+        else if (data < root.data)
+            node = inorderPred(root.left, data);
+        else if (data > root.data)
+            node = inorderPred(root.right, data);
+
+        return root;
+    }
+
     public static Node lca(Node root, int elem1, int elem2) {
         if (root == null)
             return null;
@@ -560,5 +576,7 @@ public class BSTUtils {
             correctBstUtil(root.right);
 
         }
+
+
     }
 }

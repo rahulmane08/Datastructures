@@ -1,9 +1,10 @@
 package tree;
 
 import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Queue;
 
-public class BinaryTree {
+public class BinaryTree implements Cloneable{
     Node root;
 
     public BinaryTree() {
@@ -11,6 +12,11 @@ public class BinaryTree {
     }
 
 
+    /**
+     * Tree BFS and add node when either left or right is empty of current node and exit BFS.
+     *
+     * @param data
+     */
     public void insert(int data) {
         Node newNode = new Node(null, null, data);
         if (root == null) {
@@ -38,6 +44,14 @@ public class BinaryTree {
         }
     }
 
+    /**
+     * 1. deepestNode will store the current node of BFS.
+     * 2. Do BFS and locate the nodeToDelete, checking node.data == data
+     * 3. Complete BFS and deepestNode points to rightmost node of last level.
+     * 4. Copy data of deepestNode into nodeToDelete, nullify deepestNode.
+     *
+     * @param data
+     */
     public void delete(int data) {
         if (root == null)
             return;
@@ -61,4 +75,17 @@ public class BinaryTree {
         deepestNode = null;
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        BinaryTree clone = new BinaryTree();
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(this.root);
+        while(!queue.isEmpty()) {
+            Node curr = queue.poll();
+            clone.insert(curr.data);
+            if(curr.left != null) queue.offer(curr.left);
+            if(curr.right != null) queue.offer(curr.right);
+        }
+        return clone;
+    }
 }

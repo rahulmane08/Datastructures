@@ -21,6 +21,6 @@ public class Node {
 
     @Override
     public String toString() {
-        return "Node [data=" + data + ", nextSibling=" + (nextSibling != null ? nextSibling.data : null) + "]";
+        return "Node [data=" + data + "]";
     }
 }

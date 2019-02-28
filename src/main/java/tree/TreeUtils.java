@@ -5,38 +5,51 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.TreeMap;
 
 import utils.Utils;
 
 
 public class TreeUtils {
-    public static int findMax(Node root) {
-        int max = Integer.MIN_VALUE;
-        if (root != null) {
-            int curr = root.data;
-            int left = findMax(root.left);
-            int right = findMax(root.right);
 
-            if (left > right)
-                max = left;
-            else
-                max = right;
-            if (curr > max)
-                max = curr;
+    /**
+     * 1. null nodes return MIN_VALUE.
+     * 2. for the current node, find the left tree max and right tree max
+     * 3. Return max amongst curr, left max and right max.
+     *
+     * @param root
+     * @return
+     */
+    public static int findMax(Node root) {
+        if (root == null) {
+            return Integer.MIN_VALUE;
         }
+        int max = 0;
+        int curr = root.data;
+        int left = findMax(root.left);
+        int right = findMax(root.right);
+
+        if (left > right)
+            max = left;
+        else
+            max = right;
+        if (curr > max)
+            max = curr;
+
         return max;
     }
 
+    /**
+     * @param data
+     * @param root
+     * @return
+     */
     public static boolean exists(int data, Node root) {
         if (root == null)
             return false;
         if (root.data == data)
             return true;
-        boolean exists = exists(data, root.left);
-        if (exists)
-            return true;
-        else
-            return exists(data, root.right);
+        return exists(data, root.left) || exists(data, root.right);
     }
 
     public static int size(Node root) {
@@ -106,7 +119,7 @@ public class TreeUtils {
         queue.offer(root);
         while (!queue.isEmpty()) {
             Node curr = queue.poll();
-            if (isLeaf(root))
+            if (isLeaf(curr))
                 ++count;
             if (curr.left != null)
                 queue.offer(curr.left);
@@ -115,6 +128,22 @@ public class TreeUtils {
         }
 
         return count;
+    }
+
+    /**
+     * using post order, find left and right leaf nodes and add them.
+     *
+     * @param root
+     * @return
+     */
+    public static int countLeafNodesRecursively(Node root) {
+        if (root == null)
+            return 0;
+        if (isLeaf(root))
+            return 1;
+        int leftLeaves = countLeafNodesRecursively(root.left);
+        int rightLeaves = countLeafNodesRecursively(root.right);
+        return leftLeaves + rightLeaves;
     }
 
     public static boolean areTreesIdentical(Node root1, Node root2) {
@@ -164,23 +193,19 @@ public class TreeUtils {
 
     }
 
-    public static void depthOfEachNode(Node root) {
+    public static int lengthOfLongestPathOfNode(Node root) {
         if (root == null)
-            return;
+            return 0;
         int leftHeight = heightRecursive(root.left);
         int rightHeight = heightRecursive(root.right);
         int nodesInLongestPath = leftHeight + rightHeight + 1;
-        System.out.println(root + " , leftHeight=" + leftHeight + " : rightHeight=" + rightHeight + " : nodesInLongestPath=" + nodesInLongestPath);
-        depthOfEachNode(root.left);
-        depthOfEachNode(root.right);
+        return nodesInLongestPath;
     }
 
     public static int diameter(Node root) {
         if (root == null)
             return 0;
-        int leftHeight = heightRecursive(root.left);
-        int rightHeight = heightRecursive(root.right);
-        int nodesInLongestPath = leftHeight + rightHeight + 1; //total nodes in the longest path in which current node lies
+        int nodesInLongestPath = lengthOfLongestPathOfNode(root); //total nodes in the longest path in which current node lies
 
         int leftDiameter = diameter(root.left);
         int rightDiameter = diameter(root.right);
@@ -201,8 +226,7 @@ public class TreeUtils {
             return 0;
         Node marker = new Node(null, null, Integer.MIN_VALUE);
         int maxSum = 0, maxLevel = 0;
-        int level = 0;
-        int currSum = 0;
+        int currSum = 0, level = 0;
         Queue<Node> queue = new ArrayDeque<>();
         queue.offer(root);
         queue.offer(marker);
@@ -215,8 +239,8 @@ public class TreeUtils {
                 }
                 if (!queue.isEmpty())
                     queue.offer(marker); //adding marker for next level
-                ++level;
                 currSum = 0;//reset the currSum for the next level sum
+                ++level;
             } else {
                 currSum += curr.data;
                 if (curr.left != null)
@@ -240,7 +264,7 @@ public class TreeUtils {
     public static void printAllRootToLeafPaths(Node root, Stack<Integer> path) {
         if (root == null)
             return;
-        path.add(root.data);
+        path.push(root.data);
         if (isLeaf(root)) {
             System.out.println("Found a path = " + path);
         }
@@ -250,23 +274,49 @@ public class TreeUtils {
         path.pop();
     }
 
-    public static void printPathMatchingSum(Node root, Stack<Integer> path, int sum) {
-        if (root == null)
-            return;
-        path.add(root.data);
-        if (root.left == null && root.right == null) {
-            int pathSum = 0;
-            for (int i : path)
-                pathSum += i;
-            if (pathSum == sum) {
-                System.out.println("Found a path matching the sum= " + path + ", sum = " + sum);
-            }
-
+    public static boolean printFirstRootToLeafPath(Node root, Stack<Integer> path) {
+        if (root == null) {
+            return false;
         }
-
-        printPathMatchingSum(root.left, path, sum);
-        printPathMatchingSum(root.right, path, sum);
+        path.push(root.data);
+        if (isLeaf(root)) {
+            System.out.println("Found a path = " + path);
+            return true;
+        }
+        boolean found = printFirstRootToLeafPath(root.left, path);
+        if (!found) {
+            return printFirstRootToLeafPath(root.right, path);
+        }
         path.pop();
+        return found;
+    }
+
+    public static void printAllPathsMatchingSum(Node root, Stack<Integer> path, int sum) {
+        if (root == null || sum < 0)
+            return;
+        path.push(root.data);
+        sum = sum - root.data;
+        if (isLeaf(root) && sum == 0)
+            System.out.printf("Found a path: %s%n", String.valueOf(path));
+        printAllPathsMatchingSum(root.left, path, sum);
+        printAllPathsMatchingSum(root.right, path, sum);
+        path.pop();
+    }
+
+    public static boolean printFirstPathMatchingSum(Node root, Stack<Integer> path, int sum) {
+        if (root == null || sum < 0)
+            return false;
+        path.push(root.data);
+        sum = sum - root.data;
+        if (isLeaf(root) && sum == 0) {
+            System.out.printf("Found a path: %s%n", String.valueOf(path));
+            return true;
+        }
+        boolean pathFound = printFirstPathMatchingSum(root.left, path, sum);
+        if (!pathFound)
+            return printFirstPathMatchingSum(root.right, path, sum);
+        path.pop();
+        return pathFound;
     }
 
     public static int sum(Node root) {
@@ -292,8 +342,9 @@ public class TreeUtils {
         if (root == null) return null; // Base condition
 
         //if either of the two is the parent of the other, or we have traversed down to one of the two nodes
-        if (root.data == left || root.data == right)
+        if (root.data == left || root.data == right) {
             return root;
+        }
 
         //find left/right subtree lca
         Node leftLca = lca(root.left, left, right);
@@ -306,7 +357,7 @@ public class TreeUtils {
             return root;
 
         // Otherwise check if left subtree or right subtree is LCA
-        return (leftLca != null ? leftLca : rightLca);
+        return (leftLca != null) ? leftLca : rightLca;
     }
 
     /**
@@ -321,8 +372,6 @@ public class TreeUtils {
      *
      * @param inorder
      * @param preorder
-     * @param start
-     * @param end
      * @return
      */
     public static Node createTreeUsingPreAndInorderSequences(Integer[] inorder, Integer[] preorder) {
@@ -367,8 +416,8 @@ public class TreeUtils {
             return;
         if (isLeaf(root))
             System.out.println(root);
-        printAllAncestors(root.left);
-        printAllAncestors(root.right);
+        printAllLeaves(root.left);
+        printAllLeaves(root.right);
     }
 
     /**
@@ -415,11 +464,8 @@ public class TreeUtils {
     private static void computeVerticalSum(Node root, Map<Integer, Integer> levelSum, Integer level) {
         if (root == null)
             return;
-        Integer sum = levelSum.get(level);
-        if (sum == null)
-            sum = new Integer("0");
-        sum = sum + root.data;
-        levelSum.put(level, sum);
+        Integer sum = levelSum.getOrDefault(level, 0);
+        levelSum.put(level, sum + root.data);
         computeVerticalSum(root.left, levelSum, level - 1);
         computeVerticalSum(root.right, levelSum, level + 1);
     }
@@ -465,6 +511,22 @@ public class TreeUtils {
         int left = TreeUtils.sum(root.left);
         int right = TreeUtils.sum(root.right);
         return (root.data == left + right) && checkIfSumTree(root.left) && checkIfSumTree(root.right);
+    }
+
+    public static boolean checkIfSumTree1(Node root) {
+        return checkIfSumTreeUtil(root) != Integer.MIN_VALUE;
+    }
+
+    private static int checkIfSumTreeUtil(Node root) {
+        if (root == null)
+            return 0;
+        if (isLeaf(root))
+            return root.data;
+        int left = checkIfSumTreeUtil(root.left);
+        int right = checkIfSumTreeUtil(root.right);
+        if (root.data == left + right)
+            return 2 * root.data;
+        return Integer.MIN_VALUE;
     }
 
     public static boolean checkIfSubtree(Node mainRoot, Node subRoot) {
@@ -525,6 +587,13 @@ public class TreeUtils {
         }
     }
 
+    /**
+     * Every non leaf node has left and right child
+     * In other words each node can have exactly 0 or 2 children.
+     *
+     * @param root
+     * @return
+     */
     static public boolean isStrictTree(Node root) {
         if (root == null)
             return true;
@@ -539,44 +608,64 @@ public class TreeUtils {
     static public void printKthLevelNodes(Node root, int k) {
         if (root == null || k < 0)
             return;
-
+        if (k == 0) {
+            System.out.print(root.data + " ");
+            return;
+        }
         printKthLevelNodes(root.left, k - 1);
         printKthLevelNodes(root.right, k - 1);
-        if (k == 0)
-            System.out.println(root.data);
     }
 
-    public static void printBoundaryNodesAntiClockwise(Node root) {
-        if (root == null)
-            return;
-        Node temp = root;
-        Queue<Integer> boundaryNodesQ = new java.util.LinkedList<>();
-        while (!isLeaf(temp)) {
-            boundaryNodesQ.offer(temp.data);
-            temp = temp.left;
+    public static class PrintBoundaryNodesUtil {
+        private static Node rightBoundaryEnd = null;
+
+        public static void printLeftBoundaryTopDown(Node root) {
+            if (root == null)
+                return;
+
+            if (root.left != null) {
+                System.out.print(root.data + " ");
+                printLeftBoundaryTopDown(root.left);
+            } else if (root.right != null) {
+                System.out.print(root.data + " ");
+                printLeftBoundaryTopDown(root.right);
+            }
+
         }
-        Queue<Node> queue = new java.util.LinkedList<>();
-        Stack<Integer> stack = new Stack<Integer>();
-        queue.offer(root);
-        while (!queue.isEmpty()) {
-            temp = queue.poll();
-            if (isLeaf(temp))
-                stack.push(temp.data);
-            if (temp.left != null)
-                queue.offer(temp.left);
-            if (temp.right != null)
-                queue.offer(temp.right);
+
+        public static void printRightBoundaryBottomUp(Node root) {
+            if (root == null)
+                return;
+
+            if (root.right != null) {
+                printRightBoundaryBottomUp(root.right);
+                System.out.print(root.data + " ");
+            } else if (root.left != null) {
+                printRightBoundaryBottomUp(root.left);
+                System.out.print(root.data + " ");
+            }
+
         }
-        while (!stack.isEmpty())
-            boundaryNodesQ.offer(stack.pop());
-        temp = root.right;
-        while (!isLeaf(temp)) {
-            stack.push(temp.data);
-            temp = temp.right;
+
+        public static void printLeavesLeftToRight(Node root) {
+            if (root == null) {
+                return;
+            }
+
+            if (isLeaf(root))
+                System.out.print(root.data + " ");
+
+            printLeavesLeftToRight(root.left);
+            printLeavesLeftToRight(root.right);
         }
-        while (!stack.isEmpty())
-            boundaryNodesQ.offer(stack.pop());
-        System.out.println(boundaryNodesQ);
+
+        public static void printBoundaryNodes(Node root) {
+            System.out.println("=====printBoundaryNodes=====");
+            printLeftBoundaryTopDown(root);
+            printLeavesLeftToRight(root);
+            printRightBoundaryBottomUp(root);
+            System.out.println();
+        }
     }
 
     /**
@@ -714,14 +803,12 @@ public class TreeUtils {
         public static void preOrderIterative(Node root) {
             Stack<Node> stack = new Stack<>();
             Node curr = root;
-            while (true) {
+            while (curr != null || !stack.isEmpty()) {
                 if (curr != null) {
                     System.out.print(curr.data + " ");
                     stack.push(curr);
                     curr = curr.left;
                 } else {
-                    if (stack.isEmpty())
-                        break;
                     curr = stack.pop();
                     curr = curr.right;
                 }
@@ -729,34 +816,47 @@ public class TreeUtils {
             System.out.println();
         }
 
-        /**
-         * use 2 pointers
-         * a. curr to iterate over left branch till leaf
-         * b. temp node that pops and prints in post order
-         * c. pop from stack top and check if theres a right node if yes assign it to current and then add its left branch in stack
-         * d. if theres not right node, pop from stack
-         *
-         * @param root
-         */
-        static public void postOrderIterative(Node root) {
-            Node current = root;
+        public static void preOrderIterative2(Node root) {
             Stack<Node> stack = new Stack<>();
-            while (current != null || !stack.isEmpty()) {
-                if (current != null) {
-                    stack.push(current);
-                    current = current.left;
+            if (root != null)
+                stack.push(root);
+            while (!stack.isEmpty()) {
+                root = stack.pop();
+                System.out.println(root.data);
+                if (root.right != null)
+                    stack.push(root.right);
+                if (root.left != null)
+                    stack.push(root.left);
+            }
+        }
+
+
+        public static void postOrderIterative(Node root) {
+            Stack<Node> stack = new Stack<>();
+            Node curr = root;
+            System.out.println("Post Order");
+            while (curr != null || !stack.isEmpty()) {
+                if (curr != null) {
+                    stack.push(curr);
+                    curr = curr.left;
                 } else {
-                    if (stack.peek().right != null) { //check if right node is present , if yes then set current to it and then push its entire left branch into stack
-                        current = stack.peek().right;
+                    curr = stack.pop();
+                    if (curr.right != null) {
+                        // if theres a right child then dont print current node and push back to stack.
+                        // Process the right node first
+                        stack.push(curr);
                     } else {
-                        Node temp = stack.pop();
-                        System.out.print(temp.data + " ");
-                        while (!stack.isEmpty() && temp == stack.peek().right) { //if you just popped a right node also pop its parent.
-                            temp = stack.pop();
-                            System.out.print(temp.data + " ");
-                        }
+                        System.out.print(curr.data + " ");
                     }
+
+                    // if current node is right child of next node in stack, we have hit all right subtree nodes.
+                    while (stack.peek().right == curr) {
+                        curr = stack.pop();
+                        System.out.print(curr.data + " ");
+                    }
+                    curr = curr.right;
                 }
+
             }
             System.out.println();
         }
@@ -776,20 +876,6 @@ public class TreeUtils {
             }
             while (!finalStack.isEmpty())
                 System.out.println(finalStack.pop());
-        }
-
-        public static void preOrderIterative2(Node root) {
-            Stack<Node> stack = new Stack<>();
-            if (root != null)
-                stack.push(root);
-            while (!stack.isEmpty()) {
-                root = stack.pop();
-                System.out.println(root.data);
-                if (root.right != null)
-                    stack.push(root.right);
-                if (root.left != null)
-                    stack.push(root.left);
-            }
         }
 
         public static void inOrderTraversal(Node node) {
@@ -970,78 +1056,23 @@ public class TreeUtils {
             pathWithMaxSumUtils(root.right, path, maxPath);
             path.pop();
         }
+
     }
 
-    static public class TopViewUtil {
-        int minIndex = Integer.MAX_VALUE;
-        Map<Integer, Entry> levels = new HashMap<>();
-
-        public TopViewUtil() {
-            super();
-        }
-
-        public void topLevelTraversal(Node root) {
-            if (root == null)
-                return;
-            int vLevel = 0, hLevel = 0;
-            this.topLevelTraversalUtil(root, vLevel, hLevel);
-            Entry key = levels.get(minIndex);
-            do {
-                System.out.println(key.getNode());
-                key = levels.get(++minIndex);
-            }
-            while (key != null);
-        }
-
-        private void topLevelTraversalUtil(Node root, int vLevel, int hLevel) {
-            if (root == null)
-                return;
-            topLevelTraversalUtil(root.left, vLevel - 1, hLevel + 1);
-            if (minIndex > vLevel)
-                minIndex = vLevel;
-            pushToMap(vLevel, hLevel, root);
-            topLevelTraversalUtil(root.right, vLevel + 1, hLevel + 1);
-        }
-
-        private void pushToMap(int vLevel, int hLevel, Node node) {
-            Entry e = levels.get(vLevel);
-            if (e == null)
-                levels.put(vLevel, new Entry(hLevel, node));
-            else {
-                if (hLevel < e.gethLevel()) {
-                    e.setNode(node);
-                    e.sethLevel(hLevel);
-                }
-            }
-        }
-
-        class Entry {
-            int hLevel;
-            Node node;
-
-            public Entry(int hLevel, Node node) {
-                super();
-                this.hLevel = hLevel;
-                this.node = node;
-            }
-
-            public int gethLevel() {
-                return hLevel;
-            }
-
-            public void sethLevel(int hLevel) {
-                this.hLevel = hLevel;
-            }
-
-            public Node getNode() {
-                return node;
-            }
-
-            public void setNode(Node node) {
-                this.node = node;
-            }
-        }
+    // Top view of a tree.
+    static public void topView(Node root) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        topViewUtil(root, 0, map);
+        System.out.println("Top Level of Tree");
+        map.values().forEach(System.out::println);
     }
 
-
+    private static void topViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
+        if (root == null)
+            return;
+        if (!map.containsKey(vLevel))
+            map.put(vLevel, root.data);
+        topViewUtil(root.left, vLevel - 1, map);
+        topViewUtil(root.right, vLevel + 1, map);
+    }
 }
