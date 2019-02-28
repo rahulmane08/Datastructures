@@ -7,21 +7,6 @@ import tree.TreeUtils.OrderedArrays;
 
 public class BSTUtils {
 
-    public static Node inorderPred(Node root, int data) {
-        if (root == null)
-            return null;
-        Node node = null;
-        if (data == root.data) {
-            return max(root.left);
-        }
-        else if (data < root.data)
-            node = inorderPred(root.left, data);
-        else if (data > root.data)
-            node = inorderPred(root.right, data);
-
-        return root;
-    }
-
     public static Node lca(Node root, int elem1, int elem2) {
         if (root == null)
             return null;
@@ -78,31 +63,20 @@ public class BSTUtils {
         return root;
     }
 
-    public static void printInorderPredecessorSuccessor(Node root, int data) {
+    public static Node maxRecursive(Node root) {
         if (root == null)
-            return;
-        Node predecessor = null, successor = null;
+            return null;
+        if (root.right == null)
+            return root;
+        return maxRecursive(root.right);
     }
 
-
-    public static void predecessorSuccessor(Node root, int data, Node predecessor, Node successor) {
+    public static Node minRecursive(Node root) {
         if (root == null)
-            return;
-        if (root.data == data) {
-            predecessor = max(root.left);
-            successor = min(root.right);
-            return;
-        }
-        if (data < root.data) {
-            successor = root;
-            predecessorSuccessor(root.left, data, predecessor, successor);
-        }
-
-        if (data > root.data) {
-            predecessor = root;
-            predecessorSuccessor(root.right, data, predecessor, successor);
-        }
-
+            return null;
+        if (root.left == null)
+            return root;
+        return minRecursive(root.left);
     }
 
     static public Node createBalancedBST(int[] sortedArr) {
@@ -205,15 +179,6 @@ public class BSTUtils {
     static public boolean hasOneChildForEachInternalNode(Node root) {
         if (root == null || TreeUtils.isLeaf(root))
             return true;
-		/*boolean yes = countDirectChildren(root)==1;
-		if(yes)
-		{
-			if(root.left!=null)
-				yes = hasOneChildForEachInternalNode(root.left);
-			if(yes && root.right!=null)
-				yes = hasOneChildForEachInternalNode(root.right);
-		}
-		return yes;*/
         return (countDirectChildren(root) == 1)
                 && (hasOneChildForEachInternalNode(root.left))
                 && (hasOneChildForEachInternalNode(root.right));
@@ -331,39 +296,6 @@ public class BSTUtils {
                 }
             }
         }
-    }
-
-    public static Node inorderSuccessor(Node root, int data) {
-        if (root == null)
-            return null;
-        Node successor = null;
-        if (data < root.data)
-            successor = inorderSuccessor(root.left, data);
-        else if (root.data < data)
-            successor = inorderSuccessor(root.right, data);
-        else
-            return min(root.right);
-
-        if (successor == null)
-            successor = root;
-
-        return successor;
-    }
-
-    public static Node inorderPredecessor(Node root, int data) {
-        if (root == null)
-            return null;
-        Node predecessor = null;
-        if (data < root.data)
-            predecessor = inorderPredecessor(root.left, data);
-        else if (root.data < data)
-            predecessor = inorderPredecessor(root.right, data);
-        else
-            return max(root.left);
-        if (predecessor == null)
-            predecessor = root;
-
-        return predecessor;
     }
 
     public BinarySearchTree merge(BinarySearchTree bst1, BinarySearchTree bst2) {
@@ -500,34 +432,41 @@ public class BSTUtils {
         }
     }
 
-    static class InorderPredecssorSuccessor {
-        private static Node predecessor, successor;
+    public static class InorderPredecssorSuccessor {
+        private final Node root;
+        private final int data;
+        private Node predecessor, successor;
 
-        private static void predecessorSuccessor(Node root, int data) {
+        public InorderPredecssorSuccessor(Node root, int value) {
+            this.root = root;
+            this.data = value;
+        }
+
+        private void predecessorSuccessor(Node root, int data) {
             if (root == null)
                 return;
-            if (root.data == data) {
-                predecessor = max(root.left);
-                successor = min(root.right);
-                return;
+            if (root.data == this.data) {
+                if (root.left != null)
+                    predecessor = max(root.left);
+                if (root.right != null)
+                    successor = min(root.right);
             }
-            if (data < root.data) {
+            else if (this.data < root.data) {
                 successor = root;
                 predecessorSuccessor(root.left, data);
             }
-
-            if (data > root.data) {
+            else {
                 predecessor = root;
                 predecessorSuccessor(root.right, data);
             }
         }
 
-        public static Node inorderPredecessor(Node root, int data) {
+        public Node inorderPredecessor() {
             predecessorSuccessor(root, data);
             return predecessor;
         }
 
-        public static Node inorderSuccessor(Node root, int data) {
+        public Node inorderSuccessor() {
             predecessorSuccessor(root, data);
             return successor;
         }

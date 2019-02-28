@@ -76,41 +76,6 @@ public class BinarySearchTree {
 
     }
 
-    public Node max1() {
-        if (this.root == null) {
-            return null;
-        }
-
-        // left only tree, max is root.
-        if (this.root.right == null) {
-            return this.root;
-        }
-
-        Queue<Node> queue = new LinkedList<>();
-        Node marker = new Node(-1);
-        queue.offer(root);
-        queue.offer(marker);
-        Node max = root;
-        while (!queue.isEmpty()) {
-            Node curr = queue.poll();
-            if (curr == marker) {
-                if (!queue.isEmpty())
-                    queue.offer(marker);
-                else
-                    return max;
-            } else {
-                if (curr.left != null){
-                    queue.offer(curr.left);
-                }
-                if (curr.right != null) {
-                    queue.offer(curr.right);
-                    max = curr.right;
-                }
-            }
-        }
-        return max;
-    }
-
     public Node search(int data) {
         return search(this.root, data);
     }
