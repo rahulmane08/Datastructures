@@ -1,8 +1,12 @@
 package tree;
 
+import static tree.BSTUtils.ceil;
+import static tree.BSTUtils.floor;
+import static tree.BSTUtils.isBST;
 import static tree.BSTUtils.lca;
 import static tree.BSTUtils.max;
 import static tree.BSTUtils.maxRecursive;
+import static tree.BSTUtils.printRange;
 
 public class BSTTest {
     public static void main(String[] args) {
@@ -10,6 +14,7 @@ public class BSTTest {
         BinarySearchTree leftBst = createLeftOnlyBst();
         BinarySearchTree rightBst = createRightOnlyBst();
         BinarySearchTree nullBst = createNullBst();
+        BinaryTree bt = createBT();
 
         System.out.println("=====MAX======");
         System.out.println("BST Max = " + max(bst.root));
@@ -44,12 +49,65 @@ public class BSTTest {
         predecssorSuccessor = new BSTUtils.InorderPredecssorSuccessor(bst.root, 11);
         System.out.printf("%d's inorder predecessor: %s, successor: %s%n ",
                 11, predecssorSuccessor.inorderPredecessor(), predecssorSuccessor.inorderSuccessor());
+
+        System.out.println("=======IS BST=========");
+        System.out.println("Is BST: " + isBST(bst.root));
+        System.out.println("Is BT BST: " + isBST(bt.root));
+
+        System.out.println("=======Print Range (10, 15)=========");
+        printRange(bst.root, 10, 15);
+        System.out.println("=======Print Range (15, 10)=========");
+        printRange(bst.root, 15, 10);
+
+        System.out.println("=======FLOOR=========");
+        System.out.println("Floor (10): " + floor(bst.root, 10));
+        System.out.println("Floor (3): " + floor(bst.root, 3));
+        System.out.println("Floor (5): " + floor(bst.root, 5));
+        System.out.println("Floor (4): " + floor(bst.root, 4));
+        System.out.println("Floor (10): " + floor(bst.root, 10));
+        System.out.println("Floor (3): " + floor(bst.root, 3));
+        System.out.println("Floor (1): " + floor(bst.root, 1));
+        System.out.println("Floor (12): " + floor(bst.root, 12));
+        System.out.println("Floor (11): " + floor(bst.root, 11));
+        System.out.println("Floor (13): " + floor(bst.root, 13));
+        System.out.println("Floor (99): " + floor(bst.root, 99));
+        System.out.println("Floor (10): " + floor(bst.root, 10));
+
+        System.out.println("=======FLOOR RIGHT BST=========");
+        System.out.println("Floor (6): " + floor(rightBst.root, 6));
+        System.out.println("Floor (8): " + floor(rightBst.root, 8));
+
+        System.out.println("=======CEIL=========");
+        System.out.println("Ceil (10): " + ceil(bst.root, 10));
+        System.out.println("Ceil (3): " + ceil(bst.root, 3));
+        System.out.println("Ceil (5): " + ceil(bst.root, 5));
+        System.out.println("Ceil (4): " + ceil(bst.root, 4));
+        System.out.println("Ceil (10): " + ceil(bst.root, 10));
+        System.out.println("Ceil (3): " + ceil(bst.root, 3));
+        System.out.println("Ceil (1): " + ceil(bst.root, 1));
+        System.out.println("Ceil (12): " + ceil(bst.root, 12));
+        System.out.println("Ceil (11): " + ceil(bst.root, 11));
+        System.out.println("Ceil (13): " + ceil(bst.root, 13));
+        System.out.println("Ceil (99): " + ceil(bst.root, 99));
+        System.out.println("Ceil (10): " + ceil(bst.root, 10));
+    }
+
+    private static BinaryTree createBT() {
+        BinaryTree bt = new BinaryTree();
+        bt.insert(1);
+        bt.insert(99);
+        bt.insert(2);
+        bt.insert(8);
+        bt.insert(9);
+        bt.insert(50);
+        bt.insert(51);
+        return bt;
     }
 
     private static BinarySearchTree createbst() {
         BinarySearchTree bst = new BinarySearchTree();
 
-        bst.insert(10);
+        bst.insert(9);
         bst.insert(5);
         bst.insert(3);
         bst.insert(6);
@@ -71,8 +129,8 @@ public class BSTTest {
     private static BinarySearchTree createRightOnlyBst() {
         BinarySearchTree bst = new BinarySearchTree();
         bst.insert(5);
-        bst.insert(6);
         bst.insert(7);
+        bst.insert(9);
         return bst;
     }
 

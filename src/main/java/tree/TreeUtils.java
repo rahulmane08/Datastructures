@@ -283,12 +283,27 @@ public class TreeUtils {
             System.out.println("Found a path = " + path);
             return true;
         }
-        boolean found = printFirstRootToLeafPath(root.left, path);
-        if (!found) {
-            return printFirstRootToLeafPath(root.right, path);
-        }
+        boolean found = printFirstRootToLeafPath(root.left, path) || printFirstRootToLeafPath(root.right, path);
         path.pop();
         return found;
+    }
+
+    public static boolean printFirstRootToLeafPath1(Node root, Stack<Integer> path) {
+        if (root == null) {
+            return false;
+        }
+
+        if (isLeaf(root)) {
+            path.push(root.data);
+            return true;
+        }
+
+        if (printFirstRootToLeafPath1(root.left, path) || printFirstRootToLeafPath1(root.left, path)) {
+            path.add(root.data);
+            return true;
+        }
+
+        return false;
     }
 
     public static void printAllPathsMatchingSum(Node root, Stack<Integer> path, int sum) {
@@ -312,9 +327,7 @@ public class TreeUtils {
             System.out.printf("Found a path: %s%n", String.valueOf(path));
             return true;
         }
-        boolean pathFound = printFirstPathMatchingSum(root.left, path, sum);
-        if (!pathFound)
-            return printFirstPathMatchingSum(root.right, path, sum);
+        boolean pathFound = printFirstPathMatchingSum(root.left, path, sum) ||  printFirstPathMatchingSum(root.right, path, sum);
         path.pop();
         return pathFound;
     }
@@ -850,7 +863,7 @@ public class TreeUtils {
                     }
 
                     // if current node is right child of next node in stack, we have hit all right subtree nodes.
-                    while (stack.peek().right == curr) {
+                    while ( !stack.isEmpty() && stack.peek().right == curr) {
                         curr = stack.pop();
                         System.out.print(curr.data + " ");
                     }

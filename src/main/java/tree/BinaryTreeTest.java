@@ -21,6 +21,7 @@ import static tree.TreeUtils.printAllPathsMatchingSum;
 import static tree.TreeUtils.printAllRootToLeafPaths;
 import static tree.TreeUtils.printFirstPathMatchingSum;
 import static tree.TreeUtils.printFirstRootToLeafPath;
+import static tree.TreeUtils.printFirstRootToLeafPath1;
 import static tree.TreeUtils.printKthLevelNodes;
 import static tree.TreeUtils.printVerticalSum;
 import static tree.TreeUtils.topView;
@@ -59,6 +60,13 @@ public class BinaryTreeTest {
         printAllRootToLeafPaths(bt.root, new Stack<>());
         System.out.println("====printFirstRootToLeafPath====");
         printFirstRootToLeafPath(bt.root, new Stack<>());
+        System.out.println("====printFirstRootToLeafPath1====");
+        Stack<Integer> s = new Stack<>();
+        printFirstRootToLeafPath1(bt.root, s);
+        while (!s.isEmpty()) {
+            System.out.print(s.pop()+" ");
+        }
+        System.out.println();
         System.out.println("====printAllPathsMatchingSum====");
         printAllPathsMatchingSum(bt.root, new Stack<>(), 61);
         System.out.println("====printFirstPathMatchingSum====");
