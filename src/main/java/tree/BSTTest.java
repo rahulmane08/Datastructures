@@ -1,12 +1,26 @@
 package tree;
 
+import static tree.BSTUtils.CorrectBST;
+import static tree.BSTUtils.TreeNodesWithSumOfGreaterNodes;
 import static tree.BSTUtils.ceil;
+import static tree.BSTUtils.checkIfPreorderIsBST;
+import static tree.BSTUtils.createBalancedBST;
 import static tree.BSTUtils.floor;
+import static tree.BSTUtils.hasOneChildrenForEachNode;
 import static tree.BSTUtils.isBST;
 import static tree.BSTUtils.lca;
 import static tree.BSTUtils.max;
 import static tree.BSTUtils.maxRecursive;
+import static tree.BSTUtils.printCommonNodes;
+import static tree.BSTUtils.printMergeBSTs;
 import static tree.BSTUtils.printRange;
+
+import java.util.Arrays;
+
+import tree.TreeUtils.DiameterOptimised;
+import tree.TreeUtils.MorrisTraversals;
+import tree.TreeUtils.OrderedArrays;
+import tree.TreeUtils.Traversals;
 
 public class BSTTest {
     public static void main(String[] args) {
@@ -55,9 +69,13 @@ public class BSTTest {
         System.out.println("Is BT BST: " + isBST(bt.root));
 
         System.out.println("=======Print Range (10, 15)=========");
-        printRange(bst.root, 10, 15);
+        printRange(bst.root, 10, 15, true);
         System.out.println("=======Print Range (15, 10)=========");
-        printRange(bst.root, 15, 10);
+        printRange(bst.root, 15, 10, true);
+        System.out.println("=======Print Range (11, 14) exclusive=========");
+        printRange(bst.root, 11, 14, false);
+        System.out.println("=======Print Range (11, 14) inclusive=========");
+        printRange(bst.root, 11, 14, true);
 
         System.out.println("=======FLOOR=========");
         System.out.println("Floor (10): " + floor(bst.root, 10));
@@ -90,6 +108,103 @@ public class BSTTest {
         System.out.println("Ceil (13): " + ceil(bst.root, 13));
         System.out.println("Ceil (99): " + ceil(bst.root, 99));
         System.out.println("Ceil (10): " + ceil(bst.root, 10));
+
+        System.out.println("=======PRINT COMMON NODES=========");
+        System.out.println("Common Nodes between bst and bst:");
+        printCommonNodes(bst.root, bst.root);
+        System.out.println("Common Nodes between bst and leftBst:");
+        printCommonNodes(bst.root, leftBst.root);
+        System.out.println("Common Nodes between bst and righttBst:");
+        printCommonNodes(rightBst.root, bst.root);
+
+        System.out.println("=======K-th smallest/ largest=========");
+        System.out.println("3rd smallest in bst: " + new BSTUtils.KthSmallest().kthSmallest(bst.root, 3));
+        System.out.println("10rd smallest in bst: " + new BSTUtils.KthSmallest().kthSmallest(bst.root, 10));
+        System.out.println("3rd largest in bst: " + new BSTUtils.KthLargest().kthLargest(bst.root, 3));
+        System.out.println("3rd largest in leftBst: " + new BSTUtils.KthLargest().kthLargest(leftBst.root, 3));
+        System.out.println("3rd smallest in leftBst: " + new BSTUtils.KthSmallest().kthSmallest(leftBst.root, 3));
+
+        System.out.println("=======Diameter=========");
+        System.out.println("diamater : " + TreeUtils.diameter(bst.root));
+        DiameterOptimised diameterOptimised = new DiameterOptimised();
+        // diameter.computeDiameter(bst.root);
+        System.out.println("diamater optimised: " + diameterOptimised.getDiameter());
+
+        BinarySearchTree bst1 = new BinarySearchTree();
+        bst1.insert(20);
+        bst1.insert(9);
+        bst1.insert(8);
+        bst1.insert(7);
+        bst1.insert(6);
+        bst1.insert(10);
+        bst1.insert(11);
+        bst1.insert(12);
+        bst1.insert(21);
+
+        diameterOptimised = new DiameterOptimised();
+        diameterOptimised.computeDiameter(bst1.root);
+        System.out.println("Ravi diamater : " + diameterOptimised.getDiameter());
+
+        System.out.println("=======Check Preordered array is BST=========");
+        int[] arr = {5, 3, 2, 4, 6};
+        System.out.printf("arr: %s, is a BST:%s%n", Arrays.toString(arr), checkIfPreorderIsBST(arr));
+
+        System.out.println("=======Balanced BST from array=========");
+        Node balancedBstRoot = createBalancedBST(new int[]{4, 3, 1, 2, 5});
+        System.out.println(Arrays.toString(OrderedArrays.getInstance().toInorderArray(balancedBstRoot)));
+
+        System.out.println("=======Only one children for each node=========");
+        System.out.println("BST = " + hasOneChildrenForEachNode(bst.root));
+        System.out.println("Left BST = " + hasOneChildrenForEachNode(leftBst.root));
+        System.out.println("Right BST = " + hasOneChildrenForEachNode(rightBst.root));
+
+        System.out.println("=======Print merged bst: left and right bst=========");
+        printMergeBSTs(leftBst.root, rightBst.root);
+        System.out.println("=======Print merged bst: right and left bst=========");
+        printMergeBSTs(rightBst.root, leftBst.root);
+        System.out.println("=======Print merged bst: left and null bst=========");
+        printMergeBSTs(leftBst.root, null);
+        System.out.println("=======Print merged bst: null and right bst=========");
+        printMergeBSTs(null, rightBst.root);
+        System.out.println("=======Print merged bst: two same bst's=========");
+        printMergeBSTs(bst.root, bst.root);
+        System.out.println("=======Print merged bst: bst and leftBst=========");
+        printMergeBSTs(bst.root, leftBst.root);
+
+        System.out.println("=======Convert to Tree with sum of higher nodes=========");
+        BinarySearchTree bst2 = new BinarySearchTree(new int[]{1, 2, 3, 4, 5});
+        new TreeNodesWithSumOfGreaterNodes().convertToTreeWithMaxNodeSum(bst2.root);
+        TreeUtils.Traversals.inOrderIterative(bst2.root);
+
+        System.out.println("=======Correct BST with two swapped nodes=========");
+        bst2 = new BinarySearchTree();
+        bst2.root = new Node(10);
+        bst2.root.right = new Node(8);
+        bst2.root.left = new Node(5);
+        bst2.root.left.left = new Node(2);
+        bst2.root.left.right = new Node(20);
+        System.out.println("Before correction");
+        Traversals.inOrderIterative(bst2.root);
+        new CorrectBST().correctBst(bst2.root);
+        System.out.println("After correction");
+        Traversals.inOrderIterative(bst2.root);
+        bst2.root.left.right = new Node(11);
+        System.out.println("Before correction");
+        Traversals.inOrderIterative(bst2.root);
+        new CorrectBST().correctBst(bst2.root);
+        System.out.println("After correction");
+        Traversals.inOrderIterative(bst2.root);
+
+        System.out.println("=======Morris traversals=========");
+        BinarySearchTree bst3 = new BinarySearchTree();
+        bst3.insert(5);
+        bst3.insert(2);
+        bst3.insert(1);
+        bst3.insert(3);
+        bst3.insert(6);
+        MorrisTraversals.inOrderTraversal(bst3.root);
+
+
     }
 
     private static BinaryTree createBT() {
@@ -120,6 +235,7 @@ public class BSTTest {
 
     private static BinarySearchTree createLeftOnlyBst() {
         BinarySearchTree bst = new BinarySearchTree();
+        // bst.insert(9);
         bst.insert(5);
         bst.insert(4);
         bst.insert(3);

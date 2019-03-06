@@ -86,11 +86,15 @@ public class BSTUtils {
         return minRecursive(root.left);
     }
 
-    static public Node createBalancedBST(int[] sortedArr) {
-        return createBalancedBST(sortedArr, 0, sortedArr.length - 1);
+    // Balanced BST
+    static public Node createBalancedBST(int[] arr) {
+        if (arr == null)
+            return null;
+        Arrays.sort(arr);
+        return createBalancedBST(arr, 0, arr.length - 1);
     }
 
-    static public Node createBalancedBST(int[] sortedArr, int left, int right) {
+    static private Node createBalancedBST(int[] sortedArr, int left, int right) {
         if (left > right)
             return null;
         int mid = (left + right) / 2;
@@ -100,6 +104,7 @@ public class BSTUtils {
         return root;
     }
 
+    // Tree to different linked lists
     static public Node convertToSortedDLL(Node root) {
         if (root == null)
             return null;
@@ -158,45 +163,35 @@ public class BSTUtils {
         }
     }
 
-    static public void printRange(Node root, int k1, int k2) {
+    static public void printRange(Node root, int k1, int k2, boolean inclusive) {
         if (root == null)
             return;
-        printRange(root.left, k1, k2);
-        if (k1 < root.data && root.data <= k2)
+        printRange(root.left, k1, k2, inclusive);
+        boolean check = inclusive ?
+                (k1 <= root.data && root.data <= k2) : (k1 < root.data && root.data < k2);
+        if (check)
             System.out.println(root.data);
-        printRange(root.right, k1, k2);
+        printRange(root.right, k1, k2, inclusive);
     }
 
-    static public int countDirectChildren(Node root) {
-        if (root == null)
-            return 0;
-        return (root.right != null ? 1 : 0) + (root.left != null ? 1 : 0);
-    }
 
-    static public boolean hasOneChildForEachInternalNode(BinarySearchTree tree) {
-        if (tree == null || tree.root == null)
-            return false;
-        Node root = tree.root;
-        if (TreeUtils.isLeaf(root))
-            return false;
-        return hasOneChildForEachInternalNode(root.left)
-                && hasOneChildForEachInternalNode(root.right);
-    }
-
-    static public boolean hasOneChildForEachInternalNode(Node root) {
+    static boolean hasOneChildrenForEachNode(Node root) {
         if (root == null || TreeUtils.isLeaf(root))
             return true;
-        return (countDirectChildren(root) == 1)
-                && (hasOneChildForEachInternalNode(root.left))
-                && (hasOneChildForEachInternalNode(root.right));
+        int count = 0;
+        if (root.left != null)
+            count++;
+        if (root.right != null)
+            count++;
+        return (count == 1) && hasOneChildrenForEachNode(root.left) && hasOneChildrenForEachNode(root.right);
     }
 
     /**
-     *            9
-     *        /     \
-     *       5       12
-     *      /  \    /  \
-     *     3    6  11   14
+     * 9
+     * /     \
+     * 5       12
+     * /  \    /  \
+     * 3    6  11   14
      * Ceil (10): 11
      * Ceil (3): 3
      * Ceil (5): 5
@@ -209,6 +204,7 @@ public class BSTUtils {
      * Ceil (13): 13
      * Ceil (99): 2147483647
      * Ceil (10): 11
+     *
      * @param root
      * @param data
      * @return
@@ -220,7 +216,7 @@ public class BSTUtils {
             return data;
         int ceil = -1;
         if (root.data < data)
-            ceil= ceil(root.right, data);
+            ceil = ceil(root.right, data);
         else
             ceil = ceil(root.left, data);
 
@@ -231,11 +227,11 @@ public class BSTUtils {
     }
 
     /**
-     *            9
-     *        /     \
-     *       5       12
-     *      /  \    /  \
-     *     3    6  11   14
+     * 9
+     * /     \
+     * 5       12
+     * /  \    /  \
+     * 3    6  11   14
      * Floor (10): 9
      * Floor (3): 3
      * Floor (5): 5
@@ -248,6 +244,7 @@ public class BSTUtils {
      * Floor (13): 13
      * Floor (99): 14
      * Floor (10): 9
+     *
      * @param root
      * @param data
      * @return
@@ -274,6 +271,14 @@ public class BSTUtils {
         return floor;
     }
 
+
+    /**
+     * Stack sortability algo:
+     * https://en.wikipedia.org/wiki/Stack-sortable_permutation
+     *
+     * @param preorder
+     * @return
+     */
     public static boolean checkIfPreorderIsBST(int[] preorder) {
         Stack<Integer> s = new Stack<Integer>();
         int root = Integer.MIN_VALUE;
@@ -330,43 +335,101 @@ public class BSTUtils {
         OrderedArrays.getInstance().fillTreeWithInorderArr(root, inorderArr);
     }
 
+
     public static void printCommonNodes(Node root1, Node root2) {
         if (root1 == null || root2 == null)
             return;
-        Stack<Node> s1 = new Stack<>();
-        Stack<Node> s2 = new Stack<>();
-        while (true) {
-            if (root1 != null) {
-                s1.push(root1);
-                root1 = root1.left;
-            } else if (root2 != null) {
-                s2.push(root2);
-                root2 = root2.left;
+        Stack<Node> stack1 = new Stack<>();
+        Stack<Node> stack2 = new Stack<>();
+        Node curr1 = root1;
+        Node curr2 = root2;
+        while ((curr1 != null || !stack1.isEmpty())
+                && (curr2 != null || !stack2.isEmpty())) {
+            if (curr1 != null) {
+                stack1.push(curr1);
+                curr1 = curr1.left;
+            } else if (curr2 != null) {
+                stack2.push(curr2);
+                curr2 = curr2.left;
             } else {
-                if (s1.isEmpty() || s2.isEmpty())
-                    break;
-
-                root1 = s1.pop();
-                root2 = s2.pop();
-
-                if (root1.data == root2.data) {
-                    System.out.println("Found a matching node with data = " + root1.data);
-                    root1 = root1.right;
-                    root2 = root2.right;
-                } else if (root1.data < root2.data) {
-                    root1 = root1.right;
-                    s2.push(root2);
-                    root2 = null;
+                curr1 = stack1.pop();
+                curr2 = stack2.pop();
+                if (curr1.data < curr2.data) {
+                    stack2.push(curr2);
+                    curr2 = null;
+                    curr1 = curr1.right;
+                } else if (curr2.data < curr1.data) {
+                    stack1.push(curr1);
+                    curr1 = null;
+                    curr2 = curr2.right;
                 } else {
-                    root2 = root2.right;
-                    s1.push(root1);
-                    root1 = null;
+                    System.out.print(curr1.data + " ");
+                    curr1 = curr1.right;
+                    curr2 = curr2.right;
                 }
             }
         }
+        System.out.println();
     }
 
-    public BinarySearchTree merge(BinarySearchTree bst1, BinarySearchTree bst2) {
+    static public void printMergeBSTs(Node root1, Node root2) {
+        if (root1 == null && root2 == null)
+            return;
+        Stack<Node> stack1 = new Stack<>(), stack2 = new Stack<>();
+        Node curr1 = root1, curr2 = root2;
+        while ((curr1 != null || !stack1.isEmpty()) && (curr2 != null || !stack2.isEmpty())) {
+            if (curr1 != null) {
+                stack1.push(curr1);
+                curr1 = curr1.left;
+            } else if (curr2 != null) {
+                stack2.push(curr2);
+                curr2 = curr2.left;
+            } else {
+                curr1 = stack1.pop();
+                curr2 = stack2.pop();
+                if (curr1.data < curr2.data) {
+                    System.out.print(curr1.data + " ");
+                    stack2.push(curr2);
+                    curr2 = null;
+                    curr1 = curr1.right;
+                } else if (curr2.data < curr1.data) {
+                    System.out.print(curr2.data + " ");
+                    stack1.push(curr1);
+                    curr1 = null;
+                    curr2 = curr2.right;
+                } else {
+                    System.out.print(curr1.data + " ");
+                    curr1 = curr1.right;
+                    curr2 = curr2.right;
+                }
+            }
+        }
+        while (curr1 != null || !stack1.isEmpty()) {
+            if (curr1 != null) {
+                stack1.push(curr1);
+                curr1 = curr1.left;
+            } else {
+                curr1 = stack1.pop();
+                System.out.print(curr1.data + " ");
+                curr1 = curr1.right;
+            }
+        }
+        while (curr2 != null || !stack2.isEmpty()) {
+            if (curr2 != null) {
+                stack2.push(curr2);
+                curr2 = curr2.left;
+            } else {
+                curr2 = stack2.pop();
+                System.out.print(curr2.data + " ");
+                curr2 = curr2.right;
+            }
+        }
+
+        System.out.println();
+    }
+
+    // merge two bsts.
+    public BinarySearchTree merge1(BinarySearchTree bst1, BinarySearchTree bst2) {
         if (bst1 == null && bst2 == null)
             return null;
         if (bst1 == null)
@@ -389,18 +452,8 @@ public class BSTUtils {
      * @author rahul
      */
 
-    static class KthSmallest {
-        private static int currVisit = 0;
-
-        private static KthSmallest INSTANCE = new KthSmallest();
-
-        private KthSmallest() {
-        }
-
-        public static KthSmallest getInstance() {
-            currVisit = 0;
-            return INSTANCE;
-        }
+    static public class KthSmallest {
+        private int currVisit = 0;
 
         public Node kthSmallest(Node root, int k) {
             if (root == null)
@@ -415,17 +468,7 @@ public class BSTUtils {
     }
 
     static class KthLargest {
-        private static int currVisit = 0;
-
-        private static KthLargest INSTANCE = new KthLargest();
-
-        private KthLargest() {
-        }
-
-        public static KthLargest getInstance() {
-            currVisit = 0;
-            return INSTANCE;
-        }
+        private int currVisit = 0;
 
         public Node kthLargest(Node root, int k) {
             if (root == null)
@@ -439,26 +482,6 @@ public class BSTUtils {
         }
     }
 
-    static public class KthSmallest1 {
-        private static int current = 0;
-        private static Node kthNode = null;
-
-        public static int kthSmallest(Node root, int k) {
-            find(root, k);
-            current = 0;
-            return kthNode.data;
-        }
-
-        private static void find(Node root, int k) {
-            if (root == null)
-                return;
-            find(root.left, k);
-            if (++current == k)
-                kthNode = root;
-            find(root.right, k);
-        }
-    }
-
     /**
      * 50
      * /      \
@@ -469,34 +492,26 @@ public class BSTUtils {
      * The above tree should be modified to following
      * <p>
      * 260
-     * /      \
+     * /     \
      * 330        150
      * /   \       /  \
      * 350   300    210   80
      *
      * @author rahul
      * 1. First find the tree sum
-     * 2. then inorder traversal, from the left most node start setting data = treeSum and follow the recursion with treesum-data
+     * 2. then inorder traversal, from the left most node start setting data = treeSum
+     * and follow the recursion with treesum-data
      */
-    static class TreeNodesWithSumOfGreaterNodes {
-        static int treeSum;
+    static public class TreeNodesWithSumOfGreaterNodes {
+        int currentSum = 0;
 
-        static public void convertToTreeWithMaxNodeSum(Node root) {
+        public void convertToTreeWithMaxNodeSum(Node root) {
             if (root == null)
                 return;
-            treeSum = TreeUtils.sum(root);
-            updateTreeSumOnNodes(root);
-        }
-
-        static private void updateTreeSumOnNodes(Node root) {
-            if (root == null)
-                return;
-            updateTreeSumOnNodes(root.left);
-            int nextSum = treeSum - root.data;
-            root.data = treeSum;
-            treeSum = nextSum;
-            updateTreeSumOnNodes(root.right);
-
+            convertToTreeWithMaxNodeSum(root.right);
+            root.data = root.data + currentSum;
+            currentSum = root.data;
+            convertToTreeWithMaxNodeSum(root.left);
         }
     }
 
@@ -551,7 +566,7 @@ public class BSTUtils {
         }
 
         public void correctBst(Node root) {
-            correctBstUtil(root);
+            findIncorrectNodes(root);
             if (first != null && second != null)
                 swapData(first, second);
             else if (first != null && mid != null)
@@ -564,11 +579,11 @@ public class BSTUtils {
             y.data = temp;
         }
 
-        public void correctBstUtil(Node root) {
+        private void findIncorrectNodes(Node root) {
 
             if (root == null)
                 return;
-            correctBstUtil(root.left);
+            findIncorrectNodes(root.left);
             if (prev != null && prev.data > root.data) {
                 if (first == null) {
                     first = prev;
@@ -578,7 +593,7 @@ public class BSTUtils {
             }
 
             prev = root;
-            correctBstUtil(root.right);
+            findIncorrectNodes(root.right);
 
         }
 

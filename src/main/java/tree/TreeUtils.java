@@ -327,7 +327,7 @@ public class TreeUtils {
             System.out.printf("Found a path: %s%n", String.valueOf(path));
             return true;
         }
-        boolean pathFound = printFirstPathMatchingSum(root.left, path, sum) ||  printFirstPathMatchingSum(root.right, path, sum);
+        boolean pathFound = printFirstPathMatchingSum(root.left, path, sum) || printFirstPathMatchingSum(root.right, path, sum);
         path.pop();
         return pathFound;
     }
@@ -519,14 +519,6 @@ public class TreeUtils {
      * @return
      */
     public static boolean checkIfSumTree(Node root) {
-        if (root == null || TreeUtils.isLeaf(root))
-            return true;
-        int left = TreeUtils.sum(root.left);
-        int right = TreeUtils.sum(root.right);
-        return (root.data == left + right) && checkIfSumTree(root.left) && checkIfSumTree(root.right);
-    }
-
-    public static boolean checkIfSumTree1(Node root) {
         return checkIfSumTreeUtil(root) != Integer.MIN_VALUE;
     }
 
@@ -542,6 +534,15 @@ public class TreeUtils {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * A subtree of a tree T is a tree S consisting of a node in T and all of its descendants in T.
+     * The subtree corresponding to the root node is the entire tree; the subtree corresponding to any other node
+     * is called a proper subtree.
+     *
+     * @param mainRoot
+     * @param subRoot
+     * @return
+     */
     public static boolean checkIfSubtree(Node mainRoot, Node subRoot) {
         if (mainRoot == null && subRoot == null)
             return true;
@@ -558,7 +559,7 @@ public class TreeUtils {
      * 50
      * /     \
      * /         \
-     * 7             2
+     * 7              2
      * / \             /\
      * /     \          /   \
      * 3        5      1      30
@@ -629,6 +630,77 @@ public class TreeUtils {
         printKthLevelNodes(root.right, k - 1);
     }
 
+    /**
+     * To create Double tree of the given tree, create a new duplicate for each node, and insert the duplicate as the left child of the original node.
+     * INPUT
+     * 1
+     * /   \
+     * 2      3
+     * /  \
+     * 4     5
+     * <p>
+     * OUTPUT:
+     * 1
+     * /   \
+     * 1      3
+     * /      /
+     * 2       3
+     * /  \
+     * 2    5
+     * /    /
+     * 4   5
+     * /
+     * 4
+     */
+
+    public static void createDoubleTree(Node root) {
+        if (root == null)
+            return;
+        Node doubleRoot = new Node(root.data);
+        doubleRoot.left = root.left;
+        root.left = doubleRoot;
+        createDoubleTree(doubleRoot.left);
+        createDoubleTree(root.right);
+    }
+
+    // Top view of a tree.
+    static public void topView(Node root) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        topViewUtil(root, 0, map);
+        System.out.println("Top Level of Tree");
+        map.values().forEach(System.out::println);
+    }
+
+    private static void topViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
+        if (root == null)
+            return;
+        if (!map.containsKey(vLevel))
+            map.put(vLevel, root.data);
+        topViewUtil(root.left, vLevel - 1, map);
+        topViewUtil(root.right, vLevel + 1, map);
+    }
+
+    static public class DiameterOptimised {
+
+        private int diameter = 0;
+
+        public int getDiameter() {
+            return diameter;
+        }
+
+        public int computeDiameter(Node root) {
+            if (root == null) {
+                return 0;
+            }
+
+            int rHeight = computeDiameter(root.right);
+            int lHeight = computeDiameter(root.left);
+            if (rHeight + lHeight > diameter)
+                diameter = lHeight + rHeight;
+            return Math.max(lHeight, rHeight) + 1;
+        }
+    }
+
     public static class PrintBoundaryNodesUtil {
         private static Node rightBoundaryEnd = null;
 
@@ -679,39 +751,6 @@ public class TreeUtils {
             printRightBoundaryBottomUp(root);
             System.out.println();
         }
-    }
-
-    /**
-     * To create Double tree of the given tree, create a new duplicate for each node, and insert the duplicate as the left child of the original node.
-     * INPUT
-     * 1
-     * /   \
-     * 2      3
-     * /  \
-     * 4     5
-     * <p>
-     * OUTPUT:
-     * 1
-     * /   \
-     * 1      3
-     * /      /
-     * 2       3
-     * /  \
-     * 2    5
-     * /    /
-     * 4   5
-     * /
-     * 4
-     */
-
-    public static void createDoubleTree(Node root) {
-        if (root == null)
-            return;
-        Node doubleRoot = new Node(root.data);
-        doubleRoot.left = root.left;
-        root.left = doubleRoot;
-        createDoubleTree(doubleRoot.left);
-        createDoubleTree(root.right);
     }
 
     public static class OrderedArrays {
@@ -863,7 +902,7 @@ public class TreeUtils {
                     }
 
                     // if current node is right child of next node in stack, we have hit all right subtree nodes.
-                    while ( !stack.isEmpty() && stack.peek().right == curr) {
+                    while (!stack.isEmpty() && stack.peek().right == curr) {
                         curr = stack.pop();
                         System.out.print(curr.data + " ");
                     }
@@ -993,7 +1032,7 @@ public class TreeUtils {
             Node current = root;
             while (current != null) {
                 if (current.left == null) {
-                    System.out.println(current);
+                    System.out.print(current.data + " ");
                     current = current.right;
                 } else {
                     Node predecessor = current.left;
@@ -1004,11 +1043,12 @@ public class TreeUtils {
                         current = current.left;
                     } else {
                         predecessor.right = null;
-                        System.out.println(current);
+                        System.out.print(current.data + " ");
                         current = current.right;
                     }
                 }
             }
+            System.out.println();
         }
 
 
@@ -1070,22 +1110,5 @@ public class TreeUtils {
             path.pop();
         }
 
-    }
-
-    // Top view of a tree.
-    static public void topView(Node root) {
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        topViewUtil(root, 0, map);
-        System.out.println("Top Level of Tree");
-        map.values().forEach(System.out::println);
-    }
-
-    private static void topViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
-        if (root == null)
-            return;
-        if (!map.containsKey(vLevel))
-            map.put(vLevel, root.data);
-        topViewUtil(root.left, vLevel - 1, map);
-        topViewUtil(root.right, vLevel + 1, map);
     }
 }

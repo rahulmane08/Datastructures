@@ -1,9 +1,9 @@
 package tree;
 
 import static tree.TreeUtils.Traversals.levelOrderTraversal;
-import static tree.TreeUtils.Traversals.postOrderIterative;
 import static tree.TreeUtils.areTreesIdentical;
-import static tree.TreeUtils.checkIfSumTree1;
+import static tree.TreeUtils.checkIfSubtree;
+import static tree.TreeUtils.checkIfSumTree;
 import static tree.TreeUtils.countLeafNodes;
 import static tree.TreeUtils.countLeafNodesRecursively;
 import static tree.TreeUtils.diameter;
@@ -54,6 +54,7 @@ public class BinaryTreeTest {
 
         System.out.println("length of longest path for root: " + lengthOfLongestPathOfNode(bt.root));
         System.out.println("Diameter of tree = " + diameter(bt.root));
+        System.out.println("Ravi Diameter of tree = " + diameter(bt.root));
 
         System.out.println("Level with max sum = " + findLevelWithMaxSum(bt.root));
         System.out.println("====printAllRootToLeafPaths====");
@@ -64,7 +65,7 @@ public class BinaryTreeTest {
         Stack<Integer> s = new Stack<>();
         printFirstRootToLeafPath1(bt.root, s);
         while (!s.isEmpty()) {
-            System.out.print(s.pop()+" ");
+            System.out.print(s.pop() + " ");
         }
         System.out.println();
         System.out.println("====printAllPathsMatchingSum====");
@@ -88,10 +89,10 @@ public class BinaryTreeTest {
         System.out.println("====printVerticalSum====");
         printVerticalSum(bt.root);
 
-        System.out.println("are trees identical = "+areTreesIdentical(bt.root, bt.root));
+        System.out.println("are trees identical = " + areTreesIdentical(bt.root, bt.root));
         System.out.println("========printKthLevelNodes=====");
         printKthLevelNodes(bt.root, 2);
-        System.out.println("\nis strict tree = "+ isStrictTree(bt.root));
+        System.out.println("\nis strict tree = " + isStrictTree(bt.root));
 
         topView(bt.root);
         BinaryTree bt1 = (BinaryTree) bt.clone();
@@ -108,10 +109,22 @@ public class BinaryTreeTest {
         sumTree.insert(4);
         sumTree.insert(6);
         sumTree.insert(3);
-        System.out.println("Is sum tree = "+checkIfSumTree1(sumTree.root));
-        System.out.println("Is sum tree = "+checkIfSumTree1(bt.root));
+        System.out.println("Is sum tree = " + checkIfSumTree(sumTree.root));
+        System.out.println("Is sum tree = " + checkIfSumTree(bt.root));
 
-        postOrderIterative(bt.root);
+        System.out.println("========check one tree subtree of other=====");
+        BinaryTree bt2 = new BinaryTree();
+        bt2.insert(8);
+        bt2.insert(3);
+        bt2.insert(4);
+        bt2.insert(2);
+        bt2.insert(5);
+        BinaryTree bt3 = new BinaryTree();
+        bt3.insert(3);
+        bt3.insert(2);
+        bt3.insert(5);
+        System.out.println("is subtree: " + checkIfSubtree(bt2.root, bt3.root));
+
 
     }
 }

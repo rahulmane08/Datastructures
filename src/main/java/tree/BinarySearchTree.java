@@ -1,8 +1,5 @@
 package tree;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class BinarySearchTree {
     Node root;
 
@@ -18,7 +15,7 @@ public class BinarySearchTree {
     }
 
     public BinarySearchTree(int[] sortedArray) {
-        root = BSTUtils.createBalancedBST(sortedArray, 0, sortedArray.length - 1);
+        root = BSTUtils.createBalancedBST(sortedArray);
     }
 
     public void reverse(Node node) {
