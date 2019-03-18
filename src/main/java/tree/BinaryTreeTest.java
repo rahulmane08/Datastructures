@@ -1,6 +1,7 @@
 package tree;
 
 import static tree.TreeUtils.Traversals.levelOrderTraversal;
+import static tree.TreeUtils.Traversals.verticalTopDownTraversal;
 import static tree.TreeUtils.areTreesIdentical;
 import static tree.TreeUtils.checkIfSubtree;
 import static tree.TreeUtils.checkIfSumTree;
@@ -125,6 +126,12 @@ public class BinaryTreeTest {
         bt3.insert(5);
         System.out.println("is subtree: " + checkIfSubtree(bt2.root, bt3.root));
 
+        BinaryTree leftTree = new BinaryTree();
+        leftTree.root = new Node(9);
+        leftTree.root.left = new Node(8);
+        leftTree.root.left.left = new Node(7);
+        System.out.println(lca(leftTree.root, 8, 7));
 
+        verticalTopDownTraversal(bt.root);
     }
 }

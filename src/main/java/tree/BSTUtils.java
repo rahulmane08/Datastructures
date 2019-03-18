@@ -3,6 +3,7 @@ package tree;
 import java.util.Arrays;
 import java.util.Stack;
 
+import array.ArrayUtils;
 import tree.TreeUtils.OrderedArrays;
 
 public class BSTUtils {
@@ -440,7 +441,7 @@ public class BSTUtils {
         int[] inorder2 = OrderedArrays.getInstance().toInorderArray(bst2.root);
         System.out.println("inorder 1 = " + inorder1);
         System.out.println("inorder 2 = " + inorder2);
-        int[] merged = array.Arrays.merge(inorder1, inorder2);
+        int[] merged = ArrayUtils.merge(inorder1, inorder2);
         Node root = createBalancedBST(merged);
         return new BinarySearchTree(root);
     }
@@ -596,7 +597,44 @@ public class BSTUtils {
             findIncorrectNodes(root.right);
 
         }
+    }
 
+    static public class LargestBstInBT {
+        private Node largestBstRoot;
+        private int heightOfBst = Integer.MIN_VALUE;
 
+        public void findLargestBst(Node root) {
+            findLargestBstUtil(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            if (heightOfBst <= 0)
+                System.out.println("NO BST FOUND");
+        }
+
+        private int findLargestBstUtil(Node root, int min, int max) {
+            if (root == null)
+                return 0;
+            int leftHt = findLargestBstUtil(root.left, min, root.data);
+            int rightHt = findLargestBstUtil(root.right, root.data, max);
+            int currHt = 1 + Math.max(leftHt, rightHt);
+
+            int leftData = (root.left != null) ? root.left.data : min;
+            int rightData = (root.right != null) ? root.right.data : max;
+            boolean checkCurrNodeIsBST = (leftData < root.data && root.data < rightData);
+
+            if (checkCurrNodeIsBST) {
+                if (!TreeUtils.isLeaf(root) && this.heightOfBst < currHt) {
+                    this.heightOfBst = currHt;
+                    this.largestBstRoot = root;
+                }
+            }
+            return currHt;
+        }
+
+        public Node getLargestBstRoot() {
+            return largestBstRoot;
+        }
+
+        public int getHeightOfBst() {
+            return heightOfBst;
+        }
     }
 }

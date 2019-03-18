@@ -30,9 +30,11 @@ public class StackUtils {
     }
 
     /**
-     * The span Si of the stock’s price on a given day i is defined as the maximum number of consecutive days just before the given day,
-     * for which the price of the stock on the current day is less than or equal to its price on the given day.
-     * For example, if an array of 7 days prices is given as {100, 80, 60, 70, 60, 75, 85}, then the span values for corresponding 7 days are {1, 1, 1, 2, 1, 4, 6}
+     * The span Si of the stock’s price on a given day i is defined as the maximum number of consecutive days
+     * just before the given day,for which the price of the stock on the current day is less than or equal to its price
+     * on the given day.
+     * For example, if an array of 7 days prices is given as {100, 80, 60, 70, 60, 75, 85},
+     * then the span values for corresponding 7 days are        {1, 1,  1,  2,  1,  4,  6}
      * Solution:
      * 1. push 0th element in stack and initialize span[0] = 1 , as it wont have a prev day
      * 2. for each day = i check stock price of peek element in stack is less than current and if yes then pop , until stack is empty or a greater stock price is present.
@@ -48,14 +50,13 @@ public class StackUtils {
         span[0] = 1;
         s.push(0);
         for (int i = 1; i < arr.length; i++) {
-
-            while (!s.isEmpty() && arr[i] > arr[s.peek()])
-                s.pop();
-
-            if (s.isEmpty())
-                span[i] = i + 1;
-            else
-                span[i] = i - s.peek();
+            if (arr[i] < arr[i - 1])
+                span[i] = 1;
+            else {
+                span[i] = 1;
+                while (!s.isEmpty() && arr[i] >= arr[s.peek()])
+                    span[i] += span[s.pop()];
+            }
             s.push(i);
         }
         return span;
@@ -72,28 +73,25 @@ public class StackUtils {
      * @param n
      * @return
      */
-    static public int findPermutationsGreaterThanOriginalNumber(int n) {
-        int result = 0;
-        for (int i = 1; i <= 9; i++) {
-            Stack<Integer> stack = new Stack<>();
-            if (i <= n) {
-                System.out.println("found = " + i);
-                stack.push(i);
-                result++;
-            }
-            while (!stack.isEmpty()) {
-                int tp = stack.pop();
-                for (int j = tp % 10; j <= 9; j++) {
-                    int x = tp * 10 + j;
-                    if (x <= n) {
-                        System.out.println("found = " + x);
-                        stack.push(x);
-                        result++;
-                    }
+    static public int findPermutationsGreaterThanEqualToOriginalNumber(int n) {
+        int count = 0;
+        Stack<Integer> stack = new Stack<>();
+        stack.push(0);
+        int number = 0;
+        while (!stack.isEmpty()) {
+            int base = stack.pop();
+            int lsd = base % 10;
+            for (int i = lsd; i <= 9; i++) {
+                number = 10 * base + i;
+                if (number != 0 && number < n) {
+                    stack.push(number);
+                    System.out.println("Number = " + number);
+                    count++;
                 }
             }
         }
-        return result;
+
+        return count;
     }
 
     /**
@@ -197,24 +195,20 @@ public class StackUtils {
      * @param stack
      */
     static public void deleteMiddle(Stack<Integer> stack) {
-        deleteMiddle(stack, findMid(stack.size()), 1);
+        if (stack == null)
+            return;
+        int mid = (stack.size() / 2) + 1;
+        deleteMiddle(stack, mid);
     }
 
-    static public void deleteMiddle(Stack<Integer> stack, int mid, int round) {
-        if (stack.isEmpty())
+    static private void deleteMiddle(Stack<Integer> stack, int mid) {
+        if (mid == 0)
             return;
         int top = stack.pop();
-        if (round == mid)
-            return;
-        deleteMiddle(stack, mid, ++round);
-        stack.push(top);
-    }
-
-    static private int findMid(int n) {
-        if (n % 2 != 0) {
-            return (n + 1) / 2;
-        }
-        return n / 2;
+        --mid;
+        deleteMiddle(stack, mid);
+        if (mid > 0)
+            stack.push(top);
     }
 
     // stack sorting
@@ -241,23 +235,17 @@ public class StackUtils {
             return;
         Integer curr = stack.pop();
         sort(stack);
-        sort(stack, curr);
+        sortedInsert(stack, curr);
     }
 
-    static private void sort(Stack<Integer> s, int prev) {
-        if (s.isEmpty()) {
-            s.push(prev);
+    static private void sortedInsert(Stack<Integer> s, int elem) {
+        if (s.isEmpty() || elem <= s.peek()) {
+            s.push(elem);
             return;
         }
-        int curr = s.pop();
-        System.out.println(curr + "," + prev + "," + s);
-        if (prev > curr) {
-            sort(s, prev);
-        } else {
-            sort(s, curr);
-            curr = prev;
-        }
-        s.push(curr);
+        int top = s.pop();
+        sortedInsert(s, elem);
+        s.push(top);
     }
 
     /**
@@ -268,11 +256,11 @@ public class StackUtils {
      * - for each next element of SLL, pop from the stack and check if the popped element is same, if not return false
      * - continue this until EOS.
      *
-     * @param A
+     * @param str
      * @return
      */
-    static public boolean isPalindrome(String A) {
-        char[] characters = A.toCharArray();
+    static public boolean isPalindrome(String str) {
+        char[] characters = str.toCharArray();
         int length = characters.length;
         Stack<Character> stack = new Stack<>();
         int i = 0;
@@ -282,14 +270,16 @@ public class StackUtils {
         for (; i < characters.length; i++)
             if (characters[i] != stack.pop())
                 break;
-        return stack.size() == 0;
+        return stack.isEmpty();
     }
 
 
     /**
      * Input : 1 1 1 1 0 1 1 1 1 1
      * Output : 24
-     * For {1, 1, 1, 1, 0, 1, 1, 1, 1, 1} all element are same except 0. So only for zero their exist greater element and for others it will be zero. for zero, on left 4th element is closest and greater than zero and on right 6th element is closest and greater. so maximum
+     * For {1, 1, 1, 1, 0, 1, 1, 1, 1, 1} all element are same except 0. So only for zero their exist greater element
+     * and for others it will be zero. for zero, on left 4th element is closest and greater than zero
+     * and on right 6th element is closest and greater. so maximum
      * product will be 4*6 = 24.
      * <p>
      * Input : 5 4 3 4 5
@@ -349,11 +339,11 @@ public class StackUtils {
         }
         int top = stack.pop();
         fillMinStack(stack, minStack);
-        fillMinStack(minStack, top);
+        populateMinStack(minStack, top);
         stack.push(top);
     }
 
-    static private void fillMinStack(Stack<Integer> minStack, int elem) {
+    static private void populateMinStack(Stack<Integer> minStack, int elem) {
         if (minStack.isEmpty() || elem < minStack.peek()) {
             minStack.push(elem);
         } else {

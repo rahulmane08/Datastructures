@@ -204,6 +204,45 @@ public class BSTTest {
         bst3.insert(6);
         MorrisTraversals.inOrderTraversal(bst3.root);
 
+        System.out.println("=======Find Largest BST=========");
+        System.out.println("====FOR BST");
+        BSTUtils.LargestBstInBT largestBstInBT = new BSTUtils.LargestBstInBT();
+        largestBstInBT.findLargestBst(bst.root);
+        System.out.println("Height of largest BST: " + largestBstInBT.getHeightOfBst());
+        System.out.println("Root of largest BST: " + largestBstInBT.getLargestBstRoot());
+
+        BinaryTree bt2 = new BinaryTree();
+        bt2.root = new Node(-99);
+        bt2.root.left = leftBst.root;
+        bt2.root.right = bst.root;
+        System.out.println("====For BT with left smaller BST and right larger BST");
+        largestBstInBT = new BSTUtils.LargestBstInBT();
+        largestBstInBT.findLargestBst(bt2.root);
+        System.out.println("Height of largest BST: " + largestBstInBT.getHeightOfBst());
+        System.out.println("Root of largest BST: " + largestBstInBT.getLargestBstRoot());
+
+
+        bt2.root = new Node(-99);
+        bt2.root.right = leftBst.root;
+        bt2.root.left = bst.root;
+        System.out.println("====For BT with left larger BST and right smaller BST");
+        largestBstInBT = new BSTUtils.LargestBstInBT();
+        largestBstInBT.findLargestBst(bt2.root);
+        System.out.println("Height of largest BST: " + largestBstInBT.getHeightOfBst());
+        System.out.println("Root of largest BST: " + largestBstInBT.getLargestBstRoot());
+
+        System.out.println("====For Left BST");
+        largestBstInBT = new BSTUtils.LargestBstInBT();
+        largestBstInBT.findLargestBst(leftBst.root);
+        System.out.println("Height of largest BST: " + largestBstInBT.getHeightOfBst());
+        System.out.println("Root of largest BST: " + largestBstInBT.getLargestBstRoot());
+
+
+        System.out.println("====For BT with no BST");
+        largestBstInBT = new BSTUtils.LargestBstInBT();
+        largestBstInBT.findLargestBst(createBT().root);
+        System.out.println("Height of largest BST: " + largestBstInBT.getHeightOfBst());
+        System.out.println("Root of largest BST: " + largestBstInBT.getLargestBstRoot());
 
     }
 

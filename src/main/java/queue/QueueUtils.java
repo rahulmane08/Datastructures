@@ -1,5 +1,6 @@
 package queue;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -58,24 +59,27 @@ public class QueueUtils {
      * @param arr
      * @param k
      */
-    static public void printMaxInSlidingWindowOfSizeK(int[] arr, int k) {
+    static public void printMaxInSlidingWindow(int [] arr, int k) {
+        if (arr == null)
+            return;
         int n = arr.length;
-        Deque<Integer> dq = new LinkedList<>();
-        int i;
-        for (i = 0; i < k; i++) {
-            while (!dq.isEmpty() && arr[i] >= arr[dq.peekLast()])
-                dq.pollLast();
-            dq.offerLast(i);
-        }
-        for (; i < n; i++) {
-            System.out.println("Window = [" + (i - k) + "], max = " + arr[dq.peekFirst()]);
-            while (!dq.isEmpty() && dq.peekFirst() < i - k)
+        if (k >= n)
+            k = n;
+        Deque<Integer> dq = new ArrayDeque<>();
+        for (int i=0; i < (n-k+1); i++) {
+            int max = Integer.MIN_VALUE;
+            while (!dq.isEmpty() && i > dq.peekFirst())
                 dq.pollFirst();
-            while (!dq.isEmpty() && arr[i] >= arr[dq.peekLast()])
-                dq.pollLast();
-            dq.offerLast(i);
+            for (int j=i; j< i+k; j++) {
+                if (arr[j] > max)
+                    max = arr[j];
+
+                while (!dq.isEmpty() && arr[dq.peekLast()] < arr[j])
+                    dq.pollLast();
+                dq.offer(j);
+            }
+            System.out.printf("Window = [%d], max = %d%n",i, max);
         }
-        System.out.println("Window = [" + (i - k) + "], max = " + arr[dq.peekFirst()]);
     }
 
     /**

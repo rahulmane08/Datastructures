@@ -1,7 +1,9 @@
 package tree;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
@@ -1007,7 +1009,23 @@ public class TreeUtils {
             }
         }
 
+        public static void verticalTopDownTraversal(Node root) {
+            Map<Integer, ArrayList<Integer>> verticalPaths = new TreeMap<>();
+            populateVerticalPaths(root, verticalPaths, 0);
+            verticalPaths.forEach((level, path) -> {
+                System.out.printf("vertical level = %d: nodes = %s%n", level, String.valueOf(path));
+            });
+        }
 
+        private static void populateVerticalPaths(Node root, Map<Integer, ArrayList<Integer>> verticalPaths, Integer vLevel) {
+            if (root == null)
+                return;
+            ArrayList<Integer> vPath = verticalPaths.getOrDefault(vLevel, new ArrayList<>());
+            vPath.add(root.data);
+            verticalPaths.put(vLevel, vPath);
+            populateVerticalPaths(root.left, verticalPaths, vLevel - 1);
+            populateVerticalPaths(root.right, verticalPaths, vLevel + 1);
+        }
     }
 
     public static class MorrisTraversals {

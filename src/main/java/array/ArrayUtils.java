@@ -1,10 +1,12 @@
 package array;
 
 import java.util.Comparator;
+import java.util.Stack;
 
+import math.Math;
 import utils.Utils;
 
-public class Arrays {
+public class ArrayUtils {
     static public void countPairsEqualToN(int[] arr, int N) {
         java.util.Arrays.sort(arr);// nlog(n)
         int end = arr.length - 1, start = 0;
@@ -206,10 +208,92 @@ public class Arrays {
         return result.toString();
     }
 
+    /**
+     * Let us take the same example arr[] = [1, 2, 3, 4, 5, 6, 7], d = 2
+     * Rotate arr[] by one 2 times
+     * We get [2, 3, 4, 5, 6, 7, 1] after first rotation and [ 3, 4, 5, 6, 7, 1, 2] after second rotation.
+     *
+     * @param arr
+     * @param d
+     */
     static public void rotate(int[] arr, int d) {
         if (arr == null) return;
         int n = arr.length;
+        d = d % n;
+        for (int i = 0; i < d; i++) {
+            int first = arr[0];
+            int j = 0;
+            for (; j < n - 1; j++) {
+                arr[j] = arr[j + 1];
+            }
+            arr[j] = first;
+        }
+    }
 
+    /**
+     * Let us take the same example arr[] = [1, 2, 3, 4, 5, 6, 7, 8], d = 2
+     * Rotate arr[] by one 2 times
+     * gcd (8, 2) = 2
+     * two loops
+     * first pass : [3, 2, 5, 4, 7, 6, 1, 8]
+     * second pass : [3, 4, 5, 6, 7, 8, 1, 2]
+     * @param arr
+     * @param d
+     */
+    static public void rotateEfficiently(int [] arr, int d) {
+        if (arr == null) return;
+        int n = arr.length;
+        int gcd = Math.gcd(n, d);
+        for (int i = 0; i< gcd ; i++) {
+            int temp = arr [i];
+            int k = i;
+            while (k < n) {
+                int next = k + gcd;
+                if (next >= n){
+                    arr [k] = temp;
+                } else {
+                    arr[k] = arr[next];
+                }
+                k = next;
+            }
+        }
+    }
 
+    /**
+     * Find if there is a subset of a given set with a given sum.
+     * Input:  set[] = {3, 34, 4, 12, 5, 2, 11}, sum = 9
+     * Output:  True  subset= {4, 5}
+     *
+     * @param arr
+     * @param K
+     */
+    static public void subsetWhoseSumMatchesN(int[] arr, int K) {
+        if (arr == null || arr.length == 0)
+            return;
+        Stack<Integer> subset = new Stack<>();
+        if (findSubsetWhoseSumMatchesN(arr, 0, arr.length, K, subset)) {
+            System.out.print("subset found: [ ");
+            while (!subset.isEmpty())
+                System.out.printf("%d ", subset.pop());
+            System.out.println("]");
+        }
+    }
+
+    static private boolean findSubsetWhoseSumMatchesN(int[] arr, int currIndex, int n, int K, Stack<Integer> path) {
+        if (currIndex == n && K != 0)
+            return false;
+        if (K == 0)
+            return true;
+        int curr = arr[currIndex];
+        if (curr > K)
+            return findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, K, path);
+        boolean elementSkipped = findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, K, path);
+        if (elementSkipped)
+            return true;
+        boolean elementConsidered =
+                findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, K - curr, path);
+        if (elementConsidered)
+            path.push(curr);
+        return elementConsidered;
     }
 }
