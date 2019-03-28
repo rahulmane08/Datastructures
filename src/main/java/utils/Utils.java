@@ -50,6 +50,12 @@ public class Utils {
     public static void main(String[] args) {
         int n = 73849949;
         System.out.println(mostSignificantDigit(n, countDigits(n)));
+
+        int xor = 0;
+        for (int i: new int[]{6, 3, 3, 1, 3, 6, 6}) {
+            xor ^= i;
+        }
+        System.out.println(xor);
     }
 
     public static int mostSignificantDigit(int n, int digits) {

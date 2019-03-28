@@ -106,7 +106,7 @@ public class StackUtils {
             while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
                 s.pop();
             if (s.isEmpty())
-                pgse[i] = 0;
+                pgse[i] = -1;
             else
                 pgse[i] = arr[s.peek()];
             s.push(i);

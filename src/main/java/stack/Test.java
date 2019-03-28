@@ -1,6 +1,7 @@
 package stack;
 
 import static stack.StackUtils.deleteMiddle;
+import static stack.StackUtils.findNextGreaterOrSmallerElement;
 import static stack.StackUtils.findPermutationsGreaterThanEqualToOriginalNumber;
 import static stack.StackUtils.findPrevGreaterOrSmallerElement;
 import static stack.StackUtils.sort;
@@ -33,8 +34,12 @@ public class Test {
         for (int i = 0; i < stockPrices.length; i++)
             System.out.println(stockPrices[i] + ":" + span[i]);
 
-        System.out.println(Arrays.toString(findPrevGreaterOrSmallerElement(new int[]{2, 1, 8}, false)));
-        System.out.println(Arrays.toString(findPrevGreaterOrSmallerElement(new int[]{1, 20, 3, 4, 5}, true)));
+        int [] arr = new int[]{2, 1, 8};
+        System.out.printf("Next smaller elements of arr: %s , %s%n",Arrays.toString(arr),
+                Arrays.toString(findNextGreaterOrSmallerElement(arr, false)));
+        arr = new int[]{1, 20, 3, 4, 5};
+        System.out.printf("Next greater elements of arr: %s , %s%n",Arrays.toString(arr),
+                Arrays.toString(findNextGreaterOrSmallerElement(arr, true)));
 
         System.out.println("=====Stack sorting=========");
         Stack<Integer> stack1 = new Stack<>();
