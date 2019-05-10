@@ -81,8 +81,7 @@ public class Heap {
 
     public int removeLast() {
         if (count > 0) {
-            elements[count - 1] = maxHeap ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-            --count;
+            elements[count--] = maxHeap ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         }
         return count;
     }
@@ -91,7 +90,7 @@ public class Heap {
         if (count == capacity)
             resize();
         else
-            elements[count] = elem;
-        return count++;
+            elements[count++] = elem;
+        return count;
     }
 }
