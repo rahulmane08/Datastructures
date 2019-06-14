@@ -7,7 +7,8 @@ public class TestSorting {
 //		InsertionSort.sort(test);
 //		SelectionSort.sort(test);
 //		QuickSort.sort(test, 0, test.length-1);
-        BubbleSort.sort(test);
+//        BubbleSort.sort(test);
+        HeapSort.sort(test);
         print(test);
     }
 

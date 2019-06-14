@@ -1,11 +1,11 @@
 package tree;
 
 public class Node {
+    public Node left;
+    public Node right;
+    public Node nextSibling;
+    public int data;
     int height;
-    Node left;
-    Node right;
-    Node nextSibling;
-    int data;
 
     public Node(int data) {
         super();

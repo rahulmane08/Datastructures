@@ -17,6 +17,7 @@ import static tree.BSTUtils.printRange;
 
 import java.util.Arrays;
 
+import pq.HeapUtils;
 import tree.TreeUtils.DiameterOptimised;
 import tree.TreeUtils.MorrisTraversals;
 import tree.TreeUtils.OrderedArrays;
@@ -243,6 +244,14 @@ public class BSTTest {
         largestBstInBT.findLargestBst(createBT().root);
         System.out.println("Height of largest BST: " + largestBstInBT.getHeightOfBst());
         System.out.println("Root of largest BST: " + largestBstInBT.getLargestBstRoot());
+
+        System.out.println("=====Convert BST to Min Heap========");
+        BinarySearchTree bst4 = createbst();
+        HeapUtils.convertBstToMinHeap(bst4.root);
+        int[] minheap = OrderedArrays.getInstance().toPreorderArray(bst4.root);
+        System.out.println("Is tree converted to min heap: " +
+                HeapUtils.checkIfArrayIsMinHeap(minheap, minheap.length, 0));
+        System.out.println("Tree to min heap: " + Arrays.toString(minheap));
 
     }
 

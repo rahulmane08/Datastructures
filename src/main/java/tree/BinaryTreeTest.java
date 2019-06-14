@@ -29,6 +29,8 @@ import static tree.TreeUtils.topView;
 
 import java.util.Stack;
 
+import pq.HeapUtils;
+
 public class BinaryTreeTest {
     public static void main(String[] args) throws CloneNotSupportedException {
         BinaryTree bt = new BinaryTree();
@@ -133,5 +135,10 @@ public class BinaryTreeTest {
         System.out.println(lca(leftTree.root, 8, 7));
 
         verticalTopDownTraversal(bt.root);
+
+        // check if btree is heap
+        System.out.println("Left tree is heap: " + HeapUtils.checkIfBtreeIsAMaxHeap(leftTree.root));
+        leftTree.root.left.left = new Node(10);
+        System.out.println("Left tree is heap: " + HeapUtils.checkIfBtreeIsAMaxHeap(leftTree.root));
     }
 }
