@@ -1,14 +1,23 @@
 package pq;
 
+import static pq.HeapUtils.PrintKMaxSumsOfTwoEquallySizedArraysUtil.printKMaxSumsOfTwoEquallySizedArrays;
 import static pq.HeapUtils.checkIfArrayIsMaxHeap;
 import static pq.HeapUtils.findKthLargestContiguousSum;
+import static pq.HeapUtils.maxNumberOfDistinctElementsAfterKRemovals;
 import static pq.HeapUtils.mergeMaxHeaps;
 import static pq.HeapUtils.minCostOfConnectingRopes;
+import static pq.HeapUtils.minProductOfKNumbers;
+import static pq.HeapUtils.printAllElementsLessThanXInMinHeap;
+import static pq.HeapUtils.printKLargestElements;
 import static pq.HeapUtils.printMedian;
+import static pq.HeapUtils.printMedian1;
+import static pq.HeapUtils.printMinProductOfKIntegers;
 import static pq.HeapUtils.printStringWithNonRepeatingChars;
+import static pq.HeapUtils.printTopKNumbersWithMaxFrequency;
 import static pq.HeapUtils.sortAlmostSorted;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 public class Test {
     public static void main(String[] args) {
@@ -39,6 +48,7 @@ public class Test {
             System.out.println(minPq.poll());
 
         printMedian(new int[]{5, 15, 10, 20, 3});
+        printMedian1(new int[]{5, 15, 10, 20, 3});
 
         int[] mergedMaxHeap = mergeMaxHeaps(new int[]{5, 2, 3}, new int[]{10, 8, 9, 6, 5});
         System.out.println("is merged heap max heap: " + checkIfArrayIsMaxHeap(mergedMaxHeap));
@@ -77,5 +87,44 @@ public class Test {
         printStringWithNonRepeatingChars(str);
         str = "aaabc";
         printStringWithNonRepeatingChars(str);
+
+        arr = new int[]{198, 76, 544, 123, 154, 675};
+        System.out.printf("min product of %d nos. of arr:%s = %d%n", 2, Arrays.toString(arr), minProductOfKNumbers(arr, 2));
+        arr = new int[]{11, 8, 5, 7, 5, 100};
+        System.out.printf("min product of %d nos. of arr:%s = %d%n", 4, Arrays.toString(arr), minProductOfKNumbers(arr, 4));
+
+        arr = new int[]{1, 23, 12, 9, 30, 2, 50};
+        printKLargestElements(arr, 3);
+
+        printKMaxSumsOfTwoEquallySizedArrays(new int[]{1, 4, 2, 3}, new int[]{2, 5, 1, 6}, 4);
+
+        arr = new int[]{5, 7, 5, 5, 1, 2, 2};
+        k = 3;
+        System.out.printf("Removing %d elements from arr: %s the max number of distinct elements: %d%n",
+                k, Arrays.toString(arr), maxNumberOfDistinctElementsAfterKRemovals(arr, k));
+        arr = new int[]{1, 2, 3, 4, 5, 6, 7};
+        k = 5;
+        System.out.printf("Removing %d elements from arr: %s the max number of distinct elements: %d%n",
+                k, Arrays.toString(arr), maxNumberOfDistinctElementsAfterKRemovals(arr, k));
+
+        arr = new int[]{2, 3, 15, 5, 4, 45, 80, 6, 150, 77, 120};
+        printAllElementsLessThanXInMinHeap(arr, 15);
+        printAllElementsLessThanXInMinHeap(arr, 80);
+
+
+        arr = new int[]{3, 1, 4, 4, 5, 2, 6, 1};
+        k = 2;
+        System.out.printf("Top %d elements by frequency in arr:%s%n", k, Arrays.toString(arr));
+        printTopKNumbersWithMaxFrequency(arr, k);
+        arr = new int[]{7, 10, 11, 5, 2, 5, 5, 7, 11, 8, 9};
+        k = 4;
+        System.out.printf("Top %d elements by frequency in arr:%s%n", k, Arrays.toString(arr));
+        printTopKNumbersWithMaxFrequency(arr, k);
+
+        printMinProductOfKIntegers(new int[]{198, 76, 544, 123, 154, 675}, 2);
+        printMinProductOfKIntegers(new int[]{11, 8, 5, 7, 5, 100}, 4);
+
+        Collection<Long> sizes = Arrays.asList(5l);
+        System.out.println(sizes.stream().allMatch(x -> x.intValue() == 5));
     }
 }

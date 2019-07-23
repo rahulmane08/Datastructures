@@ -253,6 +253,13 @@ public class BSTTest {
                 HeapUtils.checkIfArrayIsMinHeap(minheap, minheap.length, 0));
         System.out.println("Tree to min heap: " + Arrays.toString(minheap));
 
+        System.out.println("=====Convert BST to Min Heap========");
+        bst4 = createbst();
+        HeapUtils.convertBstToMaxHeap(bst4.root);
+        int[] maxHeap = OrderedArrays.getInstance().toPreorderArray(bst4.root);
+        System.out.println("Is tree converted to max heap: " + HeapUtils.checkIfArrayIsMaxHeap(maxHeap));
+        System.out.println("Tree to max heap: " + Arrays.toString(maxHeap));
+
     }
 
     private static BinaryTree createBT() {
