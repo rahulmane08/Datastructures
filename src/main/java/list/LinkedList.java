@@ -5,6 +5,7 @@ import java.util.Arrays;
 class Node<T> {
     public T data;
     public Node<T> next;
+    public Node<T> random;
     public boolean visited = false;
 
     public Node(T data) {
@@ -19,7 +20,7 @@ class Node<T> {
 
 }
 
-public class LinkedList<T> {
+public class LinkedList<T> implements Cloneable {
 
     Node<T> start;
 
@@ -49,6 +50,17 @@ public class LinkedList<T> {
         while (curr.next != null)
             curr = curr.next;
         curr.next = new Node<>(data);
+    }
+
+    public void insert(Node<T> node) {
+        if (start == null) {
+            start = node;
+            return;
+        }
+        Node<T> curr = start;
+        while (curr.next != null)
+            curr = curr.next;
+        curr.next = node;
     }
 
     public int length() {
@@ -120,5 +132,27 @@ public class LinkedList<T> {
             curr = curr.next;
         }
         return Arrays.toString(arr);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        LinkedList<T> clone = new LinkedList<>();
+        for (Node<T> curr = this.start; curr != null;) {
+            Node<T> next = curr.next;
+            Node<T> dupe = new Node<>(curr.data);
+            curr.next = dupe;
+            dupe.random = curr;
+            clone.insert(dupe);
+            curr = next;
+        }
+
+        for (Node<T> curr = clone.start; curr != null; curr = curr.next) {
+            Node<T> random = curr.random.random;
+            if (random != null)
+                curr.random = random.next;
+            if (curr.next != null)
+                curr.random.next = curr.next.random;
+        }
+        return clone;
     }
 }
