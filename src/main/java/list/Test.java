@@ -1,6 +1,7 @@
 package list;
 
 import static list.ListUtils.ArithematicUtils.addLists;
+import static list.ListUtils.ArithematicUtils.subtractLists;
 import static list.ListUtils.ArrangementUtils.ReverseInGroupsOfKUtils;
 import static list.ListUtils.ArrangementUtils.makeMiddleAsHead;
 import static list.ListUtils.ArrangementUtils.moveAllOccurencesOfKToEnd;
@@ -26,11 +27,16 @@ import static list.ListUtils.MergeUtils.mergeIteratively;
 import static list.ListUtils.MergeUtils.mergeKLists;
 import static list.ListUtils.PalindromeUtils.checkIfListIsPalindrome;
 import static list.ListUtils.PalindromeUtils.lengthOfLargestPalindrome;
+import static list.ListUtils.SortUtils.insertionSort;
 import static list.ListUtils.SortUtils.mergeSort;
 import static list.ListUtils.SortUtils.partitionAlternativelyUsingRecursion;
+import static list.ListUtils.SortUtils.selectionSort;
 import static list.ListUtils.SortUtils.sortAbsolutelySortedList;
 import static list.ListUtils.SortUtils.sortAlternativelySortedList;
 import static list.ListUtils.SortUtils.sortListOf012;
+import static list.ListUtils.UnionIntersection.getIntersection;
+import static list.ListUtils.UnionIntersection.getIntersectionPoint;
+import static list.ListUtils.UnionIntersection.getUnion;
 import static list.ListUtils.containsSublist;
 import static list.ListUtils.countPairsMatchingSum;
 import static list.ListUtils.detectLoop;
@@ -41,10 +47,15 @@ import static list.ListUtils.getNthNodeFromEnd;
 import static list.ListUtils.insertAfterNthNodeFromEnd;
 import static list.ListUtils.lexicalCompare;
 import static list.ListUtils.partitionlist;
+import static list.ListUtils.pointRandomToNextHighestNode;
 import static list.ListUtils.printNthNodeFromEnd;
 import static list.ListUtils.removeMiddlePointsOfline;
 import static list.ListUtils.search;
 import static list.ListUtils.searchIteratively;
+import static list.ListUtils.swap;
+import static list.ListUtils.swapAlternateNodes;
+import static list.ListUtils.swapAlternateNodesRecursively;
+import static list.ListUtils.swapKthFromStartAndEnd;
 import static list.ListUtils.toDouble;
 
 import list.ListUtils.Point;
@@ -251,6 +262,16 @@ public class Test {
         list = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
         sortAbsolutelySortedList(list);
         System.out.println("After sorting absolutely sorted list: " + list);
+        list = new LinkedList<>(new Integer[]{6, 4, 5, 10, 7});
+        list = mergeSort(list);
+        System.out.println("After merge sort: " + list);
+        list = new LinkedList<>(new Integer[]{6, 4, 5, 10, 7});
+        selectionSort(list);
+        System.out.println("After selection sort: " + list);
+        list = new LinkedList<>(new Integer[]{6, 4, 5, 10, 7});
+        insertionSort(list);
+        System.out.println("After insertion sort: " + list);
+
 
         list = new LinkedList<>(new Integer[]{1, 4, 2, 3, 5, 2, 3});
         partitionlist(list, 3);
@@ -279,9 +300,6 @@ public class Test {
         mergeInPlaceWithoutFirstListPointerMod(list1, list2);
         System.out.printf("After merging in place,list1: %s, list2: %s%n", list1, list2);
 
-        list = new LinkedList<>(new Integer[]{6, 4, 5, 10, 7});
-        list = mergeSort(list);
-        System.out.println("After merge sort: " + list);
 
         list = createMultilevelList();
         flattenMultilevelList(list);
@@ -315,24 +333,24 @@ public class Test {
         System.out.println("=========move all occurences of k to end=======");
         list = new LinkedList<>(new Integer[]{1, 2, 2, 4, 3});
         moveAllOccurencesOfKToEnd(list, 2);
-        System.out.println("moving all 2's at end: "+ list);
+        System.out.println("moving all 2's at end: " + list);
         moveAllOccurencesOfKToEnd(list, 1);
-        System.out.println("moving all 1's at end: "+ list);
+        System.out.println("moving all 1's at end: " + list);
 
-        LinkedList<Integer> [] lists = new LinkedList[]{
+        LinkedList<Integer>[] lists = new LinkedList[]{
                 new LinkedList<>(new Integer[]{1, 2, 10}),
                 new LinkedList<>(new Integer[]{3, 5, 12}),
                 new LinkedList<>(new Integer[]{6, 7, 8})};
         LinkedList<Integer> merged = mergeKLists(lists);
-        System.out.println("After merging 3 lists: "+ merged);
+        System.out.println("After merging 3 lists: " + merged);
 
         list = createMultilevelList();
         flattenMultilevelListDepthWise(list);
-        System.out.println("After flattening list depth wise: "+list);
+        System.out.println("After flattening list depth wise: " + list);
 
         list = new LinkedList<>(new Integer[]{1, 10, 2, 8, 3, 7});
         list = sortAlternativelySortedList(list);
-        System.out.println("After sorting alternatively sorted list: "+ list);
+        System.out.println("After sorting alternatively sorted list: " + list);
 
         list = new LinkedList<>(new Integer[]{1, 10, 2, 8, 3, 7});
         LinkedList<Integer> second = partitionAlternativelyUsingRecursion(list);
@@ -340,15 +358,77 @@ public class Test {
 
         list = new LinkedList<>(new Integer[]{1, 1, 2, 0, 0, 2, 1, 0});
         sortListOf012(list);
-        System.out.println("Sorting 0,1,2: "+list);
+        System.out.println("Sorting 0,1,2: " + list);
 
         list = new LinkedList<>(new Integer[]{1, 1, 2});
-        System.out.println("To double: "+ toDouble(list, 3));
+        System.out.println("To double: " + toDouble(list, 3));
 
         list1 = new LinkedList<>(new Integer[]{9, 9, 9});
         list2 = new LinkedList<>(new Integer[]{1, 2});
         Double sum = addLists(list1, list2);
-        System.out.printf("%s + %s = %f%n",  list1, list2, sum);
+        System.out.printf("%s + %s = %f%n", list1, list2, sum);
+
+        list1 = new LinkedList<>(new Integer[]{2, 2});
+        list2 = new LinkedList<>(new Integer[]{1, 2, 2});
+        Double diff = subtractLists(list1, list2);
+        System.out.printf("%s - %s = %f%n", list1, list2, diff);
+        list1 = new LinkedList<>(new Integer[]{0});
+        list2 = new LinkedList<>(new Integer[]{1, 2, 2});
+        diff = subtractLists(list1, list2);
+        System.out.printf("%s - %s = %f%n", list1, list2, diff);
+        list1 = new LinkedList<>(new Integer[]{1, 1, 2});
+        list2 = new LinkedList<>(new Integer[]{1, 2, 2});
+        diff = subtractLists(list1, list2);
+        System.out.printf("%s - %s = %f%n", list1, list2, diff);
+
+        list = new LinkedList<>(new Integer[]{5, 10, 2, 3});
+        pointRandomToNextHighestNode(list);
+        System.out.println("==========After pointing random to next highest node=========");
+        for (Node<Integer> curr = list.start; curr != null; curr = curr.next) {
+            System.out.println(curr + ", random: " + curr.prev);
+        }
+
+        System.out.println("==========Node swaps=========");
+        list = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
+        swapAlternateNodes(list);
+        System.out.println("Swap alternate nodes: " + list);
+        swapAlternateNodesRecursively(list);
+        System.out.println("Swap alternate nodes: " + list);
+        list = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
+        swap(list, 1, 2);
+        System.out.println("after swapping 1 and 2: " + list);
+        list = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
+        swap(list, 1, 3);
+        System.out.println("after swapping 1 and 3: " + list);
+        list = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
+        swap(list, 3, 4);
+        System.out.println("after swapping 3 and 4: " + list);
+        list = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
+        swap(list, 3, 5);
+        System.out.println("after swapping 3 and 5: " + list);
+        list = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+        swapKthFromStartAndEnd(list, 1);
+        System.out.println("swapping 1st nodes from start end: " + list);
+        swapKthFromStartAndEnd(list, 3);
+        System.out.println("swapping 3rd nodes from start end: " + list);
+
+        System.out.println("==========Union Intersection=========");
+        list1 = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
+        list2 = new LinkedList<>(new Integer[]{5, 10, 3});
+        System.out.println("intersection: " + getIntersection(list1, list2));
+        list1 = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
+        list2 = new LinkedList<>(new Integer[]{5, 10, 3});
+        System.out.println("union: " + getUnion(list1, list2));
+        list1 = new LinkedList<>(new Integer[]{1, 2, 3, 4, 5});
+        list2 = new LinkedList<>(new Integer[]{5, 10, 3});
+        System.out.println("intersection point: " + getIntersectionPoint(list1, list2));
+        list = new LinkedList<>(new Integer[]{99, 2, 3, 4, 5});
+        Node<Integer> curr1 = list1.start, curr2 = list2.start;
+        for (; curr1.next != null; curr1 = curr1.next) ;
+        for (; curr2.next != null; curr2 = curr2.next) ;
+        curr1.next = list.start;
+        curr2.next = list.start;
+        System.out.println("intersection point: " + getIntersectionPoint(list1, list2));
     }
 
     /**
@@ -367,20 +447,21 @@ public class Test {
     }
 
     /**
-     *  1 - 2 - 3 - 9
-     *  |       |
-     *  4 - 5   7 - 8
-     *          |
-     *          10
+     * 1 - 2 - 3 - 9
+     * |       |
+     * 4 - 5   7 - 8
+     * |
+     * 10
+     *
      * @return
      */
     static LinkedList<Integer> createMultilevelList() {
         LinkedList<Integer> list = new LinkedList<>(new Integer[]{1, 2, 3, 9});
         LinkedList<Integer> level11 = new LinkedList<>(new Integer[]{4, 5});
         LinkedList<Integer> level12 = new LinkedList<>(new Integer[]{7, 8});
-        level12.start.random = new Node<>(10);
-        list.start.random = level11.start;
-        list.start.next.next.random = level12.start;
+        level12.start.prev = new Node<>(10);
+        list.start.prev = level11.start;
+        list.start.next.next.prev = level12.start;
         return list;
     }
 

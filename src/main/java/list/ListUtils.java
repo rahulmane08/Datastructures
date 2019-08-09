@@ -173,7 +173,7 @@ public class ListUtils {
     static public void printPairsMatchingSum(DoublyLinkedList<Integer> sortedDLL, int sum) {
         if (sortedDLL == null || sortedDLL.start == null)
             return;
-        DLLNode<Integer> start, end;
+        Node<Integer> start, end;
         start = end = sortedDLL.start;
         while (end.next != null)
             end = end.next;
@@ -239,7 +239,7 @@ public class ListUtils {
     static public <T> DoublyLinkedList<T> divideMiddle(DoublyLinkedList<T> mainList) {
         if (mainList == null || mainList.start == null)
             return null;
-        DLLNode<T> slow, fast;
+        Node<T> slow, fast;
         slow = mainList.start;
         fast = mainList.start.next;
         while (fast != null) {
@@ -250,7 +250,7 @@ public class ListUtils {
             if (fast != null)
                 slow = slow.next;
         }
-        DLLNode<T> temp = slow.next;
+        Node<T> temp = slow.next;
         slow.next = null;
         temp.prev = null;
         return new DoublyLinkedList<>(temp);
@@ -272,20 +272,20 @@ public class ListUtils {
             return dll1;
         if (dll1 == null)
             return dll2;
-        DLLNode<Integer> mergedNode = merge(dll1.start, dll2.start);
+        Node<Integer> mergedNode = merge(dll1.start, dll2.start);
         if (mergedNode != null)
             return new DoublyLinkedList<>(mergedNode);
         return null;
     }
 
-    static public DLLNode<Integer> merge(DLLNode<Integer> first, DLLNode<Integer> second) {
+    static public Node<Integer> merge(Node<Integer> first, Node<Integer> second) {
         if (first == null && second == null)
             return null;
         if (second == null)
             return first;
         if (first == null)
             return second;
-        DLLNode<Integer> curr;
+        Node<Integer> curr;
         if (first.data < second.data) {
             curr = first;
             curr.next = merge(first.next, second);
@@ -384,56 +384,82 @@ public class ListUtils {
 
     }
 
-    static public <T> boolean swap(T data1, T data2, LinkedList<T> list) {
+    /**
+     * 1-2-3-4-null
+     *
+     * @param list
+     * @param data1
+     * @param data2
+     * @param <T>
+     */
+
+    static public <T> void swap(LinkedList<T> list, Node<T> first, Node<T> second) {
+        if (first == null || second == null)
+            return;
+        swap(list, first.data, second.data);
+    }
+
+    static public <T> void swap(LinkedList<T> list, T data1, T data2) {
         if (list == null || list.start == null)
-            return false;
-        if (data1 == list.start.data && data2 == list.start.data)
-            return true;
-        Node<T> prevFirst, prevSecond;
-        prevFirst = prevSecond = null;
-        boolean swapStart = false;
-        if (list.start.data == data1) {
-            swapStart = true;
-            prevSecond = list.start;
-            while (prevSecond != null && prevSecond.next.data != data2)
-                prevSecond = prevSecond.next;
-        }
-        if (list.start.data == data2) {
-            swapStart = true;
-            prevFirst = list.start;
-            while (prevFirst != null && prevFirst.next.data != data1)
-                prevFirst = prevFirst.next;
-        } else {
-            prevFirst = prevSecond = list.start;
-            while (prevFirst != null && prevFirst.next.data != data1)
-                prevFirst = prevFirst.next;
-            while (prevSecond != null && prevSecond.next.data != data2)
-                prevSecond = prevSecond.next;
-        }
-        if (prevFirst.next == null || prevSecond.next == null)
-            return false;
-        Node<T> first, second;
-        if (swapStart) {
-            first = list.start;
-            second = (prevFirst != null ? prevFirst : prevSecond);
-            list.start = second;
-        } else {
-            first = prevFirst.next;
+            return;
+        if (data1 == null || data2 == null)
+            return;
+        if (data1.equals(data2))
+            return;
+        Node<T> prevFirst, prevSecond, first, second;
+        prevFirst = prevSecond = first = second = null;
+        if (list.start.data.equals(data1) || list.start.data.equals(data2)) {
+            T dataToSearch = null;
+            if (list.start.data.equals(data1))
+                dataToSearch = data2;
+            else
+                dataToSearch = data1;
+            for (prevSecond = list.start;
+                 prevSecond.next != null && !prevSecond.next.data.equals(dataToSearch); prevSecond = prevSecond.next)
+                ;
+            if (prevSecond.next == null)
+                return; // one of the two is not present.
+            first = list.start; // first is list start
             second = prevSecond.next;
+            list.start = second; // new list start becomes second.
+        } else {
+            // both nodes arent list start
+            for (Node<T> curr = list.start; (prevFirst == null || prevSecond == null); curr = curr.next) {
+                if (curr.next != null && curr.next.data.equals(data1) || curr.next.data.equals(data2)) {
+                    if (prevFirst == null)
+                        prevFirst = curr;
+                    else
+                        prevSecond = curr;
+                }
+            }
+            if (prevFirst != null)
+                first = prevFirst.next;
+            if (prevSecond != null)
+                second = prevSecond.next;
         }
+        if (first == null || second == null)
+            return; // one of the two is null;
+
         if (first.next == second) {
+            // adjacent node case.
             first.next = second.next;
             second.next = first;
         } else {
-            Node<T> temp = second.next;
-            second.next = first.next;
-            first.next = temp;
+            // 1-2-3-4-5, swap(2,4)
+            Node<T> firstNext = first.next; // firstNext = 3
+            first.next = second.next; // 1-2-5, 3-4
+            prevSecond.next = first; //  (1,3) -2-5, 4
+            second.next = firstNext; // (1,4-3)- 2-5
         }
-        if (prevFirst != null)
-            prevFirst.next = second;
-        if (prevSecond != null)
-            prevSecond.next = first;
-        return true;
+        if (prevFirst != null) // this can be null if first if first node of list
+            prevFirst.next = second; // 1-4-3-2-5
+    }
+
+    private static <T> Node<T> findPrevToActual(Node<T> start, T data) {
+        while (start != null && start.next != null && !start.next.data.equals(data)) {
+            start = start.next;
+        }
+        return start.next == null ? null : start; // node not found.
     }
 
     /**
@@ -487,47 +513,22 @@ public class ListUtils {
     static public <T> void swapKthFromStartAndEnd(LinkedList<T> list, int k) {
         if (list == null || list.start == null)
             return;
-        int n = list.size();
-        if (k > n)
+        if (k < 1)
             return;
-        int m = n - k + 1;
-        if (m == k)
-            return;
-        Node<T> prevFirst = null, prevSecond = null, first = null, second = null;
-        Node<T> curr = list.start;
-
-        //the prevFirst and prevSecond are the prev nodes of the actual nodes to be swapped
-        //first and second are the actual nodes to swap
-        for (int i = 1; i <= n; i++) {
-            if (i < k)
-                prevFirst = curr;
-            if (i < m)
-                prevSecond = curr;
+        int i = 1;
+        Node<T> first = null, second = null, curr = list.start;
+        while (curr != null) {
+            if (i == k) {
+                first = curr;
+                second = list.start;
+            }
+            if (i > k) {
+                second = second.next;
+            }
+            i++;
             curr = curr.next;
         }
-        second = prevSecond.next;
-
-        //it may happen that we need to swap first and last in which case prevFirst remains null and first becomes list.start and list.start=second
-        if (prevFirst != null) {
-            first = prevFirst.next;
-        } else {
-            first = list.start;
-            list.start = second;
-        }
-
-        //adjacent nodes
-        if (first.next == second) {
-            first.next = second.next;
-            second.next = first;
-            prevFirst.next = second;
-        } else {
-            Node<T> temp = second.next;
-            second.next = first.next;
-            if (prevFirst != null)
-                prevFirst.next = second;
-            prevSecond.next = first;
-            first.next = temp;
-        }
+        swap(list, first, second);
     }
 
     static public boolean identical(LinkedList<Integer> list1, LinkedList<Integer> list2) {
@@ -557,6 +558,360 @@ public class ListUtils {
             node = node.next;
         }
         return false;
+    }
+
+    public static <T> void printNthNodeFromEnd(LinkedList list, int N) {
+        if (list == null || list.start == null || N < 1)
+            return;
+        Node<T> first = null, second = list.start;
+        int i = 1;
+        while (second != null) {
+            if (i == N)
+                first = list.start;
+            else if (i > N)
+                first = first.next;
+            second = second.next;
+            i++;
+        }
+        System.out.printf("Node at position:%d from the end is %d%n", N, (first != null ? first.data : null));
+    }
+
+    /**
+     * @param list
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean detectLoop(LinkedList<T> list) {
+        if (list == null || list.start == null)
+            return false;
+        Node<T> slow = list.start;
+        Node<T> fast = list.start;
+        while (slow != null && fast != null && fast.next != null) {
+            slow = fast.next;
+            fast = fast.next.next;
+            if (fast == slow)
+                return true;
+        }
+        return false;
+    }
+
+    public static <T> int countLoopLength(LinkedList<T> list) {
+        if (list == null || list.start == null)
+            return 0;
+        Node<T> slow = list.start;
+        Node<T> fast = list.start;
+        while (slow != null && fast != null && fast.next != null) {
+            slow = fast.next;
+            fast = fast.next.next;
+            if (fast == slow) {
+                int i = 0;
+                do {
+                    fast = fast.next;
+                    i++;
+                } while (fast != slow);
+                return i;
+            }
+        }
+        return 0;
+    }
+
+
+    // ================ LOOPED LIST========================
+
+    /**
+     * This method is also dependent on Floyd’s Cycle detection algorithm.
+     * Detect Loop using Floyd’s Cycle detection algorithm and get the pointer to a loop node.
+     * Count the number of nodes in loop. Let the count be k.
+     * Fix one pointer to the head and another to a kth node from the head.
+     * Move both pointers at the same pace, they will meet at loop starting node.
+     * Get a pointer to the last node of the loop and make next of it as NULL.
+     *
+     * @param list
+     * @param <T>
+     */
+    public static <T> void deleteLoop(LinkedList<T> list) {
+        int loopLength = countLoopLength(list);
+        if (loopLength == 0)
+            return;
+        Node<T> first = list.start;
+        Node<T> second = list.start;
+        for (int i = 0; i < loopLength; i++)
+            second = second.next;
+        while (first != second) {
+            first = first.next;
+            second = second.next;
+        }
+        while (second.next != first)
+            second = second.next;
+        second.next = null;
+    }
+
+    public static <T> Node<T> getMiddle(LinkedList<T> list) {
+        if (list == null || list.start == null)
+            return null;
+        Node<T> slow, fast;
+        slow = list.start;
+        fast = list.start;
+        while (fast != null) {
+            fast = fast.next;
+            if (fast == null)
+                break;
+            fast = fast.next;
+            if (fast != null)
+                slow = slow.next;
+        }
+        return slow;
+    }
+
+    // lists identical test
+    public static <T> boolean areIdentical(LinkedList<T> list1, LinkedList<T> list2) {
+        if (list1 == null && list2 == null)
+            return true;
+        if (list1 == null || list2 == null)
+            return false;
+        return checkIfIdentical(list1.start, list2.start);
+    }
+
+    private static <T> boolean checkIfIdentical(Node<T> start1, Node<T> start2) {
+        if (start1 == null && start2 == null)
+            return true;
+        if (start1 == null || start2 == null)
+            return false;
+        return (start1.data == start2.data) && checkIfIdentical(start1.next, start2.next);
+    }
+
+    public static <T> void insertAfterNthNodeFromEnd(LinkedList<T> list, int n, T data) {
+        if (list == null || list.start == null)
+            return;
+        Node<T> nthNode = list.start, curr = list.start;
+
+        for (int i = 1; i <= n - 1 && curr != null; i++) {
+            curr = curr.next;
+        }
+
+        if (curr == null) {
+            // hit the list end, cant add the node
+            return;
+        }
+
+        while (curr.next != null) {
+            curr = curr.next;
+            nthNode = nthNode.next;
+        }
+
+        Node<T> nodeToInsert = new Node<>(data);
+        nodeToInsert.next = nthNode.next;
+        nthNode.next = nodeToInsert;
+    }
+
+    public static int countPairsMatchingSum(LinkedList<Integer> list1, LinkedList<Integer> list2, int sum) {
+        if (list1 == null || list1.start == null || list2 == null || list2.start == null)
+            return 0;
+        HashMap<Integer, Integer> frequencies = new HashMap<>();
+        for (Node<Integer> curr = list1.start; curr != null; curr = curr.next) {
+            Integer freq = frequencies.get(curr.data);
+            if (freq == null)
+                frequencies.put(curr.data, 1);
+            else
+                frequencies.put(curr.data, freq + 1);
+        }
+        int count = 0;
+        for (Node<Integer> curr = list2.start; curr != null; curr = curr.next) {
+            int elem = sum - curr.data;
+            count += frequencies.getOrDefault(elem, 0);
+        }
+        return count;
+    }
+
+    public static <T> Node<T> getNthNodeFromEnd(LinkedList<T> list, int n) {
+        if (list == null || list.start == null)
+            return null;
+        AtomicInteger count = new AtomicInteger(0);
+        return nthNodeUtilFromEnd(list.start, n, count);
+    }
+
+    private static <T> Node<T> nthNodeUtilFromEnd(Node<T> curr, int n, AtomicInteger count) {
+        if (curr.next == null) {
+            count.set(1);
+            return curr;
+        }
+        Node<T> next = nthNodeUtilFromEnd(curr.next, n, count);
+        if (count.get() == n)
+            return next;
+        count.incrementAndGet();
+        return curr;
+    }
+
+    public static <T> Node<T> getNthNode(LinkedList<T> list, int n) {
+        if (list == null || list.start == null)
+            return null;
+        return nthNodeUtil(list.start, n, 1);
+    }
+
+    private static <T> Node<T> nthNodeUtil(Node<T> curr, int n, int count) {
+        if (curr == null)
+            return null;
+        if (count == n)
+            return curr;
+        return nthNodeUtil(curr.next, n, count + 1);
+    }
+
+    public static <T> void flattenMultilevelList(LinkedList<T> list) {
+        if (list == null || list.start == null)
+            return;
+        Node<T> prev = null;
+        Node<T> curr = list.start;
+        Node<T> nextStart = null;
+        Node<T> nextEnd = null;
+        while (curr != null) {
+            if (curr.prev != null) {
+                if (nextStart == null) {
+                    nextStart = nextEnd = curr.prev;
+
+                } else {
+                    nextEnd.next = curr.prev;
+                }
+                while (nextEnd != null && nextEnd.next != null)
+                    nextEnd = nextEnd.next;
+                curr.prev = null;
+            }
+            prev = curr;
+            curr = curr.next;
+            if (curr == null) {
+                prev.next = nextStart;
+                if (nextStart != null) {
+                    curr = nextStart;
+                    nextStart = nextEnd = null;
+                }
+
+            }
+        }
+
+    }
+
+    public static <T> void flattenMultilevelListDepthWise(LinkedList<T> list) {
+        if (list == null || list.start == null)
+            return;
+        flattenMultilevelListDepthWise(list.start);
+    }
+
+    private static <T> Node<T> flattenMultilevelListDepthWise(Node<T> start) {
+        if (start == null)
+            return null;
+        Node<T> next = start.next;
+        start.next = flattenMultilevelListDepthWise(start.prev);
+        Node<T> end = start;
+        while (end.next != null)
+            end = end.next;
+        end.next = flattenMultilevelListDepthWise(next);
+        start.prev = null;
+        return start;
+    }
+
+    /**
+     * (0,10)->(1,10)->(5,10)->(7,10)
+     * |
+     * (7,5)->(20,5)->(40,5)
+     *
+     * @param list
+     */
+    public static void removeMiddlePointsOfline(LinkedList<Point> list) {
+        if (list == null || list.start == null || list.start.next == null)
+            return;
+        Node<Point> start, end, prev;
+        start = list.start;
+        prev = null;
+        end = start;
+        boolean xChange = false;
+        boolean check = false;
+        if (start.data.x != start.next.data.x)
+            xChange = true;
+        while (end != null) {
+            check = xChange;
+            Node<Point> next = end.next;
+            if (next != null) {
+                if (xChange) {
+                    if (end.data.y != next.data.y) {
+                        check = false;
+                    }
+
+                } else {
+                    if (end.data.x != next.data.x)
+                        check = true;
+                }
+            } else {
+                start.next = end;
+                if (start != prev)
+                    prev.next = null;
+            }
+            if (xChange != check) {
+                start.next = end;
+                if (start != prev)
+                    prev.next = null;
+                start = end;
+                prev = null;
+                xChange = check;
+            } else {
+                prev = end;
+                end = end.next;
+            }
+        }
+    }
+
+    public static <T extends Comparable<T>> void pointRandomToNextHighestNode(LinkedList<T> list) {
+        if (list == null || list.start == null)
+            return;
+        ArrangementUtils.reverse(list);
+        Node<T> max = null;
+        for (Node<T> curr = list.start; curr != null; curr = curr.next) {
+            if (max == null) {
+                curr.prev = null;
+                max = curr;
+                continue;
+            }
+            curr.prev = max;
+            if (max.data.compareTo(curr.data) < 0)
+                max = curr;
+        }
+        ArrangementUtils.reverse(list);
+    }
+
+    public static <T> void swapAlternateNodes(LinkedList<T> list) {
+        if (list == null || list.start == null)
+            return;
+        Node<T> curr = list.start;
+        Node<T> prev = null;
+        while (curr != null) {
+            Node<T> next = curr.next;
+            if (next != null) {
+                curr.next = next.next;
+                if (list.start == curr)
+                    list.start = next;
+                next.next = curr;
+                if (prev != null)
+                    prev.next = next;
+            }
+            prev = curr;
+            curr = curr.next;
+        }
+    }
+
+    public static <T> void swapAlternateNodesRecursively(LinkedList<T> list) {
+        if (list == null || list.start == null)
+            return;
+        list.start = swapAlternateNodesRecursivelyUtil(list.start);
+    }
+
+    private static <T> Node<T> swapAlternateNodesRecursivelyUtil(Node<T> start) {
+        if (start == null)
+            return null;
+        Node<T> next = start.next;
+        if (next != null) {
+            start.next = swapAlternateNodesRecursivelyUtil(next.next);
+            next.next = start;
+            return next;
+        }
+        return start;
     }
 
     public static class DeleteUtils {
@@ -903,81 +1258,6 @@ public class ListUtils {
             list.start = start;
         }
 
-        public static class ReverseInGroupsOfKUtils {
-            public static <T> void reverse(LinkedList<T> list, int k) {
-                list.start = reverseInGroup(list.start, k);
-            }
-
-            private static <T> Node<T> reverseInGroup(Node<T> start, int k) {
-                if (start == null)
-                    return null;
-                Node<T> curr = start, prev = null, next = null;
-                for (int i = 0; i < k && curr != null; i++) {
-                    next = curr.next;
-                    curr.next = prev;
-                    prev = curr;
-                    curr = next;
-                }
-                start.next = reverseInGroup(next, k);
-                return prev;
-            }
-
-            public static <T> void reverseAlternatively(LinkedList<T> list, int k) {
-                list.start = reverseAlternativelyInGroup(list.start, k, true);
-            }
-
-            private static <T> Node<T> reverseAlternativelyInGroup(Node<T> start, int k, boolean reverse) {
-                if (start == null)
-                    return null;
-                Node<T> curr = start, prev = null, next = null;
-                for (int i = 0; i < k && curr != null; i++) {
-                    next = curr.next;
-                    if (reverse) // reverse the list only if current recursion is for reversal
-                        curr.next = prev;
-                    prev = curr;
-                    curr = next;
-                }
-                if (!reverse) {
-                    // no reversal hence point prev to the start of next reversed group.
-                    prev.next = reverseAlternativelyInGroup(next, k, !reverse);
-                    return start; // return the start of current non-reversed group.
-                }
-                start.next = reverseAlternativelyInGroup(next, k, !reverse);
-                return prev;
-            }
-
-            /**
-             * 1-> 2-> 3-> 4-> 5-> 6 ->7-> NULL
-             *
-             * @param list
-             * @param k
-             */
-            public static <T> void reverseIteratively(LinkedList<T> list, int k) {
-                Node<T> curr = list.start, prev = null, prevEnd = null;
-                boolean startSet = false;
-                while (curr != null) {
-                    Node<T> start = curr;
-                    // reverse group of size k.
-                    for (int i = 0; i < k && curr != null; i++) {
-                        Node<T> next = curr.next;
-                        curr.next = prev;
-                        prev = curr;
-                        curr = next;
-                    }
-                    // reversed k nodes, prev = last node, curr = start of next group.
-                    if (!startSet) {
-                        list.start = prev;
-                        startSet = true;
-                        start.next = curr; // point the current group start next to start of next group
-                    } else {
-                        prevEnd.next = prev; // second group onwards point the end.next of previous group to start of curr gp
-                    }
-                    prevEnd = start; // stores the end of prev reversed group.
-                    prev = null; // reset prev
-                }
-            }
-        }
-
         /**
          * 1-> 2-> 3-> 4-> 5-> NULL
          * Op: 1-3-5-2-4-NULL
@@ -1148,12 +1428,13 @@ public class ListUtils {
 
         /**
          * Input  : 1 -> 2 -> 2 -> 4 -> 3
-         *          key = 2
+         * key = 2
          * Output : 1 -> 4 -> 3 -> 2 -> 2
-         *
+         * <p>
          * Input  : 6 -> 6 -> 7 -> 6 -> 3 -> 10
-         *          key = 6
+         * key = 6
          * Output : 7 -> 3 -> 10 -> 6 -> 6 -> 6
+         *
          * @param list
          * @param k
          * @param <T>
@@ -1185,202 +1466,81 @@ public class ListUtils {
                 prev = prev.next;
             }
         }
-    }
 
-    public static <T> void printNthNodeFromEnd(LinkedList list, int N) {
-        if (list == null || list.start == null || N < 1)
-            return;
-        Node<T> first = null, second = list.start;
-        int i = 1;
-        while (second != null) {
-            if (i == N)
-                first = list.start;
-            else if (i > N)
-                first = first.next;
-            second = second.next;
-            i++;
-        }
-        System.out.printf("Node at position:%d from the end is %d%n", N, (first != null ? first.data : null));
-    }
+        public static class ReverseInGroupsOfKUtils {
+            public static <T> void reverse(LinkedList<T> list, int k) {
+                list.start = reverseInGroup(list.start, k);
+            }
 
+            private static <T> Node<T> reverseInGroup(Node<T> start, int k) {
+                if (start == null)
+                    return null;
+                Node<T> curr = start, prev = null, next = null;
+                for (int i = 0; i < k && curr != null; i++) {
+                    next = curr.next;
+                    curr.next = prev;
+                    prev = curr;
+                    curr = next;
+                }
+                start.next = reverseInGroup(next, k);
+                return prev;
+            }
 
-    // ================ LOOPED LIST========================
+            public static <T> void reverseAlternatively(LinkedList<T> list, int k) {
+                list.start = reverseAlternativelyInGroup(list.start, k, true);
+            }
 
-    /**
-     * @param list
-     * @param <T>
-     * @return
-     */
-    public static <T> boolean detectLoop(LinkedList<T> list) {
-        if (list == null || list.start == null)
-            return false;
-        Node<T> slow = list.start;
-        Node<T> fast = list.start;
-        while (slow != null && fast != null && fast.next != null) {
-            slow = fast.next;
-            fast = fast.next.next;
-            if (fast == slow)
-                return true;
-        }
-        return false;
-    }
+            private static <T> Node<T> reverseAlternativelyInGroup(Node<T> start, int k, boolean reverse) {
+                if (start == null)
+                    return null;
+                Node<T> curr = start, prev = null, next = null;
+                for (int i = 0; i < k && curr != null; i++) {
+                    next = curr.next;
+                    if (reverse) // reverse the list only if current recursion is for reversal
+                        curr.next = prev;
+                    prev = curr;
+                    curr = next;
+                }
+                if (!reverse) {
+                    // no reversal hence point prev to the start of next reversed group.
+                    prev.next = reverseAlternativelyInGroup(next, k, !reverse);
+                    return start; // return the start of current non-reversed group.
+                }
+                start.next = reverseAlternativelyInGroup(next, k, !reverse);
+                return prev;
+            }
 
-    public static <T> int countLoopLength(LinkedList<T> list) {
-        if (list == null || list.start == null)
-            return 0;
-        Node<T> slow = list.start;
-        Node<T> fast = list.start;
-        while (slow != null && fast != null && fast.next != null) {
-            slow = fast.next;
-            fast = fast.next.next;
-            if (fast == slow) {
-                int i = 0;
-                do {
-                    fast = fast.next;
-                    i++;
-                } while (fast != slow);
-                return i;
+            /**
+             * 1-> 2-> 3-> 4-> 5-> 6 ->7-> NULL
+             *
+             * @param list
+             * @param k
+             */
+            public static <T> void reverseIteratively(LinkedList<T> list, int k) {
+                Node<T> curr = list.start, prev = null, prevEnd = null;
+                boolean startSet = false;
+                while (curr != null) {
+                    Node<T> start = curr;
+                    // reverse group of size k.
+                    for (int i = 0; i < k && curr != null; i++) {
+                        Node<T> next = curr.next;
+                        curr.next = prev;
+                        prev = curr;
+                        curr = next;
+                    }
+                    // reversed k nodes, prev = last node, curr = start of next group.
+                    if (!startSet) {
+                        list.start = prev;
+                        startSet = true;
+                        start.next = curr; // point the current group start next to start of next group
+                    } else {
+                        prevEnd.next = prev; // second group onwards point the end.next of previous group to start of curr gp
+                    }
+                    prevEnd = start; // stores the end of prev reversed group.
+                    prev = null; // reset prev
+                }
             }
         }
-        return 0;
-    }
-
-    /**
-     * This method is also dependent on Floyd’s Cycle detection algorithm.
-     * Detect Loop using Floyd’s Cycle detection algorithm and get the pointer to a loop node.
-     * Count the number of nodes in loop. Let the count be k.
-     * Fix one pointer to the head and another to a kth node from the head.
-     * Move both pointers at the same pace, they will meet at loop starting node.
-     * Get a pointer to the last node of the loop and make next of it as NULL.
-     *
-     * @param list
-     * @param <T>
-     */
-    public static <T> void deleteLoop(LinkedList<T> list) {
-        int loopLength = countLoopLength(list);
-        if (loopLength == 0)
-            return;
-        Node<T> first = list.start;
-        Node<T> second = list.start;
-        for (int i = 0; i < loopLength; i++)
-            second = second.next;
-        while (first != second) {
-            first = first.next;
-            second = second.next;
-        }
-        while (second.next != first)
-            second = second.next;
-        second.next = null;
-    }
-
-    public static <T> Node<T> getMiddle(LinkedList<T> list) {
-        if (list == null || list.start == null)
-            return null;
-        Node<T> slow, fast;
-        slow = list.start;
-        fast = list.start;
-        while (fast != null) {
-            fast = fast.next;
-            if (fast == null)
-                break;
-            fast = fast.next;
-            if (fast != null)
-                slow = slow.next;
-        }
-        return slow;
-    }
-
-    // lists identical test
-    public static <T> boolean areIdentical(LinkedList<T> list1, LinkedList<T> list2) {
-        if (list1 == null && list2 == null)
-            return true;
-        if (list1 == null || list2 == null)
-            return false;
-        return checkIfIdentical(list1.start, list2.start);
-    }
-
-    private static <T> boolean checkIfIdentical(Node<T> start1, Node<T> start2) {
-        if (start1 == null && start2 == null)
-            return true;
-        if (start1 == null || start2 == null)
-            return false;
-        return (start1.data == start2.data) && checkIfIdentical(start1.next, start2.next);
-    }
-
-    public static <T> void insertAfterNthNodeFromEnd(LinkedList<T> list, int n, T data) {
-        if (list == null || list.start == null)
-            return;
-        Node<T> nthNode = list.start, curr = list.start;
-
-        for (int i = 1; i <= n - 1 && curr != null; i++) {
-            curr = curr.next;
-        }
-
-        if (curr == null) {
-            // hit the list end, cant add the node
-            return;
-        }
-
-        while (curr.next != null) {
-            curr = curr.next;
-            nthNode = nthNode.next;
-        }
-
-        Node<T> nodeToInsert = new Node<>(data);
-        nodeToInsert.next = nthNode.next;
-        nthNode.next = nodeToInsert;
-    }
-
-    public static int countPairsMatchingSum(LinkedList<Integer> list1, LinkedList<Integer> list2, int sum) {
-        if (list1 == null || list1.start == null || list2 == null || list2.start == null)
-            return 0;
-        HashMap<Integer, Integer> frequencies = new HashMap<>();
-        for (Node<Integer> curr = list1.start; curr != null; curr = curr.next) {
-            Integer freq = frequencies.get(curr.data);
-            if (freq == null)
-                frequencies.put(curr.data, 1);
-            else
-                frequencies.put(curr.data, freq + 1);
-        }
-        int count = 0;
-        for (Node<Integer> curr = list2.start; curr != null; curr = curr.next) {
-            int elem = sum - curr.data;
-            count += frequencies.getOrDefault(elem, 0);
-        }
-        return count;
-    }
-
-    public static <T> Node<T> getNthNodeFromEnd(LinkedList<T> list, int n) {
-        if (list == null || list.start == null)
-            return null;
-        AtomicInteger count = new AtomicInteger(0);
-        return nthNodeUtilFromEnd(list.start, n, count);
-    }
-
-    private static <T> Node<T> nthNodeUtilFromEnd(Node<T> curr, int n, AtomicInteger count) {
-        if (curr.next == null) {
-            count.set(1);
-            return curr;
-        }
-        Node<T> next = nthNodeUtilFromEnd(curr.next, n, count);
-        if (count.get() == n)
-            return next;
-        count.incrementAndGet();
-        return curr;
-    }
-
-    public static <T> Node<T> getNthNode(LinkedList<T> list, int n) {
-        if (list == null || list.start == null)
-            return null;
-        return nthNodeUtil(list.start, n, 1);
-    }
-
-    private static <T> Node<T> nthNodeUtil(Node<T> curr, int n, int count) {
-        if (curr == null)
-            return null;
-        if (count == n)
-            return curr;
-        return nthNodeUtil(curr.next, n, count + 1);
     }
 
     public static class SortUtils {
@@ -1487,7 +1647,7 @@ public class ListUtils {
         public static void sortListOf012(LinkedList<Integer> list) {
             if (list == null || list.start == null)
                 return;
-            int n1,n2,n3;
+            int n1, n2, n3;
             n1 = n2 = n3 = 0;
             for (Node<Integer> curr = list.start; curr != null; curr = curr.next) {
                 if (curr.data == 0)
@@ -1507,6 +1667,53 @@ public class ListUtils {
                 } else {
                     curr.data = 2;
                     n3--;
+                }
+            }
+        }
+
+        public static <T extends Comparable<T>> void selectionSort(LinkedList<T> list) {
+            if (list == null || list.start == null)
+                return;
+            list.start = selectionSortUtil(list, list.start);
+        }
+
+        private static <T extends Comparable<T>> Node<T> selectionSortUtil(LinkedList<T> list, Node<T> start) {
+            if (start == null)
+                return null;
+            Node<T> min = start;
+            for (Node<T> curr = start; curr != null; curr = curr.next)
+                if (curr.data.compareTo(min.data) < 0)
+                    min = curr;
+            swap(list, min.data, start.data);
+            min.next = selectionSortUtil(list, min.next);
+            return min;
+        }
+
+        public static <T extends Comparable<T>> void insertionSort(LinkedList<T> list) {
+            if (list == null || list.start == null)
+                return;
+            Node<T> curr = list.start.next;
+            Node<T> prev = list.start;
+            // 5-3-4-2-1
+            while (curr != null) {
+                if (curr.data.compareTo(list.start.data) < 0) {
+                    prev.next = curr.next;
+                    curr.next = list.start;
+                    list.start = curr;
+                    curr = prev.next;
+                } else {
+                    // 3-4-5-7-1
+                    Node<T> x = list.start;
+                    for (; x.next.data.compareTo(curr.data) < 0; x = x.next) ;
+                    if (x != prev) {
+                        prev.next = curr.next;
+                        curr.next = x.next;
+                        x.next = curr;
+                        curr = prev.next;
+                    } else {
+                        prev = curr;
+                        curr = curr.next;
+                    }
                 }
             }
         }
@@ -1752,173 +1959,15 @@ public class ListUtils {
         }
     }
 
-    public static <T> void flattenMultilevelList(LinkedList<T> list) {
-        if (list == null || list.start == null)
-            return;
-        Node<T> prev = null;
-        Node<T> curr = list.start;
-        Node<T> nextStart = null;
-        Node<T> nextEnd = null;
-        while (curr != null) {
-            if (curr.random != null) {
-                if (nextStart == null) {
-                    nextStart = nextEnd = curr.random;
-
-                } else {
-                    nextEnd.next = curr.random;
-                }
-                while (nextEnd != null && nextEnd.next != null)
-                    nextEnd = nextEnd.next;
-                curr.random = null;
-            }
-            prev = curr;
-            curr = curr.next;
-            if (curr == null) {
-                prev.next = nextStart;
-                if (nextStart != null) {
-                    curr = nextStart;
-                    nextStart = nextEnd = null;
-                }
-
-            }
-        }
-
-    }
-
-    public static <T> void flattenMultilevelListDepthWise(LinkedList<T> list) {
-        if (list == null || list.start == null)
-            return;
-        flattenMultilevelListDepthWise(list.start);
-    }
-
-    private static <T> Node<T> flattenMultilevelListDepthWise(Node<T> start) {
-        if (start == null)
-            return null;
-        Node<T> next = start.next;
-        start.next = flattenMultilevelListDepthWise(start.random);
-        Node<T> end = start;
-        while (end.next != null)
-            end = end.next;
-        end.next = flattenMultilevelListDepthWise(next);
-        start.random = null;
-        return start;
-    }
-
-    /**
-     * (0,10)->(1,10)->(5,10)->(7,10)
-     *                            |
-     *                           (7,5)->(20,5)->(40,5)
-     * @param list
-     */
-    public static void removeMiddlePointsOfline(LinkedList<Point> list) {
-        if (list == null || list.start == null || list.start.next == null)
-            return;
-        Node<Point> start, end, prev;
-        start = list.start;
-        prev = null;
-        end = start;
-        boolean xChange = false;
-        boolean check = false;
-        if (start.data.x != start.next.data.x)
-            xChange = true;
-        while (end != null) {
-            check = xChange;
-            Node<Point> next = end.next;
-            if (next != null) {
-                if (xChange) {
-                    if (end.data.y != next.data.y) {
-                        check = false;
-                    }
-
-                } else {
-                    if (end.data.x != next.data.x)
-                        check = true;
-                }
-            } else {
-                start.next = end;
-                if (start != prev)
-                    prev.next = null;
-            }
-            if (xChange != check) {
-                start.next = end;
-                if (start != prev)
-                    prev.next = null;
-                start = end;
-                prev = null;
-                xChange = check;
-            } else {
-                prev = end;
-                end = end.next;
-            }
-        }
-    }
-
     public static class ArithematicUtils {
-        static public int subtract(int a, int b) {
-            Integer[] c1 = toIntArray(a);
-            Integer[] c2 = toIntArray(b);
-            return subtractLists(toList(c1), toList(c2));
-        }
-
-        public static int subtractLists(LinkedList<Integer> l1, LinkedList<Integer> l2) {
-            int size1 = l1.size();
-            int size2 = l2.size();
-            int signage = 1;
-            LinkedList<Integer> largerList = l1, smallerList = l2;
-            if (size2 > size1) {
-                largerList = l2;
-                smallerList = l1;
-                signage = -1;
-            }
-            if (size1 == size2) {
-                Node<Integer> curr1 = l1.start, curr2 = l2.start;
-                int diff = 0;
-                while (curr1.next != null) {
-                    diff += (curr1.data - curr2.data);
-                    curr1 = curr1.next;
-                    curr2 = curr2.next;
-                }
-                if (diff < 0) {
-                    largerList = l2;
-                    smallerList = l1;
-                    signage = -1;
-                }
-            }
-            diff(largerList.start, smallerList.start, 0);
-            int result = 0;
-            for (int i = 0; i < largerList.size(); i++)
-                result = (int) (result + largerList.get(i) * Math.pow(10, i));
-            return signage * result;
-        }
-
-        public static int diff(Node<Integer> start1, Node<Integer> start2, int prevCarry) {
-            if (start1 == null)
-                return prevCarry;
-            int result = 0;
-            if (start2 == null)
-                result = start1.data - prevCarry;
-            else {
-                result = start1.data - start2.data - prevCarry;
-            }
-            if (result < 0) {
-                result = 10 + result;
-                prevCarry = 1;
-            } else
-                prevCarry = 0;
-            start1.data = result;
-            if (start2 == null)
-                return diff(start1.next, null, prevCarry);
-            return diff(start1.next, start2.next, prevCarry);
-        }
-        
-        public static Double addLists(LinkedList<Integer> l1, LinkedList<Integer> l2) {
+        public static Double subtractLists(LinkedList<Integer> leftOperand, LinkedList<Integer> rightOperand) {
             int resultSize = 0;
             LinkedList<Integer> result = new LinkedList<>();
-            Node<Integer> start1 = l1.start;
-            Node<Integer> start2 = l2.start;
+            Node<Integer> start1 = leftOperand.start;
+            Node<Integer> start2 = rightOperand.start;
             int size1 = 0;
             int size2 = 0;
-            while(start1 != null || start2 != null) {
+            while (start1 != null || start2 != null) {
                 result.insert(new Node<>(0));
                 if (start1 != null) {
                     size1++;
@@ -1932,9 +1981,9 @@ public class ListUtils {
             int finalCarry = 0;
             Node<Integer> temp = null;
             if (size1 != size2) {
-                Node<Integer> next = l1.start;
+                Node<Integer> next = leftOperand.start;
                 if (size1 > size2)
-                    next = l2.start;
+                    next = rightOperand.start;
                 int diff = Math.abs(size1 - size2);
                 for (int i = 0; i < diff; i++) {
                     Node<Integer> x = new Node<>(0);
@@ -1945,18 +1994,81 @@ public class ListUtils {
                 }
                 if (size1 > size2) {
                     resultSize = size1;
-                    finalCarry = add(l1.start, next, result.start);
-                }
-                else {
+                    finalCarry = subtract(leftOperand.start, next, result.start);
+                } else {
                     resultSize = size2;
-                    finalCarry = add(next, l2.start, result.start);
+                    finalCarry = subtract(next, rightOperand.start, result.start);
                 }
-
+                temp.next = null;
             } else {
                 resultSize = size1;
-                finalCarry = add(l1.start, l2.start, result.start);
+                finalCarry = subtract(leftOperand.start, rightOperand.start, result.start);
             }
-            temp.next = null;
+
+            Double number = toDouble(result, resultSize);
+            if (finalCarry < 0) {
+                number = -1 * (Math.pow(10, resultSize) - number);
+            }
+            return number;
+        }
+
+        private static int subtract(Node<Integer> start1, Node<Integer> start2, Node<Integer> result) {
+            if (result == null)
+                return 0;
+            int diff = start1.data - start2.data + subtract(start1.next, start2.next, result.next);
+            if (diff < 0) {
+                result.data = 10 + diff;
+                return -1;
+            }
+            result.data = diff;
+            return 0;
+        }
+
+
+        public static Double addLists(LinkedList<Integer> leftOperand, LinkedList<Integer> rightOperand) {
+            int resultSize = 0;
+            LinkedList<Integer> result = new LinkedList<>();
+            Node<Integer> start1 = leftOperand.start;
+            Node<Integer> start2 = rightOperand.start;
+            int size1 = 0;
+            int size2 = 0;
+            while (start1 != null || start2 != null) {
+                result.insert(new Node<>(0));
+                if (start1 != null) {
+                    size1++;
+                    start1 = start1.next;
+                }
+                if (start2 != null) {
+                    size2++;
+                    start2 = start2.next;
+                }
+            }
+            int finalCarry = 0;
+            Node<Integer> temp = null;
+            if (size1 != size2) {
+                Node<Integer> next = leftOperand.start;
+                if (size1 > size2)
+                    next = rightOperand.start;
+                int diff = Math.abs(size1 - size2);
+                for (int i = 0; i < diff; i++) {
+                    Node<Integer> x = new Node<>(0);
+                    x.next = next;
+                    next = x;
+                    if (temp == null)
+                        temp = next;
+                }
+                if (size1 > size2) {
+                    resultSize = size1;
+                    finalCarry = add(leftOperand.start, next, result.start);
+                } else {
+                    resultSize = size2;
+                    finalCarry = add(next, rightOperand.start, result.start);
+                }
+                temp.next = null;
+            } else {
+                resultSize = size1;
+                finalCarry = add(leftOperand.start, rightOperand.start, result.start);
+            }
             Double number = toDouble(result, resultSize);
             if (finalCarry == 1)
                 number = Math.pow(10, resultSize) + number;
@@ -1999,5 +2111,102 @@ public class ListUtils {
                     ", y=" + y +
                     '}';
         }
+    }
+
+    public static class UnionIntersection {
+        public static <T extends Comparable<T>> LinkedList<T> getIntersection(LinkedList<T> list1, LinkedList<T> list2) {
+            if ((list1 == null || list1.start == null) && (list2 == null || list2.start == null))
+                return null;
+            list1 = SortUtils.mergeSort(list1);
+            list2 = SortUtils.mergeSort(list2);
+            LinkedList<T> intersection = new LinkedList<>();
+            intersect(list1.start, list2.start, intersection);
+            return intersection;
+        }
+
+        private static <T extends Comparable<T>> void intersect(Node<T> start1, Node<T> start2, LinkedList<T> intersection) {
+            if (start1 == null || start2 == null)
+                return;
+            if (start1.data.compareTo(start2.data) < 0)
+                intersect(start1.next, start2, intersection);
+            else if (start1.data.compareTo(start2.data) > 0)
+                intersect(start1, start2.next, intersection);
+            else {
+                intersection.insert(start1.data);
+                intersect(start1.next, start2.next, intersection);
+            }
+        }
+
+        public static <T extends Comparable<T>> LinkedList<T> getUnion(LinkedList<T> list1, LinkedList<T> list2) {
+            if ((list1 == null || list1.start == null) && (list2 == null || list2.start == null))
+                return null;
+            list1 = SortUtils.mergeSort(list1);
+            list2 = SortUtils.mergeSort(list2);
+            LinkedList<T> intersection = new LinkedList<>();
+            union(list1.start, list2.start, intersection);
+            return intersection;
+        }
+
+        private static <T extends Comparable<T>> void union(Node<T> start1, Node<T> start2, LinkedList<T> union) {
+            if (start1 == null && start2 == null)
+                return;
+            if (start1 == null) {
+                for (Node<T> curr = start2; curr != null; curr = curr.next)
+                    union.insert(curr.data);
+                return;
+            }
+            if (start2 == null) {
+                for (Node<T> curr = start1; curr != null; curr = curr.next)
+                    union.insert(curr.data);
+                return;
+            }
+
+            if (start1.data.compareTo(start2.data) < 0) {
+                union.insert(start1.data);
+                union(start1.next, start2, union);
+            } else if (start1.data.compareTo(start2.data) > 0) {
+                union.insert(start2.data);
+                union(start1, start2.next, union);
+            } else {
+                union.insert(start1.data);
+                union(start1.next, start2.next, union);
+            }
+        }
+
+        public static <T> Node<T> getIntersectionPoint(LinkedList<T> list1, LinkedList<T> list2) {
+            if ((list1 == null || list1.start == null) && (list2 == null || list2.start == null))
+                return null;
+            int a = 0, b = 0;
+            Node<T> c1 = list1.start, c2 = list2.start;
+            while (c1 != null || c2 != null) {
+                if (c1 != null) {
+                    a++;
+                    c1 = c1.next;
+                }
+
+                if (c2 != null) {
+                    b++;
+                    c2 = c2.next;
+                }
+            }
+            int d = Math.abs(a - b);
+            c1 = list1.start;
+            c2 = list2.start;
+            if (a > b)
+                for (int i = 0; i < d; i++, c1 = c1.next) ;
+            else if (a < b)
+                for (int i = 0; i < d; i++, c2 = c2.next) ;
+
+            while (c1 != null && c2 != null) {
+                if (c1 == c2)
+                    return c1;
+                c1 = c1.next;
+                c2 = c2.next;
+            }
+
+
+            return null;
+        }
+
     }
 }

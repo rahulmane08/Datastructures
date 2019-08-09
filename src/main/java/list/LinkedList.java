@@ -2,24 +2,6 @@ package list;
 
 import java.util.Arrays;
 
-class Node<T> {
-    public T data;
-    public Node<T> next;
-    public Node<T> random;
-    public boolean visited = false;
-
-    public Node(T data) {
-        super();
-        this.data = data;
-    }
-
-    @Override
-    public String toString() {
-        return "Node [data=" + data + "]";
-    }
-
-}
-
 public class LinkedList<T> implements Cloneable {
 
     Node<T> start;
@@ -137,21 +119,21 @@ public class LinkedList<T> implements Cloneable {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         LinkedList<T> clone = new LinkedList<>();
-        for (Node<T> curr = this.start; curr != null;) {
+        for (Node<T> curr = this.start; curr != null; ) {
             Node<T> next = curr.next;
             Node<T> dupe = new Node<>(curr.data);
             curr.next = dupe;
-            dupe.random = curr;
+            dupe.prev = curr;
             clone.insert(dupe);
             curr = next;
         }
 
         for (Node<T> curr = clone.start; curr != null; curr = curr.next) {
-            Node<T> random = curr.random.random;
+            Node<T> random = curr.prev.prev;
             if (random != null)
-                curr.random = random.next;
+                curr.prev = random.next;
             if (curr.next != null)
-                curr.random.next = curr.next.random;
+                curr.prev.next = curr.next.prev;
         }
         return clone;
     }
