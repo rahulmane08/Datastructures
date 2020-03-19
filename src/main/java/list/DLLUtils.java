@@ -1,5 +1,8 @@
 package list;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class DLLUtils {
 
     public static <T> void swap(DoublyLinkedList<T> list, T data1, T data2) {
@@ -123,7 +126,63 @@ public class DLLUtils {
                     prev.prev = null;
                 }
             }
+        }
 
+        /**
+         * if the given linked list is 10->20->30->40->50->60 and k is 4, the list
+         * should be modified to 50->60->10->20->30->40
+         *
+         * @param list
+         * @param n
+         */
+        static public <T> void rotateLeftBy(DoublyLinkedList<T> list, int n) {
+            if (list == null || list.start == null || n < 0)
+                return;
+            Node<T> curr = list.start;
+            int i = 1;
+            for (; i <= n ; i++) {
+                curr = curr.next;
+                if (curr == null)
+                    curr = list.start;
+            }
+            if (curr == list.start)
+                return; // n == 0 or n == size of list, nothing todo.
+            curr.prev.next = null;
+            curr.prev = null;
+            Node<T> end = curr;
+            for (; end.next != null; end = end.next);
+            end.next = list.start;
+            list.start.prev = end;
+            list.start = curr;
+        }
+
+        /**
+         * if the given linked list is 10->20->30->40->50->60 and k is 4, the list
+         * should be modified to 30->40->50->60->10->20->NULL
+         *
+         * @param list
+         * @param n
+         */
+        static public <T> void rotateRightBy(DoublyLinkedList<T> list, int n) {
+            if (list == null || list.start == null)
+                return;
+            int i = 1;
+            Node<T> curr = list.start;
+            for (; i <= n; i++) {
+                curr = curr.next;
+                if (curr == null)
+                    curr = list.start;
+            }
+            if (curr == list.start)
+                return;
+            Node<T> end = list.start;
+            for (; curr.next != null; curr = curr.next, end = end.next);
+            Node<T> start = end.next;
+            start.prev = null;
+            end.next = null;
+            curr.next = list.start;
+            list.start.prev = curr;
+            list.start = start;
         }
     }
 
@@ -192,7 +251,26 @@ public class DLLUtils {
                 }
                 curr = next;
             }
+        }
 
+        public static <T extends Comparable<T>> void sortBiotonicList(DoublyLinkedList<T> list) {
+            if (list == null)
+                return;
+            Node<T> curr = list.start;
+            while (curr != null && curr.next != null && curr.data.compareTo(curr.next.data) < 0) {
+                curr = curr.next;
+            }
+            if (curr == list.start) {
+                mergeSort(list);
+                return;
+            }
+            if (curr.next == null)
+                return; // entire list is sorted.
+            Node<T> next = curr.next;
+            next.prev = null;
+            curr.next = null;
+            next = mergeSort(next);
+            list.start = MergeUtils.merge(list.start, next);
         }
     }
 
@@ -229,17 +307,61 @@ public class DLLUtils {
         static public <T> void deleteDupesFromSortedList(DoublyLinkedList<T> list) {
             if (list == null)
                 return;
-            for (Node<T> curr = list.start; curr.next != null; curr = curr.next) {
+            for (Node<T> curr = list.start; curr != null; curr = curr.next) {
                 Node<T> end = curr.next;
-                while (curr.data.equals(end.data)) {
+                while (end != null && curr.data.equals(end.data)) {
                     end = end.next;
                 }
                 if (curr.next != end) {
                     curr.next.prev = null;
                     curr.next = end;
-                    end.prev.next = null;
-                    end.prev = curr;
+                    if (end != null) {
+                        end.prev.next = null;
+                        end.prev = curr;
+                    }
                 }
+            }
+        }
+
+        static public <T> void deleteDupesFromUnsortedList(DoublyLinkedList<T> list) {
+            if (list == null)
+                return;
+            Set<T> visited = new HashSet<>();
+            Node<T> curr = list.start;
+            while (curr != null) {
+                Node<T> next = curr.next;
+                if (visited.contains(curr.data)) {
+                    curr.prev.next = curr.next;
+                    if (curr.next != null)
+                        curr.next.prev = curr.prev;
+                    curr.prev = null;
+                    curr.next = null;
+                } else {
+                    visited.add(curr.data);
+                }
+                curr = next;
+            }
+        }
+
+        static public <T> void deleteAllOccurences(DoublyLinkedList<T> list, T k) {
+            if (list == null || k == null)
+                return;
+            for (Node<T> curr = list.start; curr != null; ) {
+                Node<T> next = curr.next;
+                if (curr.data.equals(k)) {
+                    if (curr.prev != null) {
+                        curr.prev.next = curr.next;
+                    }
+
+                    if (next != null) {
+                        next.prev = curr.prev;
+                    }
+                    curr.prev = null;
+                    curr.next = null;
+                    if (list.start == curr)
+                        list.start = next;
+                }
+                curr = next;
             }
         }
     }

@@ -2,9 +2,15 @@ package list;
 
 import static list.DLLUtils.ArrangementUtils.reverse;
 import static list.DLLUtils.ArrangementUtils.reverseIteratively;
+import static list.DLLUtils.ArrangementUtils.rotateLeftBy;
+import static list.DLLUtils.ArrangementUtils.rotateRightBy;
+import static list.DLLUtils.DeleteUtils.deleteAllOccurences;
+import static list.DLLUtils.DeleteUtils.deleteDupesFromSortedList;
+import static list.DLLUtils.DeleteUtils.deleteDupesFromUnsortedList;
 import static list.DLLUtils.MergeUtils.merge;
 import static list.DLLUtils.SortUtils.insertionSort;
 import static list.DLLUtils.SortUtils.mergeSort;
+import static list.DLLUtils.SortUtils.sortBiotonicList;
 import static list.DLLUtils.printPairsMatchingSum;
 import static list.DLLUtils.swap;
 
@@ -45,5 +51,52 @@ public class DLLTest {
 
         list = new DoublyLinkedList<>(new Integer[]{5, 4, 3, 2, 1});
         printPairsMatchingSum(list, 5);
+
+        list = new DoublyLinkedList<>(new Integer[]{5, 5, 5, 4, 3, 2, 1});
+        deleteDupesFromSortedList(list);
+        System.out.println("After dupe deleting: "+ list);
+        list = new DoublyLinkedList<>(new Integer[]{5, 5, 5, 4, 4, 4,3, 3, 2, 1});
+        deleteDupesFromSortedList(list);
+        System.out.println("After dupe deleting: "+ list);
+        list = new DoublyLinkedList<>(new Integer[]{1,1,1,1,1});
+        deleteDupesFromSortedList(list);
+        System.out.println("After dupe deleting: "+ list);
+        list = new DoublyLinkedList<>(new Integer[]{5, 4, 3, 21, 5, 1, 6, 6});
+        deleteDupesFromUnsortedList(list);
+        System.out.println("After dupe deleting: "+ list);
+        list = new DoublyLinkedList<>(new Integer[]{5, 4, 3, 21, 5, 1, 6, 6});
+        deleteAllOccurences(list, 5);
+        System.out.println("After deleting all 5's: "+ list);
+        deleteAllOccurences(list, 6);
+        System.out.println("After deleting all 6's: "+ list);
+        list = new DoublyLinkedList<>(new Integer[]{1,1,1,1});
+        deleteAllOccurences(list, 1);
+        System.out.println("After deleting all 1's: "+ list);
+
+        list = new DoublyLinkedList<>(new Integer[]{10,20,30,40,50,60});
+        rotateLeftBy(list, 4);
+        System.out.println("After rotate left by 4: "+ list);
+        rotateLeftBy(list, 6);
+        System.out.println("After rotate left by 6: "+ list);
+        rotateLeftBy(list, 8);
+        System.out.println("After rotate left by 8: "+ list);
+
+        list = new DoublyLinkedList<>(new Integer[]{10,20,30,40,50,60});
+        rotateRightBy(list, 4);
+        System.out.println("After rotate right by 4: "+ list);
+        rotateRightBy(list, 6);
+        System.out.println("After rotate right by 6: "+ list);
+        rotateRightBy(list, 8);
+        System.out.println("After rotate right by 8: "+ list);
+
+        list = new DoublyLinkedList<>(new Integer[]{1,2,3,7,6,5});
+        sortBiotonicList(list);
+        System.out.println("After biotonic list sort: "+ list);
+        list = new DoublyLinkedList<>(new Integer[]{1,2,3,7});
+        sortBiotonicList(list);
+        System.out.println("After biotonic list sort: "+ list);
+        list = new DoublyLinkedList<>(new Integer[]{5,4,3,2,1});
+        sortBiotonicList(list);
+        System.out.println("After biotonic list sort: "+ list);
     }
 }

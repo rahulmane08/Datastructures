@@ -1214,16 +1214,19 @@ public class ListUtils {
         static public <T> void rotateLeftBy(LinkedList<T> list, int n) {
             if (list == null || list.start == null)
                 return;
-            if (n == list.size())
-                return;
-            if (n > list.size())
-                n = n % list.size();
+            int i = 1;
             Node<T> curr = list.start;
-            for (int i = 1; i < n; i++)
+            Node<T> prev = null;
+            for (; i <= n; i++) {
+                prev = curr;
                 curr = curr.next;
-            Node<T> newStart = curr.next;
-            curr.next = null;
-            curr = newStart;
+                if (curr == null)
+                    curr = list.start;
+            }
+            if (curr == list.start)
+                return; // n == 0 or n == size, nothing todo.
+            Node<T> newStart = curr;
+            prev.next = null;
             while (curr.next != null)
                 curr = curr.next;
             curr.next = list.start;
@@ -1240,22 +1243,21 @@ public class ListUtils {
         static public <T> void rotateRightBy(LinkedList<T> list, int n) {
             if (list == null || list.start == null)
                 return;
-            if (n == list.size())
-                return;
-            if (n > list.size())
-                n = n % list.size();
+            int i = 1;
             Node<T> curr = list.start;
-            for (int i = 1; i < n; i++)
+            for (; i <= n; i++) {
                 curr = curr.next;
-            Node<T> start = list.start, end = null;
-            while (curr.next != null) {
-                end = start;
-                start = start.next;
-                curr = curr.next;
+                if (curr == null)
+                    curr = list.start;
             }
-            end.next = null;
+            if (curr == list.start)
+                return;
+            Node<T> newEnd = list.start;
+            for (; curr.next != null; newEnd = newEnd.next, curr = curr.next);
+            Node<T> newStart = newEnd.next;
+            newEnd.next = null;
             curr.next = list.start;
-            list.start = start;
+            list.start = newStart;
         }
 
         /**

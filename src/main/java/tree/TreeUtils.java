@@ -3,7 +3,6 @@ package tree;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
@@ -49,15 +48,31 @@ public class TreeUtils {
     public static boolean exists(int data, Node root) {
         if (root == null)
             return false;
-        if (root.data == data)
-            return true;
-        return exists(data, root.left) || exists(data, root.right);
+        return (root.data == data) || exists(data, root.left) || exists(data, root.right);
     }
 
     public static int size(Node root) {
         if (root == null)
             return 0;
         return 1 + size(root.left) + size(root.right);
+    }
+
+    public int sizeIterative(Node root) {
+        if (root == null)
+            return 0;
+        Queue<Node> queue = new ArrayDeque<>();
+        int size = 0;
+        while (!queue.isEmpty()) {
+            Node curr = queue.poll();
+            ++size;
+            if (curr.left != null) {
+                queue.offer(curr.left);
+            }
+            if (curr.right != null) {
+                queue.offer(curr.right);
+            }
+        }
+        return size;
     }
 
     public static void deleteTree(Node root) {
@@ -168,18 +183,6 @@ public class TreeUtils {
                 && areTreesMirrors(root1.left, root2.right)
                 && areTreesMirrors(root1.right, root2.left)
         );
-    }
-
-    public static void createMirror(Node root) {
-        if (root == null)
-            return;
-        Node left = root.left;
-        Node right = root.right;
-        root.left = right;
-        root.right = left;
-        createMirror(left);
-        createMirror(right);
-
     }
 
     public static void image(Node root) {
@@ -837,6 +840,7 @@ public class TreeUtils {
     }
 
     public static class Traversals {
+        // Using single stack
         public static void inOrderIterative(Node root) {
             Stack<Node> stack = new Stack<>();
             Node curr = root;
@@ -844,16 +848,16 @@ public class TreeUtils {
                 if (curr != null) {
                     stack.push(curr);
                     curr = curr.left;
-                } else {
-                    curr = stack.pop();
-                    System.out.print(curr.data + " ");
-                    curr = curr.right;
+                    continue;
                 }
+                curr = stack.pop();
+                System.out.print(curr.data + " ");
+                curr = curr.right;
             }
             System.out.println();
         }
 
-
+        // Using single stack
         public static void preOrderIterative(Node root) {
             Stack<Node> stack = new Stack<>();
             Node curr = root;
@@ -862,29 +866,15 @@ public class TreeUtils {
                     System.out.print(curr.data + " ");
                     stack.push(curr);
                     curr = curr.left;
-                } else {
-                    curr = stack.pop();
-                    curr = curr.right;
+                    continue;
                 }
+                curr = stack.pop();
+                curr = curr.right;
             }
             System.out.println();
         }
 
-        public static void preOrderIterative2(Node root) {
-            Stack<Node> stack = new Stack<>();
-            if (root != null)
-                stack.push(root);
-            while (!stack.isEmpty()) {
-                root = stack.pop();
-                System.out.println(root.data);
-                if (root.right != null)
-                    stack.push(root.right);
-                if (root.left != null)
-                    stack.push(root.left);
-            }
-        }
-
-
+        // Using single stack
         public static void postOrderIterative(Node root) {
             Stack<Node> stack = new Stack<>();
             Node curr = root;
@@ -893,28 +883,28 @@ public class TreeUtils {
                 if (curr != null) {
                     stack.push(curr);
                     curr = curr.left;
+                    continue;
+                }
+                curr = stack.pop();
+                if (curr.right != null) {
+                    // if theres a right child then dont print current node and push back to stack.
+                    // Process the right node first
+                    stack.push(curr);
                 } else {
-                    curr = stack.pop();
-                    if (curr.right != null) {
-                        // if theres a right child then dont print current node and push back to stack.
-                        // Process the right node first
-                        stack.push(curr);
-                    } else {
-                        System.out.print(curr.data + " ");
-                    }
-
-                    // if current node is right child of next node in stack, we have hit all right subtree nodes.
-                    while (!stack.isEmpty() && stack.peek().right == curr) {
-                        curr = stack.pop();
-                        System.out.print(curr.data + " ");
-                    }
-                    curr = curr.right;
+                    System.out.print(curr.data + " ");
                 }
 
+                // if current node is right child of next node in stack, we have hit all right subtree nodes.
+                while (!stack.isEmpty() && stack.peek().right == curr) {
+                    curr = stack.pop();
+                    System.out.print(curr.data + " ");
+                }
+                curr = curr.right;
             }
             System.out.println();
         }
 
+        // Using 2 stacks
         public static void postOrderIterative2(Node root) {
             Stack<Node> tempStack = new Stack<>();
             Stack<Node> finalStack = new Stack<>();
@@ -1028,6 +1018,7 @@ public class TreeUtils {
         }
     }
 
+    // Traversals using no Stacks
     public static class MorrisTraversals {
         /**
          * current = root

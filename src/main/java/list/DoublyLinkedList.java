@@ -80,6 +80,8 @@ public class DoublyLinkedList<T> {
                 s.append(" -> " + curr.next);
             }
         }
+        if (s.toString().isEmpty())
+            return "(null)";
         return s.toString();
     }
 
