@@ -127,7 +127,7 @@ public class BSTTest {
 
         System.out.println("=======Diameter=========");
         System.out.println("diamater : " + TreeUtils.diameter(bst.root));
-        DiameterOptimised diameterOptimised = new DiameterOptimised();
+        DiameterOptimised diameterOptimised = new DiameterOptimised(bst.root);
         // diameter.computeDiameter(bst.root);
         System.out.println("diamater optimised: " + diameterOptimised.getDiameter());
 
@@ -142,8 +142,7 @@ public class BSTTest {
         bst1.insert(12);
         bst1.insert(21);
 
-        diameterOptimised = new DiameterOptimised();
-        diameterOptimised.computeDiameter(bst1.root);
+        diameterOptimised = new DiameterOptimised(bst1.root);
         System.out.println("Ravi diamater : " + diameterOptimised.getDiameter());
 
         System.out.println("=======Check Preordered array is BST=========");

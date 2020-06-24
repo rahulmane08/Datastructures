@@ -608,10 +608,16 @@ public class ArrayUtils {
 
             if (low >= high)
                 return false;
+
+            if (high < arr[low] || arr[high] < low) {
+                return false;
+            }
+
             if (low == arr[low]) {
                 index = low;
                 return true;
             }
+
             if (high == arr[high]) {
                 index = high;
                 return true;

@@ -350,4 +350,14 @@ public class StackUtils {
             minStack.push(minStack.peek());
         }
     }
+
+    static public <T> void printStack(Stack<T> stack) {
+        if (stack == null || stack.isEmpty())
+            return;
+        T elem = stack.pop();
+        printStack(stack);
+        System.out.println(elem);
+        stack.push(elem);
+    }
+
 }

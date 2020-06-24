@@ -18,21 +18,6 @@ public class BinarySearchTree {
         root = BSTUtils.createBalancedBST(sortedArray);
     }
 
-    public void reverse(Node node) {
-        if (node == null)
-            return;
-
-        if (node.left == null && node.right == null)
-            return;
-
-        Node temp = node.left;
-        node.left = node.right;
-        node.right = temp;
-
-        reverse(node.left);
-        reverse(node.right);
-    }
-
     public void insert(int data) {
         if (this.root == null) {
             this.root = new Node(data);
@@ -41,20 +26,20 @@ public class BinarySearchTree {
         insert(this.root, data);
     }
 
-    private Node insert(Node node, int data) {
-        if (node == null) {
+    private Node insert(Node root, int data) {
+        if (root == null) {
             return new Node(null, null, data);
         }
 
-        if (node.data == data)
-            return node;
+        if (root.data == data)
+            return root;
 
-        if (node.data > data)
-            node.left = insert(node.left, data);
-        else if (node.data < data)
-            node.right = insert(node.right, data);
+        if (root.data > data)
+            root.left = insert(root.left, data);
+        else if (root.data < data)
+            root.right = insert(root.right, data);
 
-        return node;
+        return root;
     }
 
     public Node min(Node rootNode) {

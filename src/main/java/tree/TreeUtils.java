@@ -2,18 +2,24 @@ package tree;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import interfaces.Important;
+import stack.StackUtils;
 import utils.Utils;
 
 
 public class TreeUtils {
 
     /**
+     * POST ORDER TRAVERSAL
      * 1. null nodes return MIN_VALUE.
      * 2. for the current node, find the left tree max and right tree max
      * 3. Return max amongst curr, left max and right max.
@@ -25,22 +31,19 @@ public class TreeUtils {
         if (root == null) {
             return Integer.MIN_VALUE;
         }
-        int max = 0;
-        int curr = root.data;
+        int max = root.data;
         int left = findMax(root.left);
         int right = findMax(root.right);
 
-        if (left > right)
+        if (left > max)
             max = left;
-        else
+        if (right > max)
             max = right;
-        if (curr > max)
-            max = curr;
-
         return max;
     }
 
     /**
+     * PRE ORDER
      * @param data
      * @param root
      * @return
@@ -57,11 +60,24 @@ public class TreeUtils {
         return 1 + size(root.left) + size(root.right);
     }
 
-    public int sizeIterative(Node root) {
+    public static int sum(Node root) {
+        if (root == null)
+            return 0;
+        return root.data + sum(root.left) + sum(root.right);
+    }
+
+    public static boolean isLeaf(Node root) {
+        if (root == null)
+            return false;
+        return (root.left == null && root.right == null);
+    }
+
+    public static int sizeIterative(Node root) {
         if (root == null)
             return 0;
         Queue<Node> queue = new ArrayDeque<>();
         int size = 0;
+        queue.offer(root);
         while (!queue.isEmpty()) {
             Node curr = queue.poll();
             ++size;
@@ -87,6 +103,11 @@ public class TreeUtils {
         root = null;
     }
 
+    /**
+     * POST ORDER
+     * @param root
+     * @return
+     */
     public static int heightRecursive(Node root) {
         if (root == null)
             return 0;
@@ -110,15 +131,342 @@ public class TreeUtils {
                 ++height;
                 if (!queue.isEmpty()) //if queue is empty then entire tree is traversed,then dont insert marker.
                     queue.offer(marker);
+                continue;
+            }
+            if (curr.left != null)
+                queue.offer(curr.left);
+            if (curr.right != null)
+                queue.offer(curr.right);
+        }
+        return height;
+    }
+
+
+    public static int diameter(Node root) {
+        if (root == null)
+            return 0;
+        int nodesInLongestPath = lengthOfLongestPathOfNode(root); //total nodes in the longest path in which current node lies
+
+        int leftDiameter = diameter(root.left);
+        int rightDiameter = diameter(root.right);
+        return Utils.max(nodesInLongestPath, leftDiameter, rightDiameter);
+    }
+
+    public static int lengthOfLongestPathOfNode(Node root) {
+        if (root == null)
+            return 0;
+        int leftHeight = heightRecursive(root.left);
+        int rightHeight = heightRecursive(root.right);
+        int nodesInLongestPath = leftHeight + rightHeight + 1;
+        return nodesInLongestPath;
+    }
+
+    /**
+     *                   1
+     *                  / \
+     *                 2   3
+     *                / \
+     *               4   5
+     *                    \
+     *                     6
+     *                      \
+     *                       7
+     *                        \
+     *                         8
+     *   Diameter = 7 (8-7-6-5-2-1-3)
+     */
+    static public class DiameterOptimised {
+
+        public DiameterOptimised(Node root) {
+            computeDiameter(root);
+        }
+
+        private int diameter = 0;
+
+        public int getDiameter() {
+            return diameter;
+        }
+
+        private int computeDiameter(Node root) {
+            if (root == null) {
+                return 0;
+            }
+
+            int rHeight = computeDiameter(root.right);
+            int lHeight = computeDiameter(root.left);
+            int nodeDiameter = 1 + lHeight + rHeight;
+            int nodeHeight = 1 + Math.max(lHeight, rHeight);
+            if (nodeDiameter > diameter)
+                diameter = nodeDiameter;
+            return nodeHeight;
+        }
+    }
+
+    /**
+     * level order traversal
+     * have maxSum,maxLevel,level and currSum
+     * if marker is reached, reset the currSum, check currSum>maxSum if yes maxSum = currSum, maxLevel = level
+     * else increment the currSum by current node data and push left and right
+     *
+     * @param root
+     * @return
+     */
+    public static int findLevelWithMaxSum(Node root) {
+        if (root == null)
+            return 0;
+        Node marker = new Node(null, null, Integer.MIN_VALUE);
+        int maxSum = 0, maxLevel = 0;
+        int currSum = 0, level = 0;
+        Queue<Node> queue = new ArrayDeque<>();
+        queue.offer(root);
+        queue.offer(marker);
+        while (!queue.isEmpty()) {
+            Node curr = queue.poll();
+            if (curr == marker) {
+                if (currSum > maxSum) {
+                    maxSum = currSum;
+                    maxLevel = level;
+                }
+                if (!queue.isEmpty())
+                    queue.offer(marker); //adding marker for next level
+                currSum = 0;//reset the currSum for the next level sum
+                ++level;
             } else {
+                currSum += curr.data;
                 if (curr.left != null)
                     queue.offer(curr.left);
                 if (curr.right != null)
                     queue.offer(curr.right);
             }
-
         }
-        return height;
+        return maxLevel;
+    }
+
+    /**
+     * 1. if either of the two is the parent of other then that node is LCA
+     * 2. traverse into left tree and assign it to left lca
+     * 3. traverse into right tree and assign it to right lca
+     * 4. leftLca==null or rightLca will be null if condition 2 is satisfied
+     * 5. if both are non null which means from the current root the recursion went down
+     * and returned the left and right nodes itself,in which case return the current root
+     *
+     * @param root
+     * @param left
+     * @param right
+     * @return
+     */
+    public static Node lca(Node root, int left, int right) {
+        if (root == null) return null; // Base condition
+
+        //if either of the two is the parent of the other, or we have traversed down to one of the two nodes
+        if (root.data == left || root.data == right) {
+            return root;
+        }
+
+        //find left/right subtree lca
+        Node leftLca = lca(root.left, left, right);
+        Node rightLca = lca(root.right, left, right);
+
+        // If both of the above calls return Non-NULL, then one key
+        // is present in once subtree and other is present in other,
+        // So this node is the LCA
+        if (leftLca != null && rightLca != null)
+            return root;
+
+        // Only left key present, its the LCA
+        if (leftLca != null)
+            return leftLca;
+
+        // Only right key present, its the LCA
+        if (rightLca != null)
+            return rightLca;
+
+        // both keys absent.
+        return null;
+    }
+
+    /**
+     * POST ORDER
+     * maintain a stack of current level path and push current root
+     * if the current node is leaf print stack
+     * traverse left and right
+     * pop the current from the stack before the stack unwinds onto parent node
+     *
+     * @param root
+     * @param path
+     */
+    public static void printAllRootToLeafPaths(Node root, Stack<Integer> path) {
+        if (root == null)
+            return;
+        path.push(root.data);
+        printAllRootToLeafPaths(root.left, path);
+        printAllRootToLeafPaths(root.right, path);
+        if (isLeaf(root)) {
+            System.out.println("Found a path: ");
+            StackUtils.printStack(path);
+        }
+        path.pop();
+    }
+
+    public static void printAllRootToLeafPathsIterative(Node root) {
+        if (root == null)
+            return;
+        Stack<Node> stack = new Stack<>();
+        Node curr = root;
+        while (curr != null || !stack.isEmpty()) {
+           if (curr != null) {
+               stack.push(curr);
+               curr = curr.left;
+           } else {
+              curr = stack.pop();
+              if (curr.right != null) {
+                  stack.push(curr);
+              } else {
+                  System.out.println("Found a path: ");
+                  StackUtils.printStack(stack);
+              }
+              while (!stack.isEmpty() && curr == stack.peek().right) {
+                  curr = stack.pop();
+              }
+              curr = curr.right;
+           }
+        }
+    }
+
+    public static boolean printFirstRootToLeafPath(Node root, Stack<Integer> path) {
+        if (root == null) {
+            return false;
+        }
+        path.push(root.data);
+        if (isLeaf(root)) {
+            System.out.println("Found a path = " + path);
+            return true;
+        }
+        boolean pathFound =
+                printFirstRootToLeafPath(root.left, path) || printFirstRootToLeafPath(root.right, path);
+        path.pop();
+        return pathFound;
+    }
+
+    public static void printAllPathsMatchingSum(Node root, Stack<Integer> path, int sum) {
+        if (root == null)
+            return;
+        path.push(root.data);
+        sum = sum - root.data;
+        if (isLeaf(root) && sum == 0) {
+            System.out.println("Found a path: ");
+            StackUtils.printStack(path);
+        }
+        printAllPathsMatchingSum(root.left, path, sum);
+        printAllPathsMatchingSum(root.right, path, sum);
+        path.pop();
+    }
+
+    public static boolean printFirstPathMatchingSum(Node root, Stack<Integer> path, int sum) {
+        if (root == null)
+            return false;
+        path.push(root.data);
+        sum = sum - root.data;
+        if (isLeaf(root) && sum == 0) {
+            System.out.printf("Found a path: %s%n", String.valueOf(path));
+            return true;
+        }
+        boolean pathFound =
+                printFirstPathMatchingSum(root.left, path, sum) || printFirstPathMatchingSum(root.right, path, sum);
+        path.pop();
+        return pathFound;
+    }
+
+    public static class PathWithMaxSumUtils {
+        private int maxSum = 0, sum = 0;
+        List<Integer> pathWithMaxSum = new ArrayList<>();
+
+        public PathWithMaxSumUtils(Node root) {
+            Deque<Integer> queue = new ArrayDeque<>();
+            computePathWithMaxSum(root, queue);
+        }
+
+        private void computePathWithMaxSum(Node root, Deque<Integer> queue) {
+            if (root == null)
+                return;
+            queue.offer(root.data);
+            sum += root.data;
+            if (isLeaf(root)) {
+                if (maxSum < sum) {
+                    pathWithMaxSum.clear();
+                    maxSum = sum;
+                    while (!queue.isEmpty())
+                        pathWithMaxSum.add(queue.pollFirst());
+                    pathWithMaxSum.stream().forEach(queue::offer);
+                }
+            }
+            computePathWithMaxSum(root.left, queue);
+            computePathWithMaxSum(root.right, queue);
+            sum = sum - root.data;
+            queue.pollLast();
+        }
+
+        public int getMaxSum() {
+            return maxSum;
+        }
+
+        public List<Integer> getPathWithMaxSum() {
+            return pathWithMaxSum;
+        }
+    }
+
+    /**
+     * PRE ORDER
+     * @param root
+     */
+    public static void printAllAncestors(Node root) {
+        if (root == null || isLeaf(root))
+            return;
+        System.out.println(root);
+        printAllAncestors(root.left);
+        printAllAncestors(root.right);
+    }
+
+    /**
+     * PRE ORDER
+     * @param root
+     */
+    public static void printAllLeaves(Node root) {
+        if (root == null)
+            return;
+        if (isLeaf(root))
+            System.out.println(root);
+        printAllLeaves(root.left);
+        printAllLeaves(root.right);
+    }
+
+    /**
+     * POST ORDER
+     * @param root
+     * @param data
+     * @return
+     */
+    public static boolean printAncestorsOfGivenNode(Node root, int data) {
+        if (root == null)
+            return false;
+        if (data == root.data)
+            return true;
+        if (printAncestorsOfGivenNode(root.left, data) || printAncestorsOfGivenNode(root.right, data)) {
+            System.out.println(root.data);
+            return true;
+        }
+        return false;
+    }
+
+    public static void printKthLevelNodes(Node root, int k) {
+        if (root == null || k < 0)
+            return;
+        if (k == 0) {
+            System.out.print(root.data + " ");
+            return;
+        }
+        printKthLevelNodes(root.left, k - 1);
+        printKthLevelNodes(root.right, k - 1);
     }
 
     /**
@@ -163,28 +511,6 @@ public class TreeUtils {
         return leftLeaves + rightLeaves;
     }
 
-    public static boolean areTreesIdentical(Node root1, Node root2) {
-        if (root1 == null && root2 == null)
-            return true;
-        if (root1 == null || root2 == null)
-            return false;
-        return ((root1.data == root2.data)
-                && areTreesIdentical(root1.left, root2.left)
-                && areTreesIdentical(root1.right, root2.right)
-        );
-    }
-
-    public static boolean areTreesMirrors(Node root1, Node root2) {
-        if (root1 == null && root2 == null)
-            return true;
-        if (root1 == null || root2 == null)
-            return false;
-        return ((root1.data == root2.data)
-                && areTreesMirrors(root1.left, root2.right)
-                && areTreesMirrors(root1.right, root2.left)
-        );
-    }
-
     public static void image(Node root) {
         if (root == null)
             return;
@@ -196,186 +522,6 @@ public class TreeUtils {
         root.right = root.left;
         root.left = temp;
 
-    }
-
-    public static int lengthOfLongestPathOfNode(Node root) {
-        if (root == null)
-            return 0;
-        int leftHeight = heightRecursive(root.left);
-        int rightHeight = heightRecursive(root.right);
-        int nodesInLongestPath = leftHeight + rightHeight + 1;
-        return nodesInLongestPath;
-    }
-
-    public static int diameter(Node root) {
-        if (root == null)
-            return 0;
-        int nodesInLongestPath = lengthOfLongestPathOfNode(root); //total nodes in the longest path in which current node lies
-
-        int leftDiameter = diameter(root.left);
-        int rightDiameter = diameter(root.right);
-        return Utils.max(nodesInLongestPath, leftDiameter, rightDiameter);
-    }
-
-    /**
-     * level order traversal
-     * have maxSum,maxLevel,level and currSum
-     * if marker is reached, reset the currSum, check currSum>maxSum if yes maxSum = currSum, maxLevel = level
-     * else increment the currSum by current node data and push left and right
-     *
-     * @param root
-     * @return
-     */
-    public static int findLevelWithMaxSum(Node root) {
-        if (root == null)
-            return 0;
-        Node marker = new Node(null, null, Integer.MIN_VALUE);
-        int maxSum = 0, maxLevel = 0;
-        int currSum = 0, level = 0;
-        Queue<Node> queue = new ArrayDeque<>();
-        queue.offer(root);
-        queue.offer(marker);
-        while (!queue.isEmpty()) {
-            Node curr = queue.poll();
-            if (curr == marker) {
-                if (currSum > maxSum) {
-                    maxSum = currSum;
-                    maxLevel = level;
-                }
-                if (!queue.isEmpty())
-                    queue.offer(marker); //adding marker for next level
-                currSum = 0;//reset the currSum for the next level sum
-                ++level;
-            } else {
-                currSum += curr.data;
-                if (curr.left != null)
-                    queue.offer(curr.left);
-                if (curr.right != null)
-                    queue.offer(curr.right);
-            }
-        }
-        return maxLevel;
-    }
-
-    /**
-     * maintain a stack of current level path and push current root
-     * if the current node is leaf print stack
-     * traverse left and right
-     * pop the current from the stack before the stack unwinds onto parent node
-     *
-     * @param root
-     * @param path
-     */
-    public static void printAllRootToLeafPaths(Node root, Stack<Integer> path) {
-        if (root == null)
-            return;
-        path.push(root.data);
-        if (isLeaf(root)) {
-            System.out.println("Found a path = " + path);
-        }
-
-        printAllRootToLeafPaths(root.left, path);
-        printAllRootToLeafPaths(root.right, path);
-        path.pop();
-    }
-
-    public static boolean printFirstRootToLeafPath(Node root, Stack<Integer> path) {
-        if (root == null) {
-            return false;
-        }
-        path.push(root.data);
-        if (isLeaf(root)) {
-            System.out.println("Found a path = " + path);
-            return true;
-        }
-        boolean found = printFirstRootToLeafPath(root.left, path) || printFirstRootToLeafPath(root.right, path);
-        path.pop();
-        return found;
-    }
-
-    public static boolean printFirstRootToLeafPath1(Node root, Stack<Integer> path) {
-        if (root == null) {
-            return false;
-        }
-
-        if (isLeaf(root)) {
-            path.push(root.data);
-            return true;
-        }
-
-        if (printFirstRootToLeafPath1(root.left, path) || printFirstRootToLeafPath1(root.left, path)) {
-            path.add(root.data);
-            return true;
-        }
-
-        return false;
-    }
-
-    public static void printAllPathsMatchingSum(Node root, Stack<Integer> path, int sum) {
-        if (root == null || sum < 0)
-            return;
-        path.push(root.data);
-        sum = sum - root.data;
-        if (isLeaf(root) && sum == 0)
-            System.out.printf("Found a path: %s%n", String.valueOf(path));
-        printAllPathsMatchingSum(root.left, path, sum);
-        printAllPathsMatchingSum(root.right, path, sum);
-        path.pop();
-    }
-
-    public static boolean printFirstPathMatchingSum(Node root, Stack<Integer> path, int sum) {
-        if (root == null || sum < 0)
-            return false;
-        path.push(root.data);
-        sum = sum - root.data;
-        if (isLeaf(root) && sum == 0) {
-            System.out.printf("Found a path: %s%n", String.valueOf(path));
-            return true;
-        }
-        boolean pathFound = printFirstPathMatchingSum(root.left, path, sum) || printFirstPathMatchingSum(root.right, path, sum);
-        path.pop();
-        return pathFound;
-    }
-
-    public static int sum(Node root) {
-        if (root == null)
-            return 0;
-        return (root.data + sum(root.left) + sum(root.right));
-    }
-
-    /**
-     * 1. if either of the two is the parent of other then that node is LCA
-     * 2. traverse into left tree and assign it to left lca
-     * 3. traverse into right tree and assign it to right lca
-     * 4. leftLca==null or rightLca will be null if condition 2 is satisfied
-     * 5. if both are non null which means from the current root the recursion went down
-     * and returned the left and right nodes itself,in which case return the current root
-     *
-     * @param root
-     * @param left
-     * @param right
-     * @return
-     */
-    public static Node lca(Node root, int left, int right) {
-        if (root == null) return null; // Base condition
-
-        //if either of the two is the parent of the other, or we have traversed down to one of the two nodes
-        if (root.data == left || root.data == right) {
-            return root;
-        }
-
-        //find left/right subtree lca
-        Node leftLca = lca(root.left, left, right);
-        Node rightLca = lca(root.right, left, right);
-
-        // If both of the above calls return Non-NULL, then one key
-        // is present in once subtree and other is present in other,
-        // So this node is the LCA
-        if (leftLca != null && rightLca != null)
-            return root;
-
-        // Otherwise check if left subtree or right subtree is LCA
-        return (leftLca != null) ? leftLca : rightLca;
     }
 
     /**
@@ -415,29 +561,6 @@ public class TreeUtils {
         return current;
     }
 
-    public static boolean isLeaf(Node root) {
-        if (root == null)
-            return false;
-        return (root.left == null && root.right == null);
-    }
-
-    public static void printAllAncestors(Node root) {
-        if (root == null || isLeaf(root))
-            return;
-        System.out.println(root);
-        printAllAncestors(root.left);
-        printAllAncestors(root.right);
-    }
-
-    public static void printAllLeaves(Node root) {
-        if (root == null)
-            return;
-        if (isLeaf(root))
-            System.out.println(root);
-        printAllLeaves(root.left);
-        printAllLeaves(root.right);
-    }
-
     /**
      * add next pointer to each tree node.
      * do LOT and add current popped element.next = queue.peek()
@@ -474,9 +597,8 @@ public class TreeUtils {
     public static void printVerticalSum(Node root) {
         Map<Integer, Integer> levelSum = new HashMap<>();
         computeVerticalSum(root, levelSum, 0);
-        levelSum.forEach((k, v) -> {
-            System.out.println("Vertical level = " + k + ", sum = " + v);
-        });
+        levelSum.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                .forEach(entry -> System.out.format("Level:%d, Sum:%d%n", entry.getKey(), entry.getValue()));
     }
 
     private static void computeVerticalSum(Node root, Map<Integer, Integer> levelSum, Integer level) {
@@ -489,28 +611,81 @@ public class TreeUtils {
     }
 
     /**
+     * POST ORDER
      * AVL tree check
      *
-     * @param root
      * @return
      */
-    public static boolean isHeightBalanced(Node root) {
-        if (root == null)
-            return true;
-        int leftHeight = heightRecursive(root.left);
-        int rightHeight = heightRecursive(root.right);
-        int balance = Math.abs(leftHeight - rightHeight);
-        return (balance <= 1) && isHeightBalanced(root.left) && isHeightBalanced(root.right);
+    public static class AVLChecker {
+
+        private boolean check = true;
+
+        public AVLChecker(Node root) {
+            checkIfAVLTree(root);
+        }
+
+        private int checkIfAVLTree(Node root) {
+            if (!check)
+                return -1;
+            if (root == null)
+                return 0;
+            int leftHeight = checkIfAVLTree(root.left);
+            int rightHeight = checkIfAVLTree(root.right);
+            int balance = Math.abs(leftHeight - rightHeight);
+            check = (balance <= 1);
+            return 1 + Math.max(leftHeight, rightHeight);
+        }
+
+        public boolean isCheck() {
+            return check;
+        }
     }
 
-    public static boolean printAncestorsOfGivenNode(Node root) {
-        if (root == null)
-            return false;
-        if (printAncestorsOfGivenNode(root.left) || printAncestorsOfGivenNode(root.right)) {
-            System.out.println(root.data);
+    public static boolean checkIfSubTree(Node mainRoot, Node subRoot) {
+        if (mainRoot == null && subRoot == null)
             return true;
+        if (subRoot != null && mainRoot == null)
+            return false;
+        if (subRoot == null && mainRoot != null)
+            return true;
+        if (mainRoot.data == subRoot.data)
+            return checkIfSubTree(mainRoot.left, subRoot.left) && checkIfSubTree(mainRoot.right, subRoot.right);
+        return checkIfSubTree(mainRoot.left, subRoot) || checkIfSubTree(mainRoot.right, subRoot);
+    }
+
+    /**
+     * POST ORDER
+     */
+    public static class InternalNodeWithOneChildChecker {
+        private Node root;
+        private boolean check = false;
+
+        public InternalNodeWithOneChildChecker(Node root) {
+            this.root = root;
+            this.check = checkIfEachInternalHasOneChild(root);
         }
-        return false;
+
+        private boolean checkIfEachInternalHasOneChild(Node root) {
+            if (root == null || isLeaf(root))
+                return true;
+            if (!checkIfEachInternalHasOneChild(root.left))
+                return false;
+            if (!checkIfEachInternalHasOneChild(root.right))
+                return false;
+            if (this.root.equals(root))
+                return true;
+
+            int children = 0;
+            if (root.left != null)
+                children++;
+            if (root.right != null)
+                children++;
+            return children % 2 == 1;
+        }
+
+        public boolean isCheck() {
+            return check;
+        }
     }
 
     /**
@@ -524,7 +699,12 @@ public class TreeUtils {
      * @return
      */
     public static boolean checkIfSumTree(Node root) {
-        return checkIfSumTreeUtil(root) != Integer.MIN_VALUE;
+        try {
+            checkIfSumTreeUtil(root);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static int checkIfSumTreeUtil(Node root) {
@@ -534,31 +714,75 @@ public class TreeUtils {
             return root.data;
         int left = checkIfSumTreeUtil(root.left);
         int right = checkIfSumTreeUtil(root.right);
-        if (root.data == left + right)
+        if (root.data != left + right)
+            throw new RuntimeException("Tree is not a sum tree");
+        return 2 * root.data;
+    }
+
+    public static class SumTreeChecker {
+        private boolean check = true;
+
+        public SumTreeChecker(Node root) {
+            checkSum(root);
+        }
+
+        private int checkSum(Node root) {
+            if (root == null)
+                return 0;
+            if (isLeaf(root))
+                return root.data;
+            int leftSum = checkSum(root.left);
+            int rightSum = checkSum(root.right);
+            if (check)
+                check = (root.data == leftSum + rightSum);
             return 2 * root.data;
-        return Integer.MIN_VALUE;
+        }
+
+        public boolean isCheck() {
+            return check;
+        }
+    }
+
+    public static boolean areTreesIdentical(Node root1, Node root2) {
+        if (root1 == null && root2 == null)
+            return true;
+        if (root1 == null || root2 == null)
+            return false;
+        return ((root1.data == root2.data)
+                && areTreesIdentical(root1.left, root2.left)
+                && areTreesIdentical(root1.right, root2.right)
+        );
+    }
+
+    public static boolean areTreesMirrors(Node root1, Node root2) {
+        if (root1 == null && root2 == null)
+            return true;
+        if (root1 == null || root2 == null)
+            return false;
+        return ((root1.data == root2.data)
+                && areTreesMirrors(root1.left, root2.right)
+                && areTreesMirrors(root1.right, root2.left)
+        );
     }
 
     /**
-     * A subtree of a tree T is a tree S consisting of a node in T and all of its descendants in T.
-     * The subtree corresponding to the root node is the entire tree; the subtree corresponding to any other node
-     * is called a proper subtree.
+     * Every non leaf node has left and right child
+     * In other words each node can have exactly 0 or 2 children.
      *
-     * @param mainRoot
-     * @param subRoot
+     * @param root
      * @return
      */
-    public static boolean checkIfSubtree(Node mainRoot, Node subRoot) {
-        if (mainRoot == null && subRoot == null)
+    static public boolean checkIfStrictTree(Node root) {
+        if (root == null)
             return true;
-        if (mainRoot == null)
-            return false;
-        if (subRoot == null)
-            return false;
-        if (mainRoot.data == subRoot.data)
-            return TreeUtils.areTreesIdentical(mainRoot, subRoot);
-        return checkIfSubtree(mainRoot.left, subRoot) || checkIfSubtree(mainRoot.right, subRoot);
+        int children = 0;
+        if (root.left != null)
+            ++children;
+        if (root.right != null)
+            ++children;
+        return (children % 2 == 0) && checkIfStrictTree(root.left) && checkIfStrictTree(root.right);
     }
+
 
     /**
      * 50
@@ -607,55 +831,53 @@ public class TreeUtils {
     }
 
     /**
-     * Every non leaf node has left and right child
-     * In other words each node can have exactly 0 or 2 children.
-     *
+     * IP:
+     *                   10
+     *                /      \
+     *              -2        6
+     *            /   \      /  \
+     *          8     -4    7    5
+     * OP:
+     *               20(4-2+12+6)
+     *                /      \
+     *          4(8-4)      12(7+5)
+     *            /   \      /  \
+     *          0      0    0    0
      * @param root
      * @return
      */
-    static public boolean isStrictTree(Node root) {
+    static public int convertToSumTree1(Node root) {
         if (root == null)
-            return true;
-        int children = 0;
-        if (root.left != null)
-            ++children;
-        if (root.right != null)
-            ++children;
-        return (children == 0 || children == 2) && isStrictTree(root.left) && isStrictTree(root.right);
-    }
-
-    static public void printKthLevelNodes(Node root, int k) {
-        if (root == null || k < 0)
-            return;
-        if (k == 0) {
-            System.out.print(root.data + " ");
-            return;
-        }
-        printKthLevelNodes(root.left, k - 1);
-        printKthLevelNodes(root.right, k - 1);
+            return 0;
+        int data = root.data;
+        int left = convertToSumTree1(root.left);
+        int right = convertToSumTree1(root.right);
+        int sum = left + right;
+        root.data = sum;
+        return data + sum;
     }
 
     /**
      * To create Double tree of the given tree, create a new duplicate for each node, and insert the duplicate as the left child of the original node.
      * INPUT
-     * 1
-     * /   \
-     * 2      3
-     * /  \
-     * 4     5
+     *        1
+     *      /   \
+     *     2      3
+     *   /  \
+     *  4     5
      * <p>
      * OUTPUT:
-     * 1
-     * /   \
-     * 1      3
-     * /      /
-     * 2       3
-     * /  \
-     * 2    5
-     * /    /
-     * 4   5
-     * /
-     * 4
+     *               1
+     *             /   \
+     *            1      3
+     *           /      /
+     *          2       3
+     *        /  \
+     *       2    5
+     *     /    /
+     *    4   5
+     *   /
+     *  4
      */
 
     public static void createDoubleTree(Node root) {
@@ -669,11 +891,19 @@ public class TreeUtils {
     }
 
     // Top view of a tree.
+
+    /**
+     * Preorder
+     * @param root
+     */
+    @Important
     static public void topView(Node root) {
         TreeMap<Integer, Integer> map = new TreeMap<>();
         topViewUtil(root, 0, map);
-        System.out.println("Top Level of Tree");
-        map.values().forEach(System.out::println);
+        System.out.println("Top view of Tree");
+        map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                .map(Map.Entry::getValue)
+                .forEach(System.out::println);
     }
 
     private static void topViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
@@ -685,25 +915,61 @@ public class TreeUtils {
         topViewUtil(root.right, vLevel + 1, map);
     }
 
-    static public class DiameterOptimised {
+    // bottom view of a tree
+    static public void bottomView(Node root) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        bottomViewUtil(root, 0, map);
+        System.out.println("Bottom view of Tree");
+        map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                .map(Map.Entry::getValue)
+                .forEach(System.out::println);
+    }
 
-        private int diameter = 0;
+    private static void bottomViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
+        if (root == null)
+            return;
+        bottomViewUtil(root.left, vLevel - 1, map);
+        bottomViewUtil(root.right, vLevel + 1, map);
+        if (!map.containsKey(vLevel))
+            map.put(vLevel, root.data);
+    }
 
-        public int getDiameter() {
-            return diameter;
-        }
+    // left side view of a tree
+    static public void leftView(Node root) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        leftViewUtil(root, 0, map);
+        System.out.println("Bottom view of Tree");
+        map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                .map(Map.Entry::getValue)
+                .forEach(System.out::println);
+    }
 
-        public int computeDiameter(Node root) {
-            if (root == null) {
-                return 0;
-            }
+    private static void leftViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
+        if (root == null)
+            return;
+        if (!map.containsKey(hLevel))
+            map.put(hLevel, root.data);
+        leftViewUtil(root.left, hLevel + 1, map);
+        leftViewUtil(root.right, hLevel + 1, map);
+    }
 
-            int rHeight = computeDiameter(root.right);
-            int lHeight = computeDiameter(root.left);
-            if (rHeight + lHeight > diameter)
-                diameter = lHeight + rHeight;
-            return Math.max(lHeight, rHeight) + 1;
-        }
+    // right side view of a tree
+    static public void rightView(Node root) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        rightViewUtil(root, 0, map);
+        System.out.println("Bottom view of Tree");
+        map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                .map(Map.Entry::getValue)
+                .forEach(System.out::println);
+    }
+
+    private static void rightViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
+        if (root == null)
+            return;
+        if (!map.containsKey(hLevel))
+            map.put(hLevel, root.data);
+        rightViewUtil(root.right, hLevel + 1, map);
+        rightViewUtil(root.left, hLevel + 1, map);
     }
 
     public static class PrintBoundaryNodesUtil {
@@ -848,11 +1114,11 @@ public class TreeUtils {
                 if (curr != null) {
                     stack.push(curr);
                     curr = curr.left;
-                    continue;
+                } else {
+                    curr = stack.pop();
+                    System.out.print(curr.data + " ");
+                    curr = curr.right;
                 }
-                curr = stack.pop();
-                System.out.print(curr.data + " ");
-                curr = curr.right;
             }
             System.out.println();
         }
@@ -866,10 +1132,10 @@ public class TreeUtils {
                     System.out.print(curr.data + " ");
                     stack.push(curr);
                     curr = curr.left;
-                    continue;
+                } else {
+                    curr = stack.pop();
+                    curr = curr.right;
                 }
-                curr = stack.pop();
-                curr = curr.right;
             }
             System.out.println();
         }
@@ -883,23 +1149,24 @@ public class TreeUtils {
                 if (curr != null) {
                     stack.push(curr);
                     curr = curr.left;
-                    continue;
-                }
-                curr = stack.pop();
-                if (curr.right != null) {
-                    // if theres a right child then dont print current node and push back to stack.
-                    // Process the right node first
-                    stack.push(curr);
                 } else {
-                    System.out.print(curr.data + " ");
-                }
+                    curr = stack.peek();
+                    if (curr.right == null) {
+                        // no right subtree
+                        do {
+                            curr = stack.pop();
+                            System.out.print(curr.data + " ");
+                        } while (!stack.isEmpty() && curr == stack.peek().right);
+                        // this will print leaf is left node, but will keep popping parents if its right node.
 
-                // if current node is right child of next node in stack, we have hit all right subtree nodes.
-                while (!stack.isEmpty() && stack.peek().right == curr) {
-                    curr = stack.pop();
-                    System.out.print(curr.data + " ");
+                        if (stack.isEmpty())
+                            break;
+
+                        // re-adjust the current to top of stack.
+                        curr = stack.peek();
+                    }
+                    curr = curr.right;
                 }
-                curr = curr.right;
             }
             System.out.println();
         }
@@ -1086,38 +1353,40 @@ public class TreeUtils {
 
     }
 
-    static class PathWithMaxSum {
-        private int maxSum = Integer.MIN_VALUE;
+    public static class DeepestLevelSumUtil {
+        private int deepestLevel = -1;
+        private List<Integer> deepestNodes = new ArrayList<>();
+        private int deepestNodesSum = 0;
 
-        public Stack<Integer> pathWithMaxSum(Node root) {
-            Stack<Integer> path = new Stack<>();
-            Stack<Integer> maxPath = new Stack<>();
-            this.pathWithMaxSumUtils(root, path, maxPath);
-            System.out.println(maxSum);
-            return maxPath;
+        public DeepestLevelSumUtil(Node root) {
+            compute(root, 0);
+            this.deepestNodesSum = deepestNodes.stream().reduce(0, Integer::sum);
         }
 
-        private void pathWithMaxSumUtils(Node root, Stack<Integer> path, Stack<Integer> maxPath) {
+        private void compute(Node root, int hLevel) {
             if (root == null)
                 return;
-            path.push(root.data);
-            if (isLeaf(root)) {
-                int pathSum = 0;
-                for (int i : path)
-                    pathSum += i;
-                if (maxSum < pathSum) {
-                    maxSum = pathSum;
-                    maxPath.clear();
-                    path.forEach(e -> {
-                        maxPath.push(e);
-                    });
-                }
-
+            compute(root.left, hLevel + 1);
+            compute(root.right, hLevel + 1);
+            if (hLevel > this.deepestLevel) {
+                this.deepestNodes.clear();
+                this.deepestLevel = hLevel;
+                this.deepestNodes.add(root.data);
+            } else if (hLevel == this.deepestLevel) {
+                this.deepestNodes.add(root.data);
             }
-            pathWithMaxSumUtils(root.left, path, maxPath);
-            pathWithMaxSumUtils(root.right, path, maxPath);
-            path.pop();
         }
 
+        public int getDeepestLevel() {
+            return deepestLevel;
+        }
+
+        public List<Integer> getDeepestNodes() {
+            return deepestNodes;
+        }
+
+        public int getDeepestNodesSum() {
+            return deepestNodesSum;
+        }
     }
 }
