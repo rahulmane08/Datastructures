@@ -16,8 +16,8 @@ public class TestExpressionUtils {
 
     @Test
     public void testInfixToPostfix() {
-        String infix = "a+b*(c^d-e)^(f+g*h)-i";
-        assertEquals(ExpressionUtils.infixToPostfix(infix), "abcd^e-fgh*+^*+i-");
+        String infix = "((a+b)*c/d/e)";
+        assertEquals("ab+c*d/e/", ExpressionUtils.infixToPostfix(infix));
     }
 
     @Test

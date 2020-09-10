@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static tree.TreeUtils.Traversals.levelOrderTraversal;
+import static tree.TreeUtils.addTrees;
 import static tree.TreeUtils.areTreesIdentical;
 import static tree.TreeUtils.areTreesMirrors;
 import static tree.TreeUtils.bottomView;
@@ -44,6 +45,7 @@ import org.junit.Before;
 import org.junit.Test;
 import tree.TreeUtils.DeepestLevelSumUtil;
 import tree.TreeUtils.InternalNodeWithOneChildChecker;
+import tree.TreeUtils.OrderedArrays;
 import tree.TreeUtils.PathWithMaxSumUtils;
 import tree.TreeUtils.SumTreeChecker;
 
@@ -422,5 +424,39 @@ public class BinaryTreeTest {
         assertEquals(Arrays.asList(4, 5, 6, 7), util.getDeepestNodes());
         assertEquals(2, util.getDeepestLevel());
         assertEquals(22, util.getDeepestNodesSum());
+    }
+
+    @Test
+    public void test_addTrees() {
+        assertNull(addTrees(null, null));
+        Node root1 = new Node(1);
+        assertEquals(root1, addTrees(root1, null));
+        assertEquals(root1, addTrees(null, root1));
+        root1.left = new Node(3);
+        root1.right = new Node(2);
+        root1.left.left = new Node(5);
+
+        Node root2 = new Node(2);
+        root2.left = new Node(1);
+        root2.right = new Node(3);
+        root2.left.right = new Node(4);
+        root2.right.right = new Node(7);
+
+        Node mergedNode = addTrees(root1, root2);
+        int[] arr = OrderedArrays.getInstance().toInorderArray(mergedNode);
+        int[] expected = {5, 4, 4, 3, 5, 7};
+        assertTrue(Arrays.equals(expected, arr));
+    }
+
+    @Test
+    public void test_SumOfRootToLeafPathsUtil() {
+        BinaryTree testTree = new BinaryTree();
+        testTree.insert(3);
+        testTree.insert(4);
+        testTree.insert(5);
+        testTree.insert(5);
+        testTree.insert(4);
+        testTree.root.right.right = new Node(7);
+        assertEquals(1046, new TreeUtils.SumOfRootToLeafPathsUtil(testTree.root).getSum(), 0);
     }
 }

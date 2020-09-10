@@ -11,7 +11,6 @@ import static tree.BSTUtils.isBST;
 import static tree.BSTUtils.lca;
 import static tree.BSTUtils.max;
 import static tree.BSTUtils.maxRecursive;
-import static tree.BSTUtils.printCommonNodes;
 import static tree.BSTUtils.printMergeBSTs;
 import static tree.BSTUtils.printRange;
 
@@ -109,21 +108,6 @@ public class BSTTest {
         System.out.println("Ceil (13): " + ceil(bst.root, 13));
         System.out.println("Ceil (99): " + ceil(bst.root, 99));
         System.out.println("Ceil (10): " + ceil(bst.root, 10));
-
-        System.out.println("=======PRINT COMMON NODES=========");
-        System.out.println("Common Nodes between bst and bst:");
-        printCommonNodes(bst.root, bst.root);
-        System.out.println("Common Nodes between bst and leftBst:");
-        printCommonNodes(bst.root, leftBst.root);
-        System.out.println("Common Nodes between bst and righttBst:");
-        printCommonNodes(rightBst.root, bst.root);
-
-        System.out.println("=======K-th smallest/ largest=========");
-        System.out.println("3rd smallest in bst: " + new BSTUtils.KthSmallest().kthSmallest(bst.root, 3));
-        System.out.println("10rd smallest in bst: " + new BSTUtils.KthSmallest().kthSmallest(bst.root, 10));
-        System.out.println("3rd largest in bst: " + new BSTUtils.KthLargest().kthLargest(bst.root, 3));
-        System.out.println("3rd largest in leftBst: " + new BSTUtils.KthLargest().kthLargest(leftBst.root, 3));
-        System.out.println("3rd smallest in leftBst: " + new BSTUtils.KthSmallest().kthSmallest(leftBst.root, 3));
 
         System.out.println("=======Diameter=========");
         System.out.println("diamater : " + TreeUtils.diameter(bst.root));

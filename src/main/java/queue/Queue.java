@@ -34,7 +34,9 @@ public class Queue<T> {
     }
 
     public int size() {
-        return Math.abs(rear - front) + 1;
+        if (rear > front)
+            return rear - front + 1;
+        return capacity() - (front - rear) + 1;
     }
 
     public boolean isFull() {

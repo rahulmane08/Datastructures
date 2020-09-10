@@ -1,6 +1,11 @@
 package stack;
 
+import java.util.Arrays;
 import java.util.Stack;
+
+import interfaces.Hard;
+import interfaces.Important;
+import interfaces.Medium;
 
 public class StackUtils {
     /**
@@ -11,6 +16,7 @@ public class StackUtils {
      * @param s
      * @param <T>
      */
+    @Important
     public static <T> void reversify(Stack<T> s) {
         if (s == null || s.isEmpty())
             return;
@@ -44,18 +50,16 @@ public class StackUtils {
      * @param arr
      * @return
      */
+    @Important
     static public int[] findSpan(int[] arr) {
+        if (arr == null || arr.length == 0)
+            return null;
         Stack<Integer> s = new Stack<>();
         int[] span = new int[arr.length];
-        span[0] = 1;
-        s.push(0);
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i] < arr[i - 1])
-                span[i] = 1;
-            else {
-                span[i] = 1;
-                while (!s.isEmpty() && arr[i] >= arr[s.peek()])
-                    span[i] += span[s.pop()];
+        for (int i = 0; i < arr.length; i++) {
+            span[i] = 1;
+            while (!s.isEmpty() && arr[i] >= arr[s.peek()]) {
+                span[i] += span[s.pop()];
             }
             s.push(i);
         }
@@ -63,6 +67,16 @@ public class StackUtils {
     }
 
     /**
+     * Given a number N, our task is to print those permutations of integer N which are greater than N.
+     * <p>
+     * Examples:
+     * <p>
+     * Input: N = 534
+     * Output: 543
+     * <p>
+     * Input: N = 324
+     * Output: 342, 423, 432
+     * <p>
      * - n=30
      * - for i=1 to 9
      * - put i in stack
@@ -73,17 +87,17 @@ public class StackUtils {
      * @param n
      * @return
      */
-    static public int findPermutationsGreaterThanEqualToOriginalNumber(int n) {
+    static public int countPermutationsGreaterThanEqualToOriginalNumber(int n) {
         int count = 0;
         Stack<Integer> stack = new Stack<>();
-        stack.push(0);
+        stack.push(1);
         int number = 0;
         while (!stack.isEmpty()) {
             int base = stack.pop();
             int lsd = base % 10;
             for (int i = lsd; i <= 9; i++) {
                 number = 10 * base + i;
-                if (number != 0 && number < n) {
+                if (number != 0 && number <= n) {
                     stack.push(number);
                     System.out.println("Number = " + number);
                     count++;
@@ -91,6 +105,26 @@ public class StackUtils {
             }
         }
 
+        return count;
+    }
+
+    static public int countPermutationsGreaterThanEqualToOriginalNumber1(int n) {
+        int count = 0;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 1; i <= 9 && i <= n; i++) {
+            stack.push(i);
+            count++;
+            while (!stack.isEmpty()) {
+                int top = stack.pop();
+                for (int j = top % 10; j <= 9; j++) {
+                    int x = top * 10 + j;
+                    if (x <= top) {
+                        stack.push(x);
+                        count++;
+                    }
+                }
+            }
+        }
         return count;
     }
 
@@ -103,12 +137,25 @@ public class StackUtils {
         int[] pgse = new int[arr.length];
         Stack<Integer> s = new Stack<>();
         for (int i = 0; i < arr.length; i++) {
+            pgse[i] = -1;
             while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
                 s.pop();
-            if (s.isEmpty())
-                pgse[i] = -1;
-            else
+            if (!s.isEmpty())
                 pgse[i] = arr[s.peek()];
+            s.push(i);
+        }
+        return pgse;
+    }
+
+    static public int[] findPrevGreaterOrSmallerElementIndexes(int[] arr, boolean greater) {
+        int[] pgse = new int[arr.length];
+        Stack<Integer> s = new Stack<>();
+        for (int i = 0; i < arr.length; i++) {
+            pgse[i] = -1;
+            while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
+                s.pop();
+            if (!s.isEmpty())
+                pgse[i] = s.peek();
             s.push(i);
         }
         return pgse;
@@ -134,12 +181,25 @@ public class StackUtils {
         int[] ngse = new int[arr.length];
         Stack<Integer> s = new Stack<>();
         for (int i = arr.length - 1; i >= 0; i--) {
+            ngse[i] = -1;
             while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
                 s.pop();
-            if (s.isEmpty())
-                ngse[i] = -1;
-            else
+            if (!s.isEmpty())
                 ngse[i] = arr[s.peek()];
+            s.push(i);
+        }
+        return ngse;
+    }
+
+    static public int[] findNextGreaterOrSmallerElementIndexes(int[] arr, boolean greater) {
+        int[] ngse = new int[arr.length];
+        Stack<Integer> s = new Stack<>();
+        for (int i = arr.length - 1; i >= 0; i--) {
+            ngse[i] = -1;
+            while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
+                s.pop();
+            if (!s.isEmpty())
+                ngse[i] = s.peek();
             s.push(i);
         }
         return ngse;
@@ -177,11 +237,8 @@ public class StackUtils {
             while (!stack.isEmpty() && arr[i] > arr[stack.peek()]) {
                 stack.pop();
             }
-            if (stack.isEmpty()) {
-                result[i] = 0;
-            } else {
+            if (!stack.isEmpty())
                 result[i] = 1 + result[stack.peek()];
-            }
             stack.push(i);
         }
         return result;
@@ -194,8 +251,9 @@ public class StackUtils {
      *
      * @param stack
      */
+    @Important
     static public void deleteMiddle(Stack<Integer> stack) {
-        if (stack == null)
+        if (stack == null || stack.isEmpty())
             return;
         int mid = (stack.size() / 2) + 1;
         deleteMiddle(stack, mid);
@@ -205,13 +263,14 @@ public class StackUtils {
         if (mid == 0)
             return;
         int top = stack.pop();
-        --mid;
-        deleteMiddle(stack, mid);
+        deleteMiddle(stack, --mid);
         if (mid > 0)
             stack.push(top);
     }
 
-    // stack sorting
+    // stack sorting using temp stack
+    // input: [34, 3, 31, 98, 92, 23]
+    @Important
     static public void sortUsingTempStack(Stack<Integer> stack) {
         if (stack.isEmpty())
             return;
@@ -219,17 +278,16 @@ public class StackUtils {
         while (!stack.isEmpty()) {
             tempStack.push(stack.pop());
         }
-
         while (!tempStack.isEmpty()) {
             int curr = tempStack.pop();
             while (!stack.isEmpty() && curr > stack.peek()) {
-                int min = stack.pop();
-                tempStack.push(min);
+                tempStack.push(stack.pop());
             }
             stack.push(curr);
         }
     }
 
+    @Important
     static public void sort(Stack<Integer> stack) {
         if (stack.isEmpty())
             return;
@@ -260,16 +318,18 @@ public class StackUtils {
      * @return
      */
     static public boolean isPalindrome(String str) {
+        if (str == null || str.isEmpty())
+            return false;
         char[] characters = str.toCharArray();
         int length = characters.length;
         Stack<Character> stack = new Stack<>();
         int i = 0;
         for (; i < length / 2; i++)
             stack.push(characters[i]);
-        if (length % 2 != 0) ++i;
-        for (; i < characters.length; i++)
-            if (characters[i] != stack.pop())
-                break;
+        if (length % 2 != 0) ++i; // odd length string, skip middle
+        for (; i < characters.length && characters[i] == stack.peek(); i++) {
+            stack.pop();
+        }
         return stack.isEmpty();
     }
 
@@ -360,4 +420,340 @@ public class StackUtils {
         stack.push(elem);
     }
 
+    static public double toNumber(Stack<Integer> stack) {
+        return toNumber(stack, 0);
+    }
+
+    private static double toNumber(Stack<Integer> stack, int i) {
+        if (stack == null || stack.isEmpty())
+            return 0;
+        int curr = stack.pop();
+        double sum = (curr * Math.pow(10, i)) + toNumber(stack, i + 1);
+        stack.push(curr);
+        return sum;
+    }
+
+    @Hard
+    @Important
+    public static int[][] mergeIntervals(int[][] intervals) {
+        if (intervals == null || intervals.length == 0)
+            return null;
+        Stack<int[]> stack = new Stack<>();
+        for (int[] arr : intervals) {
+            mergedInsert(stack, arr);
+        }
+        int n = stack.size();
+        int[][] merged = new int[n][2];
+        while (!stack.isEmpty()) {
+            merged[--n] = stack.pop();
+        }
+        return merged;
+    }
+
+    private static void mergedInsert(Stack<int[]> stack, int[] arr) {
+        if (stack.isEmpty() || stack.peek()[1] < arr[0]) {
+            stack.push(arr);
+            return;
+        }
+        int[] top = stack.pop();
+        if (arr[1] < top[0]) {
+            // lesser interval
+            mergedInsert(stack, arr);
+        } else if (arr[0] <= top[1] || top[0] <= arr[1]) {
+            // merge
+            int x = Math.min(top[0], arr[0]);
+            int y = Math.max(top[1], arr[1]);
+            top = new int[]{x, y};
+        }
+        mergedInsert(stack, top);
+    }
+
+    public static void main(String[] args) {
+        int[][] intervals = new int[4][2];
+        intervals[0][0] = 1;
+        intervals[0][1] = 2;
+        intervals[1][0] = 3;
+        intervals[1][1] = 4;
+        intervals[2][0] = 5;
+        intervals[2][1] = 6;
+        intervals[3][0] = 7;
+        intervals[3][1] = 8;
+        intervals[0] = new int[]{1, 2};
+
+        for (int i = 0; i < intervals.length; i++) {
+            int[] x = intervals[i];
+            System.out.println(Arrays.toString(x));
+        }
+    }
+
+    /**
+     * Input : S = "( a(b) (c) (d(e(f)g)h) I (j(k)l)m)";
+     * Output : 4
+     * <p>
+     * Input : S = "( p((q)) ((s)t) )";
+     * Output : 3
+     * <p>
+     * Input : S = "";
+     * Output : 0
+     * <p>
+     * Input : S = "b) (c) ()";
+     * Output : -1
+     * <p>
+     * Input : S = "(b) ((c) ()"
+     * Output : -1
+     *
+     * @param expression
+     * @return
+     */
+    @Important
+    public static int maxDepthOfBalancedParentheses(String expression) {
+        if (expression == null || !expression.contains("(") || !expression.contains(")"))
+            return 0;
+        int currentCount = 0;
+        int maxCount = 0;
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == '(') {
+                currentCount++;
+                if (maxCount < currentCount)
+                    maxCount = currentCount;
+            } else if (c == ')') {
+                currentCount--;
+            }
+        }
+        if (currentCount != 0)
+            return -1;
+        return maxCount;
+    }
+
+    /**
+     * Input : ((())) ) (((())))
+     * Output : 8
+     * Explanation : (((())))
+     * <p>
+     * Input: )()())
+     * Output : 4
+     * Explanation: ()()
+     * <p>
+     * Input:  ()(()))))
+     * Output: 6
+     * Explanation:  ()(())
+     *
+     * @param expression
+     * @return
+     */
+    @Medium
+    @Important
+    public static int maxLengthOfValidSubstring(String expression) {
+        if (expression == null || expression.isEmpty())
+            return 0;
+        int currentCount = 0;
+        int maxCount = 0;
+        int unbalancedCount = 0;
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == '(') {
+                unbalancedCount++;
+            } else if (c == ')') {
+                if (unbalancedCount == 0) {
+                    // bare ')' so reset the current count, for search of new substring
+                    currentCount = 0;
+                    continue;
+                }
+                unbalancedCount--;
+                currentCount += 2;
+            }
+            if (maxCount < currentCount)
+                maxCount = currentCount;
+
+        }
+        return maxCount;
+    }
+
+    public static String removeBrackets(String expression) {
+        if (expression == null || !expression.contains("(") || !expression.contains(")"))
+            return expression;
+        int unbalancedCount = 0;
+        String result = "";
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == '(') {
+                unbalancedCount++;
+            } else if (c == ')') {
+                unbalancedCount--;
+            } else {
+                result += c;
+            }
+        }
+        if (unbalancedCount != 0)
+            return null;
+        return result;
+    }
+
+    public static boolean checkPairWiseConsecutive(java.util.Stack<Integer> stack) {
+        if (stack == null)
+            return false;
+        if (stack.size() % 2 == 1)
+            stack.pop();
+        while (!stack.isEmpty()) {
+            Integer top1 = stack.pop();
+            if (stack.isEmpty()) {
+                break;
+            }
+            Integer top2 = stack.pop();
+            if (Math.abs(top1 - top2) != 1)
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Input : str[] = "1[b]"
+     * Output : b
+     * <p>
+     * Input : str[] = "2[ab]"
+     * Output : abab
+     * <p>
+     * Input : str[] = "2[a2[b]]"
+     * Output : abbabb
+     * <p>
+     * Input : str[] = "3[b2[ca]]"
+     * Output : bcacabcacabcaca
+     *
+     * @param str
+     * @return a3[b2[ca]]bc
+     */
+    @Important
+    @Medium
+    public static String decodeStringByCount(String str) {
+        if (str == null || str.isEmpty())
+            return null;
+        String result = "";
+        Stack<Character> stack = new Stack<>();
+        for (int i = str.length() - 1; i >= 0; --i) {
+            char c = str.charAt(i);
+            if (c == '[') {
+                int number = Integer.parseInt(String.valueOf(str.charAt(--i)));
+                String strToRepeat = "";
+                String repeatedString = "";
+                for (char top = stack.pop(); top != ']'; ) {
+                    strToRepeat = strToRepeat + top;
+                    top = stack.pop();
+                }
+                for (int j = 0; j < number; j++) {
+                    repeatedString = repeatedString + strToRepeat;
+                }
+                for (int j = repeatedString.length() - 1; j >= 0; j--) {
+                    stack.push(repeatedString.charAt(j));
+                }
+            } else {
+                stack.push(c);
+            }
+        }
+        while (!stack.isEmpty()) {
+            result = result + stack.pop();
+        }
+        return result;
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/form-minimum-number-from-given-sequence/
+     * Input: D        Output: 21
+     * Input: I        Output: 12
+     * Input: DD       Output: 321
+     * Input: II       Output: 123
+     * Input: DIDI     Output: 21435
+     * Input: IIDDD    Output: 126543
+     * Input: DDIDDIID Output: 321654798
+     */
+
+    public static String findMinimumNumberForGivenSequence(String seq) {
+        if (seq == null || seq.isEmpty())
+            return null;
+
+        String result = "";
+        Stack<Integer> stack = new Stack<>();
+        int n = 3;
+        if (seq.startsWith("D")) {
+            stack.push(2);
+            stack.push(1);
+        } else {
+            stack.push(1);
+            stack.push(2);
+        }
+        for (int i = 1; i < seq.length(); i++) {
+            insertAtCorrectPosition(stack, seq, i, n);
+            n++;
+        }
+        while (!stack.isEmpty()) {
+            result = stack.pop() + result;
+        }
+        return result;
+    }
+
+    private static void insertAtCorrectPosition(Stack<Integer> stack, String seq, int i, int n) {
+        if (stack.isEmpty()) {
+            stack.push(n);
+            return;
+        }
+        if (seq.charAt(i) == 'D' && stack.peek() > n) {
+            stack.push(n);
+            return;
+        }
+        if (seq.charAt(i) == 'I' && stack.peek() < n) {
+            stack.push(n);
+            return;
+        }
+        int top = stack.pop();
+        insertAtCorrectPosition(stack, seq, i - 1, n);
+        stack.push(top);
+    }
+
+    @Important
+    @Medium
+    public static int maxHistogramArea(int[] arr) {
+        if (arr == null || arr.length == 0)
+            return 0;
+        int[] nse = findNextGreaterOrSmallerElementIndexes(arr, false);
+        int[] pse = findPrevGreaterOrSmallerElementIndexes(arr, false);
+        int maxArea = 0;
+        for (int i = 0; i < arr.length; i++) {
+            int span = 1;
+            if (pse[i] != -1 && nse[i] != -1) {
+                span = nse[i] - pse[i] - 1;
+            } else if (pse[i] != -1) {
+                span = i - pse[i];
+            } else if (nse[i] != -1) {
+                span = nse[i] - i;
+            }
+            int currentArea = span * arr[i];
+            if (maxArea < currentArea)
+                maxArea = currentArea;
+        }
+        return maxArea;
+    }
+
+    @Important
+    @Medium
+    public static int minHistogramArea(int[] arr) {
+        if (arr == null || arr.length == 0)
+            return 0;
+        int[] nge = findNextGreaterOrSmallerElementIndexes(arr, true);
+        int[] pge = findPrevGreaterOrSmallerElementIndexes(arr, true);
+        int minArea = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            int span = 1;
+            if (pge[i] != -1 && nge[i] != -1) {
+                span = nge[i] - pge[i] - 1;
+            } else if (pge[i] != -1) {
+                span = i - pge[i];
+            } else if (nge[i] != -1) {
+                span = nge[i] - i;
+            }
+            int currentArea = span * arr[i];
+            if (currentArea < minArea)
+                minArea = currentArea;
+        }
+        return minArea;
+    }
 }

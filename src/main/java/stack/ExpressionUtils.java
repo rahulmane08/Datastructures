@@ -5,6 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+import interfaces.Important;
+
+/**
+ * Infix -> PostFix
+ * Prefix -> Infix
+ * Prefix -> Postfix
+ * Postfix -> Infix
+ * Postfix -> Prefix
+ */
 public class ExpressionUtils {
     static HashMap<String, Integer> priortyMap = new HashMap<>();
     static HashMap<Character, Character> parenthesisPairs = new HashMap<>();
@@ -40,66 +49,36 @@ public class ExpressionUtils {
         return ((parenthesisPairs.get(p1).equals(p2)) || (parenthesisPairs.get(p2).equals(p1)));
     }
 
-    /**
-     * Infix to postfix:
-     * - In infix and postfix expressions the order of the operands remain the same, however the order of operators changes .
-     * - We will use only one stack that will contain only the operators and (.
-     * - THe postfix expression doesnt contain any parentheses.
-     * - algo:
-     * - parse each character in the input string and store in t`
-     * if t=operand, then output
-     * else if t=')', then pop and output all elements in stack until ( is popped
-     * else if t='(', then push it into stack
-     * else if t= operator , then pop until all same/higher priority operators than t or until ( is popped.
-     *
-     * @param infixExp
-     */
-    public static String infixToPostfix(String infixExp) {
-        if (infixExp == null)
+    @Important
+    public static String infixToPostfix(String infix) {
+        if (infix == null || infix.length()==0) {
             return null;
-        char[] characters = infixExp.toCharArray();
-        java.util.Stack<Character> s = new Stack<>();
-        String output = "";
-        for (char t : characters) {
+        }
 
-            // if its an operand then print
-            if (isOperand(t))
-                output += t;
-                // if its a right brace, then pop and print until ( is encountered/
-                // pop ( as well but dont print
-            else if (t == ')') {
-                for (char x = s.pop(); x != '('; ) {
-                    output += x;
-                    x = s.pop();
+        Stack<Character> stack = new Stack<>();
+        String postfix = "";
+        for (int i = 0; i<infix.length(); i++) {
+            char ch = infix.charAt(i);
+            if (isOperand(ch)) {
+                postfix += ch;
+            } else if (ch == ')') {
+                for (char top = stack.pop(); top != '(';) {
+                    postfix += top;
+                    top = stack.pop();
                 }
             } else {
-                // if its a ( then push, this means ) is coming ahead
-                if (t == '(')
-                    s.push(t);
-                else {
-                    // its a operator
-                    if (s.isEmpty())
-                        s.push(t);
-                    else {
-                        do {
-                            char y = s.pop();
-                            if (y == '(' || checkPriority(y, t) < 0) {
-                                s.push(y);
-                                break;
-                            } else {
-                                output += y;
-                            }
-                        } while (!s.isEmpty());
-                        s.push(t);
+                if (ch != '(') {
+                    while (!stack.isEmpty() && stack.peek() != '(' && checkPriority(stack.peek(), ch) <= 0) {
+                        postfix += stack.pop();
                     }
-
                 }
+                stack.push(ch);
             }
         }
-        while (!s.isEmpty()) {
-            output += s.pop();
+        while (!stack.isEmpty()) {
+            postfix += stack.pop();
         }
-        return output;
+        return postfix;
     }
 
     /**
@@ -302,5 +281,53 @@ public class ExpressionUtils {
                 break;
         }
         return result;
+    }
+
+    /**
+     * Below expressions have duplicate parenthesis -
+     * ((a+b)+((c+d)))
+     * The subexpression "c+d" is surrounded by two
+     * pairs of brackets.
+     *
+     * (((a+(b)))+(c+d))
+     * The subexpression "a+(b)" is surrounded by two
+     * pairs of brackets.
+     *
+     * (((a+(b))+c+d))
+     * The whole expression is surrounded by two
+     * pairs of brackets.
+     *
+     * Below expressions don't have any duplicate parenthesis -
+     * ((a+b)+(c+d))
+     * No subsexpression is surrounded by duplicate
+     * brackets.
+     *
+     * ((a+(b))+(c+d))
+     * No subsexpression is surrounded by duplicate
+     * brackets.
+     * @param expression
+     * @return
+     */
+    @Important
+    public static boolean checkIfDuplicateParentheses(String expression) {
+        if (expression != null && !expression.isEmpty()) {
+            Stack<Character> stack = new Stack<>();
+            for (int i=0; i< expression.length(); i++) {
+                char c = expression.charAt(i);
+                if (c == ')') {
+                    int elementsInBraces = 0;
+                    char top = stack.pop();
+                    while (top != '(') {
+                        top = stack.pop();
+                        elementsInBraces++;
+                    }
+                    if (elementsInBraces < 1)
+                        return true;
+                } else {
+                    stack.push(c);
+                }
+            }
+        }
+        return false;
     }
 }

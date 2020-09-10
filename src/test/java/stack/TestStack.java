@@ -2,8 +2,17 @@ package stack;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static stack.StackUtils.checkPairWiseConsecutive;
+import static stack.StackUtils.countPermutationsGreaterThanEqualToOriginalNumber1;
+import static stack.StackUtils.decodeStringByCount;
+import static stack.StackUtils.findMinimumNumberForGivenSequence;
+import static stack.StackUtils.findNextGreaterOrSmallerElement;
+import static stack.StackUtils.maxDepthOfBalancedParentheses;
+import static stack.StackUtils.maxHistogramArea;
+import static stack.StackUtils.maxLengthOfValidSubstring;
+import static stack.StackUtils.minHistogramArea;
+import static stack.StackUtils.removeBrackets;
 
 import java.util.Arrays;
 
@@ -59,9 +68,13 @@ public class TestStack {
 
     @Test
     public void test_findNextGreaterOrSmallerElement() {
-        int[] arr = {4, 5, 2, 25};
-        int[] expected = {5, 25, 25, -1};
-        int[] result = StackUtils.findNextGreaterOrSmallerElement(arr, true);
+        int[] arr = {4, 5, 2, 25, 60, 20, 30};
+        int[] expected = {5, 25, 25, 60, -1, 30, -1};
+        int[] result = findNextGreaterOrSmallerElement(arr, true);
+        assertTrue(Arrays.equals(result, expected));
+
+        expected = new int[]{2, 2, -1, 20, 20, -1, -1};
+        result = findNextGreaterOrSmallerElement(arr, false);
         assertTrue(Arrays.equals(result, expected));
     }
 
@@ -148,5 +161,175 @@ public class TestStack {
         stack.push(1);
         StackUtils.deleteMiddle(stack);
         assertTrue(stack.isEmpty());
+    }
+
+
+    @Test
+    public void test_isPalindrome() {
+        String s = "abcd";
+        assertFalse(StackUtils.isPalindrome(s));
+
+        s = "";
+        assertFalse(StackUtils.isPalindrome(s));
+
+        s = null;
+        assertFalse(StackUtils.isPalindrome(s));
+
+        s = "abba";
+        assertTrue(StackUtils.isPalindrome(s));
+
+        s = "abcba";
+        assertTrue(StackUtils.isPalindrome(s));
+
+        s = "a";
+        assertTrue(StackUtils.isPalindrome(s));
+
+        s = "aa";
+        assertTrue(StackUtils.isPalindrome(s));
+    }
+
+    @Test
+    public void test_mergedIntervals() {
+        int[][] intervals = new int[5][2];
+        intervals[0] = new int[]{1, 5};
+        intervals[1] = new int[]{10, 12};
+        intervals[2] = new int[]{15, 17};
+        intervals[3] = new int[]{3, 6};
+        intervals[4] = new int[]{2, 4};
+        int[][] mergeIntervals = StackUtils.mergeIntervals(intervals);
+        System.out.println("For intervals: ");
+        for (int i = 0; i < intervals.length; i++) {
+            System.out.println(Arrays.toString(intervals[i]));
+        }
+        System.out.println("Merged intervals: ");
+        for (int i = 0; i < mergeIntervals.length; i++) {
+            System.out.println(Arrays.toString(mergeIntervals[i]));
+        }
+
+        intervals[0] = new int[]{1, 5};
+        intervals[1] = new int[]{10, 12};
+        intervals[2] = new int[]{15, 17};
+        intervals[3] = new int[]{3, 10};
+        intervals[4] = new int[]{2, 4};
+        mergeIntervals = StackUtils.mergeIntervals(intervals);
+        System.out.println("For intervals: ");
+        for (int i = 0; i < intervals.length; i++) {
+            System.out.println(Arrays.toString(intervals[i]));
+        }
+        System.out.println("Merged intervals: ");
+        for (int i = 0; i < mergeIntervals.length; i++) {
+            System.out.println(Arrays.toString(mergeIntervals[i]));
+        }
+
+        intervals[0] = new int[]{1, 5};
+        intervals[1] = new int[]{10, 12};
+        intervals[2] = new int[]{15, 17};
+        intervals[3] = new int[]{3, 10};
+        intervals[4] = new int[]{5, 15};
+        mergeIntervals = StackUtils.mergeIntervals(intervals);
+        System.out.println("For intervals: ");
+        for (int i = 0; i < intervals.length; i++) {
+            System.out.println(Arrays.toString(intervals[i]));
+        }
+        System.out.println("Merged intervals: ");
+        for (int i = 0; i < mergeIntervals.length; i++) {
+            System.out.println(Arrays.toString(mergeIntervals[i]));
+        }
+
+        intervals = new int[4][2];
+        intervals[0] = new int[]{6, 8};
+        intervals[1] = new int[]{1, 9};
+        intervals[2] = new int[]{2, 4};
+        intervals[3] = new int[]{4, 7};
+        mergeIntervals = StackUtils.mergeIntervals(intervals);
+        System.out.println("For intervals: ");
+        for (int i = 0; i < intervals.length; i++) {
+            System.out.println(Arrays.toString(intervals[i]));
+        }
+        System.out.println("Merged intervals: ");
+        for (int i = 0; i < mergeIntervals.length; i++) {
+            System.out.println(Arrays.toString(mergeIntervals[i]));
+        }
+    }
+
+    @Test
+    public void test_maxDepthOfBalancedParentheses() {
+        String S = "( a(b) (c) (d(e(f)g)h) I (j(k)l)m)";
+        assertEquals(4, maxDepthOfBalancedParentheses(S));
+        S = "( p((q)) ((s)t) )";
+        assertEquals(3, maxDepthOfBalancedParentheses(S));
+        S = "";
+        assertEquals(0, maxDepthOfBalancedParentheses(S));
+        S = "b) (c) ()";
+        assertEquals(-1, maxDepthOfBalancedParentheses(S));
+        S = "(b) ((c) ()";
+        assertEquals(-1, maxDepthOfBalancedParentheses(S));
+    }
+
+    @Test
+    public void test_maxLengthOfValidSubstring() {
+        String s = "((())) ) (((())))";
+        assertEquals(8, maxLengthOfValidSubstring(s));
+        s = ")()())";
+        assertEquals(4, maxLengthOfValidSubstring(s));
+        s = "()(()))))";
+        assertEquals(6, maxLengthOfValidSubstring(s));
+        s = "((())) ) (())";
+        assertEquals(6, maxLengthOfValidSubstring(s));
+    }
+
+    @Test
+    public void test_removeBrackets() {
+        String s = "a-(b+c)";
+        assertEquals("a-b+c", removeBrackets(s));
+        s = "a-(b-c-(d+e))-f";
+        assertEquals("a-b-c-d+e-f", removeBrackets(s));
+    }
+
+    @Test
+    public void test_checkPairWiseConsecutive() {
+        int[] arr = new int[]{4, 5, -2, -3, 11, 10, 5, 6, 20};
+        java.util.Stack<Integer> stack = new java.util.Stack<>();
+        Arrays.stream(arr).forEach(stack::push);
+        assertTrue(checkPairWiseConsecutive(stack));
+        arr = new int[]{4, 6, 6, 7, 4, 3};
+        stack.clear();
+        Arrays.stream(arr).forEach(stack::push);
+        assertFalse(checkPairWiseConsecutive(stack));
+    }
+
+    @Test
+    public void test_decodeStringByCount1() {
+        assertEquals("bcacabcacabcacad", decodeStringByCount("3[b2[ca]]d"));
+        assertEquals("dabcacabcacabcacabc", decodeStringByCount("da3[b2[ca]]bc"));
+    }
+
+    @Test
+    public void test_countPermutationsGreaterThanEqualToOriginalNumber() {
+        assertEquals(14, countPermutationsGreaterThanEqualToOriginalNumber1(15));
+    }
+
+    @Test
+    public void test_checkIfDuplicateParentheses() {
+        assertTrue(ExpressionUtils.checkIfDuplicateParentheses("((a+b)+((c+d)))"));
+        assertTrue(ExpressionUtils.checkIfDuplicateParentheses("(((a+(b)))+(c+d))"));
+        assertFalse(ExpressionUtils.checkIfDuplicateParentheses("((a+b)+(c+d))"));
+    }
+
+    @Test
+    public void test_findMinimumNumberForGivenSequence() {
+        assertEquals("12", findMinimumNumberForGivenSequence("I"));
+        assertEquals("21", findMinimumNumberForGivenSequence("D"));
+        assertEquals("123", findMinimumNumberForGivenSequence("II"));
+        assertEquals("321", findMinimumNumberForGivenSequence("DD"));
+        assertEquals("21435", findMinimumNumberForGivenSequence("DIDI"));
+        assertEquals("126543", findMinimumNumberForGivenSequence("IIDDD"));
+        assertEquals("321654798", findMinimumNumberForGivenSequence("DDIDDIID"));
+    }
+
+    @Test
+    public void test_maxMinHistogramArea() {
+        assertEquals(12, maxHistogramArea(new int[]{6, 2, 5, 4, 5, 1, 6}));
+        assertEquals(1, minHistogramArea(new int[]{6, 2, 5, 4, 5, 1, 6}));
     }
 }

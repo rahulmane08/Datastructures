@@ -1389,4 +1389,71 @@ public class TreeUtils {
             return deepestNodesSum;
         }
     }
+
+    /**
+     * Input:
+     * 	Tree 1                     Tree 2
+     *           1                         2
+     *          / \                       / \
+     *         3   2                     1   3
+     *        /                           \   \
+     *       5                             4   7
+     * Output:
+     * Merged tree:
+     * 	     3
+     * 	    / \
+     * 	   4   5
+     * 	  / \   \
+     * 	 5   4   7
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public static Node addTrees(Node root1, Node root2) {
+        if (root1 == null && root2 == null)
+            return null;
+        if (root2 == null)
+            return root1;
+        if (root1 == null)
+            return root2;
+        Node mergedNode = new Node(root1.data + root2.data);
+        mergedNode.left = addTrees(root1.left, root2.left);
+        mergedNode.right = addTrees(root1.right, root2.right);
+        return mergedNode;
+    }
+
+    /**
+     *        3
+     * 	    / \
+     * 	   4   5
+     * 	  / \   \
+     * 	 5   4   7
+     *
+     * 	 Op: 345 + 344 + 357 = 1046
+     * @return
+     */
+    public static class SumOfRootToLeafPathsUtil {
+        private double sum = 0;
+        private Stack<Integer> stack = new Stack<>();
+
+        public SumOfRootToLeafPathsUtil(Node root) {
+            compute(root);
+        }
+
+        private void compute(Node root) {
+            if (root == null)
+                return;
+            this.stack.push(root.data);
+            if (isLeaf(root)) {
+                this.sum = this.sum + StackUtils.toNumber(stack);
+            }
+            compute(root.left);
+            compute(root.right);
+            this.stack.pop();
+        }
+
+        public double getSum() {
+            return sum;
+        }
+    }
 }

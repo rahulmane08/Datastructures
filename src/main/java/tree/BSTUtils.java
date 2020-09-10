@@ -1,6 +1,8 @@
 package tree;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 import array.ArrayUtils;
@@ -336,8 +338,12 @@ public class BSTUtils {
         OrderedArrays.getInstance().fillTreeWithInorderArr(root, inorderArr);
     }
 
-
-    public static void printCommonNodes(Node root1, Node root2) {
+    public static List<Integer> getCommonNodes(Node root1, Node root2) {
+        List<Integer> commonNodes = new ArrayList<>();
+        computeCommonNodes(root1, root2, commonNodes);
+        return commonNodes;
+    }
+    private static void computeCommonNodes(Node root1, Node root2, List<Integer> commonNodes) {
         if (root1 == null || root2 == null)
             return;
         Stack<Node> stack1 = new Stack<>();
@@ -364,7 +370,7 @@ public class BSTUtils {
                     curr1 = null;
                     curr2 = curr2.right;
                 } else {
-                    System.out.print(curr1.data + " ");
+                    commonNodes.add(curr1.data);
                     curr1 = curr1.right;
                     curr2 = curr2.right;
                 }
@@ -453,33 +459,45 @@ public class BSTUtils {
      * @author rahul
      */
 
-    static public class KthSmallest {
-        private int currVisit = 0;
+    static public class KthSmallestLargestUtil {
+        private int currVisit;
+        private Node smallest;
+        private Node largest;
 
-        public Node kthSmallest(Node root, int k) {
+        public KthSmallestLargestUtil(Node root, int k) {
+            smallest = computeKthSmallest(root, k);
+            this.currVisit = 0;
+            largest = computeKthLargest(root, k);
+        }
+
+        public Node getSmallest() {
+            return smallest;
+        }
+
+        public Node getLargest() {
+            return largest;
+        }
+
+        private Node computeKthSmallest(Node root, int k) {
             if (root == null)
                 return null;
-            Node left = kthSmallest(root.left, k);
+            Node left = computeKthSmallest(root.left, k);
             if (left != null)
                 return left;
             if (k == ++currVisit)
                 return root;
-            return kthSmallest(root.right, k);
+            return computeKthSmallest(root.right, k);
         }
-    }
 
-    static class KthLargest {
-        private int currVisit = 0;
-
-        public Node kthLargest(Node root, int k) {
+        private Node computeKthLargest(Node root, int k) {
             if (root == null)
                 return null;
-            Node right = kthLargest(root.right, k);
+            Node right = computeKthLargest(root.right, k);
             if (right != null)
                 return right;
             if (k == ++currVisit)
                 return root;
-            return kthLargest(root.left, k);
+            return computeKthLargest(root.left, k);
         }
     }
 
