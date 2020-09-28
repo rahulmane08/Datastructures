@@ -6,11 +6,9 @@ public class LinkedList<T> implements Cloneable {
 
     Node<T> start;
 
-
     public LinkedList() {
         super();
     }
-
 
     public LinkedList(Node<T> start) {
         super();
@@ -22,16 +20,12 @@ public class LinkedList<T> implements Cloneable {
             insert(data);
     }
 
-
     public void insert(T data) {
         if (start == null) {
             start = new Node(data);
             return;
         }
-        Node<T> curr = start;
-        while (curr.next != null)
-            curr = curr.next;
-        curr.next = new Node<>(data);
+        insert(new Node<>(data));
     }
 
     public void insert(Node<T> node) {
@@ -66,24 +60,10 @@ public class LinkedList<T> implements Cloneable {
         System.out.println();
     }
 
-
     public int size() {
-        if (start == null)
-            return 0;
         int size = 0;
-        for (Node<T> curr = start; curr != null; curr = curr.next)
-            ++size;
+        for (Node<T> curr = this.start; curr != null; ++size, curr = curr.next);
         return size;
-    }
-
-
-    public T get(int index) {
-        if (index > size())
-            return null;
-        Node<T> curr = start;
-        for (int i = 1; i <= index; i++)
-            curr = curr.next;
-        return curr.data;
     }
 
     public boolean remove(T data) {
@@ -94,14 +74,35 @@ public class LinkedList<T> implements Cloneable {
             return true;
         }
         Node<T> curr = start;
-        while (curr.next != null && curr.next.data == data)
-            curr = curr.next;
-        if (curr.next != null) {
-            //node found
-            curr.next = curr.next.next;
-            return true;
+        for (; curr.next != null && curr.next.data != data; curr = curr.next);
+        if (curr.next == null) {
+            // node not found
+            return false;
         }
-        return false;
+        Node<T> next = curr.next;
+        curr.next = next.next;
+        next.next = null;
+        return true;
+    }
+
+    public boolean contains(T data) {
+        Node<T> curr = start;
+        for (; curr != null && !curr.data.equals(data); curr = curr.next) ;
+        return curr != null;
+    }
+
+    // 0-based
+    public int indexOf(T data) {
+        int i = 0;
+        Node<T> curr = start;
+        for (; curr != null && !curr.data.equals(data); curr = curr.next, i++) ;
+        return (curr != null) ? i : -1;
+    }
+
+    public Node<T> nodeAt(int index) {
+        Node<T> curr = start;
+        for (int i=0; i < index && curr != null; i++, curr = curr.next);
+        return curr;
     }
 
     @Override
@@ -136,5 +137,33 @@ public class LinkedList<T> implements Cloneable {
                 curr.prev.next = curr.next.prev;
         }
         return clone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LinkedList<T> that = (LinkedList<T>) o;
+
+        if (that == null) {
+            return false;
+        }
+
+        Node<T> curr1 = this.start;
+        Node<T> curr2 = that.start;
+        while (curr1 != null && curr1.data != null && curr2 != null && curr2.data != null) {
+            if (!curr1.data.equals(curr2.data)) {
+                return false;
+            }
+            curr1 = curr1.next;
+            curr2 = curr2.next;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return start.hashCode();
     }
 }

@@ -1,6 +1,11 @@
 package stack;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static stack.ExpressionUtils.checkIfDuplicateParentheses;
+import static stack.ExpressionUtils.infixToPostfix;
+import static stack.ExpressionUtils.removeDuplicateParentheses;
 
 import org.junit.Test;
 
@@ -17,7 +22,9 @@ public class TestExpressionUtils {
     @Test
     public void testInfixToPostfix() {
         String infix = "((a+b)*c/d/e)";
-        assertEquals("ab+c*d/e/", ExpressionUtils.infixToPostfix(infix));
+        assertEquals("ab+c*d/e/", infixToPostfix(infix));
+        infix = "(a*b+c)/d";
+        System.out.println(infixToPostfix(infix));
     }
 
     @Test
@@ -36,5 +43,12 @@ public class TestExpressionUtils {
     public void testPostfixToPrefix() {
         String postfix = "AB+CD-*";
         assertEquals(ExpressionUtils.postfixToPrefix(postfix), "*+AB-CD");
+    }
+
+    @Test
+    public void test_removeDuplicateParentheses() {
+        assertEquals("((a+b)+(c+d))", removeDuplicateParentheses("((a+b)+((c+d)))"));
+        assertEquals("((a+b)+(c+d))", removeDuplicateParentheses("(((a+(b)))+(c+d))"));
+        assertEquals("((a+b)+(c+d))", removeDuplicateParentheses("((a+b)+(c+d))"));
     }
 }

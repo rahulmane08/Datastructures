@@ -1,6 +1,7 @@
 package stack;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import interfaces.Hard;
@@ -51,7 +52,7 @@ public class StackUtils {
      * @return
      */
     @Important
-    static public int[] findSpan(int[] arr) {
+    static public int[] findStockSpan(int[] arr) {
         if (arr == null || arr.length == 0)
             return null;
         Stack<Integer> s = new Stack<>();
@@ -245,6 +246,65 @@ public class StackUtils {
     }
 
     /**
+     * Input : a[] = [1, 1, 2, 3, 4, 2, 1]
+     * Output : [-1, -1, 1, 2, 2, 1, -1]
+     * Explanation:
+     * Given array a[] = [1, 1, 2, 3, 4, 2, 1]
+     * Frequency of each element is: 3, 3, 2, 1, 1, 2, 3
+     * Lets calls Next Greater Frequency element as NGF
+     * 1. For element a[0] = 1 which has a frequency = 3,
+     * As it has frequency of 3 and no other next element
+     * has frequency more than 3 so  '-1'
+     * 2. For element a[1] = 1 it will be -1 same logic
+     * like a[0]
+     * 3. For element a[2] = 2 which has frequency = 2,
+     * NGF element is 1 at position = 6  with frequency
+     * of 3 > 2
+     * 4. For element a[3] = 3 which has frequency = 1,
+     * NGF element is 2 at position = 5 with frequency
+     * of 2 > 1
+     * 5. For element a[4] = 4 which has frequency = 1,
+     * NGF element is 2 at position = 5 with frequency
+     * of 2 > 1
+     * 6. For element a[5] = 2 which has frequency = 2,
+     * NGF element is 1 at position = 6 with frequency
+     * of 3 > 2
+     * 7. For element a[6] = 1 there is no element to its
+     * right, hence -1
+     *
+     * @param arr
+     * @param greater
+     * @return
+     */
+    public static int[] findNextGreaterOrSmallerFrequencyElement(int[] arr, boolean greater) {
+        if (arr == null) {
+            return null;
+        }
+        int n = arr.length;
+        int[] result = new int[arr.length];
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int elem : arr) {
+            map.compute(elem, (k, v) -> {
+                if (v == null)
+                    return 1;
+                return ++v;
+            });
+        }
+        Stack<Integer> stack = new Stack<>();
+        stack.push(arr[n - 1]);
+        result[n - 1] = -1;
+        for (int i = n - 2; i >= 0; i--) {
+            while (!stack.isEmpty()
+                    && (greater ? map.get(arr[i]) >= map.get(arr[stack.peek()]) : map.get(arr[i]) <= map.get(arr[stack.peek()]))) {
+                stack.pop();
+            }
+            result[i] = stack.isEmpty() ? -1 : arr[stack.peek()];
+            stack.push(i);
+        }
+        return result;
+    }
+
+    /**
      * 1. calculate mid
      * 2. pop the top and recursively call the deleteMiddle , push the top back
      * 3. if current recursion round == mid , end the recursion.
@@ -256,16 +316,28 @@ public class StackUtils {
         if (stack == null || stack.isEmpty())
             return;
         int mid = (stack.size() / 2) + 1;
-        deleteMiddle(stack, mid);
+        deleteMiddle(stack, mid, stack.size());
     }
 
-    static private void deleteMiddle(Stack<Integer> stack, int mid) {
-        if (mid == 0)
-            return;
+    static public void deleteMiddle(Stack<Integer> stack, int mid, int current) {
         int top = stack.pop();
-        deleteMiddle(stack, --mid);
-        if (mid > 0)
+        if (mid == current) {
+            return;
+        }
+        deleteMiddle(stack, mid, current - 1);
+        stack.push(top);
+    }
+
+    public static int deleteFirstKElements(Stack<Integer> stack, int k) {
+        if (stack == null || stack.isEmpty()) {
+            return 1;
+        }
+        int top = stack.pop();
+        int visitedCount = deleteFirstKElements(stack, k);
+        if (k - visitedCount < 0) {
             stack.push(top);
+        }
+        return 1 + visitedCount;
     }
 
     // stack sorting using temp stack
@@ -332,7 +404,6 @@ public class StackUtils {
         }
         return stack.isEmpty();
     }
-
 
     /**
      * Input : 1 1 1 1 0 1 1 1 1 1
@@ -433,6 +504,11 @@ public class StackUtils {
         return sum;
     }
 
+    /**
+     * https://www.geeksforgeeks.org/merging-intervals/
+     * @param intervals
+     * @return
+     */
     @Hard
     @Important
     public static int[][] mergeIntervals(int[][] intervals) {
@@ -468,128 +544,18 @@ public class StackUtils {
         mergedInsert(stack, top);
     }
 
-    public static void main(String[] args) {
-        int[][] intervals = new int[4][2];
-        intervals[0][0] = 1;
-        intervals[0][1] = 2;
-        intervals[1][0] = 3;
-        intervals[1][1] = 4;
-        intervals[2][0] = 5;
-        intervals[2][1] = 6;
-        intervals[3][0] = 7;
-        intervals[3][1] = 8;
-        intervals[0] = new int[]{1, 2};
-
-        for (int i = 0; i < intervals.length; i++) {
-            int[] x = intervals[i];
-            System.out.println(Arrays.toString(x));
-        }
-    }
-
     /**
-     * Input : S = "( a(b) (c) (d(e(f)g)h) I (j(k)l)m)";
-     * Output : 4
-     * <p>
-     * Input : S = "( p((q)) ((s)t) )";
-     * Output : 3
-     * <p>
-     * Input : S = "";
-     * Output : 0
-     * <p>
-     * Input : S = "b) (c) ()";
-     * Output : -1
-     * <p>
-     * Input : S = "(b) ((c) ()"
-     * Output : -1
+     * Input : stack = [4, 5, -2, -3, 11, 10, 5, 6, 20]
+     * Output : Yes
+     * Each of the pairs (4, 5), (-2, -3), (11, 10) and
+     * (5, 6) consists of consecutive numbers.
      *
-     * @param expression
+     * Input : stack = [4, 6, 6, 7, 4, 3]
+     * Output : No
+     * (4, 6) are not consecutive.
+     * @param stack
      * @return
      */
-    @Important
-    public static int maxDepthOfBalancedParentheses(String expression) {
-        if (expression == null || !expression.contains("(") || !expression.contains(")"))
-            return 0;
-        int currentCount = 0;
-        int maxCount = 0;
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
-            if (c == '(') {
-                currentCount++;
-                if (maxCount < currentCount)
-                    maxCount = currentCount;
-            } else if (c == ')') {
-                currentCount--;
-            }
-        }
-        if (currentCount != 0)
-            return -1;
-        return maxCount;
-    }
-
-    /**
-     * Input : ((())) ) (((())))
-     * Output : 8
-     * Explanation : (((())))
-     * <p>
-     * Input: )()())
-     * Output : 4
-     * Explanation: ()()
-     * <p>
-     * Input:  ()(()))))
-     * Output: 6
-     * Explanation:  ()(())
-     *
-     * @param expression
-     * @return
-     */
-    @Medium
-    @Important
-    public static int maxLengthOfValidSubstring(String expression) {
-        if (expression == null || expression.isEmpty())
-            return 0;
-        int currentCount = 0;
-        int maxCount = 0;
-        int unbalancedCount = 0;
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
-            if (c == '(') {
-                unbalancedCount++;
-            } else if (c == ')') {
-                if (unbalancedCount == 0) {
-                    // bare ')' so reset the current count, for search of new substring
-                    currentCount = 0;
-                    continue;
-                }
-                unbalancedCount--;
-                currentCount += 2;
-            }
-            if (maxCount < currentCount)
-                maxCount = currentCount;
-
-        }
-        return maxCount;
-    }
-
-    public static String removeBrackets(String expression) {
-        if (expression == null || !expression.contains("(") || !expression.contains(")"))
-            return expression;
-        int unbalancedCount = 0;
-        String result = "";
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
-            if (c == '(') {
-                unbalancedCount++;
-            } else if (c == ')') {
-                unbalancedCount--;
-            } else {
-                result += c;
-            }
-        }
-        if (unbalancedCount != 0)
-            return null;
-        return result;
-    }
-
     public static boolean checkPairWiseConsecutive(java.util.Stack<Integer> stack) {
         if (stack == null)
             return false;
@@ -666,7 +632,8 @@ public class StackUtils {
      * Input: IIDDD    Output: 126543
      * Input: DDIDDIID Output: 321654798
      */
-
+    @Important
+    @Medium
     public static String findMinimumNumberForGivenSequence(String seq) {
         if (seq == null || seq.isEmpty())
             return null;
@@ -755,5 +722,54 @@ public class StackUtils {
                 minArea = currentArea;
         }
         return minArea;
+    }
+
+    /**
+     * Input :
+     * Pattern : ABC
+     * Text : BABABCABCC
+     *
+     * @param str
+     * @param pattern
+     * @return
+     */
+    @Important
+    @Medium
+    public static int countPatternOccurences(String str, String pattern) {
+        if (str == null || str.length() == 0 || pattern == null || pattern.length() == 0 || pattern.length() > str.length()) {
+            return 0;
+        }
+        int patternSize = pattern.length();
+
+        int matchIndex = 0;
+        String matchedString = "";
+        String residueString = "";
+
+        int occurences = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == pattern.charAt(matchIndex)) {
+                matchedString += str.charAt(i);
+                matchIndex++;
+                if (matchIndex == patternSize) {
+                    // pattern matched, remove it from string
+                    matchedString = "";
+                    matchIndex = 0;
+                    occurences++;
+                }
+            } else {
+                matchIndex = 0;
+                if (matchedString.length() > 0) {
+                    residueString += matchedString;
+                    matchedString = "";
+                    i--;
+                } else {
+                    residueString += str.charAt(i);
+                }
+            }
+        }
+        if (occurences == 0) {
+            return 0;
+        }
+        return occurences + countPatternOccurences(residueString, pattern);
     }
 }

@@ -203,7 +203,7 @@ public class ArrayUtils {
         };
         java.util.Arrays.sort(arr, comparator);
         for (int i : arr)
-            result.append(String.valueOf(i));
+            result.append(i);
         return result.toString();
     }
 
@@ -215,7 +215,7 @@ public class ArrayUtils {
         });
         StringBuilder result = new StringBuilder();
         for (int i : arr)
-            result.append(String.valueOf(i));
+            result.append(i);
         return result.toString();
     }
 
@@ -591,6 +591,43 @@ public class ArrayUtils {
     }
 
     /**
+     * Input: arr[] = {1, 2}, x = 1, y = 2
+     * Output: Minimum distance between 1 and 2 is 1.
+     * <p>
+     * Input: arr[] = {3, 4, 5}, x = 3, y = 5
+     * Output: Minimum distance between 3 and 5 is 2.
+     * <p>
+     * Input: arr[] = {3, 5, 4, 2, 6, 5, 6, 6, 5, 4, 8, 3}, x = 3, y = 6
+     * Output: Minimum distance between 3 and 6 is 4.
+     * <p>
+     * Input: arr[] = {2, 5, 3, 5, 4, 4, 2, 3}, x = 3, y = 2
+     * Output: Minimum distance between 3 and 2 is 1.
+     *
+     * @param arr
+     * @param x
+     * @param y
+     * @return
+     */
+    public static int findMinDistBetweenTwoElements(int[] arr, int x, int y) {
+        if (arr == null)
+            return -1;
+        int minDist = Integer.MAX_VALUE;
+        int xIndex = -1, yIndex = -1;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == x) {
+                xIndex = i;
+            }
+            if (arr[i] == y) {
+                yIndex = i;
+            }
+            if (xIndex != -1 && yIndex != -1 && abs(xIndex - yIndex) < minDist) {
+                minDist = abs(xIndex - yIndex);
+            }
+        }
+        return minDist;
+    }
+
+    /**
      * {1 ,2, 2, 4}
      * o/p: 2
      */
@@ -626,41 +663,4 @@ public class ArrayUtils {
             return find(arr, low, mid) || find(arr, mid + 1, high);
         }
     }
-
-    /**
-     * Input: arr[] = {1, 2}, x = 1, y = 2
-     * Output: Minimum distance between 1 and 2 is 1.
-     *
-     * Input: arr[] = {3, 4, 5}, x = 3, y = 5
-     * Output: Minimum distance between 3 and 5 is 2.
-     *
-     * Input: arr[] = {3, 5, 4, 2, 6, 5, 6, 6, 5, 4, 8, 3}, x = 3, y = 6
-     * Output: Minimum distance between 3 and 6 is 4.
-     *
-     * Input: arr[] = {2, 5, 3, 5, 4, 4, 2, 3}, x = 3, y = 2
-     * Output: Minimum distance between 3 and 2 is 1.
-     * @param arr
-     * @param x
-     * @param y
-     * @return
-     */
-    public static int findMinDistBetweenTwoElements(int[] arr, int x, int y) {
-        if (arr == null)
-            return -1;
-        int minDist = Integer.MAX_VALUE;
-        int xIndex = -1, yIndex = -1;
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == x) {
-                xIndex = i;
-            }
-            if (arr[i] == y) {
-                yIndex = i;
-            }
-            if (xIndex != -1 && yIndex != -1 && abs(xIndex - yIndex) < minDist ) {
-                minDist = abs(xIndex - yIndex);
-            }
-        }
-        return minDist;
-    }
-
 }

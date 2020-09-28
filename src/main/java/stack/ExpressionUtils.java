@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+import interfaces.Hard;
 import interfaces.Important;
+import interfaces.Medium;
 
 /**
  * Infix -> PostFix
@@ -51,24 +53,25 @@ public class ExpressionUtils {
 
     @Important
     public static String infixToPostfix(String infix) {
-        if (infix == null || infix.length()==0) {
+        if (infix == null || infix.length() == 0) {
             return null;
         }
 
         Stack<Character> stack = new Stack<>();
         String postfix = "";
-        for (int i = 0; i<infix.length(); i++) {
+        for (int i = 0; i < infix.length(); i++) {
             char ch = infix.charAt(i);
             if (isOperand(ch)) {
                 postfix += ch;
             } else if (ch == ')') {
-                for (char top = stack.pop(); top != '(';) {
+                for (char top = stack.pop(); top != '('; ) {
                     postfix += top;
                     top = stack.pop();
                 }
             } else {
                 if (ch != '(') {
-                    while (!stack.isEmpty() && stack.peek() != '(' && checkPriority(stack.peek(), ch) <= 0) {
+                    // if there are higher or equal priority operators already in stack, add those to postfix
+                    while (!stack.isEmpty() && stack.peek() != '(' && checkPriority(stack.peek(), ch) >= 0) {
                         postfix += stack.pop();
                     }
                 }
@@ -95,9 +98,9 @@ public class ExpressionUtils {
         if (exp == null) {
             return 0;
         }
-        char[] characters = exp.toCharArray();
         Stack<Double> s = new Stack<>();
-        for (char t : characters) {
+        for (int i = 0; i < exp.length(); i++) {
+            char t = exp.charAt(i);
             if (isOperand(t))
                 s.push(Double.parseDouble("" + t));
             else {
@@ -128,15 +131,15 @@ public class ExpressionUtils {
         if (prefixExp == null) {
             return null;
         }
-        char[] chars = prefixExp.toCharArray();
         Stack<String> stack = new Stack<>();
-        for (int i = chars.length - 1; i >= 0; i--) {
-            if (isOperand(chars[i])) {
-                stack.push(String.valueOf(chars[i]));
+        for (int i = prefixExp.length() - 1; i >= 0; i--) {
+            char ch = prefixExp.charAt(i);
+            if (isOperand(ch)) {
+                stack.push(String.valueOf(ch));
             } else {
                 String op1 = stack.pop();
                 String op2 = stack.pop();
-                String exp = String.format("(%s%s%s)", op1, String.valueOf(chars[i]), op2);
+                String exp = String.format("(%s%s%s)", op1, ch, op2);
                 stack.push(exp);
             }
         }
@@ -158,16 +161,15 @@ public class ExpressionUtils {
     static public String prefixToPostfix(String prefixExp) {
         if (prefixExp == null)
             return null;
-        char[] chars = prefixExp.toCharArray();
         Stack<String> stack = new Stack<>();
-        for (int i = chars.length - 1; i >= 0; i--) {
-            char x = chars[i];
-            if (isOperand(x)) {
-                stack.push(String.valueOf(x));
+        for (int i = prefixExp.length() - 1; i >= 0; i--) {
+            char ch = prefixExp.charAt(i);
+            if (isOperand(ch)) {
+                stack.push(String.valueOf(ch));
             } else {
                 String op1 = stack.pop();
                 String op2 = stack.pop();
-                String exp = String.format("%s%s%s", op1, op2, String.valueOf(chars[i]));
+                String exp = String.format("%s%s%s", op1, op2, ch);
                 stack.push(exp);
             }
         }
@@ -192,13 +194,14 @@ public class ExpressionUtils {
             return null;
         }
         Stack<String> stack = new Stack<>();
-        for (char x : postfixExp.toCharArray()) {
-            if (isOperand(x)) {
-                stack.push(String.valueOf(x));
+        for (int i = 0; i < postfixExp.length(); i--) {
+            char ch = postfixExp.charAt(i);
+            if (isOperand(ch)) {
+                stack.push(String.valueOf(ch));
             } else {
                 String op1 = stack.pop();
                 String op2 = stack.pop();
-                String exp = String.format("(%s%s%s)", op2, String.valueOf(x), op1);
+                String exp = String.format("(%s%s%s)", op2, ch, op1);
                 stack.push(exp);
             }
         }
@@ -221,13 +224,13 @@ public class ExpressionUtils {
         if (postfix == null)
             return null;
         Stack<String> stack = new Stack<>();
-        for (char x : postfix.toCharArray()) {
-            if (isOperand(x)) {
-                stack.push(String.valueOf(x));
+        for (char ch : postfix.toCharArray()) {
+            if (isOperand(ch)) {
+                stack.push(String.valueOf(ch));
             } else {
                 String op1 = stack.pop();
                 String op2 = stack.pop();
-                String exp = String.format("%s%s%s", String.valueOf(x), op2, op1);
+                String exp = String.format("%s%s%s", ch, op2, op1);
                 stack.push(exp);
             }
         }
@@ -248,18 +251,20 @@ public class ExpressionUtils {
         if (null == expression)
             return false;
         char[] elements = expression.toCharArray();
-        Stack<Character> charStack = new Stack<>();
-        for (char c : elements) {
-            if (parenthesis.contains(c)) {
-                if (parenthesisPairs.containsKey(c)) {
-                    if (charStack.isEmpty() || !isParenthesisPairs(c, charStack.pop()))
+        Stack<Character> stack = new Stack<>();
+        for (char ch : elements) {
+            if (parenthesis.contains(ch)) {
+                if (parenthesisPairs.containsKey(ch)) {
+                    if ((stack.isEmpty() || !isParenthesisPairs(ch, stack.pop()))) {
                         return false;
-                } else
-                    charStack.push(c);
+                    }
+                } else {
+                    stack.push(ch);
+                }
             }
         }
 
-        return true;
+        return stack.isEmpty();
     }
 
     static private double compute(double a, double b, char operator) {
@@ -288,23 +293,24 @@ public class ExpressionUtils {
      * ((a+b)+((c+d)))
      * The subexpression "c+d" is surrounded by two
      * pairs of brackets.
-     *
+     * <p>
      * (((a+(b)))+(c+d))
      * The subexpression "a+(b)" is surrounded by two
      * pairs of brackets.
-     *
+     * <p>
      * (((a+(b))+c+d))
      * The whole expression is surrounded by two
      * pairs of brackets.
-     *
+     * <p>
      * Below expressions don't have any duplicate parenthesis -
      * ((a+b)+(c+d))
      * No subsexpression is surrounded by duplicate
      * brackets.
-     *
+     * <p>
      * ((a+(b))+(c+d))
      * No subsexpression is surrounded by duplicate
      * brackets.
+     *
      * @param expression
      * @return
      */
@@ -312,12 +318,11 @@ public class ExpressionUtils {
     public static boolean checkIfDuplicateParentheses(String expression) {
         if (expression != null && !expression.isEmpty()) {
             Stack<Character> stack = new Stack<>();
-            for (int i=0; i< expression.length(); i++) {
+            for (int i = 0; i < expression.length(); i++) {
                 char c = expression.charAt(i);
                 if (c == ')') {
                     int elementsInBraces = 0;
-                    char top = stack.pop();
-                    while (top != '(') {
+                    for (char top = stack.pop(); top != '('; ) {
                         top = stack.pop();
                         elementsInBraces++;
                     }
@@ -329,5 +334,171 @@ public class ExpressionUtils {
             }
         }
         return false;
+    }
+
+    @Important
+    public static String removeDuplicateParentheses(String expression) {
+        if (expression == null || expression.isEmpty()) {
+            return null;
+        }
+        Stack<String> stack = new Stack<>();
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == ')') {
+                if (stack.isEmpty()) {
+                    return expression;
+                }
+                int elementCount = 0;
+                String top = stack.pop();
+                String elements = "";
+                for (; !"(".equals(top); ) {
+                    elementCount++;
+                    elements = top + elements;
+                    top = stack.pop();
+                }
+
+                if (elementCount > 1) {
+                    elements = String.format("%s%s%s", "(", elements, ")");
+                }
+                stack.push(elements);
+            } else {
+                stack.push(String.valueOf(c));
+            }
+        }
+        return stack.pop();
+    }
+
+    /**
+     * Input : S = "(a(b)(c)(d(e(f)(x)g)h)I(j(k)l)m)";
+     * Output : 4
+     * <p>
+     * Input : S = "( p((q)) ((s)t) )";
+     * Output : 3
+     * <p>
+     * Input : S = "";
+     * Output : 0
+     * <p>
+     * Input : S = "b) (c) ()";
+     * Output : -1
+     * <p>
+     * Input : S = "(b) ((c) ()"
+     * Output : -1
+     *
+     * @param expression
+     * @return
+     */
+    @Important
+    @Hard
+    //TODO: Fix this!!
+    public static int maxDepthOfBalancedParentheses(String expression, boolean checkValidExpression) {
+        if (expression == null || expression.isEmpty()) {
+            return 0;
+        }
+        // "(a(b)(c)(d(e(f)(x)g)h)I(j(k)l)m)"
+        int pairCount = 0;
+        int unbalancedCount = 0;
+        int maxDepth = 0;
+        Character prev = null;
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == '(') {
+                unbalancedCount++;
+                if (prev == '(') {
+                    pairCount++;
+                } else {
+                    pairCount--;
+                }
+                prev = c;
+            } else if (c == ')') {
+                if (unbalancedCount == 0) {
+                    // found a bare ) in the string
+                    if (checkValidExpression) {
+                        return -1;
+                    }
+                    continue;
+                }
+                unbalancedCount--;
+                pairCount++;
+                if (maxDepth < pairCount / 2) {
+                    maxDepth = pairCount / 2;
+                }
+                prev = c;
+            }
+        }
+        if (checkValidExpression && unbalancedCount != 0) // expression is balanced check
+            return -1;
+        return maxDepth;
+    }
+
+    /**
+     * Input : ((())) ) (((())))
+     * Output : 8
+     * Explanation : (((())))
+     * <p>
+     * Input: )()())
+     * Output : 4
+     * Explanation: ()()
+     * <p>
+     * Input:  ()(()))))
+     * Output: 6
+     * Explanation:  ()(())
+     *
+     * @param expression
+     * @return
+     */
+    @Medium
+    @Important
+    public static int maxLengthOfBalancedParentheses(String expression, boolean checkValidExpression) {
+        if (expression == null || expression.isEmpty()) {
+            return 0;
+        }
+
+        int pairCount = 0;
+        int unbalancedCount = 0;
+        int maxLength = 0;
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == '(') {
+                unbalancedCount++;
+            } else if (c == ')') {
+                if (unbalancedCount == 0) {
+                    // found a bare ) in the string
+                    if (checkValidExpression) {
+                        return -1;
+                    }
+                    pairCount = 0; // reset the pairCount
+                    continue;
+                }
+                // found a pair
+                unbalancedCount--;
+                pairCount = pairCount + 2;
+                if (maxLength < pairCount)
+                    maxLength = pairCount;
+            }
+        }
+        if (checkValidExpression && unbalancedCount != 0) {
+            return -1;
+        }
+        return maxLength;
+    }
+
+    public static String removeBrackets(String expression) {
+        if (expression == null || !expression.contains("(") || !expression.contains(")"))
+            return expression;
+        int unbalancedCount = 0;
+        String result = "";
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == '(') {
+                unbalancedCount++;
+            } else if (c == ')') {
+                unbalancedCount--;
+            } else {
+                result += c;
+            }
+        }
+        if (unbalancedCount != 0)
+            return null;
+        return result;
     }
 }

@@ -12,45 +12,52 @@ public class DLLUtils {
             return;
         if (data1.equals(data2))
             return;
-        Node<T> first = null, second = null;
-        if (list.start.data.equals(data1) || list.start.data.equals(data2)) {
-            first = list.start;
-            T dataToSearch = first.data.equals(data1) ? data2 : data1;
-            for (second = list.start; !second.data.equals(dataToSearch); second = second.next) ;
-            if (second == null)
-                return; // one of the nodes missing
-            list.start = second;
-        } else {
-            for (Node<T> curr = list.start; curr != null; curr = curr.next) {
-                if (curr.data.equals(data1))
+
+        Node<T> first = null;
+        Node<T> second = null;
+
+        for (Node<T> curr = list.start; curr != null; curr = curr.next) {
+            if (curr.data.equals(data1) || curr.data.equals(data2)) {
+                if (first == null) {
                     first = curr;
-                else if (curr.data.equals(data2))
+                } else {
                     second = curr;
+                }
             }
         }
-        if (first == null || second == null)
-            return; // one of the nodes missing
-        Node<T> prevFirst = first.prev,
-                prevSecond = second.prev,
-                nextSecond = second.next,
-                nextFirst = first.next;
-        if (nextFirst == second) {
-            second.prev = prevFirst;
-            first.next = second.next;
+
+        if (first == null || second == null) {
+            return;
+        }
+
+        if (list.start == first) {
+            list.start = second;
+        } else if (list.start == second) {
+            list.start = first;
+        }
+
+        Node<T> prevFirst = first.prev;
+        Node<T> prevSecond = second.prev;
+        Node<T> nextToFirst = first.next;
+        Node<T> nextToSecond = first.next;
+
+        second.prev = prevFirst;
+        if (prevFirst != null) {
+            prevFirst.next = second;
+        }
+
+        first.next = nextToSecond;
+        if (nextToSecond != null) {
+            nextToSecond.prev = first;
+        }
+
+        if (nextToFirst != second) {
+            second.next = nextToFirst;
+            nextToFirst.prev = second;
+        } else {
             second.next = first;
             first.prev = second;
-        } else {
-            second.prev = prevFirst;
-            first.next = nextSecond;
-            second.next = nextFirst;
-            nextFirst.prev = second;
-            prevSecond.next = first;
-            first.prev = prevSecond;
         }
-        if (prevFirst != null)
-            prevFirst.next = second;
-        if (nextSecond != null)
-            nextSecond.prev = first;
     }
 
     public static <T> Node<T> getMiddle(Node<T> start) {

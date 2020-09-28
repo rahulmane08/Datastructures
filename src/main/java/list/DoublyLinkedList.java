@@ -29,38 +29,59 @@ public class DoublyLinkedList<T> {
         curr.next.prev = curr;
     }
 
-    public void delete(T data) {
-        if (start == null)
-            return;
-        if (data == null)
-            return;
-        Node<T> curr = this.start;
-        while (!curr.data.equals(data))
-            curr = curr.next;
-        if (curr == null)
-            return; // node not found
-        Node<T> next = curr.next;
-        Node<T> prev = curr.prev;
-        if (prev != null)
-            prev.next = next;
-        if (next != null)
-            next.prev = curr.prev;
-        curr.prev = null;
-        curr.next = null;
-        if (curr == this.start)
-            this.start = next;
+    public boolean remove(T data) {
+        if (start == null) {
+            return false;
+        }
+
+        if (start.data == data) {
+            Node next = start.next;
+            start.next = null;
+            start = next;
+            if (next != null) {
+                next.prev = null;
+            }
+            return true;
+        }
+
+        Node<T> curr = start;
+        for (; curr.next != null && !curr.next.data.equals(data); curr = curr.next) ;
+        if (curr.next == null) {
+            return false;
+        }
+        Node next = curr.next;
+        curr.next = next.next;
+        next.next = null;
+        next.prev = null;
+        if (curr.next != null) {
+            curr.next.prev = curr;
+        }
+        return true;
     }
 
     public int size() {
-        if (start == null)
-            return 0;
         int size = 0;
-        Node<T> curr = start;
-        while (curr != null) {
-            ++size;
-            curr = curr.next;
-        }
+        for (Node<T> curr = this.start; curr != null; ++size, curr = curr.next) ;
         return size;
+    }
+
+    public boolean contains(T data) {
+        Node<T> curr = start;
+        for (; curr != null && !curr.data.equals(data); curr = curr.next) ;
+        return curr != null;
+    }
+
+    public int indexOf(T data) {
+        int i = 0;
+        Node<T> curr = start;
+        for (; curr != null && !curr.data.equals(data); curr = curr.next, i++) ;
+        return (curr != null) ? i : -1;
+    }
+
+    public Node<T> nodeAt(int index) {
+        Node<T> curr = start;
+        for (int i=0; i < index && curr != null; i++, curr = curr.next);
+        return curr;
     }
 
     @Override
@@ -84,5 +105,4 @@ public class DoublyLinkedList<T> {
             return "(null)";
         return s.toString();
     }
-
 }

@@ -1,7 +1,7 @@
 package queue;
 
 public class Queue<T> {
-    private Object[] arr;
+    private final Object[] arr;
     private int front = -1, rear = -1;
 
 
@@ -40,17 +40,17 @@ public class Queue<T> {
     }
 
     public boolean isFull() {
-        if ((rear + 1) % capacity() == front)
-            return true;
-        return false;
+        return (rear + 1) % capacity() == front;
     }
 
     public boolean isEmpty() {
         return (front == -1);
     }
 
-    public T top() {
-
+    public T first() {
+        if (isEmpty()) {
+            return null;
+        }
         return (T) arr[front];
     }
 }

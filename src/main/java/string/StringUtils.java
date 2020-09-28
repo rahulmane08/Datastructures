@@ -48,4 +48,15 @@ public class StringUtils {
         }
         return true;
     }
+
+    public static int compare(String str1, String str2) {
+        return compare(str1, str2, str1.length(), str2.length(), 0);
+    }
+
+    private static int compare(String str1, String str2, int size1, int size2, int index) {
+        if (str1 == null && str2 == null) {
+            return 0;
+        }
+        return -1;
+    }
 }

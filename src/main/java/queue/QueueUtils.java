@@ -6,6 +6,9 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
+import interfaces.Important;
+import interfaces.Medium;
+import org.junit.Test;
 import stack.Stack;
 
 public class QueueUtils {
@@ -59,26 +62,102 @@ public class QueueUtils {
      * @param arr
      * @param k
      */
-    static public void printMaxInSlidingWindow(int [] arr, int k) {
+    @Important
+    @Medium
+    static public void printMaxInSlidingWindow(int[] arr, int k) {
         if (arr == null)
             return;
         int n = arr.length;
         if (k >= n)
             k = n;
         Deque<Integer> dq = new ArrayDeque<>();
-        for (int i=0; i < (n-k+1); i++) {
-            int max = Integer.MIN_VALUE;
-            while (!dq.isEmpty() && i > dq.peekFirst())
-                dq.pollFirst();
-            for (int j=i; j< i+k; j++) {
-                if (arr[j] > max)
-                    max = arr[j];
-
-                while (!dq.isEmpty() && arr[dq.peekLast()] < arr[j])
-                    dq.pollLast();
-                dq.offer(j);
+        int i = 0;
+        for (; i < k; i++) {
+            while (!dq.isEmpty() && arr[dq.peekLast()] <= arr[i]) {
+                dq.pollLast();
             }
-            System.out.printf("Window = [%d], max = %d%n",i, max);
+            dq.offerLast(i);
+        }
+        System.out.printf("max in window(%d, %d) = %d%n", 0, k - 1, arr[dq.peekFirst()]);
+        for (; i < n; i++) {
+            while (!dq.isEmpty() && dq.peekFirst() < i - k + 1) {
+                dq.pollFirst();
+            }
+            while (!dq.isEmpty() && arr[dq.peekLast()] <= arr[i]) {
+                dq.pollLast();
+            }
+            dq.offerLast(i);
+            System.out.printf("max in window(%d, %d) = %d%n", i - k + 1, i, arr[dq.peekFirst()]);
+        }
+    }
+
+    static public int findTotalMinMaxSumInSlidingWindow(int[] arr, int k) {
+        int sum = 0;
+        int n = arr.length;
+        if (k >= n)
+            k = n;
+        Deque<Integer> maxDq = new ArrayDeque<>();
+        Deque<Integer> minDq = new ArrayDeque<>();
+        int i = 0;
+        for (; i < k; i++) {
+            while (!maxDq.isEmpty() && arr[maxDq.peekLast()] <= arr[i]) {
+                maxDq.pollLast();
+            }
+            maxDq.offerLast(i);
+
+            while (!minDq.isEmpty() && arr[minDq.peekLast()] >= arr[i]) {
+                minDq.pollLast();
+            }
+            minDq.offerLast(i);
+        }
+        sum = arr[maxDq.peekFirst()] + arr[minDq.peekFirst()];
+        for (; i < n; i++) {
+            while (!maxDq.isEmpty() && maxDq.peekFirst() < (i - k + 1)) {
+                maxDq.pollFirst();
+            }
+
+            while (!maxDq.isEmpty() && arr[maxDq.peekLast()] <= arr[i]) {
+                maxDq.pollLast();
+            }
+            maxDq.offerLast(i);
+
+            while (!minDq.isEmpty() && minDq.peekFirst() < (i - k + 1)) {
+                minDq.pollFirst();
+            }
+
+            while (!minDq.isEmpty() && arr[minDq.peekLast()] >= arr[i]) {
+                minDq.pollLast();
+            }
+            minDq.offerLast(i);
+
+            sum += arr[maxDq.peekFirst()] + arr[minDq.peekFirst()];
+        }
+        return sum;
+    }
+
+    public static void printFirstNegativeInSlidingWindow(int[] arr, int k) {
+        if (arr == null)
+            return;
+        int n = arr.length;
+        if (k >= n)
+            k = n;
+        java.util.Queue<Integer> queue = new LinkedList<>();
+        int i = 0;
+        for (; i < k; i++) {
+            if (queue.isEmpty() && arr[i] < 0) {
+                queue.offer(i);
+            }
+        }
+        System.out.printf("first negative in window(%d, %d) = %d%n", 0, k - 1, queue.isEmpty() ? 0 : arr[queue.peek()]);
+        for (; i < n; i++) {
+            while (!queue.isEmpty() && queue.peek() < (i - k + 1)) {
+                queue.poll();
+            }
+
+            if (queue.isEmpty() && arr[i] < 0) {
+                queue.offer(i);
+            }
+            System.out.printf("first negative in window(%d, %d) = %d%n", i - k + 1, i, queue.isEmpty() ? 0 : arr[queue.peek()]);
         }
     }
 
@@ -92,7 +171,7 @@ public class QueueUtils {
      * @param m
      * @param n
      */
-    static public void printTimeToRotOranges(int[][] orangeBox, int m, int n) {
+    static public int timeToRotOranges(int[][] orangeBox, int m, int n) {
         Queue<Vertex> vertices = new Queue<Vertex>(m * n);
         /** put all rotten orange vertices in the queue to begin with **/
         for (int i = 0; i < m; i++)
@@ -107,7 +186,7 @@ public class QueueUtils {
         /** bfs over the queue **/
         while (!vertices.isEmpty()) {
             boolean flag = false;
-            while (!(vertices.top() == dummy)) {
+            while (!(vertices.first() == dummy)) {
                 Vertex curr = vertices.deque();
                 /** right orange **/
                 Vertex right = new Vertex(curr.x + 1, curr.y);
@@ -131,6 +210,7 @@ public class QueueUtils {
                 vertices.enqueue(dummy);
         }
         System.out.println("Time frame to rot all oranges = " + time);
+        return time;
     }
 
     static private boolean isValidIndex(int m, int n, int x, int y) {
@@ -186,7 +266,7 @@ public class QueueUtils {
             System.out.println("No Largest multiple of 3 cant be formed");
             return;
         }
-        List<Queue<Integer>> queues = Arrays.asList(new Queue[]{q0, q1, q2});
+        List<Queue<Integer>> queues = Arrays.asList(q0, q1, q2);
         int i = 0;
         for (Queue<Integer> currQ : queues)
             while (!currQ.isEmpty()) {
@@ -197,5 +277,108 @@ public class QueueUtils {
         for (int j = largestMultiple.length - 1; j >= 0; j--)
             System.out.print(largestMultiple[j]);
         System.out.println();
+    }
+
+    /**
+     * {4, 6}, {6, 5}, {7, 3} and {4, 5}
+     *
+     * @param pumps
+     * @return
+     */
+    @Test
+    @Medium
+    public static Vertex findFirstPointForCircularTour(Vertex[] pumps) {
+        if (pumps == null || pumps.length == 0)
+            return null;
+        int n = pumps.length;
+        int start = 0;
+        int end = 1;
+        int spare_petrol = pumps[0].x - pumps[0].y;
+        while (end != start) {
+
+            while (spare_petrol < 0 && start <= end) {
+                spare_petrol -= pumps[start].x - pumps[start].y;
+                if (++start == n) {
+                    return null; // reached the end of pumps and no spare petrol
+                }
+            }
+            spare_petrol += pumps[end].x - pumps[end].y;
+            end = (end + 1) % n;
+        }
+        if (spare_petrol < 0) {
+            return null;
+        }
+        return pumps[start];
+    }
+
+    public static void generateNBinaryNumbers(int N) {
+        java.util.Queue<String> queue = new LinkedList();
+        queue.offer("1");
+        for (int i = 0; i < N; i++) {
+            String top = queue.poll();
+            System.out.println(top);
+            queue.offer(top + "0");
+            queue.offer(top + "1");
+        }
+    }
+
+    public static class SortQueueUtil {
+        private int rearValue = -1;
+        private final java.util.Queue<Integer> queue;
+
+        public SortQueueUtil(java.util.Queue<Integer> queue) {
+            this.queue = queue;
+        }
+
+        public void sort() {
+            if (this.queue.isEmpty()) {
+                return;
+            }
+            int top = queue.poll();
+            sort();
+            sortedInsert(top);
+        }
+
+        private void sortedInsert(int elem) {
+            int size = queue.size();
+
+            if (size == 0 || this.rearValue <= elem) {
+                queue.offer(elem);
+                this.rearValue = elem;
+            } else {
+                int i = 0;
+                int currentRear = -1;
+                for (; i < size && queue.peek() < elem; i++) {
+                    queue.offer(queue.poll());
+                }
+                queue.offer(elem);
+                for (; i < size; i++) {
+                    currentRear = queue.peek();
+                    queue.offer(queue.poll());
+                }
+                this.rearValue = currentRear;
+            }
+        }
+    }
+
+    public static class StackUsingQueue<T> {
+        private Queue<T> queue;
+
+        public T pop() {
+            if (queue.isEmpty())
+                throw new RuntimeException("Stack is empty , nothing to pop");
+            return queue.deque();
+        }
+
+        public void push(T elem) {
+            int size = queue.size();
+            queue.enqueue(elem);
+            if (size > 0) {
+                for (int i = 0; i < size - 1; i++) {
+                    T curr = queue.deque();
+                    queue.enqueue(curr);
+                }
+            }
+        }
     }
 }

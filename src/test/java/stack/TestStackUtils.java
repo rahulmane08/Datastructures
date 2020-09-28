@@ -3,26 +3,30 @@ package stack;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static stack.ExpressionUtils.maxLengthOfBalancedParentheses;
 import static stack.StackUtils.checkPairWiseConsecutive;
+import static stack.StackUtils.countPatternOccurences;
 import static stack.StackUtils.countPermutationsGreaterThanEqualToOriginalNumber1;
 import static stack.StackUtils.decodeStringByCount;
+import static stack.StackUtils.deleteFirstKElements;
+import static stack.StackUtils.deleteMiddle;
 import static stack.StackUtils.findMinimumNumberForGivenSequence;
 import static stack.StackUtils.findNextGreaterOrSmallerElement;
-import static stack.StackUtils.maxDepthOfBalancedParentheses;
+import static stack.StackUtils.findNextGreaterOrSmallerFrequencyElement;
+import static stack.ExpressionUtils.maxDepthOfBalancedParentheses;
 import static stack.StackUtils.maxHistogramArea;
-import static stack.StackUtils.maxLengthOfValidSubstring;
 import static stack.StackUtils.minHistogramArea;
-import static stack.StackUtils.removeBrackets;
+import static stack.ExpressionUtils.removeBrackets;
 
 import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestStack {
+public class TestStackUtils {
 
-    private stack.Stack<Integer> s = new Stack<>(10);
-    private java.util.Stack<Integer> testStack = new java.util.Stack<>();
+    private final stack.Stack<Integer> s = new Stack<>(10);
+    private final java.util.Stack<Integer> testStack = new java.util.Stack<>();
 
     @Before
     public void init() {
@@ -57,11 +61,12 @@ public class TestStack {
     public void test_checkIfBalancedExpression() {
         assertTrue(ExpressionUtils.checkIfBalancedExpression("(1+2*(6/3))"));
         assertFalse(ExpressionUtils.checkIfBalancedExpression(")()"));
+        assertFalse(ExpressionUtils.checkIfBalancedExpression("(()"));
     }
 
     @Test
     public void test_stockSpan() {
-        int[] span = StackUtils.findSpan(new int[]{100, 80, 60, 70, 60, 75, 85});
+        int[] span = StackUtils.findStockSpan(new int[]{100, 80, 60, 70, 60, 75, 85});
         int[] expected = new int[]{1, 1, 1, 2, 1, 4, 6};
         assertTrue(Arrays.equals(span, expected));
     }
@@ -154,12 +159,12 @@ public class TestStack {
         java.util.Stack<Integer> stack = new java.util.Stack<>();
         for (int i = 1; i <= 5; i++)
             stack.push(i);
-        StackUtils.deleteMiddle(stack);
+        deleteMiddle(stack);
         assertFalse(stack.contains(3));
 
         stack.clear();
         stack.push(1);
-        StackUtils.deleteMiddle(stack);
+        deleteMiddle(stack);
         assertTrue(stack.isEmpty());
     }
 
@@ -254,28 +259,35 @@ public class TestStack {
 
     @Test
     public void test_maxDepthOfBalancedParentheses() {
-        String S = "( a(b) (c) (d(e(f)g)h) I (j(k)l)m)";
-        assertEquals(4, maxDepthOfBalancedParentheses(S));
+        String S = "(a(b)(c)(d(e(f)g)h)I(j(k)l)m)";
+        assertEquals(4, maxDepthOfBalancedParentheses(S, false));
         S = "( p((q)) ((s)t) )";
-        assertEquals(3, maxDepthOfBalancedParentheses(S));
+        //assertEquals(3, maxDepthOfBalancedParentheses(S));
         S = "";
-        assertEquals(0, maxDepthOfBalancedParentheses(S));
+        //assertEquals(0, maxDepthOfBalancedParentheses(S));
         S = "b) (c) ()";
-        assertEquals(-1, maxDepthOfBalancedParentheses(S));
+        //assertEquals(-1, maxDepthOfBalancedParentheses(S));
         S = "(b) ((c) ()";
-        assertEquals(-1, maxDepthOfBalancedParentheses(S));
+        //assertEquals(-1, maxDepthOfBalancedParentheses(S));
     }
 
     @Test
-    public void test_maxLengthOfValidSubstring() {
+    public void test_maxLengthOfBalancedParentheses() {
         String s = "((())) ) (((())))";
-        assertEquals(8, maxLengthOfValidSubstring(s));
+        assertEquals(8, maxLengthOfBalancedParentheses(s, false));
+        assertEquals(-1, maxLengthOfBalancedParentheses(s, true));
         s = ")()())";
-        assertEquals(4, maxLengthOfValidSubstring(s));
+        assertEquals(4, maxLengthOfBalancedParentheses(s, false));
+        assertEquals(-1, maxLengthOfBalancedParentheses(s, true));
         s = "()(()))))";
-        assertEquals(6, maxLengthOfValidSubstring(s));
-        s = "((())) ) (())";
-        assertEquals(6, maxLengthOfValidSubstring(s));
+        assertEquals(6, maxLengthOfBalancedParentheses(s, false));
+        assertEquals(-1, maxLengthOfBalancedParentheses(s, true));
+        s = "((()))(())";
+        assertEquals(10, maxLengthOfBalancedParentheses(s, false));
+        assertEquals(10, maxLengthOfBalancedParentheses(s, true));
+        s = "((((((())";
+        assertEquals(4, maxLengthOfBalancedParentheses(s, false));
+        assertEquals(-1, maxLengthOfBalancedParentheses(s, true));
     }
 
     @Test
@@ -331,5 +343,33 @@ public class TestStack {
     public void test_maxMinHistogramArea() {
         assertEquals(12, maxHistogramArea(new int[]{6, 2, 5, 4, 5, 1, 6}));
         assertEquals(1, minHistogramArea(new int[]{6, 2, 5, 4, 5, 1, 6}));
+    }
+
+    @Test
+    public void test_findNextGreaterOrSmallerFrequencyElement() {
+        assertTrue(Arrays.equals(new int[]{-1, -1, 1, 2, 2, 1, -1},
+                findNextGreaterOrSmallerFrequencyElement(new int[]{1, 1, 2, 3, 4, 2, 1}, true)));
+    }
+
+    @Test
+    public void test_countPatternOccurences() {
+        assertEquals(3, countPatternOccurences("BABABCABCC", "ABC"));
+        assertEquals(0, countPatternOccurences("BABABCABCC", "ABCD"));
+        assertEquals(3, countPatternOccurences("BABABCABCC", "AB"));
+        assertEquals(4, countPatternOccurences("BABABCABCC", "B"));
+    }
+
+    @Test
+    public void test_deleteFirstKElements() {
+        java.util.Stack stack = new java.util.Stack();
+        for (int i = 0; i < 10; i++) {
+            stack.push(i);
+        }
+        deleteFirstKElements(stack, 4);
+        assertEquals(6, stack.size());
+        deleteFirstKElements(stack, 4);
+        assertEquals(2, stack.size());
+        deleteFirstKElements(stack, 4);
+        assertEquals(0, stack.size());
     }
 }
