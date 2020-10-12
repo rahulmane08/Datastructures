@@ -1,27 +1,10 @@
 package pq;
 
-import static pq.HeapUtils.PrintKMaxSumsOfTwoEquallySizedArraysUtil.printKMaxSumsOfTwoEquallySizedArrays;
-import static pq.HeapUtils.checkIfArrayIsMaxHeap;
-import static pq.HeapUtils.findKthLargestContiguousSum;
-import static pq.HeapUtils.maxNumberOfDistinctElementsAfterKRemovals;
-import static pq.HeapUtils.mergeMaxHeaps;
-import static pq.HeapUtils.minCostOfConnectingRopes;
-import static pq.HeapUtils.minProductOfKNumbers;
-import static pq.HeapUtils.printAllElementsLessThanXInMinHeap;
-import static pq.HeapUtils.printKLargestElements;
-import static pq.HeapUtils.printMedian;
-import static pq.HeapUtils.printMedian1;
-import static pq.HeapUtils.printMinProductOfKIntegers;
-import static pq.HeapUtils.printStringWithNonRepeatingChars;
-import static pq.HeapUtils.printTopKNumbersWithMaxFrequency;
-import static pq.HeapUtils.sortAlmostSorted;
-
-import java.util.Arrays;
-import java.util.Collection;
+import static pq.HeapUtils.CheckerUtils.checkIfArrayIsMaxHeap;
 
 public class Test {
     public static void main(String[] args) {
-        int k = 3;
+        /*int k = 3;
         int[] arr = {1, 10, 9, 8, 2};
         System.out.printf("%d largest element in arr: %s: %d%n", k, Arrays.toString(arr), HeapUtils.kthLargest(arr, k));
 
@@ -50,7 +33,7 @@ public class Test {
         printMedian(new int[]{5, 15, 10, 20, 3});
         printMedian1(new int[]{5, 15, 10, 20, 3});
 
-        int[] mergedMaxHeap = mergeMaxHeaps(new int[]{5, 2, 3}, new int[]{10, 8, 9, 6, 5});
+        int[] mergedMaxHeap = mergeMaxHeaps(new Integer[][]{5, 2, 3}, new Integer[][]{10, 8, 9, 6, 5});
         System.out.println("is merged heap max heap: " + checkIfArrayIsMaxHeap(mergedMaxHeap));
 
         arr = new int[]{20, -5, -1};
@@ -125,6 +108,6 @@ public class Test {
         printMinProductOfKIntegers(new int[]{11, 8, 5, 7, 5, 100}, 4);
 
         Collection<Long> sizes = Arrays.asList(5l);
-        System.out.println(sizes.stream().allMatch(x -> x.intValue() == 5));
+        System.out.println(sizes.stream().allMatch(x -> x.intValue() == 5));*/
     }
 }

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Stack;
 
 import array.ArrayUtils;
+import interfaces.Hard;
+import interfaces.Important;
+import interfaces.Medium;
 import tree.TreeUtils.OrderedArrays;
 
 public class BSTUtils {
@@ -38,6 +41,7 @@ public class BSTUtils {
         return ((isBST_WrongAlgo(root.left)) && isBST_WrongAlgo(root.right));
     }
 
+    @Important
     public static boolean isBST(Node root) {
         return isBSTUtils(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
@@ -112,58 +116,54 @@ public class BSTUtils {
         if (root == null)
             return null;
 
-        Node prev = null, head = null;
-        Stack<Node> s = new Stack<>();
-        while (true) {
-            if (root != null) {
-                s.push(root);
-                root = root.left;
+        Node curr = root, prev = null, head = null;
+        Stack<Node> stack = new Stack<>();
+        while (curr != null || !stack.isEmpty()) {
+            if (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
             } else {
-                if (s.isEmpty())
-                    return head;
-
-                root = s.pop();
-                if (head == null)
-                    head = root;
-
-                root.left = prev;
-                if (prev != null) prev.right = root;
-                prev = root;
-                root = root.right;
+                curr = stack.pop();
+                if (head == null) {
+                    head = curr;
+                }
+                curr.left = prev;
+                if (curr.left != null) {
+                    curr.left.right = curr;
+                }
+                prev = curr;
+                curr = curr.right;
             }
-
         }
+        return head;
     }
 
     static public Node convertToSortedCLL(Node root) {
         if (root == null)
             return null;
 
-        Node prev = null, head = null;
-        Stack<Node> s = new Stack<>();
-        while (true) {
-            if (root != null) {
-                s.push(root);
-                root = root.left;
+        Node curr = root, prev = null, head = null;
+        Stack<Node> stack = new Stack<>();
+        while (curr != null || !stack.isEmpty()) {
+            if (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
             } else {
-                if (s.isEmpty()) {
-                    head.left = prev;
-                    prev.right = head;
-                    return head;
+                curr = stack.pop();
+                if (head == null) {
+                    head = curr;
                 }
-
-
-                root = s.pop();
-                if (head == null)
-                    head = root;
-
-                root.left = prev;
-                if (prev != null) prev.right = root;
-                prev = root;
-                root = root.right;
+                curr.left = prev;
+                if (curr.left != null) {
+                    curr.left.right = curr;
+                }
+                prev = curr;
+                curr = curr.right;
             }
-
         }
+        prev.right = head;
+        head.left = prev;
+        return head;
     }
 
     static public void printRange(Node root, int k1, int k2, boolean inclusive) {
@@ -177,24 +177,12 @@ public class BSTUtils {
         printRange(root.right, k1, k2, inclusive);
     }
 
-
-    static boolean hasOneChildrenForEachNode(Node root) {
-        if (root == null || TreeUtils.isLeaf(root))
-            return true;
-        int count = 0;
-        if (root.left != null)
-            count++;
-        if (root.right != null)
-            count++;
-        return (count == 1) && hasOneChildrenForEachNode(root.left) && hasOneChildrenForEachNode(root.right);
-    }
-
     /**
-     * 9
-     * /     \
-     * 5       12
-     * /  \    /  \
-     * 3    6  11   14
+     *           9
+     *        /    \
+     *      5       12
+     *    /  \    /  \
+     *   3    6  11   14
      * Ceil (10): 11
      * Ceil (3): 3
      * Ceil (5): 5
@@ -204,7 +192,7 @@ public class BSTUtils {
      * Ceil (1): 3
      * Ceil (12): 12
      * Ceil (11): 11
-     * Ceil (13): 13
+     * Ceil (13): 14
      * Ceil (99): 2147483647
      * Ceil (10): 11
      *
@@ -212,21 +200,13 @@ public class BSTUtils {
      * @param data
      * @return
      */
-    public static int ceil(Node root, int data) {
-        if (root == null)
-            return Integer.MAX_VALUE;
-        if (root.data == data)
-            return data;
-        int ceil = -1;
-        if (root.data < data)
-            ceil = ceil(root.right, data);
-        else
-            ceil = ceil(root.left, data);
-
-        if (ceil >= data && root.data > data)
-            return Math.min(ceil, root.data);
-
-        return ceil;
+    @Important
+    public static Integer ceil(Node root, int data) {
+        Node ceilNode = inorderSuccessor(root, data);
+        if (ceilNode != null) {
+            return ceilNode.data;
+        }
+        return null;
     }
 
     /**
@@ -241,7 +221,7 @@ public class BSTUtils {
      * Floor (4): 3
      * Floor (10): 9
      * Floor (3): 3
-     * Floor (1): -2147483648
+     * Floor (1): NULL
      * Floor (12): 12
      * Floor (11): 11
      * Floor (13): 13
@@ -252,28 +232,14 @@ public class BSTUtils {
      * @param data
      * @return
      */
-    public static int floor(Node root, int data) {
-        // for absent nodes floor is -1
-        if (root == null)
-            return Integer.MIN_VALUE;
-
-        // node is located
-        if (root.data == data) {
-            return root.data;
+    @Important
+    public static Integer floor(Node root, int data) {
+        Node ceilNode = inorderPredecessor(root, data);
+        if (ceilNode != null) {
+            return ceilNode.data;
         }
-
-        int floor = -1;
-        if (data > root.data)
-            floor = floor(root.right, data);
-        else
-            floor = floor(root.left, data);
-
-        // if floor is not found , find first node less than data.
-        if (floor <= data && root.data < data)
-            return Math.max(floor, root.data);
-        return floor;
+        return null;
     }
-
 
     /**
      * Stack sortability algo:
@@ -282,11 +248,13 @@ public class BSTUtils {
      * @param preorder
      * @return
      */
+    @Important
+    @Hard
     public static boolean checkIfPreorderIsBST(int[] preorder) {
         Stack<Integer> s = new Stack<Integer>();
         int root = Integer.MIN_VALUE;
         for (int i = 0; i < preorder.length; i++) {
-            if (preorder[i] < root)
+            if (preorder[i] <= root)
                 return false;
             while (!s.isEmpty() && preorder[i] > s.peek())
                 root = s.pop();
@@ -534,45 +502,48 @@ public class BSTUtils {
         }
     }
 
-    public static class InorderPredecssorSuccessor {
-        private final Node root;
-        private final int data;
-        private Node predecessor, successor;
-
-        public InorderPredecssorSuccessor(Node root, int value) {
-            this.root = root;
-            this.data = value;
+    public static Node inorderPredecessor(Node root, int data) {
+        if (root == null) {
+            return null;
+        }
+        if (root.data == data) {
+            return max(root.left);
+        }
+        Node predecessor;
+        if (data < root.data) {
+            predecessor = inorderPredecessor(root.left, data);
+        } else {
+            predecessor = inorderPredecessor(root.right, data);
         }
 
-        private void predecessorSuccessor(Node root, int data) {
-            if (root == null)
-                return;
-            if (root.data == this.data) {
-                if (root.left != null)
-                    predecessor = max(root.left);
-                if (root.right != null)
-                    successor = min(root.right);
-            } else if (this.data < root.data) {
-                successor = root;
-                predecessorSuccessor(root.left, data);
-            } else {
-                predecessor = root;
-                predecessorSuccessor(root.right, data);
-            }
+        if (predecessor == null && root.data < data) {
+            return root;
         }
-
-        public Node inorderPredecessor() {
-            predecessorSuccessor(root, data);
-            return predecessor;
-        }
-
-        public Node inorderSuccessor() {
-            predecessorSuccessor(root, data);
-            return successor;
-        }
-
+        return predecessor;
     }
 
+    public static Node inorderSuccessor(Node root, int data) {
+        if (root == null) {
+            return null;
+        }
+        if (root.data == data) {
+            return min(root.right);
+        }
+        Node successor;
+        if (data < root.data) {
+            successor = inorderSuccessor(root.left, data);
+        } else {
+            successor = inorderSuccessor(root.right, data);
+        }
+
+        if (successor == null && root.data > data) {
+            return root;
+        }
+        return successor;
+    }
+
+    @Important
+    @Medium
     static public class CorrectBST {
         private Node prev;
         private Node first;
@@ -586,9 +557,9 @@ public class BSTUtils {
 
         public void correctBst(Node root) {
             findIncorrectNodes(root);
-            if (first != null && second != null)
+            if (first != null && second != null) // non adjacent are faulty nodes
                 swapData(first, second);
-            else if (first != null && mid != null)
+            else if (first != null && mid != null) // parent child (adjacent) are faulty nodes
                 swapData(first, mid);
         }
 
@@ -607,16 +578,18 @@ public class BSTUtils {
                 if (first == null) {
                     first = prev;
                     mid = root;
-                } else
+                } else {
                     second = root;
+                }
             }
 
             prev = root;
             findIncorrectNodes(root.right);
-
         }
     }
 
+    @Important
+    @Hard
     static public class LargestBstInBT {
         private Node largestBstRoot;
         private int heightOfBst = Integer.MIN_VALUE;

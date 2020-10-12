@@ -15,12 +15,17 @@ public class MaxPriorityQueue<T extends Comparable<T>> {
     }
 
     private int getBalancedCapacity(int capacity) {
-        int pow = (int) pow(2, ceil(log(new Double(capacity).doubleValue()) / log(new Double(2).doubleValue())));
+        int pow = (int) pow(2, ceil(log(capacity) / log(2d)));
         if (pow == capacity)
             return getBalancedCapacity(capacity + 1);
         return pow;
     }
 
+    /**
+     * Time complexity: log(n)
+     * @param elem
+     * @return
+     */
     public boolean add(T elem) {
         if (elem == null) {
             return false;
@@ -90,12 +95,16 @@ public class MaxPriorityQueue<T extends Comparable<T>> {
         return (T) this.arr[0];
     }
 
+    /**
+     * Time complexity: log(n)
+     * @return
+     */
     public T poll() {
         if (size == 0)
             return null;
         T elem = peek();
-        this.arr[0] = arr[size - 1];
-        this.arr[size--] = null;
+        this.arr[0] = arr[--size];
+        this.arr[size] = null;
         heapifyDown(0);
         return elem;
     }

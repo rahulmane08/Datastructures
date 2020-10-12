@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BinaryTree implements Cloneable{
-    Node root;
+    public Node root;
 
     public BinaryTree() {
         super();
@@ -55,24 +55,32 @@ public class BinaryTree implements Cloneable{
     public void delete(int data) {
         if (root == null)
             return;
-        Node nodeToDelete = null, deepestNode = null;
+        Node nodeToDelete = null, deepestNode = null, deepestParent = null;
         Queue<Node> queue = new ArrayDeque<>();
         queue.offer(root);
         while (!queue.isEmpty()) {
             deepestNode = queue.poll();
             if (nodeToDelete == null && deepestNode.data == data)
                 nodeToDelete = deepestNode;
-            if (deepestNode.left != null)
+            if (deepestNode.left != null) {
+                deepestParent = deepestNode;
                 queue.offer(deepestNode.left);
-            if (deepestNode.right != null)
+            }
+            if (deepestNode.right != null) {
+                deepestParent = deepestNode;
                 queue.offer(deepestNode.right);
+            }
         }
         if (nodeToDelete == null)
             return; //the node with the data to delete is not found in tree
         System.out.println("node to delete = " + nodeToDelete);
         System.out.println("deepest node = " + deepestNode);
         nodeToDelete.data = deepestNode.data;
-        deepestNode = null;
+        if (deepestParent.left == deepestNode) {
+            deepestParent.left = null;
+        } else {
+            deepestParent.right = null;
+        }
     }
 
     @Override

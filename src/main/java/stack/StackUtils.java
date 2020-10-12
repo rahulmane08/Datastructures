@@ -587,7 +587,6 @@ public class StackUtils {
      * Output : bcacabcacabcaca
      *
      * @param str
-     * @return a3[b2[ca]]bc
      */
     @Important
     @Medium
@@ -761,7 +760,7 @@ public class StackUtils {
                 if (matchedString.length() > 0) {
                     residueString += matchedString;
                     matchedString = "";
-                    i--;
+                    i--; // important
                 } else {
                     residueString += str.charAt(i);
                 }

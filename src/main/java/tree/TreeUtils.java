@@ -11,7 +11,9 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import interfaces.Hard;
 import interfaces.Important;
+import interfaces.Medium;
 import stack.StackUtils;
 import utils.Utils;
 
@@ -44,6 +46,7 @@ public class TreeUtils {
 
     /**
      * PRE ORDER
+     *
      * @param data
      * @param root
      * @return
@@ -91,6 +94,14 @@ public class TreeUtils {
         return size;
     }
 
+    public static void deleteTree(BinaryTree tree) {
+        if (tree == null || tree.root == null) {
+            return;
+        }
+        deleteTree(tree.root);
+        tree.root = null;
+    }
+
     public static void deleteTree(Node root) {
         if (root == null)
             return;
@@ -100,11 +111,11 @@ public class TreeUtils {
         //eliminate the references
         root.left = null;
         root.right = null;
-        root = null;
     }
 
     /**
      * POST ORDER
+     *
      * @param root
      * @return
      */
@@ -139,107 +150,6 @@ public class TreeUtils {
                 queue.offer(curr.right);
         }
         return height;
-    }
-
-
-    public static int diameter(Node root) {
-        if (root == null)
-            return 0;
-        int nodesInLongestPath = lengthOfLongestPathOfNode(root); //total nodes in the longest path in which current node lies
-
-        int leftDiameter = diameter(root.left);
-        int rightDiameter = diameter(root.right);
-        return Utils.max(nodesInLongestPath, leftDiameter, rightDiameter);
-    }
-
-    public static int lengthOfLongestPathOfNode(Node root) {
-        if (root == null)
-            return 0;
-        int leftHeight = heightRecursive(root.left);
-        int rightHeight = heightRecursive(root.right);
-        int nodesInLongestPath = leftHeight + rightHeight + 1;
-        return nodesInLongestPath;
-    }
-
-    /**
-     *                   1
-     *                  / \
-     *                 2   3
-     *                / \
-     *               4   5
-     *                    \
-     *                     6
-     *                      \
-     *                       7
-     *                        \
-     *                         8
-     *   Diameter = 7 (8-7-6-5-2-1-3)
-     */
-    static public class DiameterOptimised {
-
-        public DiameterOptimised(Node root) {
-            computeDiameter(root);
-        }
-
-        private int diameter = 0;
-
-        public int getDiameter() {
-            return diameter;
-        }
-
-        private int computeDiameter(Node root) {
-            if (root == null) {
-                return 0;
-            }
-
-            int rHeight = computeDiameter(root.right);
-            int lHeight = computeDiameter(root.left);
-            int nodeDiameter = 1 + lHeight + rHeight;
-            int nodeHeight = 1 + Math.max(lHeight, rHeight);
-            if (nodeDiameter > diameter)
-                diameter = nodeDiameter;
-            return nodeHeight;
-        }
-    }
-
-    /**
-     * level order traversal
-     * have maxSum,maxLevel,level and currSum
-     * if marker is reached, reset the currSum, check currSum>maxSum if yes maxSum = currSum, maxLevel = level
-     * else increment the currSum by current node data and push left and right
-     *
-     * @param root
-     * @return
-     */
-    public static int findLevelWithMaxSum(Node root) {
-        if (root == null)
-            return 0;
-        Node marker = new Node(null, null, Integer.MIN_VALUE);
-        int maxSum = 0, maxLevel = 0;
-        int currSum = 0, level = 0;
-        Queue<Node> queue = new ArrayDeque<>();
-        queue.offer(root);
-        queue.offer(marker);
-        while (!queue.isEmpty()) {
-            Node curr = queue.poll();
-            if (curr == marker) {
-                if (currSum > maxSum) {
-                    maxSum = currSum;
-                    maxLevel = level;
-                }
-                if (!queue.isEmpty())
-                    queue.offer(marker); //adding marker for next level
-                currSum = 0;//reset the currSum for the next level sum
-                ++level;
-            } else {
-                currSum += curr.data;
-                if (curr.left != null)
-                    queue.offer(curr.left);
-                if (curr.right != null)
-                    queue.offer(curr.right);
-            }
-        }
-        return maxLevel;
     }
 
     /**
@@ -285,189 +195,27 @@ public class TreeUtils {
         return null;
     }
 
-    /**
-     * POST ORDER
-     * maintain a stack of current level path and push current root
-     * if the current node is leaf print stack
-     * traverse left and right
-     * pop the current from the stack before the stack unwinds onto parent node
-     *
-     * @param root
-     * @param path
-     */
-    public static void printAllRootToLeafPaths(Node root, Stack<Integer> path) {
-        if (root == null)
-            return;
-        path.push(root.data);
-        printAllRootToLeafPaths(root.left, path);
-        printAllRootToLeafPaths(root.right, path);
-        if (isLeaf(root)) {
-            System.out.println("Found a path: ");
-            StackUtils.printStack(path);
-        }
-        path.pop();
-    }
-
-    public static void printAllRootToLeafPathsIterative(Node root) {
-        if (root == null)
-            return;
-        Stack<Node> stack = new Stack<>();
-        Node curr = root;
-        while (curr != null || !stack.isEmpty()) {
-           if (curr != null) {
-               stack.push(curr);
-               curr = curr.left;
-           } else {
-              curr = stack.pop();
-              if (curr.right != null) {
-                  stack.push(curr);
-              } else {
-                  System.out.println("Found a path: ");
-                  StackUtils.printStack(stack);
-              }
-              while (!stack.isEmpty() && curr == stack.peek().right) {
-                  curr = stack.pop();
-              }
-              curr = curr.right;
-           }
-        }
-    }
-
-    public static boolean printFirstRootToLeafPath(Node root, Stack<Integer> path) {
+    public static int depth(Node root, int data) {
         if (root == null) {
-            return false;
+            return -1;
         }
-        path.push(root.data);
-        if (isLeaf(root)) {
-            System.out.println("Found a path = " + path);
-            return true;
+
+        if (root.data == data) {
+            return 0;
         }
-        boolean pathFound =
-                printFirstRootToLeafPath(root.left, path) || printFirstRootToLeafPath(root.right, path);
-        path.pop();
-        return pathFound;
+
+
+        int depth = depth(root.left, data);
+        if (depth != -1) {
+            return 1 + depth;
+        }
+        depth = depth(root.right, data);
+        if (depth != -1) {
+            return 1 + depth;
+        }
+        return -1;
     }
 
-    public static void printAllPathsMatchingSum(Node root, Stack<Integer> path, int sum) {
-        if (root == null)
-            return;
-        path.push(root.data);
-        sum = sum - root.data;
-        if (isLeaf(root) && sum == 0) {
-            System.out.println("Found a path: ");
-            StackUtils.printStack(path);
-        }
-        printAllPathsMatchingSum(root.left, path, sum);
-        printAllPathsMatchingSum(root.right, path, sum);
-        path.pop();
-    }
-
-    public static boolean printFirstPathMatchingSum(Node root, Stack<Integer> path, int sum) {
-        if (root == null)
-            return false;
-        path.push(root.data);
-        sum = sum - root.data;
-        if (isLeaf(root) && sum == 0) {
-            System.out.printf("Found a path: %s%n", String.valueOf(path));
-            return true;
-        }
-        boolean pathFound =
-                printFirstPathMatchingSum(root.left, path, sum) || printFirstPathMatchingSum(root.right, path, sum);
-        path.pop();
-        return pathFound;
-    }
-
-    public static class PathWithMaxSumUtils {
-        private int maxSum = 0, sum = 0;
-        List<Integer> pathWithMaxSum = new ArrayList<>();
-
-        public PathWithMaxSumUtils(Node root) {
-            Deque<Integer> queue = new ArrayDeque<>();
-            computePathWithMaxSum(root, queue);
-        }
-
-        private void computePathWithMaxSum(Node root, Deque<Integer> queue) {
-            if (root == null)
-                return;
-            queue.offer(root.data);
-            sum += root.data;
-            if (isLeaf(root)) {
-                if (maxSum < sum) {
-                    pathWithMaxSum.clear();
-                    maxSum = sum;
-                    while (!queue.isEmpty())
-                        pathWithMaxSum.add(queue.pollFirst());
-                    pathWithMaxSum.stream().forEach(queue::offer);
-                }
-            }
-            computePathWithMaxSum(root.left, queue);
-            computePathWithMaxSum(root.right, queue);
-            sum = sum - root.data;
-            queue.pollLast();
-        }
-
-        public int getMaxSum() {
-            return maxSum;
-        }
-
-        public List<Integer> getPathWithMaxSum() {
-            return pathWithMaxSum;
-        }
-    }
-
-    /**
-     * PRE ORDER
-     * @param root
-     */
-    public static void printAllAncestors(Node root) {
-        if (root == null || isLeaf(root))
-            return;
-        System.out.println(root);
-        printAllAncestors(root.left);
-        printAllAncestors(root.right);
-    }
-
-    /**
-     * PRE ORDER
-     * @param root
-     */
-    public static void printAllLeaves(Node root) {
-        if (root == null)
-            return;
-        if (isLeaf(root))
-            System.out.println(root);
-        printAllLeaves(root.left);
-        printAllLeaves(root.right);
-    }
-
-    /**
-     * POST ORDER
-     * @param root
-     * @param data
-     * @return
-     */
-    public static boolean printAncestorsOfGivenNode(Node root, int data) {
-        if (root == null)
-            return false;
-        if (data == root.data)
-            return true;
-        if (printAncestorsOfGivenNode(root.left, data) || printAncestorsOfGivenNode(root.right, data)) {
-            System.out.println(root.data);
-            return true;
-        }
-        return false;
-    }
-
-    public static void printKthLevelNodes(Node root, int k) {
-        if (root == null || k < 0)
-            return;
-        if (k == 0) {
-            System.out.print(root.data + " ");
-            return;
-        }
-        printKthLevelNodes(root.left, k - 1);
-        printKthLevelNodes(root.right, k - 1);
-    }
 
     /**
      * level ordered traversals
@@ -548,15 +296,15 @@ public class TreeUtils {
     private static Node createTreeUsingPreAndInorderSequences(Integer[] inorder, Integer[] preorder, Integer start, Integer end, Integer preIndex) {
         if (start > end || preIndex == preorder.length)
             return null;
-        int data = preorder[preIndex++];
+        int data = preorder[preIndex];
         Node current = new Node(null, null, data);
 
         if (start == end)
             return current;
 
         Integer inIndex = Utils.search(inorder, data);
-        current.left = createTreeUsingPreAndInorderSequences(inorder, preorder, start, inIndex - 1, preIndex);
-        current.right = createTreeUsingPreAndInorderSequences(inorder, preorder, inIndex + 1, end, preIndex);
+        current.left = createTreeUsingPreAndInorderSequences(inorder, preorder, start, inIndex - 1, preIndex + 1);
+        current.right = createTreeUsingPreAndInorderSequences(inorder, preorder, inIndex + 1, end, preIndex + 1);
 
         return current;
     }
@@ -610,179 +358,6 @@ public class TreeUtils {
         computeVerticalSum(root.right, levelSum, level + 1);
     }
 
-    /**
-     * POST ORDER
-     * AVL tree check
-     *
-     * @return
-     */
-    public static class AVLChecker {
-
-        private boolean check = true;
-
-        public AVLChecker(Node root) {
-            checkIfAVLTree(root);
-        }
-
-        private int checkIfAVLTree(Node root) {
-            if (!check)
-                return -1;
-            if (root == null)
-                return 0;
-            int leftHeight = checkIfAVLTree(root.left);
-            int rightHeight = checkIfAVLTree(root.right);
-            int balance = Math.abs(leftHeight - rightHeight);
-            check = (balance <= 1);
-            return 1 + Math.max(leftHeight, rightHeight);
-        }
-
-        public boolean isCheck() {
-            return check;
-        }
-    }
-
-    public static boolean checkIfSubTree(Node mainRoot, Node subRoot) {
-        if (mainRoot == null && subRoot == null)
-            return true;
-        if (subRoot != null && mainRoot == null)
-            return false;
-        if (subRoot == null && mainRoot != null)
-            return true;
-        if (mainRoot.data == subRoot.data)
-            return checkIfSubTree(mainRoot.left, subRoot.left) && checkIfSubTree(mainRoot.right, subRoot.right);
-        return checkIfSubTree(mainRoot.left, subRoot) || checkIfSubTree(mainRoot.right, subRoot);
-    }
-
-    /**
-     * POST ORDER
-     */
-    public static class InternalNodeWithOneChildChecker {
-        private Node root;
-        private boolean check = false;
-
-        public InternalNodeWithOneChildChecker(Node root) {
-            this.root = root;
-            this.check = checkIfEachInternalHasOneChild(root);
-        }
-
-        private boolean checkIfEachInternalHasOneChild(Node root) {
-            if (root == null || isLeaf(root))
-                return true;
-            if (!checkIfEachInternalHasOneChild(root.left))
-                return false;
-            if (!checkIfEachInternalHasOneChild(root.right))
-                return false;
-            if (this.root.equals(root))
-                return true;
-
-            int children = 0;
-            if (root.left != null)
-                children++;
-            if (root.right != null)
-                children++;
-            return children % 2 == 1;
-        }
-
-        public boolean isCheck() {
-            return check;
-        }
-    }
-
-    /**
-     * 26
-     * /   \
-     * 10     3
-     * /    \     \
-     * 4      6      3
-     *
-     * @param root
-     * @return
-     */
-    public static boolean checkIfSumTree(Node root) {
-        try {
-            checkIfSumTreeUtil(root);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private static int checkIfSumTreeUtil(Node root) {
-        if (root == null)
-            return 0;
-        if (isLeaf(root))
-            return root.data;
-        int left = checkIfSumTreeUtil(root.left);
-        int right = checkIfSumTreeUtil(root.right);
-        if (root.data != left + right)
-            throw new RuntimeException("Tree is not a sum tree");
-        return 2 * root.data;
-    }
-
-    public static class SumTreeChecker {
-        private boolean check = true;
-
-        public SumTreeChecker(Node root) {
-            checkSum(root);
-        }
-
-        private int checkSum(Node root) {
-            if (root == null)
-                return 0;
-            if (isLeaf(root))
-                return root.data;
-            int leftSum = checkSum(root.left);
-            int rightSum = checkSum(root.right);
-            if (check)
-                check = (root.data == leftSum + rightSum);
-            return 2 * root.data;
-        }
-
-        public boolean isCheck() {
-            return check;
-        }
-    }
-
-    public static boolean areTreesIdentical(Node root1, Node root2) {
-        if (root1 == null && root2 == null)
-            return true;
-        if (root1 == null || root2 == null)
-            return false;
-        return ((root1.data == root2.data)
-                && areTreesIdentical(root1.left, root2.left)
-                && areTreesIdentical(root1.right, root2.right)
-        );
-    }
-
-    public static boolean areTreesMirrors(Node root1, Node root2) {
-        if (root1 == null && root2 == null)
-            return true;
-        if (root1 == null || root2 == null)
-            return false;
-        return ((root1.data == root2.data)
-                && areTreesMirrors(root1.left, root2.right)
-                && areTreesMirrors(root1.right, root2.left)
-        );
-    }
-
-    /**
-     * Every non leaf node has left and right child
-     * In other words each node can have exactly 0 or 2 children.
-     *
-     * @param root
-     * @return
-     */
-    static public boolean checkIfStrictTree(Node root) {
-        if (root == null)
-            return true;
-        int children = 0;
-        if (root.left != null)
-            ++children;
-        if (root.right != null)
-            ++children;
-        return (children % 2 == 0) && checkIfStrictTree(root.left) && checkIfStrictTree(root.right);
-    }
-
 
     /**
      * 50
@@ -832,17 +407,18 @@ public class TreeUtils {
 
     /**
      * IP:
-     *                   10
-     *                /      \
-     *              -2        6
-     *            /   \      /  \
-     *          8     -4    7    5
+     * 10
+     * /      \
+     * -2        6
+     * /   \      /  \
+     * 8     -4    7    5
      * OP:
-     *               20(4-2+12+6)
-     *                /      \
-     *          4(8-4)      12(7+5)
-     *            /   \      /  \
-     *          0      0    0    0
+     * 20(4-2+12+6)
+     * /      \
+     * 4(8-4)      12(7+5)
+     * /   \      /  \
+     * 0      0    0    0
+     *
      * @param root
      * @return
      */
@@ -860,24 +436,24 @@ public class TreeUtils {
     /**
      * To create Double tree of the given tree, create a new duplicate for each node, and insert the duplicate as the left child of the original node.
      * INPUT
-     *        1
-     *      /   \
-     *     2      3
-     *   /  \
-     *  4     5
+     * 1
+     * /   \
+     * 2      3
+     * /  \
+     * 4     5
      * <p>
      * OUTPUT:
-     *               1
-     *             /   \
-     *            1      3
-     *           /      /
-     *          2       3
-     *        /  \
-     *       2    5
-     *     /    /
-     *    4   5
-     *   /
-     *  4
+     * 1
+     * /   \
+     * 1      3
+     * /      /
+     * 2       3
+     * /  \
+     * 2    5
+     * /    /
+     * 4   5
+     * /
+     * 4
      */
 
     public static void createDoubleTree(Node root) {
@@ -890,86 +466,297 @@ public class TreeUtils {
         createDoubleTree(root.right);
     }
 
-    // Top view of a tree.
-
     /**
-     * Preorder
-     * @param root
+     * Input:
+     * Tree 1                     Tree 2
+     * 1                         2
+     * / \                       / \
+     * 3   2                     1   3
+     * /                           \   \
+     * 5                             4   7
+     * Output:
+     * Merged tree:
+     * 3
+     * / \
+     * 4   5
+     * / \   \
+     * 5   4   7
+     *
+     * @param root1
+     * @param root2
+     * @return
      */
-    @Important
-    static public void topView(Node root) {
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        topViewUtil(root, 0, map);
-        System.out.println("Top view of Tree");
-        map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
-                .map(Map.Entry::getValue)
-                .forEach(System.out::println);
+    public static Node addTrees(Node root1, Node root2) {
+        if (root1 == null && root2 == null)
+            return null;
+        if (root2 == null)
+            return root1;
+        if (root1 == null)
+            return root2;
+        Node mergedNode = new Node(root1.data + root2.data);
+        mergedNode.left = addTrees(root1.left, root2.left);
+        mergedNode.right = addTrees(root1.right, root2.right);
+        return mergedNode;
     }
 
-    private static void topViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
-        if (root == null)
-            return;
-        if (!map.containsKey(vLevel))
-            map.put(vLevel, root.data);
-        topViewUtil(root.left, vLevel - 1, map);
-        topViewUtil(root.right, vLevel + 1, map);
+    public static class CheckerUtils {
+
+        public static boolean checkIfSubTree(Node mainRoot, Node subRoot) {
+            if (mainRoot == null && subRoot == null)
+                return true;
+            if (subRoot != null && mainRoot == null)
+                return false;
+            if (subRoot == null && mainRoot != null)
+                return true;
+            if (mainRoot.data == subRoot.data)
+                return checkIfSubTree(mainRoot.left, subRoot.left) && checkIfSubTree(mainRoot.right, subRoot.right);
+            return checkIfSubTree(mainRoot.left, subRoot) || checkIfSubTree(mainRoot.right, subRoot);
+        }
+
+        /**
+         * 26
+         * /   \
+         * 10     3
+         * /    \     \
+         * 4      6      3
+         *
+         * @param root
+         * @return
+         */
+        public static boolean checkIfSumTree(Node root) {
+            try {
+                checkIfSumTreeUtil(root);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        private static int checkIfSumTreeUtil(Node root) {
+            if (root == null)
+                return 0;
+            if (isLeaf(root))
+                return root.data;
+            int left = checkIfSumTreeUtil(root.left);
+            int right = checkIfSumTreeUtil(root.right);
+            if (root.data != left + right)
+                throw new RuntimeException("Tree is not a sum tree");
+            return 2 * root.data;
+        }
+
+        public static boolean areTreesIdentical(Node root1, Node root2) {
+            if (root1 == null && root2 == null)
+                return true;
+            if (root1 == null || root2 == null)
+                return false;
+            return ((root1.data == root2.data)
+                    && areTreesIdentical(root1.left, root2.left)
+                    && areTreesIdentical(root1.right, root2.right)
+            );
+        }
+
+        public static boolean areTreesMirrors(Node root1, Node root2) {
+            if (root1 == null && root2 == null)
+                return true;
+            if (root1 == null || root2 == null)
+                return false;
+            return ((root1.data == root2.data)
+                    && areTreesMirrors(root1.left, root2.right)
+                    && areTreesMirrors(root1.right, root2.left)
+            );
+        }
+
+        /**
+         * Every non leaf node has left and right child
+         * In other words each node can have exactly 0 or 2 children.
+         *
+         * @param root
+         * @return
+         */
+        static public boolean checkIfStrictTree(Node root) {
+            if (root == null)
+                return true;
+            int children = 0;
+            if (root.left != null)
+                ++children;
+            if (root.right != null)
+                ++children;
+            return (children % 2 == 0) && checkIfStrictTree(root.left) && checkIfStrictTree(root.right);
+        }
+
+        /**
+         * POST ORDER
+         * AVL tree check
+         * AVL property: Difference between left and right height is <= 1.
+         * @return
+         */
+        public static class AVLChecker {
+
+            private boolean check = true;
+
+            public AVLChecker(Node root) {
+                checkIfAVLTree(root);
+            }
+
+            private int checkIfAVLTree(Node root) {
+                if (!check)
+                    return -1;
+                if (root == null)
+                    return 0;
+                int leftHeight = checkIfAVLTree(root.left);
+                int rightHeight = checkIfAVLTree(root.right);
+                int balance = Math.abs(leftHeight - rightHeight);
+                check = (balance <= 1);
+                return 1 + Math.max(leftHeight, rightHeight);
+            }
+
+            public boolean isCheck() {
+                return check;
+            }
+        }
+
+        /**
+         * POST ORDER
+         */
+        public static class InternalNodeWithOneChildChecker {
+            private Node root;
+            private boolean check = false;
+
+            public InternalNodeWithOneChildChecker(Node root) {
+                this.root = root;
+                this.check = checkIfEachInternalHasOneChild(root);
+            }
+
+            private boolean checkIfEachInternalHasOneChild(Node root) {
+                if (root == null || isLeaf(root))
+                    return true;
+                if (!checkIfEachInternalHasOneChild(root.left))
+                    return false;
+                if (!checkIfEachInternalHasOneChild(root.right))
+                    return false;
+                if (this.root.equals(root)) // root is not an internal node, so skip
+                    return true;
+
+                int children = 0;
+                if (root.left != null)
+                    children++;
+                if (root.right != null)
+                    children++;
+                return children % 2 == 1;
+            }
+
+            public boolean isCheck() {
+                return check;
+            }
+        }
+
+        public static class SumTreeChecker {
+            private boolean check = true;
+
+            public SumTreeChecker(Node root) {
+                checkSum(root);
+            }
+
+            private int checkSum(Node root) {
+                if (root == null)
+                    return 0;
+                if (isLeaf(root))
+                    return root.data;
+                int leftSum = checkSum(root.left);
+                int rightSum = checkSum(root.right);
+                if (check)
+                    check = (root.data == leftSum + rightSum);
+                return 2 * root.data;
+            }
+
+            public boolean isCheck() {
+                return check;
+            }
+        }
     }
 
-    // bottom view of a tree
-    static public void bottomView(Node root) {
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        bottomViewUtil(root, 0, map);
-        System.out.println("Bottom view of Tree");
-        map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
-                .map(Map.Entry::getValue)
-                .forEach(System.out::println);
-    }
+    public static class ViewUtils {
 
-    private static void bottomViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
-        if (root == null)
-            return;
-        bottomViewUtil(root.left, vLevel - 1, map);
-        bottomViewUtil(root.right, vLevel + 1, map);
-        if (!map.containsKey(vLevel))
-            map.put(vLevel, root.data);
-    }
+        /**
+         * Preorder
+         *
+         * @param root
+         */
+        @Important
+        static public void topView(Node root) {
+            TreeMap<Integer, Integer> map = new TreeMap<>();
+            topViewUtil(root, 0, map);
+            System.out.println("Top view of Tree");
+            map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                    .map(Map.Entry::getValue)
+                    .forEach(System.out::println);
+        }
 
-    // left side view of a tree
-    static public void leftView(Node root) {
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        leftViewUtil(root, 0, map);
-        System.out.println("Bottom view of Tree");
-        map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
-                .map(Map.Entry::getValue)
-                .forEach(System.out::println);
-    }
+        private static void topViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
+            if (root == null)
+                return;
+            if (!map.containsKey(hLevel))
+                map.put(hLevel, root.data);
+            topViewUtil(root.left, hLevel - 1, map);
+            topViewUtil(root.right, hLevel + 1, map);
+        }
 
-    private static void leftViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
-        if (root == null)
-            return;
-        if (!map.containsKey(hLevel))
-            map.put(hLevel, root.data);
-        leftViewUtil(root.left, hLevel + 1, map);
-        leftViewUtil(root.right, hLevel + 1, map);
-    }
+        // bottom view of a tree
+        static public void bottomView(Node root) {
+            TreeMap<Integer, Integer> map = new TreeMap<>();
+            bottomViewUtil(root, 0, map);
+            System.out.println("Bottom view of Tree");
+            map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                    .map(Map.Entry::getValue)
+                    .forEach(System.out::println);
+        }
 
-    // right side view of a tree
-    static public void rightView(Node root) {
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        rightViewUtil(root, 0, map);
-        System.out.println("Bottom view of Tree");
-        map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
-                .map(Map.Entry::getValue)
-                .forEach(System.out::println);
-    }
+        private static void bottomViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
+            if (root == null)
+                return;
+            bottomViewUtil(root.left, hLevel - 1, map);
+            bottomViewUtil(root.right, hLevel + 1, map);
+            if (!map.containsKey(hLevel))
+                map.put(hLevel, root.data);
+        }
 
-    private static void rightViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
-        if (root == null)
-            return;
-        if (!map.containsKey(hLevel))
-            map.put(hLevel, root.data);
-        rightViewUtil(root.right, hLevel + 1, map);
-        rightViewUtil(root.left, hLevel + 1, map);
+        // left side view of a tree
+        static public void leftView(Node root) {
+            TreeMap<Integer, Integer> map = new TreeMap<>();
+            leftViewUtil(root, 0, map);
+            System.out.println("Bottom view of Tree");
+            map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                    .map(Map.Entry::getValue)
+                    .forEach(System.out::println);
+        }
+
+        private static void leftViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
+            if (root == null)
+                return;
+            if (!map.containsKey(vLevel))
+                map.put(vLevel, root.data);
+            leftViewUtil(root.left, vLevel + 1, map);
+            leftViewUtil(root.right, vLevel + 1, map);
+        }
+
+        // right side view of a tree
+        static public void rightView(Node root) {
+            TreeMap<Integer, Integer> map = new TreeMap<>();
+            rightViewUtil(root, 0, map);
+            System.out.println("Bottom view of Tree");
+            map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+                    .map(Map.Entry::getValue)
+                    .forEach(System.out::println);
+        }
+
+        private static void rightViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
+            if (root == null)
+                return;
+            if (!map.containsKey(vLevel))
+                map.put(vLevel, root.data);
+            rightViewUtil(root.right, vLevel + 1, map);
+            rightViewUtil(root.left, vLevel + 1, map);
+        }
     }
 
     public static class PrintBoundaryNodesUtil {
@@ -1270,7 +1057,7 @@ public class TreeUtils {
             Map<Integer, ArrayList<Integer>> verticalPaths = new TreeMap<>();
             populateVerticalPaths(root, verticalPaths, 0);
             verticalPaths.forEach((level, path) -> {
-                System.out.printf("vertical level = %d: nodes = %s%n", level, String.valueOf(path));
+                System.out.printf("vertical level = %d: nodes = %s%n", level, path);
             });
         }
 
@@ -1282,6 +1069,41 @@ public class TreeUtils {
             verticalPaths.put(vLevel, vPath);
             populateVerticalPaths(root.left, verticalPaths, vLevel - 1);
             populateVerticalPaths(root.right, verticalPaths, vLevel + 1);
+        }
+
+        public static void diagonalTraversal(Node root) {
+            Map<Integer, ArrayList<Integer>> diagonalPaths = new TreeMap<>();
+            populateDiagalPaths(root, diagonalPaths, 0);
+            diagonalPaths.forEach((level, path) -> {
+                System.out.printf("diagonal level = %d: nodes = %s%n", level, path);
+            });
+        }
+
+        private static void populateDiagalPaths(Node root, Map<Integer, ArrayList<Integer>> diagonalPaths, int level) {
+            if (root == null)
+                return;
+            ArrayList<Integer> vPath = diagonalPaths.getOrDefault(level, new ArrayList<>());
+            vPath.add(root.data);
+            diagonalPaths.put(level, vPath);
+            populateDiagalPaths(root.left, diagonalPaths, level + 1);
+            populateDiagalPaths(root.right, diagonalPaths, level);
+        }
+
+        public static void diagonalTraversalIterative(Node root) {
+            if (root == null)
+                return;
+            Queue<Node> queue = new ArrayDeque<>();
+            Node curr = root;
+            while (curr != null || !queue.isEmpty()) {
+                if (curr != null) {
+                    queue.offer(curr);
+                    curr = curr.right;
+                } else {
+                    curr = queue.poll();
+                    System.out.println(curr.data);
+                    curr = curr.left;
+                }
+            }
         }
     }
 
@@ -1353,12 +1175,488 @@ public class TreeUtils {
 
     }
 
-    public static class DeepestLevelSumUtil {
+    /**
+     * 1
+     * / \
+     * 2   3
+     * / \
+     * 4   5
+     * \
+     * 6
+     * \
+     * 7
+     * \
+     * 8
+     * Diameter = 7 (8-7-6-5-2-1-3)
+     */
+    static public class DiameterOptimised {
+
+        private int diameter = 0;
+
+        public DiameterOptimised(Node root) {
+            computeDiameter(root);
+        }
+
+        public int getDiameter() {
+            return diameter;
+        }
+
+        private int computeDiameter(Node root) {
+            if (root == null) {
+                return 0;
+            }
+
+            int rHeight = computeDiameter(root.right);
+            int lHeight = computeDiameter(root.left);
+            int nodeDiameter = 1 + lHeight + rHeight;
+            int nodeHeight = 1 + Math.max(lHeight, rHeight);
+            if (nodeDiameter > diameter)
+                diameter = nodeDiameter;
+            return nodeHeight;
+        }
+    }
+
+    public static class PathQueryUtils {
+
+        /**
+         * level order traversal
+         * have maxSum,maxLevel,level and currSum
+         * if marker is reached, reset the currSum, check currSum>maxSum if yes maxSum = currSum, maxLevel = level
+         * else increment the currSum by current node data and push left and right
+         *
+         * @param root
+         * @return
+         */
+        public static int findLevelWithMaxSum(Node root) {
+            if (root == null)
+                return 0;
+            Node marker = new Node(null, null, Integer.MIN_VALUE);
+            int maxSum = 0, maxLevel = 0;
+            int currSum = 0, level = 0;
+            Queue<Node> queue = new ArrayDeque<>();
+            queue.offer(root);
+            queue.offer(marker);
+            while (!queue.isEmpty()) {
+                Node curr = queue.poll();
+                if (curr == marker) {
+                    if (currSum > maxSum) {
+                        maxSum = currSum;
+                        maxLevel = level;
+                    }
+                    if (!queue.isEmpty())
+                        queue.offer(marker); //adding marker for next level
+                    currSum = 0;//reset the currSum for the next level sum
+                    ++level;
+                } else {
+                    currSum += curr.data;
+                    if (curr.left != null)
+                        queue.offer(curr.left);
+                    if (curr.right != null)
+                        queue.offer(curr.right);
+                }
+            }
+            return maxLevel;
+        }
+
+        /**
+         * POST ORDER
+         * maintain a stack of current level path and push current root
+         * if the current node is leaf print stack
+         * traverse left and right
+         * pop the current from the stack before the stack unwinds onto parent node
+         *
+         * @param root
+         * @param path
+         */
+        @Important
+        public static void printAllRootToLeafPaths(Node root, Stack<Integer> path) {
+            if (root == null)
+                return;
+            path.push(root.data);
+            printAllRootToLeafPaths(root.left, path);
+            printAllRootToLeafPaths(root.right, path);
+            if (isLeaf(root)) {
+                System.out.println("Found a path: ");
+                StackUtils.printStack(path);
+            }
+            path.pop();
+        }
+
+        @Important
+        public static void printAllRootToLeafPaths(Node root, String path) {
+            if (root == null)
+                return;
+            path += " " + root.data;
+            printAllRootToLeafPaths(root.left, path);
+            printAllRootToLeafPaths(root.right, path);
+            if (isLeaf(root)) {
+                System.out.println("Found a path: " + path);
+            }
+        }
+
+        @Important
+        public static void printAllRootToLeafPathsIterative(Node root) {
+            if (root == null)
+                return;
+            Stack<Node> stack = new Stack<>();
+            Node curr = root;
+            while (curr != null || !stack.isEmpty()) {
+                if (curr != null) {
+                    stack.push(curr);
+                    curr = curr.left;
+                } else {
+                    curr = stack.pop();
+                    if (curr.right != null) {
+                        stack.push(curr);
+                    } else {
+                        System.out.println("Found a path: ");
+                        StackUtils.printStack(stack);
+                    }
+                    while (!stack.isEmpty() && curr == stack.peek().right) {
+                        curr = stack.pop();
+                    }
+                    curr = curr.right;
+                }
+            }
+        }
+
+        @Important
+        public static boolean printFirstRootToLeafPath(Node root, Stack<Integer> path) {
+            if (root == null) {
+                return false;
+            }
+            path.push(root.data);
+            if (isLeaf(root)) {
+                System.out.println("Found a path = " + path);
+                return true;
+            }
+            boolean pathFound =
+                    printFirstRootToLeafPath(root.left, path) || printFirstRootToLeafPath(root.right, path);
+            path.pop();
+            return pathFound;
+        }
+
+        @Important
+        public static void printAllPathsMatchingSum(Node root, Stack<Integer> path, int sum) {
+            if (root == null)
+                return;
+            path.push(root.data);
+            sum = sum - root.data;
+            if (isLeaf(root) && sum == 0) {
+                System.out.println("Found a path: ");
+                StackUtils.printStack(path);
+            }
+            printAllPathsMatchingSum(root.left, path, sum);
+            printAllPathsMatchingSum(root.right, path, sum);
+            path.pop();
+        }
+
+        @Important
+        public static boolean printFirstPathMatchingSum(Node root, Stack<Integer> path, int sum) {
+            if (root == null)
+                return false;
+            path.push(root.data);
+            sum = sum - root.data;
+            if (isLeaf(root) && sum == 0) {
+                System.out.printf("Found a path: %s%n", String.valueOf(path));
+                return true;
+            }
+            boolean pathFound =
+                    printFirstPathMatchingSum(root.left, path, sum) || printFirstPathMatchingSum(root.right, path, sum);
+            path.pop();
+            return pathFound;
+        }
+
+        /**
+         * PRE ORDER
+         *
+         * @param root
+         */
+        public static void printAllAncestors(Node root) {
+            if (root == null || isLeaf(root))
+                return;
+            System.out.println(root);
+            printAllAncestors(root.left);
+            printAllAncestors(root.right);
+        }
+
+        /**
+         * PRE ORDER
+         *
+         * @param root
+         */
+        public static void printAllLeaves(Node root) {
+            if (root == null)
+                return;
+            if (isLeaf(root))
+                System.out.println(root);
+            printAllLeaves(root.left);
+            printAllLeaves(root.right);
+        }
+
+        /**
+         * POST ORDER
+         *
+         * @param root
+         * @param data
+         * @return
+         */
+        @Important
+        @Medium
+        public static boolean printAncestorsOfGivenNode(Node root, int data) {
+            if (root == null)
+                return false;
+            if (data == root.data)
+                return true;
+            if (printAncestorsOfGivenNode(root.left, data) || printAncestorsOfGivenNode(root.right, data)) {
+                System.out.println(root.data);
+                return true;
+            }
+            return false;
+        }
+
+        public static void printKthLevelNodes(Node root, int k) {
+            if (root == null || k < 0)
+                return;
+            if (k == 0) {
+                System.out.print(root.data + " ");
+                return;
+            }
+            printKthLevelNodes(root.left, k - 1);
+            printKthLevelNodes(root.right, k - 1);
+        }
+
+        public static int lengthOfLongestPathOfNode(Node root) {
+            if (root == null)
+                return 0;
+            int leftHeight = heightRecursive(root.left);
+            int rightHeight = heightRecursive(root.right);
+            int nodesInLongestPath = leftHeight + rightHeight + 1;
+            return nodesInLongestPath;
+        }
+
+        /**
+         * 3
+         * / \
+         * 4   5
+         * / \   \
+         * 5   4   7
+         * <p>
+         * Op: 345 + 344 + 357 = 1046
+         *
+         * @return
+         */
+        @Important
+        public static class SumOfRootToLeafPathsUtil {
+            private double sum = 0;
+            private Stack<Integer> stack = new Stack<>();
+
+            public SumOfRootToLeafPathsUtil(Node root) {
+                compute(root);
+            }
+
+            private void compute(Node root) {
+                if (root == null)
+                    return;
+                this.stack.push(root.data);
+                if (isLeaf(root)) {
+                    this.sum = this.sum + StackUtils.toNumber(stack);
+                }
+                compute(root.left);
+                compute(root.right);
+                this.stack.pop();
+            }
+
+            public double getSum() {
+                return sum;
+            }
+        }
+
+        @Important
+        public static class MaxSumOfRootToLeafPathsUtil {
+            List<Integer> pathWithMaxSum = new ArrayList<>();
+            private int maxSum = 0, sum = 0;
+
+            public MaxSumOfRootToLeafPathsUtil(Node root) {
+                Deque<Integer> queue = new ArrayDeque<>();
+                computePathWithMaxSum(root, queue);
+            }
+
+            private void computePathWithMaxSum(Node root, Deque<Integer> queue) {
+                if (root == null)
+                    return;
+                queue.offer(root.data);
+                sum += root.data;
+                if (isLeaf(root)) {
+                    if (maxSum < sum) {
+                        pathWithMaxSum.clear();
+                        maxSum = sum;
+                        while (!queue.isEmpty())
+                            pathWithMaxSum.add(queue.pollFirst());
+                        pathWithMaxSum.stream().forEach(queue::offer);
+                    }
+                }
+                computePathWithMaxSum(root.left, queue);
+                computePathWithMaxSum(root.right, queue);
+                sum = sum - root.data;
+                queue.pollLast();
+            }
+
+            public int getMaxSum() {
+                return maxSum;
+            }
+
+            public List<Integer> getPathWithMaxSum() {
+                return pathWithMaxSum;
+            }
+        }
+
+        @Important
+        @Hard
+        public static class MaxSumOfAnyPathUtil {
+            private int maxSum = Integer.MIN_VALUE;
+
+            public MaxSumOfAnyPathUtil(Node root) {
+                compute(root);
+            }
+
+            public int getMaxSum() {
+                return maxSum;
+            }
+
+            private int compute(Node root) {
+                if (root == null) {
+                    return 0;
+                }
+
+                int left = compute(root.left);
+                int right = compute(root.right);
+
+                int leftSum = left + root.data;
+                int rightSum = right + root.data;
+                int allSum = left + right + root.data;
+
+                int maxRoot = Utils.max(root.data, leftSum, rightSum);
+                maxSum = Utils.max(maxSum, allSum);
+                return maxRoot;
+            }
+        }
+
+        @Important
+        @Hard
+        public static class MaxSumOfAny2LeafPathUtil {
+            private int maxSum = Integer.MIN_VALUE;
+
+            public MaxSumOfAny2LeafPathUtil(Node root) {
+                compute(root);
+            }
+
+            public int getMaxSum() {
+                return maxSum;
+            }
+
+            private int compute(Node root) {
+                if (root == null) {
+                    return 0;
+                }
+
+                int left = compute(root.left);
+                int right = compute(root.right);
+
+                int leftSum = left + root.data;
+                int rightSum = right + root.data;
+                int allSum = left + right + root.data;
+
+                int maxRoot = Utils.max(leftSum, rightSum);
+                maxSum = Utils.max(maxSum, allSum);
+                return maxRoot;
+            }
+        }
+
+        /**
+         * ``````````` 50  max(217, 100 + 5 + 9 + 90) = 254
+         *``````` ``/      \
+         * ``````` 8 (108)       2 (99)
+         * ``````/   \        /     \
+         * ````3(100) 5 (5)  9 (9)    90 (90)
+         * ``/
+         * 100 (100)
+         */
+        @Important
+        @Hard
+        public static class MaxSumOfNonAdjacentNodesUtil {
+            private int maxSum = Integer.MIN_VALUE;
+            private Map<Integer, Integer> nodeSums = new HashMap<>(); // memoization
+
+            public MaxSumOfNonAdjacentNodesUtil(Node root) {
+                this.maxSum = computeMaxSum(root);
+            }
+
+            public int getMaxSum() {
+                return maxSum;
+            }
+
+            private int sumOfGrandChildren(Node root) {
+                if (root == null) {
+                    return 0;
+                }
+
+                int leftGrandChildrenSum = 0;
+                if (root.left != null) {
+                    leftGrandChildrenSum = computeMaxSum(root.left.left) + computeMaxSum(root.left.right);
+                }
+
+                int rightGrandChildrenSum = 0;
+                if (root.right != null) {
+                    rightGrandChildrenSum = computeMaxSum(root.right.left) + computeMaxSum(root.right.right);
+                }
+
+                return leftGrandChildrenSum + rightGrandChildrenSum;
+            }
+
+            private int computeMaxSum(Node root) {
+                if (root == null) {
+                    return 0;
+                }
+
+                if (nodeSums.containsKey(root.data)) {
+                    return nodeSums.get(root.data);
+                }
+
+                int rootAndGrandChildrenSum = root.data + sumOfGrandChildren(root);
+                int childrenSum = computeMaxSum(root.left) + computeMaxSum(root.right);
+                nodeSums.put(root.data, Utils.max(rootAndGrandChildrenSum, childrenSum));
+                System.out.printf("Node: %d, maxSum: %d%n", root.data, nodeSums.get(root.data));
+                return nodeSums.get(root.data);
+            }
+        }
+
+        public static int distanceBetweenAnyTwoNodes(Node root, int data1, int data2) {
+            Node lca = lca(root, data1, data2);
+            if (lca == null) {
+                return -1;
+            }
+            int depth1 = depth(lca, data1);
+            if (depth1 == -1) {
+                return -1;
+            }
+
+            int depth2 = depth(lca, data2);
+            if (depth2 == -1) {
+                return -1;
+            }
+
+            return depth1 + depth2;
+        }
+    }
+
+    @Important
+    public static class DeepestHorrizontalLevelSumUtil {
         private int deepestLevel = -1;
         private List<Integer> deepestNodes = new ArrayList<>();
         private int deepestNodesSum = 0;
 
-        public DeepestLevelSumUtil(Node root) {
+        public DeepestHorrizontalLevelSumUtil(Node root) {
             compute(root, 0);
             this.deepestNodesSum = deepestNodes.stream().reduce(0, Integer::sum);
         }
@@ -1390,70 +1688,57 @@ public class TreeUtils {
         }
     }
 
-    /**
-     * Input:
-     * 	Tree 1                     Tree 2
-     *           1                         2
-     *          / \                       / \
-     *         3   2                     1   3
-     *        /                           \   \
-     *       5                             4   7
-     * Output:
-     * Merged tree:
-     * 	     3
-     * 	    / \
-     * 	   4   5
-     * 	  / \   \
-     * 	 5   4   7
-     * @param root1
-     * @param root2
-     * @return
-     */
-    public static Node addTrees(Node root1, Node root2) {
-        if (root1 == null && root2 == null)
-            return null;
-        if (root2 == null)
-            return root1;
-        if (root1 == null)
-            return root2;
-        Node mergedNode = new Node(root1.data + root2.data);
-        mergedNode.left = addTrees(root1.left, root2.left);
-        mergedNode.right = addTrees(root1.right, root2.right);
-        return mergedNode;
-    }
+    public static class PrintUtils {
 
-    /**
-     *        3
-     * 	    / \
-     * 	   4   5
-     * 	  / \   \
-     * 	 5   4   7
-     *
-     * 	 Op: 345 + 344 + 357 = 1046
-     * @return
-     */
-    public static class SumOfRootToLeafPathsUtil {
-        private double sum = 0;
-        private Stack<Integer> stack = new Stack<>();
-
-        public SumOfRootToLeafPathsUtil(Node root) {
-            compute(root);
+        /**
+         * Input : Pointer to root of below tree
+         *              1
+         *             /  \
+         *            2    3
+         *           / \   / \
+         *          4   5  6  7
+         *
+         * Output :
+         *                     7
+         *
+         *           3
+         *
+         *                     6
+         *
+         * 1
+         *
+         *                     5
+         *
+         *           2
+         *
+         *                     4
+         * @param root
+         */
+        public static void printIn2DRotateLeftBy90(Node root) {
+            print2DRotateLeftBy90Util(root, "");
         }
 
-        private void compute(Node root) {
-            if (root == null)
+        private static void print2DRotateLeftBy90Util(Node root, String space) {
+            if (root == null) {
                 return;
-            this.stack.push(root.data);
-            if (isLeaf(root)) {
-                this.sum = this.sum + StackUtils.toNumber(stack);
             }
-            compute(root.left);
-            compute(root.right);
-            this.stack.pop();
+            print2DRotateLeftBy90Util(root.right, space + "      ");
+            System.out.println(space + root.data);
+            print2DRotateLeftBy90Util(root.left, space + "      ");
         }
 
-        public double getSum() {
-            return sum;
+        public static void printIn2DRotateLeftBy90Transpose(Node root) {
+            print2DRotateLeftBy90TransposeUtil(root, "");
         }
+
+        private static void print2DRotateLeftBy90TransposeUtil(Node root, String space) {
+            if (root == null) {
+                return;
+            }
+            print2DRotateLeftBy90TransposeUtil(root.left, space + "      ");
+            System.out.println(space + root.data);
+            print2DRotateLeftBy90TransposeUtil(root.right, space + "      ");
+        }
+
     }
 }

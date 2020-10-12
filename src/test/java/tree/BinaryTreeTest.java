@@ -5,49 +5,57 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static tree.TreeUtils.PathQueryUtils.distanceBetweenAnyTwoNodes;
+import static tree.TreeUtils.PrintUtils.printIn2DRotateLeftBy90;
+import static tree.TreeUtils.PrintUtils.printIn2DRotateLeftBy90Transpose;
+import static tree.TreeUtils.Traversals.diagonalTraversal;
+import static tree.TreeUtils.Traversals.diagonalTraversalIterative;
 import static tree.TreeUtils.Traversals.levelOrderTraversal;
 import static tree.TreeUtils.addTrees;
-import static tree.TreeUtils.areTreesIdentical;
-import static tree.TreeUtils.areTreesMirrors;
-import static tree.TreeUtils.bottomView;
-import static tree.TreeUtils.checkIfSubTree;
-import static tree.TreeUtils.checkIfSumTree;
+import static tree.TreeUtils.CheckerUtils.areTreesIdentical;
+import static tree.TreeUtils.CheckerUtils.areTreesMirrors;
+import static tree.TreeUtils.ViewUtils.bottomView;
+import static tree.TreeUtils.CheckerUtils.checkIfSubTree;
+import static tree.TreeUtils.CheckerUtils.checkIfSumTree;
 import static tree.TreeUtils.convertToSumTree1;
 import static tree.TreeUtils.countLeafNodes;
 import static tree.TreeUtils.countLeafNodesRecursively;
 import static tree.TreeUtils.exists;
-import static tree.TreeUtils.findLevelWithMaxSum;
+import static tree.TreeUtils.PathQueryUtils.findLevelWithMaxSum;
 import static tree.TreeUtils.findMax;
 import static tree.TreeUtils.heightInterative;
 import static tree.TreeUtils.heightRecursive;
 import static tree.TreeUtils.image;
-import static tree.TreeUtils.checkIfStrictTree;
+import static tree.TreeUtils.CheckerUtils.checkIfStrictTree;
 import static tree.TreeUtils.lca;
-import static tree.TreeUtils.leftView;
-import static tree.TreeUtils.printAllAncestors;
-import static tree.TreeUtils.printAllLeaves;
-import static tree.TreeUtils.printAllPathsMatchingSum;
-import static tree.TreeUtils.printAllRootToLeafPaths;
-import static tree.TreeUtils.printAncestorsOfGivenNode;
-import static tree.TreeUtils.printFirstPathMatchingSum;
-import static tree.TreeUtils.printFirstRootToLeafPath;
-import static tree.TreeUtils.printKthLevelNodes;
+import static tree.TreeUtils.ViewUtils.leftView;
+import static tree.TreeUtils.PathQueryUtils.printAllAncestors;
+import static tree.TreeUtils.PathQueryUtils.printAllLeaves;
+import static tree.TreeUtils.PathQueryUtils.printAllPathsMatchingSum;
+import static tree.TreeUtils.PathQueryUtils.printAllRootToLeafPaths;
+import static tree.TreeUtils.PathQueryUtils.printAncestorsOfGivenNode;
+import static tree.TreeUtils.PathQueryUtils.printFirstPathMatchingSum;
+import static tree.TreeUtils.PathQueryUtils.printFirstRootToLeafPath;
+import static tree.TreeUtils.PathQueryUtils.printKthLevelNodes;
 import static tree.TreeUtils.printVerticalSum;
-import static tree.TreeUtils.rightView;
+import static tree.TreeUtils.ViewUtils.rightView;
 import static tree.TreeUtils.size;
 import static tree.TreeUtils.sizeIterative;
-import static tree.TreeUtils.topView;
+import static tree.TreeUtils.ViewUtils.topView;
 
 import java.util.Arrays;
 import java.util.Stack;
 
 import org.junit.Before;
 import org.junit.Test;
-import tree.TreeUtils.DeepestLevelSumUtil;
-import tree.TreeUtils.InternalNodeWithOneChildChecker;
+import tree.TreeUtils.DeepestHorrizontalLevelSumUtil;
+import tree.TreeUtils.CheckerUtils.InternalNodeWithOneChildChecker;
 import tree.TreeUtils.OrderedArrays;
-import tree.TreeUtils.PathWithMaxSumUtils;
-import tree.TreeUtils.SumTreeChecker;
+import tree.TreeUtils.PathQueryUtils.MaxSumOfAny2LeafPathUtil;
+import tree.TreeUtils.PathQueryUtils.MaxSumOfAnyPathUtil;
+import tree.TreeUtils.PathQueryUtils.MaxSumOfNonAdjacentNodesUtil;
+import tree.TreeUtils.PathQueryUtils.MaxSumOfRootToLeafPathsUtil;
+import tree.TreeUtils.CheckerUtils.SumTreeChecker;
 
 public class BinaryTreeTest {
 
@@ -165,6 +173,7 @@ public class BinaryTreeTest {
     @Test
     public void test_printAllRootToLeafPaths() {
         printAllRootToLeafPaths(bt.root, new Stack<>());
+        printAllRootToLeafPaths(bt.root, "");
     }
 
     @Test
@@ -221,7 +230,7 @@ public class BinaryTreeTest {
 
     @Test
     public void test_checkIfAVLTree() {
-        assertTrue(new TreeUtils.AVLChecker(bt.root).isCheck());
+        assertTrue(new TreeUtils.CheckerUtils.AVLChecker(bt.root).isCheck());
 
         BinaryTree testTree = new BinaryTree();
         testTree.insert(1);
@@ -229,7 +238,7 @@ public class BinaryTreeTest {
         testTree.root.left.left = new Node(3);
         testTree.root.left.left.left = new Node(2);
         testTree.root.right = new Node(5);
-        assertFalse(new TreeUtils.AVLChecker(testTree.root).isCheck());
+        assertFalse(new TreeUtils.CheckerUtils.AVLChecker(testTree.root).isCheck());
     }
 
     @Test
@@ -299,7 +308,7 @@ public class BinaryTreeTest {
 
     @Test
     public void test_PathWithMaxSumUtils() {
-        PathWithMaxSumUtils pathWithMaxSumUtils = new PathWithMaxSumUtils(bt.root);
+        MaxSumOfRootToLeafPathsUtil pathWithMaxSumUtils = new MaxSumOfRootToLeafPathsUtil(bt.root);
         assertNotEquals(0, pathWithMaxSumUtils.getMaxSum());
         assertTrue(!pathWithMaxSumUtils.getPathWithMaxSum().isEmpty());
         System.out.printf("max sum = %s, max sum path = %s%n",
@@ -313,7 +322,7 @@ public class BinaryTreeTest {
         testTree.root.right.left = new Node(6);
         testTree.root.right.right = new Node(10);
 
-        pathWithMaxSumUtils = new PathWithMaxSumUtils(testTree.root);
+        pathWithMaxSumUtils = new MaxSumOfRootToLeafPathsUtil(testTree.root);
         assertNotEquals(0, pathWithMaxSumUtils.getMaxSum());
         assertTrue(!pathWithMaxSumUtils.getPathWithMaxSum().isEmpty());
         System.out.printf("max sum = %s, max sum path = %s%n",
@@ -407,7 +416,7 @@ public class BinaryTreeTest {
 
     @Test
     public void test_deepestNodesSum() {
-        DeepestLevelSumUtil util = new DeepestLevelSumUtil(bt.root);
+        DeepestHorrizontalLevelSumUtil util = new DeepestHorrizontalLevelSumUtil(bt.root);
         assertEquals(Arrays.asList(100), util.getDeepestNodes());
         assertEquals(3, util.getDeepestLevel());
         assertEquals(100, util.getDeepestNodesSum());
@@ -420,7 +429,7 @@ public class BinaryTreeTest {
         testTree.insert(5);
         testTree.insert(6);
         testTree.insert(7);
-        util = new DeepestLevelSumUtil(testTree.root);
+        util = new DeepestHorrizontalLevelSumUtil(testTree.root);
         assertEquals(Arrays.asList(4, 5, 6, 7), util.getDeepestNodes());
         assertEquals(2, util.getDeepestLevel());
         assertEquals(22, util.getDeepestNodesSum());
@@ -457,6 +466,84 @@ public class BinaryTreeTest {
         testTree.insert(5);
         testTree.insert(4);
         testTree.root.right.right = new Node(7);
-        assertEquals(1046, new TreeUtils.SumOfRootToLeafPathsUtil(testTree.root).getSum(), 0);
+        assertEquals(1046, new TreeUtils.PathQueryUtils.SumOfRootToLeafPathsUtil(testTree.root).getSum(), 0);
+    }
+
+    @Test
+    public void test_MaxSumForAnyPathUtil() {
+        assertEquals(253, new MaxSumOfAnyPathUtil(bt.root).getMaxSum());
+    }
+
+    @Test
+    public void test_MaxSumOfAny2LeafPathUtil() {
+        BinaryTree tree = new BinaryTree();
+        tree.root = new Node(-15);
+        tree.root.left = new Node(5);
+        tree.root.right = new Node(6);
+        tree.root.left.left = new Node(-8);
+        tree.root.left.right = new Node(1);
+        tree.root.left.left.left = new Node(2);
+        tree.root.left.left.right = new Node(6);
+        tree.root.right.left = new Node(3);
+        tree.root.right.right = new Node(9);
+        tree.root.right.right.right = new Node(0);
+        tree.root.right.right.right.left = new Node(4);
+        tree.root.right.right.right.right = new Node(-1);
+        tree.root.right.right.right.right.left = new Node(10);
+        assertEquals(27, new MaxSumOfAny2LeafPathUtil(tree.root).getMaxSum());
+    }
+
+    @Test
+    public void test_MaxSumOfNonAdjacentNodesUtil() {
+        System.out.println(new MaxSumOfNonAdjacentNodesUtil(bt.root).getMaxSum());
+
+        Node root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.right.left = new Node(4);
+        root.right.right = new Node(5);
+        root.left.left = new Node(1);
+        System.out.print(new MaxSumOfNonAdjacentNodesUtil(root).getMaxSum());
+    }
+
+    /**
+     * ```````````50
+     *``````` ``/   \
+     * ```````8      2
+     * ``````/ \    /  \
+     * ````3   5  9    90
+     * ``/
+     * 100
+     */
+    @Test
+    public void test_distanceBetweenAnyTwoNodes() {
+        assertEquals(2, distanceBetweenAnyTwoNodes(bt.root, 8, 2));
+        assertEquals(3, distanceBetweenAnyTwoNodes(bt.root, 8, 90));
+        assertEquals(5, distanceBetweenAnyTwoNodes(bt.root, 100, 90));
+        assertEquals(1, distanceBetweenAnyTwoNodes(bt.root, 2, 90));
+        assertEquals(0, distanceBetweenAnyTwoNodes(bt.root, 90, 90));
+        assertEquals(-1, distanceBetweenAnyTwoNodes(bt.root, 90, 1000));
+    }
+
+    @Test
+    public void test_diagonalTraversal() {
+        Node root = new Node(8);
+        root.left = new Node(3);
+        root.right = new Node(10);
+        root.left.left = new Node(1);
+        root.left.right = new Node(6);
+        root.right.right = new Node(14);
+        root.right.right.left = new Node(13);
+        root.left.right.left = new Node(4);
+        root.left.right.right = new Node(7);
+
+        diagonalTraversalIterative(root);
+        diagonalTraversal(root);
+    }
+
+    @Test
+    public void test_printIn2D() {
+        printIn2DRotateLeftBy90(bt.root);
+        printIn2DRotateLeftBy90Transpose(bt.root);
     }
 }

@@ -1,8 +1,6 @@
 package tree;
 
-public class BinarySearchTree {
-    Node root;
-
+public class BinarySearchTree extends BinaryTree {
 
     public BinarySearchTree(Node root) {
         super();
@@ -42,35 +40,39 @@ public class BinarySearchTree {
         return root;
     }
 
-    public Node min(Node rootNode) {
-        Node node = rootNode;
-        while (node != null && node.left != null)
-            node = node.left;
-        return node;
+    public Node min() {
+        return min(this.root);
+    }
 
+    public Node min(Node root) {
+        Node node;
+        for (node = root; node != null && node.left != null; node = node.left);
+        return node;
     }
 
     public Node max() {
-        Node curr = this.root;
-        while (curr != null && curr.right != null)
-            curr = curr.right;
-        return curr;
+        return max(this.root);
+    }
 
+    public Node max(Node root) {
+        Node node;
+        for (node = root; node != null && node.left != null; node = node.left);
+        return node;
     }
 
     public Node search(int data) {
         return search(this.root, data);
     }
 
-    private Node search(Node node, int data) {
-        if (node == null)
+    private Node search(Node root, int data) {
+        if (root == null)
             return null;
-        if (node.data == data)
-            return node;
-        else if (data < node.data)
-            return search(node.left, data);
+        if (root.data == data)
+            return root;
+        else if (data < root.data)
+            return search(root.left, data);
         else
-            return search(node.right, data);
+            return search(root.right, data);
 
     }
 
