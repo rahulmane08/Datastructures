@@ -2,6 +2,7 @@ package graph.cycledetection;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import graph.DisjointSet;
 import graph.DisjointSet.Node;
@@ -88,16 +89,16 @@ public class CycleDetection {
      * @return
      */
     static private <T> boolean detectCycleInUDG(Graph<T> graph) {
-        DisjointSet<Long> set = new DisjointSet<>();
+        DisjointSet<UUID> set = new DisjointSet<>();
         for (Vertex<T> v : graph.getAllVertexes())
             set.makeSet(v.getId());
-        for (Edge<T> edge : graph.getAllEdges()) {
+        for (Edge<T> edge : graph.getEdges()) {
             Vertex<T> v1 = edge.getVertex1();
             Vertex<T> v2 = edge.getVertex2();
 
             // find the set representatives
-            Node<Long> r1 = set.findSet(v1.getId());
-            Node<Long> r2 = set.findSet(v2.getId());
+            Node<UUID> r1 = set.findSet(v1.getId());
+            Node<UUID> r2 = set.findSet(v2.getId());
 
             if (r1.equals(r2)) {
                 System.out.println("Cycle detected");

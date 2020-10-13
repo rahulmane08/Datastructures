@@ -5,13 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.UUID;
 
 public class KosarajuStronglyConnectedComponent {
 
     static public <T> void findSCC(Graph<T> graph) {
         if (graph == null)
             return;
-        HashSet<Long> visited = new HashSet<>();
+        HashSet<UUID> visited = new HashSet<>();
         Stack<Vertex<T>> stack = new Stack<>();
 
         //insert into the stack by the visit times. TOPOLOGICAL SORT
@@ -44,7 +45,7 @@ public class KosarajuStronglyConnectedComponent {
     }
 
 
-    private static <T> void DFSUtilForTranspose(Vertex<T> vertex, HashSet<Long> visited, Set<Vertex<T>> set) {
+    private static <T> void DFSUtilForTranspose(Vertex<T> vertex, HashSet<UUID> visited, Set<Vertex<T>> set) {
         visited.add(vertex.getId());
         for (Vertex<T> adjVertex : vertex.getAdjacentVertexes())
             if (!visited.contains(adjVertex.getId()))

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import graph.DisjointSet;
 import graph.DisjointSet.Node;
@@ -26,19 +27,19 @@ public class KruskalMST {
         if (graph == null)
             return null;
 
-        List<Edge<T>> edges = graph.getAllEdges();
+        List<Edge<T>> edges = graph.getEdges();
         Collections.sort(edges, weightComparator);
-        DisjointSet<Long> set = new DisjointSet<>();
+        DisjointSet<UUID> set = new DisjointSet<>();
         for (Vertex<T> v : graph.getAllVertexes())
             set.makeSet(v.getId());
-        for (Iterator<Edge<T>> iter = graph.getAllEdges().iterator(); iter.hasNext(); ) {
+        for (Iterator<Edge<T>> iter = graph.getEdges().iterator(); iter.hasNext(); ) {
             Edge<T> edge = iter.next();
             Vertex<T> v1 = edge.getVertex1();
             Vertex<T> v2 = edge.getVertex2();
 
             //find the set representatives
-            Node<Long> r1 = set.findSet(v1.getId());
-            Node<Long> r2 = set.findSet(v2.getId());
+            Node<UUID> r1 = set.findSet(v1.getId());
+            Node<UUID> r2 = set.findSet(v2.getId());
 
             if (r1.equals(r2)) {
                 iter.remove(); // remove that edge which connects node belonging to same set
@@ -47,26 +48,5 @@ public class KruskalMST {
             set.union(v1.getId(), v2.getId());
         }
         return edges;
-    }
-
-    public static void main(String[] args) {
-        Graph<String> graph = new Graph<>(false);
-        Vertex<String> A = new Vertex<>(1);
-        Vertex<String> B = new Vertex<>(2);
-        Vertex<String> C = new Vertex<>(3);
-        Vertex<String> D = new Vertex<>(4);
-
-        A.setData("A");
-        B.setData("B");
-        C.setData("C");
-        D.setData("D");
-
-        graph.addEdge(A, B, 1);
-        graph.addEdge(A, C, 3);
-        graph.addEdge(D, B, 1);
-        graph.addEdge(D, C, 1);
-        graph.addEdge(B, C, 2);
-
-        KruskalMST.printMST(graph);
     }
 }

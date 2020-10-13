@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Date 08/22/2015
@@ -35,28 +36,8 @@ import java.util.Set;
 public class TarjanArticulationPoint {
     private int time = 0;
 
-    public static void main(String[] args) {
-        Graph<String> graph = new Graph<>(false);
-        Vertex<String> A = new Vertex<>(1);
-        Vertex<String> B = new Vertex<>(2);
-        Vertex<String> C = new Vertex<>(3);
-        Vertex<String> D = new Vertex<>(4);
-
-        A.setData("A");
-        B.setData("B");
-        C.setData("C");
-        D.setData("D");
-
-        graph.addEdge(A, B, 1);
-        graph.addEdge(B, C, 1);
-        graph.addEdge(C, D, 1);
-        graph.addEdge(C, A, 1);
-
-        System.out.println(new TarjanArticulationPoint().getArticulationPoints(graph));
-    }
-
     public <T> Set<Vertex<T>> getArticulationPoints(Graph<T> graph) {
-        Set<Long> visited = new HashSet<>();
+        Set<UUID> visited = new HashSet<>();
         Set<Vertex<T>> articulationPoints = new HashSet<>();
 
         Map<Vertex<T>, Integer> visitTimes = new HashMap<>();
@@ -104,7 +85,7 @@ public class TarjanArticulationPoint {
      */
     private <T> void apUtil(Graph<T> graph
             , Vertex<T> vertex
-            , Set<Long> visited
+            , Set<UUID> visited
             , Map<Vertex<T>, Integer> visitTimes
             , Map<Vertex<T>, Integer> lowTimes
             , Map<Vertex<T>, Vertex<T>> parents

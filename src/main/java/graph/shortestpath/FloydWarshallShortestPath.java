@@ -41,20 +41,4 @@ public class FloydWarshallShortestPath {
         return path;
 
     }
-
-    public static void main(String[] args) {
-        Graph<Integer> graph = new Graph<>(true);
-        Vertex<Integer> v0 = new Vertex<>(0);
-        Vertex<Integer> v1 = new Vertex<>(1);
-        Vertex<Integer> v2 = new Vertex<>(2);
-        Vertex<Integer> v3 = new Vertex<>(3);
-
-        graph.addEdge(0, 1, 2);
-        graph.addEdge(1, 2, 10);
-        graph.addEdge(2, 3, 2);
-        graph.addEdge(0, 3, 2);
-
-        int V = graph.getAllVertexes().size();
-        Utils.print(new FloydWarshallShortestPath().getShortestPaths(graph), V, V);
-    }
 }

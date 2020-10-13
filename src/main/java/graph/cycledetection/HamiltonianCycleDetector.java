@@ -3,6 +3,7 @@ package graph.cycledetection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import graph.Graph;
 import graph.Vertex;
@@ -32,7 +33,7 @@ public class HamiltonianCycleDetector {
 
         Vertex<T> startVertex = graph.getAllVertexes().iterator().next();
         int totalVertexes = graph.getAllVertexes().size();
-        HashSet<Long> visited = new HashSet<>();
+        HashSet<UUID> visited = new HashSet<>();
         List<Vertex<T>> result = new ArrayList<>();
         if (hasHamiltonianCycle(startVertex, startVertex, totalVertexes, visited, result)) {
             System.out.println("Hamiltonian cycle = " + result);
@@ -41,7 +42,7 @@ public class HamiltonianCycleDetector {
 
     }
 
-    static private <T> boolean hasHamiltonianCycle(Vertex<T> start, Vertex<T> curr, int totalVertexes, HashSet<Long> visited, List<Vertex<T>> result) {
+    static private <T> boolean hasHamiltonianCycle(Vertex<T> start, Vertex<T> curr, int totalVertexes, HashSet<UUID> visited, List<Vertex<T>> result) {
         visited.add(curr.getId());
         result.add(curr);
 

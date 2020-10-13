@@ -3,17 +3,26 @@ package graph.traversal;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.UUID;
 
 import graph.Graph;
 import graph.Vertex;
 
 public class GraphTraversal {
+    /**
+     * Breadth First Traversal (or Search) for a graph is similar to Breadth First Traversal of a tree.
+     * The only catch here is, unlike trees, graphs may contain cycles, so we may come to the same node again.
+     * To avoid processing a node more than once, we use a boolean visited array.
+     * For simplicity, it is assumed that all vertices are reachable from the starting vertex.
+     * @param graph
+     * @param <T>
+     */
     static public <T> void bfs(Graph<T> graph) {
         if (graph == null)
             return;
         System.out.println("BFS Traversal============");
         Queue<Vertex<T>> queue = new LinkedList<>();
-        HashSet<Long> visited = new HashSet<>();
+        HashSet<UUID> visited = new HashSet<>();
 
         for (Vertex<T> vertex : graph.getAllVertexes()) {
             if (!visited.contains(vertex.getId())) {
@@ -34,23 +43,26 @@ public class GraphTraversal {
         }
     }
 
-    static public <T> HashSet<Long> dfs(Graph<T> graph) {
+    static public <T> HashSet<UUID> dfs(Graph<T> graph) {
         if (graph == null)
             return null;
         System.out.println("DFS Traversal============");
-        HashSet<Long> visited = new HashSet<>();
-        for (Vertex<T> vertex : graph.getAllVertexes())
-            if (!visited.contains(vertex.getId()))
-                dfsUtil(vertex, visited);
+        HashSet<UUID> visited = new HashSet<>();
+        for (Vertex<T> vertex : graph.getAllVertexes()) {
+            dfsUtil(vertex, visited);
+        }
         return visited;
     }
 
-    static public <T> void dfsUtil(Vertex<T> vertex, HashSet<Long> visited) {
+    static public <T> void dfsUtil(Vertex<T> vertex, HashSet<UUID> visited) {
+        if (visited.contains(vertex.getId())) {
+            return;
+        }
         visited.add(vertex.getId());
         System.out.println(vertex.getData());
-        for (Vertex<T> adjacentVertex : vertex.getAdjacentVertexes())
-            if (!visited.contains(adjacentVertex.getId()))
-                dfsUtil(adjacentVertex, visited);
+        for (Vertex<T> adjacentVertex : vertex.getAdjacentVertexes()) {
+            dfsUtil(adjacentVertex, visited);
+        }
     }
 
     /**
@@ -62,7 +74,7 @@ public class GraphTraversal {
      * @param maxDepth
      * @return
      */
-    static public <T> boolean iddfs(Graph<T> graph, Long source, Long dest, int maxDepth) {
+    static public <T> boolean iddfs(Graph<T> graph, UUID source, UUID dest, int maxDepth) {
         if (graph == null)
             return false;
         if (graph.getVertex(source) == null || graph.getVertex(dest) == null)
@@ -73,7 +85,7 @@ public class GraphTraversal {
         return false;
     }
 
-    static public <T> boolean dfsForMaxDepth(Graph<T> graph, Long source, Long dest, int limit) {
+    static public <T> boolean dfsForMaxDepth(Graph<T> graph, UUID source, UUID dest, int limit) {
         if (limit <= 0)
             return false;
 

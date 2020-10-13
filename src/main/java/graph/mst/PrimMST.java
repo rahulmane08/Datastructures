@@ -4,31 +4,27 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.UUID;
 
 import graph.Edge;
 import graph.Graph;
 import graph.Vertex;
+import lombok.Data;
+import lombok.Getter;
 
 /**
  * Structure to hold the vertex and the edge reaching to it having min edge.
  *
  * @author rahul
  */
+@Getter
 class PrimNode {
-    private final Long vertexID;
+    private final UUID vertexID;
     private int edgeWeight;
 
-    public PrimNode(Long vertexID) {
+    public PrimNode(UUID vertexID) {
         super();
         this.vertexID = vertexID;
-    }
-
-    public Long getVertexID() {
-        return vertexID;
-    }
-
-    public int getEdgeWeight() {
-        return edgeWeight;
     }
 
     public void setEdgeWeight(int edgeWeight) {
@@ -95,7 +91,7 @@ public class PrimMST {
 
         //two structures to query for a vertex in constant time and get min in log(V) time.
         PriorityQueue<PrimNode> primNodeByMinEdgeWeightHeap = new PriorityQueue<>(weightComparator);
-        HashMap<Long, PrimNode> primNodeMap = new HashMap<>();
+        HashMap<UUID, PrimNode> primNodeMap = new HashMap<>();
 
         boolean start = false;
         //add all vertices to map and priority queue with the first vertex being the start node with weight=0 and rest being INF
@@ -138,26 +134,5 @@ public class PrimMST {
             System.out.println(minEdgesByVertex.get(v));
 
 
-    }
-
-    public static void main(String[] args) {
-        Graph<String> graph = new Graph<>(false);
-        Vertex<String> A = new Vertex<>(1);
-        Vertex<String> B = new Vertex<>(2);
-        Vertex<String> C = new Vertex<>(3);
-        Vertex<String> D = new Vertex<>(4);
-
-        A.setData("A");
-        B.setData("B");
-        C.setData("C");
-        D.setData("D");
-
-        graph.addEdge(A, B, 1);
-        graph.addEdge(A, C, 3);
-        graph.addEdge(D, B, 1);
-        graph.addEdge(D, C, 1);
-        graph.addEdge(B, C, 2);
-
-        PrimMST.printMST(graph);
     }
 }

@@ -5,11 +5,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
+
+@Data
 public class Graph<T> {
-    boolean isDirected = false;
-    private List<Edge<T>> allEdges;
-    private Map<Long, Vertex<T>> allVertexes;
+    private final boolean isDirected;
+    private List<Edge<T>> edges = new ArrayList<>();
+    private Map<UUID, Vertex<T>> vertexesMap = new HashMap<>();
+    private AtomicInteger vertexIndex = new AtomicInteger(0);
 
     public Graph() {
         this(false);
@@ -18,57 +25,46 @@ public class Graph<T> {
     public Graph(boolean isDirected) {
         super();
         this.isDirected = isDirected;
-        this.allEdges = new ArrayList<>();
-        this.allVertexes = new HashMap<>();
     }
 
-    public void addEdge(Vertex<T> a, Vertex<T> b, int weight) {
-        allVertexes.put(a.id, a);
-        allVertexes.put(b.id, b);
-        addEdge(a.id, b.id, weight);
-    }
-
-    public void addEdge(long id1, long id2, int weight) {
-        Vertex<T> v1 = allVertexes.get(id1);
-        Vertex<T> v2 = allVertexes.get(id2);
-        if (v1 == null) {
-            v1 = new Vertex<>(id1);
-            allVertexes.put(id1, v1);
-        }
-        if (v2 == null) {
-            v2 = new Vertex<>(id2);
-            allVertexes.put(id2, v2);
+    public void addEdge(UUID id1, UUID id2, int weight) {
+        Vertex a = vertexesMap.getOrDefault(id1, null);
+        Vertex b = vertexesMap.getOrDefault(id2, null);
+        if (a == null || b == null) {
+            throw new IllegalArgumentException("vertex absent");
         }
 
-        Edge<T> edge = new Edge<>(v1, v2, isDirected, weight);
-        v1.addAdjacentVertex(edge, v2);
-        if (!isDirected)
-            v2.addAdjacentVertex(edge, v1);
-        allEdges.add(edge);
+       Edge<T> edge = a.addAdjacentVertex(b, weight, this.isDirected);
+       vertexesMap.put(a.getId(), a);
+       vertexesMap.put(b.getId(), b);
+       edges.add(edge);
+
+       a.setIndex(vertexIndex.getAndIncrement());
+       b.setIndex(vertexIndex.getAndIncrement());
     }
 
     public void addVertex(Vertex<T> vertex) {
-        if (allVertexes.containsKey(vertex.getId()))
+        if (vertex == null || vertexesMap.containsKey(vertex.getId())) {
             return;
-        allVertexes.put(vertex.getId(), vertex);
-        if (vertex.getEdges() != null && vertex.getEdges().size() > 0)
-            for (Edge<T> edge : vertex.getEdges())
-                allEdges.add(edge);
+        }
+
+        if (CollectionUtils.isNotEmpty(vertex.getEdges())) {
+            boolean match = vertex.getEdges().stream().map(Edge::isDirected)
+                    .allMatch(edgeDirection -> this.isDirected == edgeDirection);
+            if (!match) {
+                throw new IllegalArgumentException("Graph Vertex direction mismatch");
+            }
+            vertex.getEdges().forEach(edges::add);
+        }
+        vertexesMap.put(vertex.getId(), vertex);
+        vertex.setIndex(vertexIndex.getAndIncrement());
     }
 
-    public Vertex<T> getVertex(long id) {
-        return allVertexes.get(id);
-    }
-
-    public List<Edge<T>> getAllEdges() {
-        return allEdges;
-    }
-
-    public boolean isDirected() {
-        return isDirected;
+    public Vertex<T> getVertex(UUID id) {
+        return vertexesMap.get(id);
     }
 
     public Collection<Vertex<T>> getAllVertexes() {
-        return allVertexes.values();
+        return vertexesMap.values();
     }
 }

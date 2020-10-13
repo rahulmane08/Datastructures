@@ -3,6 +3,7 @@ package graph;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.UUID;
 
 import graph.cycledetection.CycleDetection;
 import graph.traversal.GraphTraversal;
@@ -13,15 +14,15 @@ public class GraphUtils {
     static public <T> Graph<T> transpose(Graph<T> graph) {
         if (graph == null)
             return null;
-        if (!graph.isDirected)
+        if (!graph.isDirected())
             return graph;
-        Graph<T> transpose = new Graph<>(graph.isDirected);
-        for (Edge<T> edge : graph.getAllEdges())
+        Graph<T> transpose = new Graph<>(graph.isDirected());
+        for (Edge<T> edge : graph.getEdges())
             graph.addEdge(edge.getVertex2().getId(), edge.getVertex1().getId(), edge.getWeight());
         return transpose;
     }
 
-    static private <T> boolean areConnected(Vertex<T> v1, Vertex<T> v2, Graph<T> graph, HashSet<Long> visited) {
+    static private <T> boolean areConnected(Vertex<T> v1, Vertex<T> v2, Graph<T> graph, HashSet<UUID> visited) {
         if (graph != null) {
             for (Vertex<T> v : v1.getAdjacentVertexes())
                 if (!visited.contains(v.getId())) {
@@ -56,7 +57,7 @@ public class GraphUtils {
     }
 
     public static <T> boolean checkIfGraphIsConnected(Graph<T> graph) {
-        HashSet<Long> visited = new HashSet<>();
+        HashSet<UUID> visited = new HashSet<>();
         Vertex<T> start = graph.getAllVertexes().iterator().next();
         GraphTraversal.dfsUtil(start, visited);
         return visited.size() == graph.getAllVertexes().size();
@@ -80,7 +81,7 @@ public class GraphUtils {
         printAllPathsUtil(graph, source, dest, new LinkedHashSet<>());
     }
 
-    static private <T> void printAllPathsUtil(Graph<T> graph, Vertex<T> source, Vertex<T> dest, HashSet<Long> visited) {
+    static private <T> void printAllPathsUtil(Graph<T> graph, Vertex<T> source, Vertex<T> dest, HashSet<UUID> visited) {
         visited.add(source.getId());
         if (source.equals(dest)) {
             System.out.print("Found a path ");
@@ -107,12 +108,12 @@ public class GraphUtils {
             for (int j = 0; j < V; j++)
                 adj[i][j] = INF;
 
-        for (Edge<T> e : graph.getAllEdges()) {
-            int i = (int) e.getVertex1().getId();
-            int j = (int) e.getVertex2().getId();
+        for (Edge<T> e : graph.getEdges()) {
+            int i = e.getVertex1().getIndex();
+            int j = e.getVertex2().getIndex();
             adj[i][j] = e.getWeight();
 
-            if (!graph.isDirected)
+            if (!graph.isDirected())
                 adj[j][i] = e.getWeight();
         }
         return adj;
@@ -139,7 +140,7 @@ public class GraphUtils {
                 for (int k = 0; k < V; k++)
                     if (adj[i][j] == 1 && adj[j][k] == 1 && adj[k][i] == 1)
                         ++triangles;
-        if (graph.isDirected)
+        if (graph.isDirected())
             triangles = triangles / 3;
         else
             triangles = triangles / 6;

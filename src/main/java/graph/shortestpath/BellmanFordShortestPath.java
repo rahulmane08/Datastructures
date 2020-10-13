@@ -30,7 +30,7 @@ public class BellmanFordShortestPath {
         int totalVertexes = graph.getAllVertexes().size();
 
         for (int i = 0; i < totalVertexes - 1; i++)
-            for (Edge<T> edge : graph.getAllEdges()) {
+            for (Edge<T> edge : graph.getEdges()) {
                 Vertex<T> u = edge.getVertex1();
                 Vertex<T> v = edge.getVertex2();
 
@@ -45,7 +45,7 @@ public class BellmanFordShortestPath {
             }
 
         //additional check for decreasing negative weight cycle
-        for (Edge<T> edge : graph.getAllEdges()) {
+        for (Edge<T> edge : graph.getEdges()) {
             Vertex<T> u = edge.getVertex1();
             Vertex<T> v = edge.getVertex2();
             if (shortestWeightForVertex.get(u) + edge.getWeight() < shortestWeightForVertex.get(v)) {
