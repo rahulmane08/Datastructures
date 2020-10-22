@@ -1,10 +1,13 @@
-package graph;
+package graph.misc;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import graph.Graph;
+import graph.Vertex;
 
 /**
  * Date 08/22/2015

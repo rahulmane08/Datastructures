@@ -46,17 +46,30 @@ public class DisjointSet<T> {
     }
 
     public boolean union(T data1, T data2) {
+        if (data1 == null || data2 == null) {
+            return false;
+        }
+
+        if (data1.equals(data2)) {
+            return false;
+        }
+
         Node<T> parent1 = findSet(data1);
         Node<T> parent2 = findSet(data2);
 
-        if (parent1.data == parent2.data)
+        if (parent1 == null || parent2 == null) {
             return false;
+        }
 
-        if (parent1.rank >= parent2.rank) {
-            parent1.rank = (parent1.rank > parent2.rank) ? parent1.rank + 1 : parent2.rank;
+        if (parent1.rank > parent2.rank) {
             parent2.parent = parent1;
-        } else
+        } else if (parent2.rank > parent1.rank) {
             parent1.parent = parent2;
+        } else {
+            // make any 1 as parent and increment the rank of new parent
+            parent2.parent = parent1;
+            parent1.rank += 1;
+        }
         return true;
     }
 

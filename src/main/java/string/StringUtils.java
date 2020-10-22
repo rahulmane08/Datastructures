@@ -1,5 +1,9 @@
 package string;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class StringUtils {
     public static void buildLowestNumberRec(StringBuilder res, String str, int n) {
         // If there are 0 characters to remove from str,
@@ -42,7 +46,7 @@ public class StringUtils {
             return false;
         char[] chars = str.toCharArray();
         int i = 0, j = str.length() - 1;
-        for (; i<j; i++, j--) {
+        for (; i < j; i++, j--) {
             if (chars[i] != chars[j])
                 return false;
         }
@@ -58,5 +62,34 @@ public class StringUtils {
             return 0;
         }
         return -1;
+    }
+
+    public static List<String> permute(String str) {
+        if (str == null || str.length() == 0) {
+            return Collections.emptyList();
+        }
+        List<String> permutations = new ArrayList<>();
+        permuteUtil(permutations, str.toCharArray(), 0, str.length() - 1);
+        return permutations;
+    }
+
+    private static void permuteUtil(List<String> permutations, char[] charArray, int start, int end) {
+        if (start == end) {
+            permutations.add(new String(charArray));
+        }
+        for (int i = start; i <= end; i++) {
+            swap(charArray, start, i);
+            permuteUtil(permutations, charArray, start + 1, end);
+            swap(charArray, start, i);
+        }
+    }
+
+    public static void swap(char[] charArray, int i, int j) {
+        if (i == j) {
+            return;
+        }
+        char temp = charArray[i];
+        charArray[i] = charArray[j];
+        charArray[j] = temp;
     }
 }

@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,19 +30,16 @@ public class Graph<T> {
     }
 
     public void addEdge(UUID id1, UUID id2, int weight) {
-        Vertex a = vertexesMap.getOrDefault(id1, null);
-        Vertex b = vertexesMap.getOrDefault(id2, null);
+        Vertex<T> a = vertexesMap.getOrDefault(id1, null);
+        Vertex<T> b = vertexesMap.getOrDefault(id2, null);
         if (a == null || b == null) {
             throw new IllegalArgumentException("vertex absent");
         }
 
-       Edge<T> edge = a.addAdjacentVertex(b, weight, this.isDirected);
-       vertexesMap.put(a.getId(), a);
-       vertexesMap.put(b.getId(), b);
-       edges.add(edge);
-
-       a.setIndex(vertexIndex.getAndIncrement());
-       b.setIndex(vertexIndex.getAndIncrement());
+        Edge<T> edge = a.addAdjacentVertex(b, weight, this.isDirected);
+        vertexesMap.put(a.getId(), a);
+        vertexesMap.put(b.getId(), b);
+        edges.add(edge);
     }
 
     public void addVertex(Vertex<T> vertex) {
@@ -58,6 +57,46 @@ public class Graph<T> {
         }
         vertexesMap.put(vertex.getId(), vertex);
         vertex.setIndex(vertexIndex.getAndIncrement());
+    }
+
+    public void removeVertex(Vertex<T> v) {
+        if (v == null || !vertexesMap.containsKey(v.getId())) {
+            return;
+        }
+        Vertex<T> vertex = vertexesMap.get(v.getId());
+        List<Edge<T>> inEdges = vertex.getAdjacentVertexes().stream()
+                .map(adj -> adj.removeAdjacentVertex(vertex)).collect(Collectors.toList());
+        Set<Edge<T>> outEdges = vertex.removeAllAdjacentVertexes();
+
+        edges.removeAll(inEdges);
+        edges.removeAll(outEdges);
+        vertexesMap.remove(vertex.getId());
+    }
+
+    public long getOutdegree(Vertex<T> v) {
+        return getOutdegree(v.getId());
+    }
+
+    private long getOutdegree(UUID id) {
+        Vertex<T> vertex = vertexesMap.get(id);
+        if (vertex == null) {
+            return 0;
+        }
+        return vertex.getAdjacentVertexes().size();
+    }
+
+    public long getIndegree(Vertex<T> v) {
+        return getIndegree(v.getId());
+    }
+
+    private long getIndegree(UUID id) {
+        Vertex<T> vertex = vertexesMap.get(id);
+        if (vertex == null) {
+            return 0;
+        }
+        return getAllVertexes().stream()
+                .filter(adj -> adj != vertex && adj.isAdjacent(vertex))
+                .count();
     }
 
     public Vertex<T> getVertex(UUID id) {

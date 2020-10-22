@@ -10,7 +10,7 @@ import graph.Edge;
 import graph.Graph;
 import graph.Vertex;
 
-public class CycleDetection {
+public class CycleDetectionUtil {
 
     static public <T> boolean detectCycle(Graph<T> graph) {
         if (graph == null)
@@ -34,15 +34,13 @@ public class CycleDetection {
      * @return
      */
     static private <T> boolean detectCycleInDG(Graph<T> graph) {
-        Set<Vertex<T>> whiteSet = new HashSet<>();
-        Set<Vertex<T>> graySet = new HashSet<>();
-        Set<Vertex<T>> blackSet = new HashSet<>();
+        Set<Vertex<T>> whiteSet = new HashSet<>(); // nodes are selected for dfs.
+        Set<Vertex<T>> graySet = new HashSet<>(); // nodes whose dfs is ongoing.
+        Set<Vertex<T>> blackSet = new HashSet<>(); // nodes whose dfs is fully complete.
 
-        for (Vertex<T> vertex : graph.getAllVertexes()) {
-            whiteSet.add(vertex);
-        }
+        whiteSet.addAll(graph.getAllVertexes());
 
-        while (whiteSet.size() > 0) {
+        while (!whiteSet.isEmpty()) {
             Vertex<T> current = whiteSet.iterator().next();
             if (detectCycleInDG(current, whiteSet, graySet, blackSet)) {
                 return true;
@@ -58,7 +56,7 @@ public class CycleDetection {
         for (Vertex<T> neighbor : current.getAdjacentVertexes()) {
             // if in black set means already explored so continue.
             if (blackSet.contains(neighbor)) {
-                continue;
+                continue; // dfs already done so skip
             }
             // if in gray set then cycle found.
             if (graySet.contains(neighbor)) {
@@ -90,8 +88,10 @@ public class CycleDetection {
      */
     static private <T> boolean detectCycleInUDG(Graph<T> graph) {
         DisjointSet<UUID> set = new DisjointSet<>();
-        for (Vertex<T> v : graph.getAllVertexes())
-            set.makeSet(v.getId());
+
+        // add all vertexes to Disjoint set
+        graph.getAllVertexes().stream().map(Vertex::getId).forEach(set::makeSet);
+
         for (Edge<T> edge : graph.getEdges()) {
             Vertex<T> v1 = edge.getVertex1();
             Vertex<T> v2 = edge.getVertex2();

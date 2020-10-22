@@ -2,8 +2,6 @@ package graph.shortestpath;
 
 import graph.Graph;
 import graph.GraphUtils;
-import graph.Vertex;
-import utils.Utils;
 
 public class FloydWarshallShortestPath {
     private static final int INF = Integer.MAX_VALUE;
@@ -12,7 +10,7 @@ public class FloydWarshallShortestPath {
         if (graph == null)
             return null;
 
-        int[][] distance = GraphUtils.getAdjacencyMatrix(graph);
+        Integer[][] distance = GraphUtils.getAdjacencyMatrix(graph);
         int[][] path = new int[distance.length][distance.length];
         int V = graph.getAllVertexes().size();
         for (int i = 0; i < V; i++)

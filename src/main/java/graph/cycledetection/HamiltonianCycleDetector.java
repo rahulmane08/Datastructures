@@ -3,6 +3,7 @@ package graph.cycledetection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import graph.Graph;
@@ -46,7 +47,7 @@ public class HamiltonianCycleDetector {
         visited.add(curr.getId());
         result.add(curr);
 
-        List<Vertex<T>> adjacentVertexes = curr.getAdjacentVertexes();
+        Set<Vertex<T>> adjacentVertexes = curr.getAdjacentVertexes();
         if (adjacentVertexes != null && adjacentVertexes.size() != 0)
             for (Vertex<T> adjVertex : adjacentVertexes) {
                 if (start.equals(adjVertex) && totalVertexes == result.size())

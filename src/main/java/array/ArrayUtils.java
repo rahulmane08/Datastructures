@@ -627,6 +627,61 @@ public class ArrayUtils {
         return minDist;
     }
 
+    public static void printSpiralOrder(int[][] arr) {
+        if (arr == null) {
+            return;
+        }
+        int level = 0;
+        int m = arr.length;
+        int n = arr[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (level % 2 == 0) {
+                    System.out.print(arr[i][j] + "  ");
+                } else {
+                    System.out.print(arr[i][n - 1 - j] + "  ");
+                }
+            }
+            System.out.println();
+            level++;
+        }
+    }
+
+    public static void printCombinations(int[] arr, int r) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        int n = arr.length;
+        if (r > n) {
+            System.out.println("No combinations possible");
+            return;
+        }
+        combinationUtil(arr, 0, n - 1, 0, r, new int[r]);
+    }
+
+    /**
+     * [1,2,3]
+     * 1 -- combinationUtil(arr, 1, 2, 1, 2, [1])
+     * -- 2 -- combinationUtil(arr, 1, 2, 1, 2, [1])
+     *
+     * @param arr
+     * @param start
+     * @param end
+     * @param index
+     * @param r
+     * @param data
+     */
+    private static void combinationUtil(int[] arr, int start, int end, int index, int r, int[] data) {
+        if (index == r) {
+            System.out.println(Arrays.toString(data));
+            return;
+        }
+        for (int i = start; i <= end; i++) {
+            data[index] = arr[i];
+            combinationUtil(arr, i + 1, end, index + 1, r, data);
+        }
+    }
+
     /**
      * {1 ,2, 2, 4}
      * o/p: 2

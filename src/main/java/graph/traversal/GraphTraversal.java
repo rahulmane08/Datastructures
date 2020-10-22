@@ -14,6 +14,7 @@ public class GraphTraversal {
      * The only catch here is, unlike trees, graphs may contain cycles, so we may come to the same node again.
      * To avoid processing a node more than once, we use a boolean visited array.
      * For simplicity, it is assumed that all vertices are reachable from the starting vertex.
+     *
      * @param graph
      * @param <T>
      */
@@ -25,21 +26,24 @@ public class GraphTraversal {
         HashSet<UUID> visited = new HashSet<>();
 
         for (Vertex<T> vertex : graph.getAllVertexes()) {
-            if (!visited.contains(vertex.getId())) {
-                queue.offer(vertex);
-                visited.add(vertex.getId());
+            if (visited.contains(vertex.getId())) {
+                continue;
+            }
 
-                while (!queue.isEmpty()) {
-                    Vertex<T> curr = queue.poll();
-                    System.out.println(curr.getData());
-                    for (Vertex<T> adjacentVertex : curr.getAdjacentVertexes()) {
-                        if (!visited.contains(adjacentVertex.getId())) {
-                            queue.offer(adjacentVertex);
-                            visited.add(adjacentVertex.getId());
-                        }
+            queue.offer(vertex);
+            visited.add(vertex.getId());
+
+            while (!queue.isEmpty()) {
+                Vertex<T> curr = queue.poll();
+                System.out.println(curr.getData());
+                for (Vertex<T> adjacentVertex : curr.getAdjacentVertexes()) {
+                    if (!visited.contains(adjacentVertex.getId())) {
+                        queue.offer(adjacentVertex);
+                        visited.add(adjacentVertex.getId());
                     }
                 }
             }
+
         }
     }
 

@@ -2,24 +2,29 @@ package graph;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-import graph.cycledetection.CycleDetection;
+import graph.cycledetection.CycleDetectionUtil;
 import graph.traversal.GraphTraversal;
 
 public class GraphUtils {
     private static final int INF = Integer.MAX_VALUE;
 
     static public <T> Graph<T> transpose(Graph<T> graph) {
-        if (graph == null)
-            return null;
-        if (!graph.isDirected())
+        if (graph == null || !graph.isDirected())
             return graph;
-        Graph<T> transpose = new Graph<>(graph.isDirected());
-        for (Edge<T> edge : graph.getEdges())
-            graph.addEdge(edge.getVertex2().getId(), edge.getVertex1().getId(), edge.getWeight());
-        return transpose;
+        Graph<T> graphT = new Graph<>(graph.isDirected());
+        for (Edge<T> edge : graph.getEdges()) {
+            Vertex<T> a = edge.getVertex1();
+            Vertex<T> b = edge.getVertex2();
+            Vertex<T> aT = new Vertex<>(a.getId(), a.getData());
+            Vertex<T> bT = new Vertex<>(b.getId(), b.getData());
+            graphT.addVertex(aT);
+            graphT.addVertex(bT);
+            graphT.addEdge(bT.getId(), aT.getId(), edge.getWeight());
+        }
+        return graphT;
     }
 
     static private <T> boolean areConnected(Vertex<T> v1, Vertex<T> v2, Graph<T> graph, HashSet<UUID> visited) {
@@ -47,7 +52,7 @@ public class GraphUtils {
      */
     static public <T> boolean checkIfGraphIsTree(Graph<T> graph) {
         if (graph != null) {
-            boolean cyclePresent = CycleDetection.detectCycle(graph);
+            boolean cyclePresent = CycleDetectionUtil.detectCycle(graph);
             if (cyclePresent)
                 return false;
             return checkIfGraphIsConnected(graph);
@@ -91,7 +96,7 @@ public class GraphUtils {
             System.out.println();
         } else {
 
-            List<Vertex<T>> adjacentVertexes = source.getAdjacentVertexes();
+            Set<Vertex<T>> adjacentVertexes = source.getAdjacentVertexes();
             for (Vertex<T> adj : adjacentVertexes)
                 if (!visited.contains(adj.getId()))
                     printAllPathsUtil(graph, adj, dest, visited);
@@ -99,14 +104,11 @@ public class GraphUtils {
         visited.remove(source.getId());
     }
 
-    static public <T> int[][] getAdjacencyMatrix(Graph<T> graph) {
+    static public <T> Integer[][] getAdjacencyMatrix(Graph<T> graph) {
         if (graph == null)
             return null;
         int V = graph.getAllVertexes().size();
-        int[][] adj = new int[V][V];
-        for (int i = 0; i < V; i++)
-            for (int j = 0; j < V; j++)
-                adj[i][j] = INF;
+        Integer[][] adj = new Integer[V][V];
 
         for (Edge<T> e : graph.getEdges()) {
             int i = e.getVertex1().getIndex();
@@ -132,7 +134,7 @@ public class GraphUtils {
     static public <T> void findAllTriangles(Graph<T> graph) {
         if (graph == null)
             return;
-        int[][] adj = getAdjacencyMatrix(graph);
+        Integer[][] adj = getAdjacencyMatrix(graph);
         int triangles = 0;
         int V = graph.getAllVertexes().size();
         for (int i = 0; i < V; i++)
@@ -151,11 +153,11 @@ public class GraphUtils {
         if (graph == null)
             return -1;
         int V = graph.getAllVertexes().size();
-        int[][] adj = getAdjacencyMatrix(graph);
+        Integer[][] adj = getAdjacencyMatrix(graph);
         return countwalks(adj, u, v, k, V);
     }
 
-    static private <T> int countwalks(int[][] graph, int u, int v, int k, int V) {
+    static private <T> int countwalks(Integer[][] graph, int u, int v, int k, int V) {
         // Base cases
         if (k == 0 && u == v) return 1;
         if (k == 1 && graph[u][v] == 1) return 1;

@@ -34,15 +34,20 @@ public class Edge<T> {
         Edge<?> edge = (Edge<?>) o;
 
         if (isDirected != edge.isDirected) return false;
-        if (!vertex1.equals(edge.vertex1)) return false;
-        return vertex2.equals(edge.vertex2);
+        if (weight != edge.weight) return false;
+        if (vertex1 != null ? !vertex1.equals(edge.vertex1) : edge.vertex1 != null) return false;
+        return vertex2 != null ? vertex2.equals(edge.vertex2) : edge.vertex2 == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (isDirected ? 1 : 0);
-        result = 31 * result + vertex1.hashCode();
-        result = 31 * result + vertex2.hashCode();
+        int result = vertex1 != null ? vertex1.hashCode() : 0;
+        result = 31 * result + (vertex2 != null ? vertex2.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s--(%s)--%s %s", vertex1, weight, isDirected ? ">" : "", vertex2);
     }
 }
