@@ -3,7 +3,8 @@ package pq;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static pq.HeapUtils.KthSmallestLargestUtil.kthLargestUsingMinHeap;
-import static pq.HeapUtils.KthSmallestLargestUtil.kthSmallestUsingMinHeap;
+import static pq.HeapUtils.KthSmallestLargestUtil.kthSmallestUsingMaxHeap;
+import static pq.HeapUtils.printStringWithNonRepeatingChars;
 
 import java.util.Arrays;
 
@@ -23,9 +24,9 @@ public class HeapUtilsTest {
     @Test
     public void test_kthSmallest() {
         Integer[] arr = new Integer[]{1,2,3,4,5,6};
-        assertEquals(4, kthSmallestUsingMinHeap(arr, 4));
-        assertEquals(1, kthSmallestUsingMinHeap(arr, 1));
-        assertEquals(6, kthSmallestUsingMinHeap(arr, 6));
+        assertEquals(4, kthSmallestUsingMaxHeap(arr, 4));
+        assertEquals(1, kthSmallestUsingMaxHeap(arr, 1));
+        assertEquals(6, kthSmallestUsingMaxHeap(arr, 6));
     }
 
     @Test
@@ -62,5 +63,11 @@ public class HeapUtilsTest {
     public void test_printMedian1() {
         int[] arr = new int[] {5, 15, 1, 3};
         HeapUtils.printMedian1(arr);
+    }
+
+    @Test
+    public void test_printStringWithNonRepeatingChars() {
+        printStringWithNonRepeatingChars("aaabc");
+        printStringWithNonRepeatingChars("aaaabc");
     }
 }

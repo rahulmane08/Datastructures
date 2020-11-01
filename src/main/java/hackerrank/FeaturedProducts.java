@@ -17,8 +17,8 @@ public class FeaturedProducts {
         Map<String, Integer> frequency = new HashMap<>();
         products.forEach(p -> frequency.compute(p, (k, v) -> (v == null) ? 1 : v + 1));
         Comparator<Map.Entry<String, Integer>> comparator = Comparator
-                .comparingInt((ToIntFunction<Map.Entry<String, Integer>>) Map.Entry::getValue)
-                .thenComparing(Map.Entry::getKey)
+                .comparing((Map.Entry<String, Integer> entry) -> entry.getValue())
+                .thenComparing((Map.Entry<String, Integer> entry) -> entry.getKey())
                 .reversed();
         PriorityQueue<Map.Entry<String, Integer>> pq = new PriorityQueue<>(frequency.size(), comparator);
         frequency.entrySet().forEach(pq::add);

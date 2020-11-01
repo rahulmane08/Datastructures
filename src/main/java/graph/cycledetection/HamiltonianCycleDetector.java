@@ -3,7 +3,6 @@ package graph.cycledetection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import graph.Graph;
@@ -28,38 +27,41 @@ import graph.Vertex;
  * @author rahul
  */
 public class HamiltonianCycleDetector {
-    static public <T> void printHamiltonianCycle(Graph<T> graph) {
-        if (graph == null)
-            return;
+    static public <T> List<Vertex<T>> getHamiltonianCycle(Graph<T> graph) {
+        if (graph == null || graph.getAllVertexes().isEmpty()) {
+            return null;
+        }
 
-        Vertex<T> startVertex = graph.getAllVertexes().iterator().next();
+        Vertex<T> startVertex = graph.getAllVertexes().get(0);
         int totalVertexes = graph.getAllVertexes().size();
         HashSet<UUID> visited = new HashSet<>();
         List<Vertex<T>> result = new ArrayList<>();
         if (hasHamiltonianCycle(startVertex, startVertex, totalVertexes, visited, result)) {
             System.out.println("Hamiltonian cycle = " + result);
-        } else
+        } else {
             System.out.println("No hamiltonian cycle");
-
+        }
+        return result;
     }
 
     static private <T> boolean hasHamiltonianCycle(Vertex<T> start, Vertex<T> curr, int totalVertexes, HashSet<UUID> visited, List<Vertex<T>> result) {
         visited.add(curr.getId());
         result.add(curr);
 
-        Set<Vertex<T>> adjacentVertexes = curr.getAdjacentVertexes();
-        if (adjacentVertexes != null && adjacentVertexes.size() != 0)
-            for (Vertex<T> adjVertex : adjacentVertexes) {
-                if (start.equals(adjVertex) && totalVertexes == result.size())
-                    return true;
-
-                if (!visited.contains(adjVertex.getId()))
-                    return hasHamiltonianCycle(start, adjVertex, totalVertexes, visited, result);
-
+        for (Vertex<T> adjVertex : curr.getAdjacentVertexes()) {
+            if (start.equals(adjVertex) && totalVertexes == result.size()) {
+                return true;
             }
+
+            if (!visited.contains(adjVertex.getId())) {
+                if (hasHamiltonianCycle(start, adjVertex, totalVertexes, visited, result)) {
+                    return true;
+                }
+            }
+        }
+        // back track, remove them from visited.
         visited.remove(curr.getId());
         result.remove(curr);
         return false;
     }
-
 }

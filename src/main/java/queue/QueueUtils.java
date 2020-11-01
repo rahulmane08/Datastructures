@@ -17,9 +17,9 @@ public class QueueUtils {
             return;
         Stack<T> stack = new Stack<>(queue.capacity());
         while (!queue.isEmpty())
-            stack.push(queue.deque());
+            stack.push(queue.poll());
         while (!stack.isEmpty())
-            queue.enqueue(stack.pop());
+            queue.offer(stack.pop());
     }
 
     static public void reversify(java.util.Queue<Integer> queue) {
@@ -48,6 +48,17 @@ public class QueueUtils {
     }
 
     /**
+     * Input: arr[] = {1, 2, 3, 1, 4, 5, 2, 3, 6}, K = 3
+     * Output: 3 3 4 5 5 5 6
+     * Explanation:
+     * Maximum of 1, 2, 3 is 3
+     * Maximum of 2, 3, 1 is 3
+     * Maximum of 3, 1, 4 is 4
+     * Maximum of 1, 4, 5 is 5
+     * Maximum of 4, 5, 2 is 5
+     * Maximum of 5, 2, 3 is 5
+     * Maximum of 2, 3, 6 is 6
+     * <p>
      * Idea is to keep the max elements index in the deque and remove the smaller ones until higher one is found
      * As the window moves, an element is removed from dq if :
      * 1. front elements index is lesser than window start.
@@ -91,6 +102,7 @@ public class QueueUtils {
         }
     }
 
+    @Important
     static public int findTotalMinMaxSumInSlidingWindow(int[] arr, int k) {
         int sum = 0;
         int n = arr.length;
@@ -177,17 +189,17 @@ public class QueueUtils {
         for (int i = 0; i < m; i++)
             for (int j = 0; j < n; j++)
                 if (orangeBox[i][j] == 2)
-                    vertices.enqueue(new Vertex(i, j));
+                    vertices.offer(new Vertex(i, j));
         /** enter a Dummy vertex to mark end of current time frame **/
         Vertex dummy = new Vertex();
-        vertices.enqueue(dummy);
+        vertices.offer(dummy);
         int time = 0;
 
         /** bfs over the queue **/
         while (!vertices.isEmpty()) {
             boolean flag = false;
             while (!(vertices.first() == dummy)) {
-                Vertex curr = vertices.deque();
+                Vertex curr = vertices.poll();
                 /** right orange **/
                 Vertex right = new Vertex(curr.x + 1, curr.y);
                 Vertex left = new Vertex(curr.x - 1, curr.y);
@@ -201,13 +213,13 @@ public class QueueUtils {
                             ++time;
                         }
                         orangeBox[sibling.x][sibling.y] = 2;
-                        vertices.enqueue(sibling);
+                        vertices.offer(sibling);
                     }
                 }
             }
-            vertices.deque();
+            vertices.poll();
             if (!vertices.isEmpty())
-                vertices.enqueue(dummy);
+                vertices.offer(dummy);
         }
         System.out.println("Time frame to rot all oranges = " + time);
         return time;
@@ -218,51 +230,51 @@ public class QueueUtils {
     }
 
     static public void printLargestMultipleOf3(int[] arr) {
-        int n = arr.length;
         int[] largestMultiple = new int[arr.length];
         Arrays.sort(arr);
         Queue<Integer> q0 = new Queue<>(arr.length);
         Queue<Integer> q1 = new Queue<>(arr.length);
         Queue<Integer> q2 = new Queue<>(arr.length);
-        boolean cantForm = false;
+        boolean possible = false;
         int sum = 0;
+
         for (int i : arr) {
             sum += i;
             if (i % 3 == 0)
-                q0.enqueue(i);
+                q0.offer(i);
             else if (i % 3 == 1)
-                q1.enqueue(i);
+                q1.offer(i);
             else
-                q2.enqueue(i);
+                q2.offer(i);
         }
+
         if (sum % 3 == 1) {
-            if (!q1.isEmpty())
-                q1.deque();
-            else {
+            if (!q1.isEmpty()) {
+                q1.poll();
+                possible = true;
+            } else if (!q2.isEmpty()) {
+                q2.poll();
                 if (!q2.isEmpty()) {
-                    q2.deque();
-                    if (!q2.isEmpty())
-                        q2.deque();
-                    else
-                        cantForm = true;
-                } else
-                    cantForm = true;
+                    q2.poll();
+                    possible = true;
+                }
             }
         } else if (sum % 3 == 2) {
-            if (!q2.isEmpty())
-                q2.deque();
-            else {
+            if (!q2.isEmpty()) {
+                q2.poll();
+                possible = true;
+            } else if (!q1.isEmpty()) {
+                q1.poll();
                 if (!q1.isEmpty()) {
-                    q1.deque();
-                    if (!q2.isEmpty())
-                        q1.deque();
-                    else
-                        cantForm = true;
-                } else
-                    cantForm = true;
+                    q1.poll();
+                    possible = true;
+                }
             }
+        } else {
+            possible = true;
         }
-        if (cantForm) {
+
+        if (!possible) {
             System.out.println("No Largest multiple of 3 cant be formed");
             return;
         }
@@ -270,7 +282,7 @@ public class QueueUtils {
         int i = 0;
         for (Queue<Integer> currQ : queues)
             while (!currQ.isEmpty()) {
-                largestMultiple[i++] = currQ.deque();
+                largestMultiple[i++] = currQ.poll();
             }
         Arrays.sort(largestMultiple);
         System.out.print("Largest multiple of 3 = ");
@@ -323,8 +335,8 @@ public class QueueUtils {
     }
 
     public static class SortQueueUtil {
-        private int rearValue = -1;
         private final java.util.Queue<Integer> queue;
+        private int rearValue = -1;
 
         public SortQueueUtil(java.util.Queue<Integer> queue) {
             this.queue = queue;
@@ -334,9 +346,9 @@ public class QueueUtils {
             if (this.queue.isEmpty()) {
                 return;
             }
-            int top = queue.poll();
+            int front = queue.poll();
             sort();
-            sortedInsert(top);
+            sortedInsert(front);
         }
 
         private void sortedInsert(int elem) {
@@ -367,16 +379,16 @@ public class QueueUtils {
         public T pop() {
             if (queue.isEmpty())
                 throw new RuntimeException("Stack is empty , nothing to pop");
-            return queue.deque();
+            return queue.poll();
         }
 
         public void push(T elem) {
             int size = queue.size();
-            queue.enqueue(elem);
+            queue.offer(elem);
             if (size > 0) {
                 for (int i = 0; i < size - 1; i++) {
-                    T curr = queue.deque();
-                    queue.enqueue(curr);
+                    T curr = queue.poll();
+                    queue.offer(curr);
                 }
             }
         }

@@ -40,11 +40,11 @@ public class ExpressionUtils {
     }
 
     private static int checkPriority(char operator1, char operator2) {
-        return checkPriority("" + operator1, "" + operator2);
+        return checkPriority(String.valueOf(operator1), String.valueOf(operator2));
     }
 
     private static boolean isOperand(char operand) {
-        return !priortyMap.containsKey("" + operand);
+        return !priortyMap.containsKey(String.valueOf(operand));
     }
 
     private static boolean isParenthesisPairs(char p1, char p2) {
@@ -102,7 +102,7 @@ public class ExpressionUtils {
         for (int i = 0; i < exp.length(); i++) {
             char t = exp.charAt(i);
             if (isOperand(t))
-                s.push(Double.parseDouble("" + t));
+                s.push(Double.parseDouble(String.valueOf(t)));
             else {
                 double o1 = s.pop();
                 double o2 = s.pop();
@@ -254,7 +254,7 @@ public class ExpressionUtils {
         Stack<Character> stack = new Stack<>();
         for (char ch : elements) {
             if (parenthesis.contains(ch)) {
-                if (parenthesisPairs.containsKey(ch)) {
+                if (parenthesisPairs.containsKey(ch)) { //if its ending brace ) ] }
                     if ((stack.isEmpty() || !isParenthesisPairs(ch, stack.pop()))) {
                         return false;
                     }
@@ -326,8 +326,10 @@ public class ExpressionUtils {
                         top = stack.pop();
                         elementsInBraces++;
                     }
-                    if (elementsInBraces < 1)
+                    if (elementsInBraces == 0) {
+                        // dupe pair will have no operator/operands in between as it was popped by another pair
                         return true;
+                    }
                 } else {
                     stack.push(c);
                 }

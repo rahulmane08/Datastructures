@@ -180,72 +180,6 @@ public class ListUtils {
         return (start.data * Math.pow(2, n - 1)) + computeDecimal(start.next, --n);
     }
 
-
-    /**
-     * Mergesort a dll
-     */
-    static public <T> DoublyLinkedList<T> divideMiddle(DoublyLinkedList<T> mainList) {
-        if (mainList == null || mainList.start == null)
-            return null;
-        Node<T> slow, fast;
-        slow = mainList.start;
-        fast = mainList.start.next;
-        while (fast != null) {
-            fast = fast.next;
-            if (fast == null)
-                break;
-            fast = fast.next;
-            if (fast != null)
-                slow = slow.next;
-        }
-        Node<T> temp = slow.next;
-        slow.next = null;
-        temp.prev = null;
-        return new DoublyLinkedList<>(temp);
-    }
-
-    static public DoublyLinkedList<Integer> mergeSort(DoublyLinkedList<Integer> dll) {
-        if (dll == null || dll.start == null)
-            return null;
-        DoublyLinkedList<Integer> second = divideMiddle(dll);
-        mergeSort(dll);
-        mergeSort(second);
-        return merge(dll, second);
-    }
-
-    static public DoublyLinkedList<Integer> merge(DoublyLinkedList<Integer> dll1, DoublyLinkedList<Integer> dll2) {
-        if (dll1 == null && dll2 == null)
-            return null;
-        if (dll2 == null)
-            return dll1;
-        if (dll1 == null)
-            return dll2;
-        Node<Integer> mergedNode = merge(dll1.start, dll2.start);
-        if (mergedNode != null)
-            return new DoublyLinkedList<>(mergedNode);
-        return null;
-    }
-
-    static public Node<Integer> merge(Node<Integer> first, Node<Integer> second) {
-        if (first == null && second == null)
-            return null;
-        if (second == null)
-            return first;
-        if (first == null)
-            return second;
-        Node<Integer> curr;
-        if (first.data < second.data) {
-            curr = first;
-            curr.next = merge(first.next, second);
-            curr.next.prev = curr;
-        } else {
-            curr = second;
-            curr.next = merge(first, second.next);
-            curr.next.prev = curr;
-        }
-        return curr;
-    }
-
     /**
      * Input: list1 = g->e->e->k->s->a
      * list2 = g->e->e->k->s->b
@@ -650,6 +584,7 @@ public class ListUtils {
      * There is only one vertical line, so all middle points are removed.
      * @param list
      */
+    @Important
     public static void removeMiddlePoints(LinkedList<Point> list) {
         if (list == null || list.start == null || list.start.next == null) {
             return;

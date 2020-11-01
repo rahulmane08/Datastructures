@@ -470,6 +470,18 @@ public class BinaryTreeTest {
     }
 
     @Test
+    public void test_SumOfRootToLeafPathsUtil1() {
+        BinaryTree testTree = new BinaryTree();
+        testTree.insert(3);
+        testTree.insert(4);
+        testTree.insert(5);
+        testTree.insert(5);
+        testTree.insert(4);
+        testTree.root.right.right = new Node(7);
+        assertEquals(1046, new TreeUtils.PathQueryUtils.SumOfRootToLeafPathsUtil1(testTree.root).getSum(), 0);
+    }
+
+    @Test
     public void test_MaxSumForAnyPathUtil() {
         assertEquals(253, new MaxSumOfAnyPathUtil(bt.root).getMaxSum());
     }

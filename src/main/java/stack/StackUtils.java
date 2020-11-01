@@ -134,6 +134,7 @@ public class StackUtils {
      * @param greater
      * @return
      */
+    @Important
     static public int[] findPrevGreaterOrSmallerElement(int[] arr, boolean greater) {
         int[] pgse = new int[arr.length];
         Stack<Integer> s = new Stack<>();
@@ -178,12 +179,13 @@ public class StackUtils {
      * @param greater
      * @return
      */
+    @Important
     static public int[] findNextGreaterOrSmallerElement(int[] arr, boolean greater) {
         int[] ngse = new int[arr.length];
         Stack<Integer> s = new Stack<>();
         for (int i = arr.length - 1; i >= 0; i--) {
             ngse[i] = -1;
-            while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
+            while (!s.isEmpty() && (greater ? arr[i] >= arr[s.peek()] : arr[s.peek()] >= arr[i]))
                 s.pop();
             if (!s.isEmpty())
                 ngse[i] = arr[s.peek()];
@@ -197,7 +199,7 @@ public class StackUtils {
         Stack<Integer> s = new Stack<>();
         for (int i = arr.length - 1; i >= 0; i--) {
             ngse[i] = -1;
-            while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
+            while (!s.isEmpty() && (greater ? arr[i] >= arr[s.peek()] : arr[s.peek()] >= arr[i]))
                 s.pop();
             if (!s.isEmpty())
                 ngse[i] = s.peek();
@@ -284,21 +286,19 @@ public class StackUtils {
         int[] result = new int[arr.length];
         Map<Integer, Integer> map = new HashMap<>();
         for (int elem : arr) {
-            map.compute(elem, (k, v) -> {
-                if (v == null)
-                    return 1;
-                return ++v;
-            });
+            map.compute(elem, (k, v) -> v == null ? 1 : v + 1);
         }
         Stack<Integer> stack = new Stack<>();
-        stack.push(arr[n - 1]);
-        result[n - 1] = -1;
-        for (int i = n - 2; i >= 0; i--) {
+        for (int i = n - 1; i >= 0; i--) {
+            result[i] = -1;
             while (!stack.isEmpty()
                     && (greater ? map.get(arr[i]) >= map.get(arr[stack.peek()]) : map.get(arr[i]) <= map.get(arr[stack.peek()]))) {
                 stack.pop();
             }
-            result[i] = stack.isEmpty() ? -1 : arr[stack.peek()];
+
+            if (!stack.isEmpty()) {
+                result[i] = arr[stack.peek()];
+            }
             stack.push(i);
         }
         return result;
@@ -328,13 +328,14 @@ public class StackUtils {
         stack.push(top);
     }
 
+    @Important
     public static int deleteFirstKElements(Stack<Integer> stack, int k) {
         if (stack == null || stack.isEmpty()) {
-            return 1;
+            return 0;
         }
         int top = stack.pop();
         int visitedCount = deleteFirstKElements(stack, k);
-        if (k - visitedCount < 0) {
+        if (k - visitedCount <= 0) {
             stack.push(top);
         }
         return 1 + visitedCount;
@@ -396,12 +397,9 @@ public class StackUtils {
         int length = characters.length;
         Stack<Character> stack = new Stack<>();
         int i = 0;
-        for (; i < length / 2; i++)
-            stack.push(characters[i]);
+        for (; i < length / 2; stack.push(characters[i]), i++) ;
         if (length % 2 != 0) ++i; // odd length string, skip middle
-        for (; i < characters.length && characters[i] == stack.peek(); i++) {
-            stack.pop();
-        }
+        for (; i < characters.length && characters[i] == stack.peek(); stack.pop(), i++) ;
         return stack.isEmpty();
     }
 
@@ -415,8 +413,7 @@ public class StackUtils {
      * <p>
      * Input : 5 4 3 4 5
      * Output : 8
-     * For {5, 4, 3, 4, 5}, L[] = {0, 1, 2, 1, 0} and R[]
-     * = {0, 5, 4, 5, 0},
+     * For {5, 4, 3, 4, 5}, L[] = {0, 1, 2, 1, 0} and R[] = {0, 5, 4, 5, 0}
      * LRProduct = {0, 5, 8, 5, 0} and max in this is 8.
      *
      * @param arr
@@ -506,6 +503,7 @@ public class StackUtils {
 
     /**
      * https://www.geeksforgeeks.org/merging-intervals/
+     *
      * @param intervals
      * @return
      */
@@ -549,10 +547,11 @@ public class StackUtils {
      * Output : Yes
      * Each of the pairs (4, 5), (-2, -3), (11, 10) and
      * (5, 6) consists of consecutive numbers.
-     *
+     * <p>
      * Input : stack = [4, 6, 6, 7, 4, 3]
      * Output : No
      * (4, 6) are not consecutive.
+     *
      * @param stack
      * @return
      */
@@ -770,5 +769,48 @@ public class StackUtils {
             return 0;
         }
         return occurences + countPatternOccurences(residueString, pattern);
+    }
+
+    public static int countPatternOccurences1(String str, String pattern) {
+        if (str == null || str.length() == 0 || pattern == null || pattern.length() == 0 || pattern.length() > str.length()) {
+            return 0;
+        }
+
+        int m = pattern.length();
+        int n = str.length();
+        int occurences = 0;
+        String residueString = "";
+
+        int i = 0;
+        while (i < n - m + 1) {
+            int j = 0;
+            for (; j < m && str.charAt(i + j) == pattern.charAt(j); j++) ;
+            if (j == m) {
+                // pattern found
+                i = i + j; // move to j
+                occurences++;
+            } else {
+                if (j != 0) {
+                    // partial match
+                    for (int x = i; x < i + j; x++) {
+                        residueString += str.charAt(x);
+                    }
+                    i = i + j; // move to j
+                } else {
+                    residueString += str.charAt(i);
+                    i++;
+                }
+            }
+        }
+
+        while (i < n) {
+            residueString += str.charAt(i);
+            i++;
+        }
+
+        if (occurences == 0) {
+            return 0;
+        }
+        return occurences + countPatternOccurences1(residueString, pattern);
     }
 }

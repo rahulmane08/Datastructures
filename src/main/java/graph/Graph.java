@@ -103,7 +103,7 @@ public class Graph<T> {
         return vertexesMap.get(id);
     }
 
-    public Collection<Vertex<T>> getAllVertexes() {
-        return vertexesMap.values();
+    public List<Vertex<T>> getAllVertexes() {
+        return vertexesMap.values().stream().collect(Collectors.toList());
     }
 }

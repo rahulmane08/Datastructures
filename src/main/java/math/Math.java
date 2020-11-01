@@ -69,7 +69,8 @@ public class Math {
     }
 
     public static void main(String[] args) {
-        System.out.println(parseInt(String.valueOf(1234)));
+        System.out.println(parseInt("1234"));
         System.out.println(parseInt("-2147483648"));
+        System.out.println(Integer.parseInt("0.888"));
     }
 }

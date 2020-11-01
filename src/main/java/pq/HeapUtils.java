@@ -49,152 +49,6 @@ public class HeapUtils {
         }
     }
 
-    public static class KthSmallestLargestUtil {
-
-        /**
-         * Time complexity: O(k * log(n))
-         * Space complexity: k
-         * @param arr
-         * @param k
-         * @return
-         */
-        @Important
-        public static int kthLargestUsingMaxHeap(int[] arr, int k) {
-            if (arr == null)
-                return -1;
-            int n = arr.length;
-            if (k > n)
-                return -1;
-
-            MaxPriorityQueue<Integer> pq = new MaxPriorityQueue<>(n);
-            for (int i : arr)
-                pq.add(i);
-            int kthLargest = -1;
-            for (int i = 0; i < k; i++)
-                kthLargest = pq.poll();
-            return kthLargest;
-        }
-
-        /**
-         * Time complexity = log(k) + (n-k)*log(k)
-         * @param arr
-         * @param k
-         * @return
-         */
-        @Important
-        public static int kthLargestUsingMinHeap(Integer[] arr, int k) {
-            if (arr == null || arr.length == 0 || k > arr.length || k < 1)
-                return -1;
-            int n = arr.length;
-            // min heapify first k elements
-            // log(k)
-            int i;
-            for (i = (k / 2) -1; i >= 0; i--) {
-                minHeapify(arr, k, i);
-            }
-            // check the remaining elements with the top of Min heap.
-            // (n-k)*log(k)
-            for (i = k ; i < n; i ++) {
-                if (arr[i] > arr[0]) {
-                    Swapper.swap(arr, 0, i);
-                    minHeapify(arr, k, 0);
-                }
-            }
-            return arr[0];
-        }
-
-        /**
-         * Time complexity = log(k) + (n-k)*log(k)
-         * @param arr
-         * @param k
-         * @return
-         */
-        @Important
-        public static int kthSmallestUsingMinHeap(Integer[] arr, int k) {
-            if (arr == null || arr.length == 0 || k > arr.length || k < 1)
-                return -1;
-            int n = arr.length;
-            // min heapify first k elements
-            // log(k)
-            int i;
-            for (i = (k / 2) -1; i >= 0; i--) {
-                maxHeapify(arr, k, i);
-            }
-            // check the remaining elements with the top of Min heap.
-            // (n-k)*log(k)
-            for (i = k ; i < n; i ++) {
-                if (arr[i] < arr[0]) {
-                    Swapper.swap(arr, 0, i);
-                    maxHeapify(arr, k, 0);
-                }
-            }
-            return arr[0];
-        }
-    }
-
-    public static class CheckerUtils {
-
-        public static boolean checkIfBtreeIsAMaxHeap(Node root) {
-            if (root == null) {
-                return true;
-            }
-            boolean isHeap = true;
-            if (root.left != null) {
-                isHeap = root.data > root.left.data;
-            }
-            if (isHeap && root.right != null) {
-                isHeap = root.data > root.right.data;
-            }
-            return isHeap && checkIfBtreeIsAMaxHeap(root.left) && checkIfBtreeIsAMaxHeap(root.right);
-        }
-
-        public static boolean checkIfArrayIsMaxHeap(int[] arr) {
-            return checkIfArrayIsMaxHeap(arr, arr.length, 0);
-        }
-
-        public static boolean checkIfArrayIsMaxHeap(int[] arr, int n, int i) {
-            if (arr == null) {
-                return false;
-            }
-            if (i > n / 2) {
-                return true;
-            }
-            int left = 2 * i + 1;
-            int right = 2 * i + 2;
-            boolean isHeap = true;
-            if (left < n) {
-                isHeap = arr[i] > arr[left];
-            }
-            if (isHeap && right < n) {
-                isHeap = arr[i] > arr[right];
-            }
-            return isHeap && checkIfArrayIsMaxHeap(arr, n, left) && checkIfArrayIsMaxHeap(arr, n, right);
-        }
-
-        public static boolean checkIfArrayIsMinHeap(int[] arr) {
-            return checkIfArrayIsMinHeap(arr, arr.length, 0);
-        }
-
-        public static boolean checkIfArrayIsMinHeap(int[] arr, int n, int i) {
-            if (arr == null) {
-                return false;
-            }
-            if (i > n / 2) {
-                return true;
-            }
-            int left = 2 * i + 1;
-            int right = 2 * i + 2;
-            boolean isHeap = true;
-            if (left < n) {
-                isHeap = arr[i] < arr[left];
-            }
-            if (isHeap && right < n) {
-                isHeap = arr[i] < arr[right];
-            }
-            return isHeap && checkIfArrayIsMinHeap(arr, n, left) && checkIfArrayIsMinHeap(arr, n, right);
-        }
-    }
-
     /**
      * if we are given 4 ropes of lengths 4, 3, 2 and 6. We can connect the ropes in following ways.
      * 1) First connect ropes of lengths 2 and 3. Now we have three ropes of lengths 4, 6 and 5.
@@ -248,11 +102,14 @@ public class HeapUtils {
      * Median can be defined as the element in the data set which separates the higher half of the data sample from the lower half.
      * In other words we can get the median element as, when the input size is odd, we take the middle element of sorted data.
      * If the input size is even, we pick average of middle two elements in sorted stream.
-     *
+     * <p>
      * Time Complexity: If we omit the way how stream was read, complexity of median finding is O(N log N),
      * as we need to read the stream, and due to heap insertions/deletions.
+     *
      * @param a
      */
+    @Important
+    @Hard
     public static void printMedian(int[] a) {
 
         double med = a[0];
@@ -313,7 +170,8 @@ public class HeapUtils {
         }
     }
 
-
+    @Important
+    @Hard
     public static void printMedian1(int[] arr) {
         if (arr == null || arr.length == 0)
             return;
@@ -367,6 +225,7 @@ public class HeapUtils {
      * 1. get inordered array from tree
      * 2. reverse
      * 3. create a pre-ordered tree
+     *
      * @param root
      */
     public static void convertBstToMaxHeap(Node root) {
@@ -377,6 +236,7 @@ public class HeapUtils {
         TreeUtils.OrderedArrays.getInstance().fillTreeWithPreOrderArr(root, inorderedArr);
     }
 
+    @Important
     public static Integer[] mergeMaxHeaps(Integer[] arr1, Integer[] arr2) {
         if (arr1 == null && arr2 == null)
             return null;
@@ -525,15 +385,8 @@ public class HeapUtils {
      */
     static public void printStringWithNonRepeatingChars(String str) {
         Map<Character, Integer> charFreq = new HashMap<>();
-        char[] charArr = str.toCharArray();
-        for (char c : charArr) {
-            if (charFreq.get(c) != null) {
-                int count = charFreq.get(c);
-                ++count;
-                charFreq.put(c, count);
-            } else {
-                charFreq.put(c, 1);
-            }
+        for (int i = 0; i < str.length(); i++) {
+            charFreq.compute(str.charAt(i), (k, v) -> v == null ? 1 : v + 1);
         }
         java.util.PriorityQueue<Map.Entry<Character, Integer>> pq =
                 new java.util.PriorityQueue<>((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
@@ -751,6 +604,213 @@ public class HeapUtils {
         return (int) Math.floor(arr.length / 2) + 1;
     }
 
+    @Important
+    public static void largestDerangement(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        MaxPriorityQueue<Integer> maxPq = new MaxPriorityQueue<>(arr.length);
+        for (int i : arr) {
+            maxPq.add(i);
+        }
+        for (int i = 0; i < arr.length; i++) {
+            int top = maxPq.poll();
+            if (top != arr[i]) {
+                arr[i] = top;
+            } else {
+                // last element but at the same position
+                if (maxPq.isEmpty()) {
+                    Swapper.swap(arr, i - 1, i);
+                } else {
+                    int next = maxPq.poll();
+                    arr[i] = next;
+                    maxPq.add(top);
+                }
+            }
+        }
+    }
+
+    @Important
+    public static void smallestDerangement(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        MinPriorityQueue<Integer> minPq = new MinPriorityQueue<>(arr.length);
+        for (int i : arr) {
+            minPq.add(i);
+        }
+        for (int i = 0; i < arr.length; i++) {
+            int top = minPq.poll();
+            if (top != arr[i]) {
+                arr[i] = top;
+            } else {
+                // last element but at the same position
+                if (minPq.isEmpty()) {
+                    Swapper.swap(arr, i - 1, i);
+                } else {
+                    int next = minPq.poll();
+                    arr[i] = next;
+                    minPq.add(top);
+                }
+            }
+        }
+    }
+
+    public static class KthSmallestLargestUtil {
+
+        /**
+         * Time complexity: O(k * log(n))
+         * Space complexity: k
+         *
+         * @param arr
+         * @param k
+         * @return
+         */
+        @Important
+        public static int kthLargestUsingMaxHeap(int[] arr, int k) {
+            if (arr == null)
+                return -1;
+            int n = arr.length;
+            if (k > n)
+                return -1;
+
+            MaxPriorityQueue<Integer> pq = new MaxPriorityQueue<>(n);
+            for (int i : arr)
+                pq.add(i);
+            int kthLargest = -1;
+            for (int i = 0; i < k; i++)
+                kthLargest = pq.poll();
+            return kthLargest;
+        }
+
+        /**
+         * Time complexity = log(k) + (n-k)*log(k)
+         *
+         * @param arr
+         * @param k
+         * @return
+         */
+        @Important
+        public static int kthLargestUsingMinHeap(Integer[] arr, int k) {
+            if (arr == null || arr.length == 0 || k > arr.length || k < 1)
+                return -1;
+            int n = arr.length;
+            /**
+             * min heapify first k elements ie create a Min heap of first K elements
+             * log(k)
+             * By doing this we already find the kth largest as the min element in the array of k elements.
+             * Now is the next element is larger than this min, which means the min is not the kth largest element anymore
+             * but its the next largest, so we swap the new element with min of heap and min heapify again so that we get the next
+             * min at the 0th positiong which means its the new kth min.
+             */
+            int i;
+            for (i = (k / 2) - 1; i >= 0; i--) {
+                minHeapify(arr, k, i);
+            }
+            // check the remaining elements with the top of Min heap.
+            // (n-k)*log(k)
+            for (i = k; i < n; i++) {
+                if (arr[i] > arr[0]) {
+                    Swapper.swap(arr, 0, i); // remove the current min
+                    minHeapify(arr, k, 0);  // this will get the 2nd min , 3rd min...
+                }
+            }
+            return arr[0];
+        }
+
+        /**
+         * Time complexity = log(k) + (n-k)*log(k)
+         *
+         * @param arr
+         * @param k
+         * @return
+         */
+        @Important
+        public static int kthSmallestUsingMaxHeap(Integer[] arr, int k) {
+            if (arr == null || arr.length == 0 || k > arr.length || k < 1)
+                return -1;
+            int n = arr.length;
+            // min heapify first k elements
+            // log(k)
+            int i;
+            for (i = (k / 2) - 1; i >= 0; i--) {
+                maxHeapify(arr, k, i);
+            }
+            // check the remaining elements with the top of Min heap.
+            // (n-k)*log(k)
+            for (i = k; i < n; i++) {
+                if (arr[i] < arr[0]) {
+                    Swapper.swap(arr, 0, i);
+                    maxHeapify(arr, k, 0);
+                }
+            }
+            return arr[0];
+        }
+    }
+
+    public static class CheckerUtils {
+
+        public static boolean checkIfBtreeIsAMaxHeap(Node root) {
+            if (root == null) {
+                return true;
+            }
+            boolean isHeap = true;
+            if (root.left != null) {
+                isHeap = root.data > root.left.data;
+            }
+            if (isHeap && root.right != null) {
+                isHeap = root.data > root.right.data;
+            }
+            return isHeap && checkIfBtreeIsAMaxHeap(root.left) && checkIfBtreeIsAMaxHeap(root.right);
+        }
+
+        public static boolean checkIfArrayIsMaxHeap(int[] arr) {
+            return checkIfArrayIsMaxHeap(arr, arr.length, 0);
+        }
+
+        public static boolean checkIfArrayIsMaxHeap(int[] arr, int n, int i) {
+            if (arr == null) {
+                return false;
+            }
+            if (i > n / 2) {
+                return true;
+            }
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            boolean isHeap = true;
+            if (left < n) {
+                isHeap = arr[i] > arr[left];
+            }
+            if (isHeap && right < n) {
+                isHeap = arr[i] > arr[right];
+            }
+            return isHeap && checkIfArrayIsMaxHeap(arr, n, left) && checkIfArrayIsMaxHeap(arr, n, right);
+        }
+
+        public static boolean checkIfArrayIsMinHeap(int[] arr) {
+            return checkIfArrayIsMinHeap(arr, arr.length, 0);
+        }
+
+        public static boolean checkIfArrayIsMinHeap(int[] arr, int n, int i) {
+            if (arr == null) {
+                return false;
+            }
+            if (i > n / 2) {
+                return true;
+            }
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            boolean isHeap = true;
+            if (left < n) {
+                isHeap = arr[i] < arr[left];
+            }
+            if (isHeap && right < n) {
+                isHeap = arr[i] < arr[right];
+            }
+            return isHeap && checkIfArrayIsMinHeap(arr, n, left) && checkIfArrayIsMinHeap(arr, n, right);
+        }
+    }
+
     /**
      * This Min Heap based solution has same time complexity which is O(nk Log k). But for different sized arrays,
      * this solution works much better.
@@ -842,7 +902,7 @@ public class HeapUtils {
 
             Arrays.sort(arr1);
             Arrays.sort(arr2);
-            addIfValid(n -1, n - 1);
+            addIfValid(n - 1, n - 1);
 
             for (int i = 0; i < k && !pq.isEmpty(); i++) {
                 Node top = pq.poll();
@@ -889,58 +949,6 @@ public class HeapUtils {
             @Override
             public int compareTo(Node o) {
                 return Integer.valueOf(this.data).compareTo(o.data);
-            }
-        }
-    }
-
-    @Important
-    public static void largestDerangement(int [] arr) {
-        if (arr == null || arr.length == 0) {
-            return;
-        }
-        MaxPriorityQueue<Integer> maxPq = new MaxPriorityQueue<>(arr.length);
-        for (int i: arr) {
-            maxPq.add(i);
-        }
-        for (int i = 0; i < arr.length; i++) {
-            int top = maxPq.poll();
-            if (top != arr[i]) {
-                arr[i] = top;
-            } else {
-                // last element but at the same position
-                if (maxPq.isEmpty()) {
-                    Swapper.swap(arr, i - 1, i);
-                } else {
-                    int next = maxPq.poll();
-                    arr[i] = next;
-                    maxPq.add(top);
-                }
-            }
-        }
-    }
-
-    @Important
-    public static void smallestDerangement(int [] arr) {
-        if (arr == null || arr.length == 0) {
-            return;
-        }
-        MinPriorityQueue<Integer> minPq = new MinPriorityQueue<>(arr.length);
-        for (int i: arr) {
-            minPq.add(i);
-        }
-        for (int i = 0; i < arr.length; i++) {
-            int top = minPq.poll();
-            if (top != arr[i]) {
-                arr[i] = top;
-            } else {
-                // last element but at the same position
-                if (minPq.isEmpty()) {
-                    Swapper.swap(arr, i - 1, i);
-                } else {
-                    int next = minPq.poll();
-                    arr[i] = next;
-                    minPq.add(top);
-                }
             }
         }
     }

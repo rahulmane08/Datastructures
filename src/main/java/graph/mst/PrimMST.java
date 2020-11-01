@@ -9,62 +9,7 @@ import java.util.UUID;
 import graph.Edge;
 import graph.Graph;
 import graph.Vertex;
-import lombok.Data;
 import lombok.Getter;
-
-/**
- * Structure to hold the vertex and the edge reaching to it having min edge.
- *
- * @author rahul
- */
-@Getter
-class PrimNode {
-    private final UUID vertexID;
-    private int edgeWeight;
-
-    public PrimNode(UUID vertexID) {
-        super();
-        this.vertexID = vertexID;
-    }
-
-    public void setEdgeWeight(int edgeWeight) {
-        this.edgeWeight = edgeWeight;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((vertexID == null) ? 0 : vertexID.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        PrimNode other = (PrimNode) obj;
-        if (vertexID == null) {
-            if (other.vertexID != null)
-                return false;
-        } else if (!vertexID.equals(other.vertexID))
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "PrimNode [vertexID=" + vertexID + ", edgeWeight=" + edgeWeight
-                + "]";
-    }
-
-
-}
 
 /**
  * Spanning tree = Graph with N vertexes have N-1 edges, which means there are no cycles.
@@ -132,6 +77,61 @@ public class PrimMST {
         }
         for (Vertex<T> v : minEdgesByVertex.keySet())
             System.out.println(minEdgesByVertex.get(v));
+
+
+    }
+
+    /**
+     * Structure to hold the vertex and the edge reaching to it having min edge.
+     *
+     * @author rahul
+     */
+    @Getter
+    static
+    class PrimNode {
+        private final UUID vertexID;
+        private int edgeWeight;
+
+        public PrimNode(UUID vertexID) {
+            super();
+            this.vertexID = vertexID;
+        }
+
+        public void setEdgeWeight(int edgeWeight) {
+            this.edgeWeight = edgeWeight;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result
+                    + ((vertexID == null) ? 0 : vertexID.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            PrimNode other = (PrimNode) obj;
+            if (vertexID == null) {
+                if (other.vertexID != null)
+                    return false;
+            } else if (!vertexID.equals(other.vertexID))
+                return false;
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "PrimNode [vertexID=" + vertexID + ", edgeWeight=" + edgeWeight
+                    + "]";
+        }
 
 
     }

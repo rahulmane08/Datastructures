@@ -3,16 +3,16 @@ package patternsearching;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatternSearchUtil {
+public class NaiveAlgo {
 
     /**
-     * Time complexity : O(m*(n-m+1))
+     * Time complexity : O(m*(n-m+1)) = O(mn)
      *
      * @param pattern
      * @param text
      * @return
      */
-    public static List<Integer> searchNaive(String pattern, String text) {
+    public static List<Integer> search(String pattern, String text) {
         List<Integer> indexes = new ArrayList<>();
         if (text == null || text.isEmpty()) {
             return indexes;

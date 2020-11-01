@@ -69,17 +69,27 @@ public class StringUtils {
             return Collections.emptyList();
         }
         List<String> permutations = new ArrayList<>();
-        permuteUtil(permutations, str.toCharArray(), 0, str.length() - 1);
+        permuteUtil(str.toCharArray(), 0, str.length() - 1, permutations);
         return permutations;
     }
 
-    private static void permuteUtil(List<String> permutations, char[] charArray, int start, int end) {
+    /**
+     *                               ABC
+     *          [A]                 [B]                 [C]
+     *       [AB]  [AC]           [BA] [BC]          [CB]  [CA]
+     *     [ABC]     [ACB]      [BAC]    [BCA]     [CBA]     [CAB]
+     * @param result
+     * @param charArray
+     * @param start
+     * @param end
+     */
+    private static void permuteUtil(char[] charArray, int start, int end, List<String> result) {
         if (start == end) {
-            permutations.add(new String(charArray));
+            result.add(new String(charArray));
         }
         for (int i = start; i <= end; i++) {
             swap(charArray, start, i);
-            permuteUtil(permutations, charArray, start + 1, end);
+            permuteUtil(charArray, start + 1, end, result);
             swap(charArray, start, i);
         }
     }

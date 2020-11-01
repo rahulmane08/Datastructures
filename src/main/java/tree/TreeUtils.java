@@ -289,17 +289,16 @@ public class TreeUtils {
     public static Node createTreeUsingPreAndInorderSequences(Integer[] inorder, Integer[] preorder) {
         if (inorder == null || preorder == null)
             return null;
-        int preIndex = 0;
-        return createTreeUsingPreAndInorderSequences(inorder, preorder, 0, inorder.length - 1, preIndex);
+        return createTreeUsingPreAndInorderSequences(inorder, preorder, 0, inorder.length - 1, 0);
     }
 
-    private static Node createTreeUsingPreAndInorderSequences(Integer[] inorder, Integer[] preorder, Integer start, Integer end, Integer preIndex) {
+    private static Node createTreeUsingPreAndInorderSequences(Integer[] inorder, Integer[] preorder, int start, int end, int preIndex) {
         if (start > end || preIndex == preorder.length)
             return null;
         int data = preorder[preIndex];
         Node current = new Node(null, null, data);
 
-        if (start == end)
+        if (start == end) //leaf node
             return current;
 
         Integer inIndex = Utils.search(inorder, data);
@@ -352,8 +351,7 @@ public class TreeUtils {
     private static void computeVerticalSum(Node root, Map<Integer, Integer> levelSum, Integer level) {
         if (root == null)
             return;
-        Integer sum = levelSum.getOrDefault(level, 0);
-        levelSum.put(level, sum + root.data);
+        levelSum.compute(level, (k, v) -> v == null ? root.data : root.data + v);
         computeVerticalSum(root.left, levelSum, level - 1);
         computeVerticalSum(root.right, levelSum, level + 1);
     }
@@ -490,9 +488,9 @@ public class TreeUtils {
         if (root1 == null && root2 == null)
             return null;
         if (root2 == null)
-            return root1;
+            return new Node(root1.data);
         if (root1 == null)
-            return root2;
+            return new Node(root2.data);
         Node mergedNode = new Node(root1.data + root2.data);
         mergedNode.left = addTrees(root1.left, root2.left);
         mergedNode.right = addTrees(root1.right, root2.right);
@@ -551,8 +549,7 @@ public class TreeUtils {
                 return false;
             return ((root1.data == root2.data)
                     && areTreesIdentical(root1.left, root2.left)
-                    && areTreesIdentical(root1.right, root2.right)
-            );
+                    && areTreesIdentical(root1.right, root2.right));
         }
 
         public static boolean areTreesMirrors(Node root1, Node root2) {
@@ -562,8 +559,7 @@ public class TreeUtils {
                 return false;
             return ((root1.data == root2.data)
                     && areTreesMirrors(root1.left, root2.right)
-                    && areTreesMirrors(root1.right, root2.left)
-            );
+                    && areTreesMirrors(root1.right, root2.left));
         }
 
         /**
@@ -687,18 +683,19 @@ public class TreeUtils {
             TreeMap<Integer, Integer> map = new TreeMap<>();
             topViewUtil(root, 0, map);
             System.out.println("Top view of Tree");
-            map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey))
+            map.entrySet().stream()
+                    .sorted(Comparator.comparingInt(Map.Entry::getKey))
                     .map(Map.Entry::getValue)
                     .forEach(System.out::println);
         }
 
-        private static void topViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
+        private static void topViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
             if (root == null)
                 return;
-            if (!map.containsKey(hLevel))
-                map.put(hLevel, root.data);
-            topViewUtil(root.left, hLevel - 1, map);
-            topViewUtil(root.right, hLevel + 1, map);
+            if (!map.containsKey(vLevel))
+                map.put(vLevel, root.data);
+            topViewUtil(root.left, vLevel - 1, map);
+            topViewUtil(root.right, vLevel + 1, map);
         }
 
         // bottom view of a tree
@@ -711,13 +708,13 @@ public class TreeUtils {
                     .forEach(System.out::println);
         }
 
-        private static void bottomViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
+        private static void bottomViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
             if (root == null)
                 return;
-            bottomViewUtil(root.left, hLevel - 1, map);
-            bottomViewUtil(root.right, hLevel + 1, map);
-            if (!map.containsKey(hLevel))
-                map.put(hLevel, root.data);
+            bottomViewUtil(root.left, vLevel - 1, map);
+            bottomViewUtil(root.right, vLevel + 1, map);
+            if (!map.containsKey(vLevel))
+                map.put(vLevel, root.data);
         }
 
         // left side view of a tree
@@ -730,13 +727,13 @@ public class TreeUtils {
                     .forEach(System.out::println);
         }
 
-        private static void leftViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
+        private static void leftViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
             if (root == null)
                 return;
-            if (!map.containsKey(vLevel))
-                map.put(vLevel, root.data);
-            leftViewUtil(root.left, vLevel + 1, map);
-            leftViewUtil(root.right, vLevel + 1, map);
+            if (!map.containsKey(hLevel))
+                map.put(hLevel, root.data);
+            leftViewUtil(root.left, hLevel + 1, map);
+            leftViewUtil(root.right, hLevel + 1, map);
         }
 
         // right side view of a tree
@@ -749,13 +746,13 @@ public class TreeUtils {
                     .forEach(System.out::println);
         }
 
-        private static void rightViewUtil(Node root, int vLevel, TreeMap<Integer, Integer> map) {
+        private static void rightViewUtil(Node root, int hLevel, TreeMap<Integer, Integer> map) {
             if (root == null)
                 return;
-            if (!map.containsKey(vLevel))
-                map.put(vLevel, root.data);
-            rightViewUtil(root.right, vLevel + 1, map);
-            rightViewUtil(root.left, vLevel + 1, map);
+            if (!map.containsKey(hLevel))
+                map.put(hLevel, root.data);
+            rightViewUtil(root.right, hLevel + 1, map);
+            rightViewUtil(root.left, hLevel + 1, map);
         }
     }
 
@@ -1358,7 +1355,7 @@ public class TreeUtils {
             path.push(root.data);
             sum = sum - root.data;
             if (isLeaf(root) && sum == 0) {
-                System.out.printf("Found a path: %s%n", String.valueOf(path));
+                System.out.printf("Found a path: %s%n", path);
                 return true;
             }
             boolean pathFound =
@@ -1465,6 +1462,32 @@ public class TreeUtils {
                 compute(root.left);
                 compute(root.right);
                 this.stack.pop();
+            }
+
+            public double getSum() {
+                return sum;
+            }
+        }
+
+        public static class SumOfRootToLeafPathsUtil1 {
+            private double sum = 0;
+            private List<String> paths = new ArrayList<>();
+
+            public SumOfRootToLeafPathsUtil1(Node root) {
+                compute(root, "");
+                sum = paths.stream().map(Double::parseDouble).reduce(0d, Double::sum);
+            }
+
+            private void compute(Node root, String str) {
+                if (root == null)
+                    return;
+                str += root.data;
+                if (isLeaf(root)) {
+                    paths.add(str);
+                    return;
+                }
+                compute(root.left, str);
+                compute(root.right, str);
             }
 
             public double getSum() {

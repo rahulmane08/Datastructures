@@ -34,8 +34,7 @@ public class LinkedList<T> implements Cloneable {
             return;
         }
         Node<T> curr = start;
-        while (curr.next != null)
-            curr = curr.next;
+        for (; curr.next != null; curr = curr.next);
         curr.next = node;
     }
 

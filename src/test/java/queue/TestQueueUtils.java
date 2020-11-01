@@ -5,6 +5,7 @@ import static queue.QueueUtils.findFirstPointForCircularTour;
 import static queue.QueueUtils.findTotalMinMaxSumInSlidingWindow;
 import static queue.QueueUtils.generateNBinaryNumbers;
 import static queue.QueueUtils.printFirstNegativeInSlidingWindow;
+import static queue.QueueUtils.printLargestMultipleOf3;
 import static queue.QueueUtils.reversify;
 import static queue.QueueUtils.reversifyFirstKElements;
 import static queue.QueueUtils.timeToRotOranges;
@@ -18,10 +19,10 @@ public class TestQueueUtils {
     public void test_reversify() {
         Queue<Integer> queue = new Queue<>(5);
         for (int i = 0; i < 5; i++)
-            queue.enqueue(i);
+            queue.offer(i);
         reversify(queue);
         for (int i = 4; i >= 0; i--)
-            assertEquals(i, queue.deque().intValue());
+            assertEquals(i, queue.poll().intValue());
     }
 
     @Test
@@ -136,5 +137,11 @@ public class TestQueueUtils {
     public void test_printFirstNegativeInSlidingWindow() {
         printFirstNegativeInSlidingWindow(new int[]{-8, 2, 3, -6, 10}, 2);
         printFirstNegativeInSlidingWindow(new int[]{-8, 2, 3, -6, 10}, 3);
+    }
+
+    @Test
+    public void test_printLargestMultipleOf3() {
+        printLargestMultipleOf3(new int[] {8, 1, 9});
+        printLargestMultipleOf3(new int[] {8, 1, 7, 6, 0});
     }
 }

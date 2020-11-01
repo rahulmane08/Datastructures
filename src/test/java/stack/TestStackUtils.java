@@ -3,20 +3,21 @@ package stack;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static stack.ExpressionUtils.maxDepthOfBalancedParentheses;
 import static stack.ExpressionUtils.maxLengthOfBalancedParentheses;
+import static stack.ExpressionUtils.removeBrackets;
 import static stack.StackUtils.checkPairWiseConsecutive;
 import static stack.StackUtils.countPatternOccurences;
-import static stack.StackUtils.countPermutationsGreaterThanEqualToOriginalNumber1;
+import static stack.StackUtils.countPatternOccurences1;
+import static stack.StackUtils.countPermutationsGreaterThanEqualToOriginalNumber;
 import static stack.StackUtils.decodeStringByCount;
 import static stack.StackUtils.deleteFirstKElements;
 import static stack.StackUtils.deleteMiddle;
 import static stack.StackUtils.findMinimumNumberForGivenSequence;
 import static stack.StackUtils.findNextGreaterOrSmallerElement;
 import static stack.StackUtils.findNextGreaterOrSmallerFrequencyElement;
-import static stack.ExpressionUtils.maxDepthOfBalancedParentheses;
 import static stack.StackUtils.maxHistogramArea;
 import static stack.StackUtils.minHistogramArea;
-import static stack.ExpressionUtils.removeBrackets;
 
 import java.util.Arrays;
 
@@ -318,7 +319,7 @@ public class TestStackUtils {
 
     @Test
     public void test_countPermutationsGreaterThanEqualToOriginalNumber() {
-        assertEquals(14, countPermutationsGreaterThanEqualToOriginalNumber1(15));
+        assertEquals(14, countPermutationsGreaterThanEqualToOriginalNumber(15));
     }
 
     @Test
@@ -360,6 +361,14 @@ public class TestStackUtils {
     }
 
     @Test
+    public void test_countPatternOccurences1() {
+        assertEquals(3, countPatternOccurences1("BABABCABCC", "ABC"));
+        assertEquals(0, countPatternOccurences1("BABABCABCC", "ABCD"));
+        assertEquals(3, countPatternOccurences1("BABABCABCC", "AB"));
+        assertEquals(4, countPatternOccurences1("BABABCABCC", "B"));
+    }
+
+    @Test
     public void test_deleteFirstKElements() {
         java.util.Stack stack = new java.util.Stack();
         for (int i = 0; i < 10; i++) {
@@ -367,9 +376,12 @@ public class TestStackUtils {
         }
         deleteFirstKElements(stack, 4);
         assertEquals(6, stack.size());
+        System.out.println(stack);
         deleteFirstKElements(stack, 4);
         assertEquals(2, stack.size());
+        System.out.println(stack);
         deleteFirstKElements(stack, 4);
         assertEquals(0, stack.size());
+        System.out.println(stack);
     }
 }

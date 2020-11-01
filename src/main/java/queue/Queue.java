@@ -9,7 +9,7 @@ public class Queue<T> {
         arr = new Object[capacity];
     }
 
-    public void enqueue(T elem) {
+    public void offer(T elem) {
         if (isFull())
             throw new RuntimeException("Queue is full");
         rear = (rear + 1) % capacity();
@@ -18,14 +18,16 @@ public class Queue<T> {
             front = rear;
     }
 
-    public T deque() {
+    public T poll() {
         if (isEmpty())
             throw new RuntimeException("Queue is empty");
         T elem = (T) arr[front];
+        arr[front] = null;
         if (front == rear) {
             front = rear = -1;
-        } else
+        } else {
             front = (front + 1) % capacity();
+        }
         return elem;
     }
 
