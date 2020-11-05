@@ -135,18 +135,25 @@ public class HeapUtils {
 
             int x = a[i];
 
-            // case1(left side heap has more elements)
             if (maxHeap.size() > minHeap.size()) {
+                // case1(left side heap has more elements)
                 if (x < med) {
                     minHeap.add(maxHeap.remove());
                     maxHeap.add(x);
                 } else
                     minHeap.add(x);
                 med = (double) (maxHeap.peek() + minHeap.peek()) / 2;
-            }
+            } else if (maxHeap.size() < minHeap.size()) {
+                // case2 (right side heap has more elements)
+                if (x > med) {
+                    maxHeap.add(minHeap.remove());
+                    minHeap.add(x);
+                } else
+                    maxHeap.add(x);
+                med = (double) (maxHeap.peek() + minHeap.peek()) / 2;
 
-            // case2(both heaps are balanced)
-            else if (maxHeap.size() == minHeap.size()) {
+            } else {
+                // case2(both heaps are balanced)
                 if (x < med) {
                     maxHeap.add(x);
                     med = (double) maxHeap.peek();
@@ -156,16 +163,6 @@ public class HeapUtils {
                 }
             }
 
-            // case3(right side heap has more elements)
-            else {
-                if (x > med) {
-                    maxHeap.add(minHeap.remove());
-                    minHeap.add(x);
-                } else
-                    maxHeap.add(x);
-                med = (double) (maxHeap.peek() + minHeap.peek()) / 2;
-
-            }
             System.out.printf("median after reading %d elements: %f%n", i, med);
         }
     }
@@ -433,16 +430,15 @@ public class HeapUtils {
         if (0 < k && k < n) {
             Map<Integer, Integer> frequencies = new HashMap<>();
             for (int i = 0; i < n; i++) {
-                if (frequencies.containsKey(arr[i])) {
-                    frequencies.put(arr[i], frequencies.get(arr[i]) + 1);
-                } else {
-                    frequencies.put(arr[i], 1);
-                }
+                frequencies.compute(arr[i], (key, v) -> v == null ? 1 : v + 1);
             }
+
             java.util.PriorityQueue<Map.Entry<Integer, Integer>> pq =
                     new java.util.PriorityQueue<>((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-            for (Map.Entry<Integer, Integer> entry : frequencies.entrySet())
+            for (Map.Entry<Integer, Integer> entry : frequencies.entrySet()) {
                 pq.offer(entry);
+            }
+
             for (int i = 0; i < k; i++) {
                 Map.Entry<Integer, Integer> current = pq.poll();
                 if (current.getValue() != 1) {
@@ -551,11 +547,7 @@ public class HeapUtils {
             k = arr.length;
         Map<Integer, Integer> frequencies = new HashMap<>();
         for (int i = 0; i < arr.length; i++) {
-            if (frequencies.containsKey(arr[i])) {
-                frequencies.put(arr[i], frequencies.get(arr[i]) + 1);
-            } else {
-                frequencies.put(arr[i], 1);
-            }
+            frequencies.compute(arr[i], (key, v) -> v == null ? 1 : v + 1);
         }
 
         // min priority queue

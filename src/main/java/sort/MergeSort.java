@@ -1,64 +1,70 @@
 package sort;
 
-import utils.Swapper;
+import java.util.Arrays;
 
 public class MergeSort {
-    private static final int INSERTIONSORT_THRESHOLD = 7;
 
-    static public void sort(int[] a) {
-        mergeSort(a, 0, a.length);
+
+    public static void sort(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        int n = arr.length;
+        sort(arr, 0, n - 1);
     }
 
-    private static void mergeSort(int[] arr, int low, int high) {
-        if (low < high) {
-            int length = high - low;
-            // Insertion sort on smallest arrays
-            if (length < INSERTIONSORT_THRESHOLD) {
-                for (int i = low; i < high; i++)
-                    for (int j = i; j > 0; j--)
-                        if (arr[j] < arr[j - 1])
-                            Swapper.swap(arr, j, j - 1);
-                return;
-            }
-            int mid = (low + high) >>> 1;
-            mergeSort(arr, low, mid);
-            mergeSort(arr, mid, high);
+    public static void sort(int[] arr, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int mid = left + (right - left) / 2; // partition
+        sort(arr, left, mid);
+        sort(arr, mid + 1, right);
 
-            if (arr[mid - 1] <= arr[mid])
-                return;
+        // merge the sorted halves
+        merge(arr, left, mid, right);
+    }
 
-            merge(arr, low, mid, high);
+    private static void merge(int[] arr, int l, int m, int r) {
+        int M = m - l + 1;
+        int N = r - m;
+        int[] LEFT = new int[M];
+        int[] RIGHT = new int[N];
+
+        for (int i = 0; i < M; i++) {
+            LEFT[i] = arr[l + i];
         }
 
-    }
+        for (int j = 0; j < N; j++) {
+            RIGHT[j] = arr[m + 1 + j];
+        }
 
-    private static void merge(int[] arr, int low, int mid, int high) {
-        int size1 = mid - low + 1;
-        int size2 = high - mid;
+        int i = 0, j = 0, k = l;
 
-        int[] L = new int[size1];
-        int[] R = new int[size2];
-
-        for (int i = 0; i < size1; i++)
-            L[i] = arr[low + i];
-        for (int j = 0; j < size2; j++)
-            R[j] = arr[mid + 1 + j];
-
-        int i = 0, j = 0, k = low;
-        while (i < size1 && j < size2) {
-            if (L[i] < R[j]) {
-                arr[k++] = L[i++];
+        while (i < M && j < N) {
+            if (LEFT[i] <= RIGHT[j]) {
+                arr[k++] = LEFT[i++];
             } else {
-                arr[k++] = R[j++];
+                arr[k++] = RIGHT[j++];
             }
         }
-        while (i < size1) {
-            arr[k++] = L[i++];
+
+        if (i < M) {
+            while (i < M) {
+                arr[k++] = LEFT[i++];
+            }
         }
-        while (j < size2) {
-            arr[k++] = R[j++];
+
+        if (j < N) {
+            while (j < N) {
+                arr[k++] = RIGHT[j++];
+            }
         }
     }
 
-
+    public static void main(String[] args) {
+        int[] arr = {5, 4, 3, 2, 1};
+        sort(arr);
+        System.out.println(Arrays.toString(arr));
+    }
 }

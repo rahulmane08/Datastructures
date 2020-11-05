@@ -140,10 +140,12 @@ public class StackUtils {
         Stack<Integer> s = new Stack<>();
         for (int i = 0; i < arr.length; i++) {
             pgse[i] = -1;
-            while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
+            while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i])) {
                 s.pop();
-            if (!s.isEmpty())
+            }
+            if (!s.isEmpty()) {
                 pgse[i] = arr[s.peek()];
+            }
             s.push(i);
         }
         return pgse;
@@ -154,10 +156,12 @@ public class StackUtils {
         Stack<Integer> s = new Stack<>();
         for (int i = 0; i < arr.length; i++) {
             pgse[i] = -1;
-            while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i]))
+            while (!s.isEmpty() && (greater ? arr[s.peek()] <= arr[i] : arr[s.peek()] >= arr[i])) {
                 s.pop();
-            if (!s.isEmpty())
+            }
+            if (!s.isEmpty()) {
                 pgse[i] = s.peek();
+            }
             s.push(i);
         }
         return pgse;
@@ -185,10 +189,12 @@ public class StackUtils {
         Stack<Integer> s = new Stack<>();
         for (int i = arr.length - 1; i >= 0; i--) {
             ngse[i] = -1;
-            while (!s.isEmpty() && (greater ? arr[i] >= arr[s.peek()] : arr[s.peek()] >= arr[i]))
+            while (!s.isEmpty() && (greater ? arr[i] >= arr[s.peek()] : arr[s.peek()] >= arr[i])) {
                 s.pop();
-            if (!s.isEmpty())
+            }
+            if (!s.isEmpty()) {
                 ngse[i] = arr[s.peek()];
+            }
             s.push(i);
         }
         return ngse;
@@ -336,6 +342,19 @@ public class StackUtils {
         int top = stack.pop();
         int visitedCount = deleteFirstKElements(stack, k);
         if (k - visitedCount <= 0) {
+            stack.push(top);
+        }
+        return 1 + visitedCount;
+    }
+
+    @Important
+    public static int deleteBottomKElements(Stack<Integer> stack, int k) {
+        if (stack == null || stack.isEmpty()) {
+            return 0;
+        }
+        int top = stack.pop();
+        int visitedCount = deleteFirstKElements(stack, k);
+        if (k - visitedCount > 0) {
             stack.push(top);
         }
         return 1 + visitedCount;
@@ -533,7 +552,7 @@ public class StackUtils {
         if (arr[1] < top[0]) {
             // lesser interval
             mergedInsert(stack, arr);
-        } else if (arr[0] <= top[1] || top[0] <= arr[1]) {
+        } else if ((top[0] <= arr[0] && arr[0] <= top[1]) || (top[0] <= arr[1] && arr[1] <= top[1])) {
             // merge
             int x = Math.min(top[0], arr[0]);
             int y = Math.max(top[1], arr[1]);
@@ -600,9 +619,8 @@ public class StackUtils {
                 int number = Integer.parseInt(String.valueOf(str.charAt(--i)));
                 String strToRepeat = "";
                 String repeatedString = "";
-                for (char top = stack.pop(); top != ']'; ) {
+                for (char top = stack.pop(); top != ']'; top = stack.pop()) {
                     strToRepeat = strToRepeat + top;
-                    top = stack.pop();
                 }
                 for (int j = 0; j < number; j++) {
                     repeatedString = repeatedString + strToRepeat;
@@ -781,8 +799,8 @@ public class StackUtils {
         int occurences = 0;
         String residueString = "";
 
-        int i = 0;
-        while (i < n - m + 1) {
+
+        for (int i = 0; i < n; ) {
             int j = 0;
             for (; j < m && str.charAt(i + j) == pattern.charAt(j); j++) ;
             if (j == m) {
@@ -801,11 +819,6 @@ public class StackUtils {
                     i++;
                 }
             }
-        }
-
-        while (i < n) {
-            residueString += str.charAt(i);
-            i++;
         }
 
         if (occurences == 0) {

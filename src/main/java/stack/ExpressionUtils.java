@@ -69,11 +69,9 @@ public class ExpressionUtils {
                     top = stack.pop();
                 }
             } else {
-                if (ch != '(') {
-                    // if there are higher or equal priority operators already in stack, add those to postfix
-                    while (!stack.isEmpty() && stack.peek() != '(' && checkPriority(stack.peek(), ch) >= 0) {
-                        postfix += stack.pop();
-                    }
+                // if there are higher or equal priority operators already in stack, add those to postfix
+                while (!stack.isEmpty() && stack.peek() != '(' && checkPriority(stack.peek(), ch) >= 0) {
+                    postfix += stack.pop();
                 }
                 stack.push(ch);
             }
@@ -350,16 +348,15 @@ public class ExpressionUtils {
                 if (stack.isEmpty()) {
                     return expression;
                 }
-                int elementCount = 0;
-                String top = stack.pop();
+
+                int elementsInBraces = 0;
                 String elements = "";
-                for (; !"(".equals(top); ) {
-                    elementCount++;
+                for (String top = stack.pop(); !"(".equals(top); top = stack.pop()) {
+                    elementsInBraces++;
                     elements = top + elements;
-                    top = stack.pop();
                 }
 
-                if (elementCount > 1) {
+                if (elementsInBraces > 1) {
                     elements = String.format("%s%s%s", "(", elements, ")");
                 }
                 stack.push(elements);

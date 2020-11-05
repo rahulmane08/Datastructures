@@ -66,12 +66,15 @@ public class LinkedList<T> implements Cloneable {
     }
 
     public boolean remove(T data) {
-        if (start == null)
+        if (start == null) {
             return false;
+        }
+
         if (start.data == data) {
             start = start.next;
             return true;
         }
+
         Node<T> curr = start;
         for (; curr.next != null && curr.next.data != data; curr = curr.next);
         if (curr.next == null) {
@@ -86,7 +89,7 @@ public class LinkedList<T> implements Cloneable {
 
     public boolean contains(T data) {
         Node<T> curr = start;
-        for (; curr != null && !curr.data.equals(data); curr = curr.next) ;
+        for (; curr != null && !curr.data.equals(data); curr = curr.next);
         return curr != null;
     }
 

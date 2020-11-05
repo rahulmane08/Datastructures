@@ -183,6 +183,7 @@ public class QueueUtils {
      * @param m
      * @param n
      */
+    @Important
     static public int timeToRotOranges(int[][] orangeBox, int m, int n) {
         Queue<Vertex> vertices = new Queue<Vertex>(m * n);
         /** put all rotten orange vertices in the queue to begin with **/
@@ -198,7 +199,7 @@ public class QueueUtils {
         /** bfs over the queue **/
         while (!vertices.isEmpty()) {
             boolean flag = false;
-            while (!(vertices.first() == dummy)) {
+            while (vertices.first() != dummy) {
                 Vertex curr = vertices.poll();
                 /** right orange **/
                 Vertex right = new Vertex(curr.x + 1, curr.y);
@@ -229,6 +230,7 @@ public class QueueUtils {
         return !((x < 0) || (x >= m) || (y < 0) || (y >= n));
     }
 
+    @Important
     static public void printLargestMultipleOf3(int[] arr) {
         int[] largestMultiple = new int[arr.length];
         Arrays.sort(arr);
@@ -297,7 +299,7 @@ public class QueueUtils {
      * @param pumps
      * @return
      */
-    @Test
+    @Important
     @Medium
     public static Vertex findFirstPointForCircularTour(Vertex[] pumps) {
         if (pumps == null || pumps.length == 0)

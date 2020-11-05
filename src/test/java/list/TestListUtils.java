@@ -25,6 +25,7 @@ import static list.ListUtils.flattenMultilevelListDepthWise;
 import static list.ListUtils.getMiddle;
 import static list.ListUtils.SwapUtils.swap;
 import static list.ListUtils.partitionlist;
+import static list.ListUtils.pointRandomToNextHigherNode;
 import static list.ListUtils.removeMiddlePoints;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -727,5 +728,23 @@ public class TestListUtils {
         LinkedList<Integer> list = new LinkedList<>(head);
         flattenMultilevelList(list);
         System.out.println(list);
+    }
+
+    @Test
+    public void test_pointRandomToNextHigherNode() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.insert(5);
+        list.insert(10);
+        list.insert(2);
+        list.insert(3);
+        pointRandomToNextHigherNode(list);
+        for (Node<Integer> curr = list.start; curr != null; curr = curr.next) {
+            System.out.print(curr.data + " ");
+        }
+        System.out.println();
+        for (Node<Integer> curr = list.start; curr != null; curr = curr.random) {
+            System.out.print(curr.data + " ");
+        }
+        System.out.println();
     }
 }

@@ -7,46 +7,30 @@ public class QuickSort {
         sort(arr, 0, arr.length - 1);
     }
 
-    static public void sort(int[] arr, int low, int high) {
-        if (low >= high)
+    static public void sort(int[] arr, int left, int right) {
+        if (left >= right) {
             return;
-        int mid = (low + high) / 2;
+        }
+        int mid = (left + right) >>> 1;
         int pivot = arr[mid];
-        int i = low, j = high;
+        int i = left, j = right;
         while (i <= j) {
-            while (arr[i] < pivot)
+            // find first element higher than pivot
+            while (arr[i] < pivot) {
                 i++;
-            while (pivot < arr[j])
+            }
+            // find first element lower than pivot
+            while (pivot < arr[j])  {
                 j--;
+            }
+            // swap such elements
             if (i <= j) {
                 Swapper.swap(arr, i, j);
                 i++;
                 j--;
             }
         }
-        sort(arr, low, j);
-        sort(arr, i, high);
-    }
-
-    static public void sortIteratively(int[] arr) {
-        int n = arr.length;
-        int low = 0;
-        int high = n - 1;
-        while (low < high) {
-            int mid = (low + high) / 2;
-            int pivot = arr[mid];
-            int i = low, j = high;
-            while (i <= j) {
-                while (arr[i] < pivot)
-                    i++;
-                while (pivot < arr[j])
-                    j--;
-                if (i <= j) {
-                    Swapper.swap(arr, i, j);
-                    i++;
-                    j--;
-                }
-            }
-        }
+        sort(arr, left, j);
+        sort(arr, i, right);
     }
 }
