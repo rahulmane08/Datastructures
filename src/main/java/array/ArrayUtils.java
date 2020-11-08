@@ -664,6 +664,7 @@ public class ArrayUtils {
          *
          * @param arr
          */
+        @Important
         public static void rearrageAlternatePositiveAndNegative(int[] arr) {
             if (arr == null)
                 return;

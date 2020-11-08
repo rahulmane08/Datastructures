@@ -55,9 +55,10 @@ public class StringUtils {
             return false;
         char[] chars = str.toCharArray();
         int i = 0, j = str.length() - 1;
-        for (; i < j; i++, j--) {
-            if (chars[i] != chars[j])
+        while (i < j) {
+            if (chars[i++] != chars[j--]) {
                 return false;
+            }
         }
         return true;
     }
@@ -113,6 +114,11 @@ public class StringUtils {
         charArray[j] = temp;
     }
 
+    /**
+     * s = abcabcd , ans = 3 (abc)
+     * @param s
+     * @return
+     */
     public static int lengthOfLongestSubstringWithNonRepeatingCharacters(String s) {
         if (s == null) {
             return 0;

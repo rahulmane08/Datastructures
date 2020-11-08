@@ -679,7 +679,7 @@ public class StackUtils {
             stack.push(n);
             return;
         }
-        if (seq.charAt(i) == 'D' && stack.peek() > n) {
+        if (seq.charAt(i) == 'D' && n < stack.peek()) {
             stack.push(n);
             return;
         }
@@ -710,8 +710,7 @@ public class StackUtils {
                 span = nse[i] - i;
             }
             int currentArea = span * arr[i];
-            if (maxArea < currentArea)
-                maxArea = currentArea;
+            maxArea = Math.max(maxArea, currentArea);
         }
         return maxArea;
     }
