@@ -56,9 +56,30 @@ public class BSTUtils {
         if (root.right != null)
             right = root.right.data;
 
-        return (left < root.data && right > root.data)
+        return (left < root.data && root.data < right)
                 && (isBSTUtils(root.left, min, root.data)
                 && (isBSTUtils(root.right, root.data, max)));
+    }
+
+    public static boolean isBST1(Node root) {
+        return isBST1(root, null, null);
+    }
+
+    public static boolean isBST1(Node root, Node predecessor, Node successor) {
+        if (root == null) {
+            return true;
+        }
+        Node left = root.left != null ? root.left : predecessor;
+        Node right = root.right != null ? root.right : successor;
+
+        if (left != null && left.data >= root.data) {
+            return false;
+        }
+        if (right != null && right.data <= root.data) {
+            return false;
+        }
+
+        return isBST1(root.left, predecessor, root) && isBST1(root.right, root, successor);
     }
 
     public static Node min(Node root) {
@@ -234,9 +255,9 @@ public class BSTUtils {
      */
     @Important
     public static Integer floor(Node root, int data) {
-        Node ceilNode = inorderPredecessor(root, data);
-        if (ceilNode != null) {
-            return ceilNode.data;
+        Node floorNode = inorderPredecessor(root, data);
+        if (floorNode != null) {
+            return floorNode.data;
         }
         return null;
     }
@@ -401,6 +422,36 @@ public class BSTUtils {
         }
 
         System.out.println();
+    }
+
+    @Important
+    @Medium
+    public static Node createBstUsingPreorderSequence(Integer[] preorder) {
+        if (preorder == null || preorder.length == 0) {
+            return null;
+        }
+        Node root = new Node(preorder[0]);
+        Stack<Node> stack = new Stack<>();
+        stack.push(root);
+        for (int i = 1; i < preorder.length; i++) {
+            Node node = new Node(preorder[i]);
+            Node temp = null;
+            for (; !stack.isEmpty() && stack.peek().data < node.data; temp = stack.pop());
+            if (temp != null) {
+                temp.right = node;
+            } else {
+                temp = stack.peek();
+                temp.left = node;
+            }
+            stack.push(node);
+        }
+        return root;
+    }
+
+    @Important
+    @Medium
+    public static Node createBstUsingPostorderSequence(Integer[] postorder) {
+        return null;
     }
 
     // merge two bsts.

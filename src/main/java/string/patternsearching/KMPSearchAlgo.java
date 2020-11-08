@@ -1,4 +1,4 @@
-package patternsearching;
+package string.patternsearching;
 
 import java.util.ArrayList;
 import java.util.List;

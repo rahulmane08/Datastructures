@@ -11,6 +11,9 @@ import static tree.TreeUtils.PrintUtils.printIn2DRotateLeftBy90Transpose;
 import static tree.TreeUtils.Traversals.diagonalTraversal;
 import static tree.TreeUtils.Traversals.diagonalTraversalIterative;
 import static tree.TreeUtils.Traversals.levelOrderTraversal;
+import static tree.TreeUtils.Traversals.preOrderTraversal;
+import static tree.TreeUtils.TreeSerializeDeserializeUtil.deserialize;
+import static tree.TreeUtils.TreeSerializeDeserializeUtil.serialize;
 import static tree.TreeUtils.addTrees;
 import static tree.TreeUtils.CheckerUtils.areTreesIdentical;
 import static tree.TreeUtils.CheckerUtils.areTreesMirrors;
@@ -44,6 +47,7 @@ import static tree.TreeUtils.sizeIterative;
 import static tree.TreeUtils.ViewUtils.topView;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 import org.junit.Before;
@@ -56,14 +60,16 @@ import tree.TreeUtils.PathQueryUtils.MaxSumOfAnyPathUtil;
 import tree.TreeUtils.PathQueryUtils.MaxSumOfNonAdjacentNodesUtil;
 import tree.TreeUtils.PathQueryUtils.MaxSumOfRootToLeafPathsUtil;
 import tree.TreeUtils.CheckerUtils.SumTreeChecker;
+import tree.TreeUtils.PathQueryUtils.SumOfAllLeftLeafNodes;
+import tree.TreeUtils.TreeSerializeDeserializeUtil;
 
-public class BinaryTreeTest {
+public class TreeUtilsTest {
 
     BinaryTree bt;
 
     /**
      * ```````````50
-     *``````` ``/   \
+     * ``````` ``/   \
      * ```````8      2
      * ``````/ \    /  \
      * ````3   5  9    90
@@ -520,7 +526,7 @@ public class BinaryTreeTest {
 
     /**
      * ```````````50
-     *``````` ``/   \
+     * ``````` ``/   \
      * ```````8      2
      * ``````/ \    /  \
      * ````3   5  9    90
@@ -557,5 +563,23 @@ public class BinaryTreeTest {
     public void test_printIn2D() {
         printIn2DRotateLeftBy90(bt.root);
         printIn2DRotateLeftBy90Transpose(bt.root);
+    }
+
+    @Test
+    public void test_printBoundaryNodes() {
+        TreeUtils.PrintBoundaryNodesUtil.printBoundaryNodes(bt.root);
+    }
+
+    @Test
+    public void test_SumOfAllLeftLeafNodes() {
+        System.out.println(new SumOfAllLeftLeafNodes(bt.root).getSum());
+    }
+
+    @Test
+    public void test_serializeDeserialize() {
+        List<Integer> list = serialize(bt.root);
+        System.out.println(list);
+        Node root = deserialize(list);
+        preOrderTraversal(root);
     }
 }

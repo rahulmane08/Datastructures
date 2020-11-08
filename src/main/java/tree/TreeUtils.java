@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import interfaces.Hard;
 import interfaces.Important;
@@ -195,6 +196,7 @@ public class TreeUtils {
         return null;
     }
 
+    @Important
     public static int depth(Node root, int data) {
         if (root == null) {
             return -1;
@@ -286,6 +288,8 @@ public class TreeUtils {
      * @param preorder
      * @return
      */
+    @Important
+    @Medium
     public static Node createTreeUsingPreAndInorderSequences(Integer[] inorder, Integer[] preorder) {
         if (inorder == null || preorder == null)
             return null;
@@ -584,6 +588,7 @@ public class TreeUtils {
          * POST ORDER
          * AVL tree check
          * AVL property: Difference between left and right height is <= 1.
+         *
          * @return
          */
         public static class AVLChecker {
@@ -614,6 +619,7 @@ public class TreeUtils {
         /**
          * POST ORDER
          */
+        @Important
         public static class InternalNodeWithOneChildChecker {
             private Node root;
             private boolean check = false;
@@ -801,9 +807,11 @@ public class TreeUtils {
 
         public static void printBoundaryNodes(Node root) {
             System.out.println("=====printBoundaryNodes=====");
-            printLeftBoundaryTopDown(root);
-            printLeavesLeftToRight(root);
-            printRightBoundaryBottomUp(root);
+            System.out.print(root.data + " ");
+            printLeftBoundaryTopDown(root.left);
+            printLeavesLeftToRight(root.left);
+            printLeavesLeftToRight(root.right);
+            printRightBoundaryBottomUp(root.right);
             System.out.println();
         }
     }
@@ -1131,7 +1139,7 @@ public class TreeUtils {
                     current = current.right;
                 } else {
                     Node predecessor = current.left;
-                    while (predecessor.right != current && predecessor.right != null)
+                    while (predecessor.right != null && predecessor.right != current)
                         predecessor = predecessor.right;
                     if (predecessor.right == null) {
                         predecessor.right = current;
@@ -1432,6 +1440,24 @@ public class TreeUtils {
             return nodesInLongestPath;
         }
 
+        public static int distanceBetweenAnyTwoNodes(Node root, int data1, int data2) {
+            Node lca = lca(root, data1, data2);
+            if (lca == null) {
+                return -1;
+            }
+            int depth1 = depth(lca, data1);
+            if (depth1 == -1) {
+                return -1;
+            }
+
+            int depth2 = depth(lca, data2);
+            if (depth2 == -1) {
+                return -1;
+            }
+
+            return depth1 + depth2;
+        }
+
         /**
          * 3
          * / \
@@ -1559,9 +1585,8 @@ public class TreeUtils {
                 int rightSum = right + root.data;
                 int allSum = left + right + root.data;
 
-                int maxRoot = Utils.max(root.data, leftSum, rightSum);
                 maxSum = Utils.max(maxSum, allSum);
-                return maxRoot;
+                return Utils.max(root.data, leftSum, rightSum);
             }
         }
 
@@ -1590,18 +1615,17 @@ public class TreeUtils {
                 int rightSum = right + root.data;
                 int allSum = left + right + root.data;
 
-                int maxRoot = Utils.max(leftSum, rightSum);
                 maxSum = Utils.max(maxSum, allSum);
-                return maxRoot;
+                return Utils.max(leftSum, rightSum);
             }
         }
 
         /**
          * ``````````` 50  max(217, 100 + 5 + 9 + 90) = 254
-         *``````` ``/      \
+         * ``````` ``/      \
          * ``````` 8 (108)       2 (99)
          * ``````/   \        /     \
-         * ````3(100) 5 (5)  9 (9)    90 (90)
+         * ````3(103) 5 (5)  9 (9)    90 (90)
          * ``/
          * 100 (100)
          */
@@ -1654,22 +1678,27 @@ public class TreeUtils {
             }
         }
 
-        public static int distanceBetweenAnyTwoNodes(Node root, int data1, int data2) {
-            Node lca = lca(root, data1, data2);
-            if (lca == null) {
-                return -1;
-            }
-            int depth1 = depth(lca, data1);
-            if (depth1 == -1) {
-                return -1;
+        public static class SumOfAllLeftLeafNodes {
+            private int sum;
+
+            public SumOfAllLeftLeafNodes(Node root) {
+                compute(null, root);
             }
 
-            int depth2 = depth(lca, data2);
-            if (depth2 == -1) {
-                return -1;
+            private void compute(Node prev, Node root) {
+                if (root == null) {
+                    return;
+                }
+                compute(root, root.left);
+                if (isLeaf(root) && prev != null && prev.left == root) {
+                    sum += root.data;
+                }
+                compute(root, root.right);
             }
 
-            return depth1 + depth2;
+            public int getSum() {
+                return sum;
+            }
         }
     }
 
@@ -1715,26 +1744,27 @@ public class TreeUtils {
 
         /**
          * Input : Pointer to root of below tree
-         *              1
-         *             /  \
-         *            2    3
-         *           / \   / \
-         *          4   5  6  7
-         *
-         * Output :
-         *                     7
-         *
-         *           3
-         *
-         *                     6
-         *
          * 1
+         * /  \
+         * 2    3
+         * / \   / \
+         * 4   5  6  7
+         * <p>
+         * Output :
+         * 7
+         * <p>
+         * 3
+         * <p>
+         * 6
+         * <p>
+         * 1
+         * <p>
+         * 5
+         * <p>
+         * 2
+         * <p>
+         * 4
          *
-         *                     5
-         *
-         *           2
-         *
-         *                     4
          * @param root
          */
         public static void printIn2DRotateLeftBy90(Node root) {
@@ -1763,5 +1793,47 @@ public class TreeUtils {
             print2DRotateLeftBy90TransposeUtil(root.right, space + "      ");
         }
 
+    }
+
+    public static class TreeSerializeDeserializeUtil {
+
+        private int index = 0;
+        public static List<Integer> serialize(Node root) {
+            if (root == null) {
+                return null;
+            }
+            List<Integer> preorderList = new ArrayList<>();
+            serializeUtil(root, preorderList);
+            return preorderList;
+        }
+
+        private static void serializeUtil(Node root, List<Integer> preorderList) {
+            if (root == null) {
+                preorderList.add(-1);
+                return;
+            }
+            preorderList.add(root.data);
+            serializeUtil(root.left, preorderList);
+            serializeUtil(root.right, preorderList);
+        }
+
+        public static Node deserialize(List<Integer> preorderList) {
+            if (preorderList == null || preorderList.isEmpty()) {
+                return null;
+            }
+            return deserializeUtil(preorderList, new AtomicInteger(0), preorderList.size());
+        }
+
+        private static Node deserializeUtil(List<Integer> preorderList, AtomicInteger i, int n) {
+            if (preorderList.get(i.get()) == -1) {
+                return null;
+            }
+            Node root = new Node(preorderList.get(i.get()));
+            i.set(i.incrementAndGet());
+            root.left = deserializeUtil(preorderList, i, n);
+            i.set(i.incrementAndGet());
+            root.right = deserializeUtil(preorderList, i, n);
+            return root;
+        }
     }
 }

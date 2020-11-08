@@ -1,4 +1,4 @@
-package patternsearching;
+package string.patternsearching;
 
 import org.junit.Test;
 

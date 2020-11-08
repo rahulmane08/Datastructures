@@ -1,7 +1,7 @@
 package array;
 
-import static array.ArrayArrangementUtils.rearrageAlternateMaxAndMin;
-import static array.ArrayArrangementUtils.rearrageAlternatePositiveAndNegative;
+import static array.ArrayUtils.ArrangementUtils.rearrageAlternateMaxAndMin;
+import static array.ArrayUtils.ArrangementUtils.rearrageAlternatePositiveAndNegative;
 
 import java.util.Arrays;
 

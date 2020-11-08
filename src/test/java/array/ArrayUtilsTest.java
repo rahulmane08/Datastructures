@@ -1,7 +1,18 @@
 package array;
 
+import static array.ArrayUtils.ArrangementUtils.moveAllZeroesAtEnd;
+import static array.ArrayUtils.ArrangementUtils.sortAsPerIndexedArray;
+import static array.ArrayUtils.concatenateArrayToLargestNumber;
+import static array.ArrayUtils.findMajorityElement;
+import static array.ArrayUtils.findMaxJMinusI;
+import static array.ArrayUtils.largestContiguousSubArray;
+import static array.ArrayUtils.totalRainWaterTrapped;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+
 import array.ArrayUtils.FindIndexEqualsElementInSortedArrayUtil;
-import org.junit.Assert;
+import matrix.MatrixUtils;
 import org.junit.Test;
 
 public class ArrayUtilsTest {
@@ -9,19 +20,94 @@ public class ArrayUtilsTest {
     @Test
     public void test_FindIndexEqualsElementInSortedArrayUtil() {
         FindIndexEqualsElementInSortedArrayUtil util = new FindIndexEqualsElementInSortedArrayUtil();
-        Assert.assertEquals(4, util.find(new int[]{2, 2, 3, 3, 4}));
-        Assert.assertEquals(3, util.find(new int[]{2, 2, 3, 3, 3}));
-        Assert.assertEquals(2, util.find(new int[]{2, 2, 2, 2, 2}));
+        assertEquals(4, util.find(new int[]{2, 2, 3, 3, 4}));
+        assertEquals(3, util.find(new int[]{2, 2, 3, 3, 3}));
+        assertEquals(2, util.find(new int[]{2, 2, 2, 2, 2}));
     }
 
     @Test
     public void test_printSpiralOrder() {
         int[][] arr = new int[][]{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
-        ArrayUtils.printSpiralOrder(arr);
+        MatrixUtils.PrintUtils.printZigzagOrder(arr);
     }
 
     @Test
     public void test_printCombinations() {
-        ArrayUtils.printCombinations(new int[]{1, 2, 3, 4, 5}, 3);
+        ArrayUtils.printCombinations(new int[]{1, 2, 3, 4, 5}, 2);
+    }
+
+    @Test
+    public void test_findMedianSortedArrays() {
+        System.out.println(ArrayUtils.findMedianSortedArrays(new int[] {1,2}, new int[] {3,4}));
+    }
+
+    @Test
+    public void test_reverse() {
+        int [] a = new int[]{5, 6, 7, 8};
+        ArrayUtils.reverse(a);
+        System.out.println(Arrays.toString(a));
+        ArrayUtils.reverse(a, 2, 3);
+        System.out.println(Arrays.toString(a));
+    }
+
+    @Test
+    public void test_largestContiguousSubArray() {
+        largestContiguousSubArray(new int[]{-2, -3, 4, -1, -2, 1, 5, -3});
+        largestContiguousSubArray(new int[]{-2, -3, 4, 1, -2, -1, 5, -3});
+        largestContiguousSubArray(new int[]{-2, -3});
+        largestContiguousSubArray(new int[]{11, -2, -3, -10});
+        largestContiguousSubArray(new int[]{-2, 11, -3, -10});
+        largestContiguousSubArray(new int[]{-2, -1});
+        largestContiguousSubArray(new int[]{-2, -1, 1, 2, 3, 10});
+        largestContiguousSubArray(new int[]{10, 7, 8, -2, -1, 1, 2});
+        largestContiguousSubArray(new int[]{10, 7, 8, -2, -1, 2});
+    }
+
+    @Test
+    public void test_concatenateArrayToLargestNumber() {
+        assertEquals("6054854654", concatenateArrayToLargestNumber(new Integer[] {54, 546, 548, 60}));
+        assertEquals("998764543431",
+                concatenateArrayToLargestNumber(new Integer[] {1, 34, 3, 98, 9, 76, 45, 4}));
+    }
+
+    @Test
+    public void test_findMajorityElement() {
+        int[] arr = {3, 3, 4, 2, 4, 4, 2, 4, 4};
+        int i = findMajorityElement(arr);
+        assertEquals(4, arr[i]);
+
+        arr = new int[]{3, 3, 4, 2, 4, 4, 2, 4};
+        i = findMajorityElement(arr);
+        assertEquals(-1, i);
+    }
+
+    @Test
+    public void test_findMaxJMinusI() {
+        System.out.println(findMaxJMinusI(new int[] {12, 11, 10, 9, 8, 7}));
+    }
+
+    @Test
+    public void test_moveAllZeroesAtEnd() {
+        int arr[] = {1, 2, 0, 4, 3, 0, 5, 0};
+        moveAllZeroesAtEnd(arr);
+        print(arr);
+    }
+
+    @Test
+    public void test_sortAsPerIndexedArray() {
+        int [] order = new int[] {3,  0,  4,  1,  2};
+        int [] arr = new int[] {50, 40, 70, 60, 90};
+        sortAsPerIndexedArray(arr, order);
+        print(arr);
+        print(order);
+    }
+
+    @Test
+    public void test_totalRainWaterTrapped() {
+        System.out.println(totalRainWaterTrapped(new int[] {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
+    }
+
+    private static void print(int[] arr) {
+        System.out.println(Arrays.toString(arr));
     }
 }

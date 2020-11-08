@@ -61,6 +61,12 @@ public class GraphUtils {
         return false;
     }
 
+    /**
+     * Just do DFS with any vertex in graph and if all nodes are present in visited post dfs then its a connected graph.
+     * @param graph
+     * @param <T>
+     * @return
+     */
     public static <T> boolean checkIfGraphIsConnected(Graph<T> graph) {
         HashSet<UUID> visited = new HashSet<>();
         Vertex<T> start = graph.getAllVertexes().iterator().next();

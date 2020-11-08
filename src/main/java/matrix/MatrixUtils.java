@@ -4,6 +4,99 @@ import utils.Utils;
 
 public class MatrixUtils {
 
+    public static class PrintUtils {
+
+        public static void printZigzagOrder(int[][] arr) {
+            if (arr == null) {
+                return;
+            }
+            int level = 0;
+            int m = arr.length;
+            int n = arr[0].length;
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (level % 2 == 0) {
+                        System.out.print(arr[i][j] + "  ");
+                    } else {
+                        System.out.print(arr[i][n - 1 - j] + "  ");
+                    }
+                }
+                System.out.println();
+                level++;
+            }
+        }
+
+        /**
+         * 1     2     3     4
+         * 5     6     7     8
+         * 9    10    11    12
+         * 13    14    15    16
+         * 17    18    19    20
+         * Diagonal printing of the above arr is
+         * 1
+         * 5     2
+         * 9     6     3
+         * 13    10     7     4
+         * 17    14    11     8
+         * 18    15    12
+         * 19    16
+         * 20
+         *
+         */
+        static public void printDiagonally(int arr[][]) {
+            int m = arr.length - 1;
+            int n = arr[0].length - 2;
+            int LINES = m + n + 1;
+
+            for (int line = 0; line < LINES; line++) {
+                int row_idx = Math.min(line, m);
+                int col_idx = Math.max(0, line - n);
+                int elements = Utils.min(line, n - col_idx, m) + 1;
+                ;
+                for (int i = 0; i < elements; i++) {
+                    int x = (row_idx - i);
+                    int y = Math.abs(i - col_idx);
+                    System.out.print(arr[x][y] + " ");
+                }
+                System.out.println();
+            }
+        }
+
+        static void printSpiralOrder(int arr[][]) {
+            int TOP = 0;
+            int BOTTOM = arr.length - 1;
+            int LEFT = 0;
+            int RIGHT = arr[0].length - 1;
+            int dir = 0;
+
+            while (TOP <= BOTTOM && LEFT <= RIGHT) {
+                if (dir == 0) {
+                    for (int i = LEFT; i <= RIGHT; i++) {
+                        System.out.print(arr[TOP][i] + " ");
+                    }
+                    TOP++;
+                } else if (dir == 1) {
+                    for (int i = TOP; i <= BOTTOM; i++) {
+                        System.out.print(arr[i][RIGHT] + " ");
+                    }
+                    RIGHT--;
+                } else if (dir == 2) {
+                    for (int i = RIGHT; i >= LEFT; i--) {
+                        System.out.print(arr[BOTTOM][i] + " ");
+                    }
+                    BOTTOM--;
+                } else if (dir == 3) {
+                    for (int i = BOTTOM; i >= TOP; i--) {
+                        System.out.print(arr[i][LEFT] + " ");
+                    }
+                    LEFT++;
+                }
+                dir = (dir + 1) % 4;
+            }
+            System.out.println();
+        }
+    }
+
     public static class ArrangementUtils {
         static public void rotateMatrix(int mat[][], int N) {
             // Consider all squares one by one
@@ -30,85 +123,6 @@ public class MatrixUtils {
         }
     }
 
-    /**
-     * 1     2     3     4
-     * 5     6     7     8
-     * 9    10    11    12
-     * 13    14    15    16
-     * 17    18    19    20
-     * Diagonal printing of the above matrix is
-     * 1
-     * 5     2
-     * 9     6     3
-     * 13    10     7     4
-     * 17    14    11     8
-     * 18    15    12
-     * 19    16
-     * 20
-     *
-     * @param m
-     * @param n
-     * @param a
-     */
-    static public void diagonalPrint(int m, int n, int matrix[][]) {
-        int LINES = m + n - 1;
-
-        for (int line = 1; line <= LINES; line++) {
-            int col_idx = Math.max(0, line - m);
-            int row_idx = Math.min(m - 1, line - 1);
-            int elements = Utils.min(line, n - col_idx, m);
-            ;
-//			System.out.println(line+","+row_idx+","+col_idx+","+elements);
-            for (int i = 0; i < elements; i++) {
-                int x = (row_idx - i);
-                int y = Math.abs(i - col_idx);
-//				System.out.print(x+""+y+" ");
-                System.out.print(matrix[x][y] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-
-    static void spiralPrint(int m, int n, int a[][]) {
-        int i, k = 0, l = 0;
-        /*  k - starting row index
-        m - ending row index
-        l - starting column index
-        n - ending column index
-        i - iterator
-        */
-
-        while (k < m && l < n) {
-            // Print the first row from the remaining rows
-            for (i = l; i < n; ++i) {
-                System.out.print(a[k][i] + " ");
-            }
-            k++;
-
-            // Print the last column from the remaining columns 
-            for (i = k; i < m; ++i) {
-                System.out.print(a[i][n - 1] + " ");
-            }
-            n--;
-
-            // Print the last row from the remaining rows */
-            if (k < m) {
-                for (i = n - 1; i >= l; --i) {
-                    System.out.print(a[m - 1][i] + " ");
-                }
-                m--;
-            }
-
-            // Print the first column from the remaining columns */
-            if (l < n) {
-                for (i = m - 1; i >= k; --i) {
-                    System.out.print(a[i][l] + " ");
-                }
-                l++;
-            }
-        }
-    }
 
     static public int findPairWithMaxDiff(int mat[][], int N) {
         int[][] maxArray = new int[N][N];

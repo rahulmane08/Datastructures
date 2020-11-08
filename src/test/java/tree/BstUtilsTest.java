@@ -9,10 +9,13 @@ import static tree.BSTUtils.ceil;
 import static tree.BSTUtils.checkIfPreorderIsBST;
 import static tree.BSTUtils.convertToSortedCLL;
 import static tree.BSTUtils.convertToSortedDLL;
+import static tree.BSTUtils.createBstUsingPreorderSequence;
 import static tree.BSTUtils.floor;
 import static tree.BSTUtils.getCommonNodes;
 import static tree.BSTUtils.inorderPredecessor;
 import static tree.BSTUtils.inorderSuccessor;
+import static tree.BSTUtils.isBST;
+import static tree.BSTUtils.isBST1;
 
 import java.util.List;
 
@@ -20,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import tree.BSTUtils.KthSmallestLargestUtil;
 
-public class BstTest {
+public class BstUtilsTest {
 
     private BinarySearchTree bst;
     private BinarySearchTree leftBst;
@@ -28,13 +31,13 @@ public class BstTest {
     private BinarySearchTree nullBst;
 
     /**
-     *          9
-     *        /    \
-     *      5       12
-     *    /  \    /   \
-     *   3    6  11    14
-     *                /
-     *              13
+     * 9
+     * /    \
+     * 5       12
+     * /  \    /   \
+     * 3    6  11    14
+     * /
+     * 13
      *
      * @return
      */
@@ -132,13 +135,13 @@ public class BstTest {
     }
 
     /**
-     *          9
-     *        /    \
-     *      5       12
-     *    /  \    /   \
-     *   3    6  11    14
-     *                /
-     *              13
+     * 9
+     * /    \
+     * 5       12
+     * /  \    /   \
+     * 3    6  11    14
+     * /
+     * 13
      *
      * @return
      */
@@ -164,19 +167,19 @@ public class BstTest {
 
     @Test
     public void test_checkIfPreorderIsBST() {
-        assertTrue(checkIfPreorderIsBST(new int[] {4,2,1,3,7,6,9}));
-        assertFalse(checkIfPreorderIsBST(new int[] {4,2,1,3,2,6,9}));
-        assertFalse(checkIfPreorderIsBST(new int[] {4,2,1,3,7,8,9}));
+        assertTrue(checkIfPreorderIsBST(new int[]{4, 2, 1, 3, 7, 6, 9}));
+        assertFalse(checkIfPreorderIsBST(new int[]{4, 2, 1, 3, 2, 6, 9}));
+        assertFalse(checkIfPreorderIsBST(new int[]{4, 2, 1, 3, 7, 8, 9}));
     }
 
     /**
-     *          9
-     *        /    \
-     *      5       12
-     *    /  \    /   \
-     *   3    6  11    14
-     *                /
-     *              13
+     * 9
+     * /    \
+     * 5       12
+     * /  \    /   \
+     * 3    6  11    14
+     * /
+     * 13
      *
      * @return
      */
@@ -205,5 +208,38 @@ public class BstTest {
         assertEquals(3, inorderSuccessor(bst.root, 1).data);
         assertEquals(11, inorderSuccessor(bst.root, 9).data);
         assertNull(inorderSuccessor(bst.root, 15));
+    }
+
+    @Test
+    public void test_IsBST() {
+        Node root = new Node(10);
+        root.left = new Node(5);
+        root.right = new Node(15);
+        root.right.left = new Node(6);
+        root.right.right = new Node(20);
+
+        assertFalse(isBST(root));
+        root.right.left.data = 12;
+        assertTrue(isBST(root));
+    }
+
+    @Test
+    public void test_IsBST1() {
+        Node root = new Node(10);
+        root.left = new Node(5);
+        root.right = new Node(15);
+        root.right.left = new Node(6);
+        root.right.right = new Node(20);
+
+        assertFalse(isBST1(root));
+        root.right.left.data = 12;
+        assertTrue(isBST1(root));
+    }
+
+    @Test
+    public void test_createBstUsingPreorderSequence() {
+        Node root = createBstUsingPreorderSequence(new Integer[]{3, 1, 2, 5, 4, 6});
+        assertNotNull(root);
+        TreeUtils.Traversals.preOrderTraversal(root);
     }
 }

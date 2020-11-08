@@ -2,9 +2,18 @@ package string;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StringUtils {
+
+    public static String buildLowestNumberRec(String str, int n) {
+        StringBuilder res = new StringBuilder();
+        buildLowestNumberRec(res, str, n);
+        return res.toString();
+    }
+
     public static void buildLowestNumberRec(StringBuilder res, String str, int n) {
         // If there are 0 characters to remove from str,
         // append everything to result
@@ -74,10 +83,11 @@ public class StringUtils {
     }
 
     /**
-     *                               ABC
-     *          [A]                 [B]                 [C]
-     *       [AB]  [AC]           [BA] [BC]          [CB]  [CA]
-     *     [ABC]     [ACB]      [BAC]    [BCA]     [CBA]     [CAB]
+     * ABC
+     * [A]                 [B]                 [C]
+     * [AB]  [AC]           [BA] [BC]          [CB]  [CA]
+     * [ABC]     [ACB]      [BAC]    [BCA]     [CBA]     [CAB]
+     *
      * @param result
      * @param charArray
      * @param start
@@ -102,4 +112,75 @@ public class StringUtils {
         charArray[i] = charArray[j];
         charArray[j] = temp;
     }
+
+    public static int lengthOfLongestSubstringWithNonRepeatingCharacters(String s) {
+        if (s == null) {
+            return 0;
+        }
+        int count = 0;
+        int start = 0;
+        Set<Character> visited = new HashSet<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (visited.contains(c)) {
+                do {
+                    visited.remove(s.charAt(start++));
+                } while (visited.contains(c));
+            }
+            visited.add(c);
+            count = Math.max(count, i - start + 1);
+        }
+        return count;
+    }
+
+    public static int lengthOfLongestPalindrome(String s) {
+        int maxLength = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int even = countSameForwards(s, i) + 1;
+            int odd = 2 * countSameBothWays(s, i-1, i + 1) + 1;
+            int current = Math.max(even, odd);
+            maxLength = Math.max(maxLength, current);
+        }
+        return maxLength;
+    }
+
+    private static int countSameForwards(String s, int index) {
+        int count = 0;
+        for (; index < s.length() - 1 && s.charAt(index) == s.charAt(index + 1); index++, count++);
+        return count;
+    }
+
+    private static int countSameBothWays(String s, int left, int right) {
+        int count = 0;
+        for (; left >= 0 && right < s.length() && s.charAt(left--) == s.charAt(right++); count++);
+        return count;
+    }
+
+    public static String longestPalindrome(String s) {
+        String palindrome = "";
+        for (int i = 0; i < s.length(); i++) {
+            int index = i;
+            for (; index < s.length() - 1 && s.charAt(index) == s.charAt(index + 1); index++);
+            String forwards = s.substring(i, index - i);
+
+            String bothways = String.valueOf(s.charAt(i));
+            for (int left = i, right = i;
+                 left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right); left--, right++) {
+                bothways = s.charAt(left) + bothways + s.charAt(right);
+            }
+
+            String current = "";
+            if (forwards.length() > bothways.length()) {
+                current = forwards;
+            } else {
+                current = bothways;
+            }
+
+            if (current.length() > palindrome.length()) {
+                palindrome = current;
+            }
+        }
+        return palindrome;
+    }
+
 }

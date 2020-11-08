@@ -1,16 +1,22 @@
 package array;
 
+import static array.ArrayUtils.RotationUtils.rightRotateByReversal;
 import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
+import interfaces.DynamicProgramming;
+import interfaces.Hard;
+import interfaces.Important;
+import interfaces.Medium;
 import math.Math;
-import utils.Utils;
 
 public class ArrayUtils {
-    static public void countPairsEqualToN(int[] arr, int N) {
+    static public int countPairsEqualToN(int[] arr, int N) {
         java.util.Arrays.sort(arr);// nlog(n)
         int end = arr.length - 1, start = 0;
         for (; arr[end] >= N; end--) {
@@ -22,12 +28,55 @@ public class ArrayUtils {
                 ++count;
                 ++start;
                 --end;
-            } else if (sum > N)
+            } else if (sum > N) {
                 --end;
-            else
+            } else {
                 ++start;
+            }
         }
         System.out.println("Total Pairs = " + count);
+        return count;
+    }
+
+    static public int countPairsEqualToNWithHashing(int[] arr, int N) {
+        Map<Integer, Integer> map = new HashMap();
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            int diff = N - arr[i];
+            int j = map.getOrDefault(diff, -1);
+            if (j != -1 && j != i ) {
+                System.out.printf("Found pair: ( %d, %d) %n)", arr[i], arr[j]);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    static public int countTripletsEqualToN(int[] arr, int N) {
+        java.util.Arrays.sort(arr);// nlog(n)
+        int count = 0;
+        int fixed, left, right;
+        for (int i = 0; i < arr.length; i++) {
+            fixed = i;
+            left = i + 1;
+            right = arr.length - 1;
+
+            while (left < right) {
+                int curSum = arr[fixed] + arr[left] + arr[right];
+                if (curSum == N) {
+                    System.out.printf("Triplet (%d,%d,%d)%n", arr[fixed], arr[left], arr[right]);
+                    left++;
+                    right--;
+                    count++;
+                } else if (curSum > N) {
+                    right--;
+                } else {
+                    left++;
+                }
+            }
+        }
+        System.out.println("Total Pairs = " + count);
+        return count;
     }
 
     static public void splitIntoEqualSumSubArrays(int[] arr) {
@@ -143,6 +192,19 @@ public class ArrayUtils {
         return java.util.Arrays.copyOfRange(arr, start, end + 1);
     }
 
+    public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int[] merged = merge(nums1, nums2);
+
+        if (merged == null) {
+            return 0;
+        }
+
+        int i = 0, j = merged.length - 1;
+        for (; i < j; i++, j--) ;
+        double median = (merged[i] + merged[j]) / 2d;
+        return median;
+    }
+
     static public int[] merge(int[] a, int[] b) {
         if (a == null && b == null)
             return null;
@@ -179,192 +241,6 @@ public class ArrayUtils {
         return merged;
     }
 
-    public static String concatenateArrayToLargestNumber(Integer[] arr) {
-        StringBuilder result = new StringBuilder();
-        Comparator<Integer> comparator = (o1, o2) -> {
-            int digits1 = Utils.countDigits(o1);
-            int digits2 = Utils.countDigits(o2);
-            if (digits1 != digits2) {
-                int msd1, msd2;
-                do {
-                    msd1 = Utils.mostSignificantDigit(o1, digits1--);
-                    msd2 = Utils.mostSignificantDigit(o2, digits2--);
-                }
-                while (msd1 == msd2);
-                if (msd1 > msd2)
-                    return -1;
-                else if (msd1 < msd2)
-                    return 1;
-                else
-                    return 0;
-
-            }
-            return o2.compareTo(o1);
-        };
-        java.util.Arrays.sort(arr, comparator);
-        for (int i : arr)
-            result.append(i);
-        return result.toString();
-    }
-
-    public static String concatenateArrayToLargestNumber1(Integer[] arr) {
-        Arrays.parallelSort(arr, (e1, e2) -> {
-            String x = String.valueOf(e1);
-            String y = String.valueOf(e2);
-            return -(x + y).compareTo(y + x);
-        });
-        StringBuilder result = new StringBuilder();
-        for (int i : arr)
-            result.append(i);
-        return result.toString();
-    }
-
-    /**
-     * Let us take the same example arr[] = [1, 2, 3, 4, 5, 6, 7], d = 2
-     * Rotate arr[] by one 2 times
-     * We get [2, 3, 4, 5, 6, 7, 1] after first rotation and [ 3, 4, 5, 6, 7, 1, 2] after second rotation.
-     *
-     * @param arr
-     * @param d
-     */
-    static public void leftRotate(int[] arr, int d) {
-        if (arr == null) return;
-        int n = arr.length;
-        d = d % n;
-        for (int i = 0; i < d; i++) {
-            int first = arr[0];
-            int j = 0;
-            for (; j < n - 1; j++) {
-                arr[j] = arr[j + 1];
-            }
-            arr[j] = first;
-        }
-    }
-
-    /**
-     * Let us take the same example arr[] = [1, 2, 3, 4, 5, 6, 7, 8], d = 2
-     * Rotate arr[] by one 2 times
-     * gcd (8, 2) = 2
-     * two loops
-     * first pass : [3, 2, 5, 4, 7, 6, 1, 8]
-     * second pass : [3, 4, 5, 6, 7, 8, 1, 2]
-     *
-     * @param arr
-     * @param d
-     */
-    static public void leftRotateByGCD(int[] arr, int d) {
-        leftRotateByGCD(arr, d, 0, arr.length);
-    }
-
-    static public void leftRotateByGCD(int[] arr, int d, int start) {
-        leftRotateByGCD(arr, d, start, arr.length);
-    }
-
-    static public void leftRotateByGCD(int[] arr, int d, int start, int end) {
-        if (arr == null || start > end || start < 0 || end < 0) return;
-        int n = end - start;
-        int gcd = Math.gcd(n, d);
-        for (int i = start; i < start + (d % n); i++) {
-            int k = gcd == 1 ? start : i;
-            int temp = arr[k];
-            while (k < end) {
-                int next = k + gcd;
-                if (next >= end) {
-                    arr[k] = temp;
-                } else {
-                    arr[k] = arr[next];
-                }
-                k = next;
-            }
-        }
-    }
-
-
-    static public void leftRotateByReversal(int[] arr, int d) {
-        if (arr == null)
-            return;
-        leftRotateByReversal(arr, d, 0, arr.length - 1);
-    }
-
-    static public void leftRotateByReversal(int[] arr, int d, int startIndex, int endIndex) {
-        if (arr == null)
-            return;
-        int n = endIndex - startIndex + 1;
-        d = d % n;
-        reverse(arr, startIndex, d - 1);
-        reverse(arr, startIndex + d, endIndex);
-        reverse(arr, startIndex, endIndex);
-    }
-
-    static public void rightRotateByReversal(int[] arr, int d) {
-        if (arr == null)
-            return;
-        rightRotateByReversal(arr, d, 0, arr.length - 1);
-    }
-
-    public static void rightRotateByReversal(int[] arr, int d, int startIndex, int endIndex) {
-        if (arr == null)
-            return;
-        int n = endIndex - startIndex + 1;
-        d = d % n;
-        reverse(arr, endIndex - d + 1, endIndex);
-        reverse(arr, startIndex, endIndex - d);
-        reverse(arr, startIndex, endIndex);
-    }
-
-    static public void reverse(int[] arr) {
-        reverse(arr, 0, arr.length - 1);
-    }
-
-    static public void reverse(int[] arr, int start, int end) {
-        if (arr == null || start > end || start < 0 || end < 0) return;
-        int mid = start + (end - start) / 2;
-        int i = start;
-        int j = end;
-        while (i <= mid && i <= j) {
-            swap(arr, i++, j--);
-        }
-    }
-
-
-    /**
-     * Find if there is a subset of a given set with a given sum.
-     * Input:  set[] = {3, 34, 4, 12, 5, 2, 11}, sum = 9
-     * Output:  True  subset= {4, 5}
-     *
-     * @param arr
-     * @param K
-     */
-    static public void subsetWhoseSumMatchesN(int[] arr, int K) {
-        if (arr == null || arr.length == 0)
-            return;
-        Stack<Integer> subset = new Stack<>();
-        if (findSubsetWhoseSumMatchesN(arr, 0, arr.length, K, subset)) {
-            System.out.print("subset found: [ ");
-            while (!subset.isEmpty())
-                System.out.printf("%d ", subset.pop());
-            System.out.println("]");
-        }
-    }
-
-    static private boolean findSubsetWhoseSumMatchesN(int[] arr, int currIndex, int n, int K, Stack<Integer> path) {
-        if (currIndex == n && K != 0)
-            return false;
-        if (K == 0)
-            return true;
-        int curr = arr[currIndex];
-        if (curr > K)
-            return findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, K, path);
-        boolean elementSkipped = findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, K, path);
-        if (elementSkipped)
-            return true;
-        boolean elementConsidered =
-                findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, K - curr, path);
-        if (elementConsidered)
-            path.push(curr);
-        return elementConsidered;
-    }
-
     public static void swap(int[] arr, int i, int j) {
         if (arr == null)
             return;
@@ -378,117 +254,192 @@ public class ArrayUtils {
         arr[j] = temp;
     }
 
+    public static String concatenateArrayToLargestNumber(Integer[] arr) {
+        Arrays.sort(arr, (e1, e2) -> {
+            String x = String.valueOf(e1);
+            String y = String.valueOf(e2);
+            return -(x + y).compareTo(y + x);
+        });
+        StringBuilder result = new StringBuilder();
+        for (int i : arr)
+            result.append(i);
+        return result.toString();
+    }
+
+    static public void reverse(int[] arr) {
+        reverse(arr, 0, arr.length - 1);
+    }
+
+    static public void reverse(int[] arr, int start, int end) {
+        if (arr == null || start > end || start < 0 || end < 0) return;
+        int i = start, j = end;
+        while (i < j) {
+            swap(arr, i++, j--);
+        }
+    }
+
+    /**
+     * Find if there is a subset of a given set with a given sum.
+     * Input:  set[] = {3, 34, 4, 12, 5, 2, 11}, sum = 9
+     * Output:  True  subset= {4, 5}
+     *
+     * @param arr
+     * @param N
+     */
+    @Important
+    @Hard
+    @DynamicProgramming
+    static public void subsetWhoseSumMatchesN(int[] arr, int N) {
+        if (arr == null || arr.length == 0)
+            return;
+        Stack<Integer> subset = new Stack<>();
+        if (findSubsetWhoseSumMatchesN(arr, 0, arr.length, N, subset)) {
+            System.out.print("subset found: [ ");
+            while (!subset.isEmpty())
+                System.out.printf("%d ", subset.pop());
+            System.out.println("]");
+        }
+    }
+
+    static private boolean findSubsetWhoseSumMatchesN(int[] arr, int currIndex, int n, int N, Stack<Integer> path) {
+        if (currIndex == n && N != 0)
+            return false;
+        if (N == 0)
+            return true;
+        int curr = arr[currIndex];
+        if (curr > N)
+            return findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, N, path);
+        boolean elementSkipped = findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, N, path);
+        if (elementSkipped)
+            return true;
+        boolean elementConsidered =
+                findSubsetWhoseSumMatchesN(arr, currIndex + 1, n, N - curr, path);
+        if (elementConsidered)
+            path.push(curr);
+        return elementConsidered;
+    }
+
+    @Important
+    @Medium
     public static void largestContiguousSubArray(int[] arr) {
         if (arr == null)
             return;
-        int startIndex = 0;
-        int endIndex = 0;
-        int sum = arr[0];
+        int start = 0;
+        int end = 0;
+        int currSum = arr[0];
         int maxSum = arr[0];
+
         for (int i = 1; i < arr.length; i++) {
-            sum = sum + arr[i];
-            if (sum >= maxSum) {
-                maxSum = sum;
-                endIndex = i;
+            currSum += arr[i];
+
+            if (maxSum <= currSum) {
+                maxSum = currSum;
+                end = i;
             }
-            if (arr[i] > maxSum) {
-                startIndex = i;
-                maxSum = sum = arr[i];
+
+            for (; start + 1 <= end && currSum - arr[start] > currSum; ) {
+                currSum = currSum - arr[start++];
+                maxSum = currSum;
             }
-            if (endIndex < startIndex)
-                endIndex = startIndex;
         }
-        System.out.printf("For array:%s: Largest contiguous startIndex=%d, endIndex=%d, sum=%d%n",
-                Arrays.toString(arr), startIndex, endIndex, maxSum);
+        System.out.printf("For array:%s: Largest contiguous start=%d, end=%d, maxSum=%d%n",
+                Arrays.toString(arr), start, end, maxSum);
     }
 
+    /**
+     * Given an array arr[], find the maximum j – i such that arr[j] > arr[i].
+     * Input: {34, 8, 10, 3, 2, 80, 30, 33, 1}
+     * Output: 6  (j = 7, i = 1)
+     *
+     * @param arr
+     */
+    @Important
+    @Hard
+    public static int findMaxJMinusI(int[] arr) {
+        int n = arr.length;
+        int maxDiff;
+        int i, j;
+
+        int RMax[] = new int[n];
+        int LMin[] = new int[n];
+
+        /* Construct LMin[] such that LMin[i] stores the minimum value
+           from (arr[0], arr[1], ... arr[i]) */
+        LMin[0] = arr[0];
+        for (i = 1; i < n; ++i) {
+            LMin[i] = Math.min(arr[i], LMin[i - 1]);
+        }
+
+        /* Construct RMax[] such that RMax[j] stores the maximum value
+           from (arr[j], arr[j+1], ..arr[n-1]) */
+        RMax[n - 1] = arr[n - 1];
+        for (j = n - 2; j >= 0; --j) {
+            RMax[j] = Math.max(arr[j], RMax[j + 1]);
+        }
+
+        /* Traverse both arrays from left to right to find optimum j - i
+           This process is similar to merge() of MergeSort */
+        i = 0;
+        j = 0;
+        maxDiff = -1;
+        while (j < n && i < n) {
+            if (LMin[i] < RMax[j]) {
+                maxDiff = Math.max(maxDiff, j - i);
+                j = j + 1;
+            }
+            else {
+                i = i + 1;
+            }
+        }
+
+        return maxDiff;
+    }
+
+    /**
+     * A majority element in an array A[] of size n is an element that appears more than n/2 times
+     * (and hence there is at most one such element).
+     * <p>
+     * MOORES VOTING ALGO:
+     *
+     * @param arr
+     * @return
+     */
+    @Important
+    @Medium
     public static int findMajorityElement(int[] arr) {
         if (arr == null)
             throw new IllegalArgumentException("null array");
-        Arrays.sort(arr);
+
         int n = arr.length;
-        int i = 1;
-        int j = n - 2;
-        int countLeft = 1;
-        int countRight = 1;
-        int totalCount;
-        while (i < j) {
-            if (arr[i - 1] == arr[i])
-                countLeft++;
-            else
-                countLeft = 1;
-            if (arr[j] == arr[j + 1])
-                countRight++;
-            else
-                countRight++;
-            i++;
-            j--;
-        }
-
-        if (arr[i - 1] == arr[i])
-            countLeft++;
-        else
-            countLeft = 1;
-
-        if (arr[j] == arr[j + 1])
-            countRight++;
-        else
-            countRight++;
-
-        if (i == j)
-            totalCount = countLeft + countRight - 1;
-        else
-            totalCount = countLeft + countRight - 2;
-        if (totalCount <= n / 2)
-            throw new RuntimeException("No majority element found");
-        return arr[i];
-    }
-
-    public static int findMajorityElement1(int[] arr) {
-        if (arr == null)
-            throw new IllegalArgumentException("null array");
-        int n = arr.length;
-        int i = 1;
-        int j = n - 2;
-        int countLeft = 1;
-        int countRight = 1;
-        int left = arr[0];
-        int right = arr[n - 1];
-        int prevLeft = left;
-        int prevRight = right;
-        while (i <= j) {
-            if (arr[i - 1] == arr[i]) {
-                countLeft++;
+        int count = 1;
+        int majorityIndex = 0;
+        for (int i = 1; i < n; i++) {
+            if (arr[i] == arr[majorityIndex]) {
+                count++;
             } else {
-                countLeft = 1;
-                left = arr[i];
+                if (--count == 0) {
+                    majorityIndex = i;
+                    count = 1;
+                }
             }
+        }
 
-            if (arr[j] == arr[j + 1]) {
-                countRight++;
-            } else {
-                countRight++;
-                right = arr[j];
-            }
-            i++;
-            j--;
+        if (count > n / 2) {
+            return majorityIndex;
         }
-        // case1: element found in left half
-        if (countLeft > countRight) {
-            while (i < n) {
-                if (arr[i++] == left && ++countLeft > n / 2)
-                    return left;
+
+        count = 0;
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == arr[majorityIndex]) {
+                count++;
             }
-        } else if (countLeft < countRight) {
-            while (j > -1) {
-                if (arr[j--] == left && ++countRight > n / 2)
-                    return right;
-            }
-        } else {
-            if (countLeft + countRight - 1 > n / 2)
-                return left;
         }
-        throw new IllegalArgumentException("No majority element found");
+
+        if (count > n / 2) {
+            return majorityIndex;
+        }
+
+        return -1;
     }
 
     /**
@@ -498,6 +449,8 @@ public class ArrayUtils {
      *
      * @param arr
      */
+    @Important
+    @Medium
     public static void printRepeatingElementsBetween0AndN(int[] arr) {
         if (arr == null)
             return;
@@ -560,7 +513,7 @@ public class ArrayUtils {
         int n = arr.length;
         for (int i = 0; i < n; i++) {
             if (i % 2 == 1) {
-                rightRotateByReversal(arr, 1, i, n - 1);
+                RotationUtils.rightRotateByReversal(arr, 1, i, n - 1);
             }
         }
     }
@@ -574,20 +527,7 @@ public class ArrayUtils {
                 arr[i + 1] = 0;
             }
         }
-        ArrayArrangementUtils.moveAllZeroesAtEnd(arr);
-    }
-
-    /**
-     * Given an array arr[], find the maximum j – i such that arr[j] > arr[i].
-     * Input: {34, 8, 10, 3, 2, 80, 30, 33, 1}
-     * Output: 6  (j = 7, i = 1)
-     *
-     * @param arr
-     */
-    public static void findMaxJMinusI(int[] arr) {
-        if (arr == null)
-            return;
-
+        ArrangementUtils.moveAllZeroesAtEnd(arr);
     }
 
     /**
@@ -620,31 +560,11 @@ public class ArrayUtils {
             if (arr[i] == y) {
                 yIndex = i;
             }
-            if (xIndex != -1 && yIndex != -1 && abs(xIndex - yIndex) < minDist) {
-                minDist = abs(xIndex - yIndex);
+            if (xIndex != -1 && yIndex != -1) {
+                minDist = min(minDist, abs(xIndex - yIndex));
             }
         }
         return minDist;
-    }
-
-    public static void printSpiralOrder(int[][] arr) {
-        if (arr == null) {
-            return;
-        }
-        int level = 0;
-        int m = arr.length;
-        int n = arr[0].length;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (level % 2 == 0) {
-                    System.out.print(arr[i][j] + "  ");
-                } else {
-                    System.out.print(arr[i][n - 1 - j] + "  ");
-                }
-            }
-            System.out.println();
-            level++;
-        }
     }
 
     public static void printCombinations(int[] arr, int r) {
@@ -717,5 +637,256 @@ public class ArrayUtils {
             int mid = (low + high) / 2;
             return find(arr, low, mid) || find(arr, mid + 1, high);
         }
+    }
+
+    public static class ArrangementUtils {
+
+        public static void rearrageAlternateMaxAndMin(int[] arr) {
+            if (arr == null)
+                return;
+            Arrays.sort(arr);
+            int n = arr.length;
+            int mid = (n % 2 == 0) ? n / 2 : (n / 2) + 1;
+            int end = (n % 2 == 0) ? n - 2 : n - 1;
+            for (int i = 0; i < mid; ) {
+                int j = end - i;
+                swap(arr, i, j);
+                i = i + 2;
+            }
+        }
+
+        /**
+         * Input:  arr[] = {1, 2, 3, -4, -1, 4}
+         * Output: arr[] = {-4, 1, -1, 2, 3, 4}
+         * <p>
+         * Input:  arr[] = {-5, -2, 5, 2, 4, 7, 1, 8, 0, -8}
+         * output: arr[] = {-5, 5, -2, 2, -8, 4, 7, 1, 8, 0}
+         *
+         * @param arr
+         */
+        public static void rearrageAlternatePositiveAndNegative(int[] arr) {
+            if (arr == null)
+                return;
+            int n = arr.length;
+            for (int i = 0; i < n; i++) {
+                int j = i + 1;
+                if (i % 2 == 0) {
+                    if (arr[i] >= 0) {
+                        while (j < n && arr[j] >= 0)
+                            j++;
+                        if (j >= n)
+                            break;
+                        RotationUtils.rightRotateByReversal(arr, 1, i, j);
+                    }
+                } else {
+                    if (arr[i] < 0) {
+                        while (j < n && arr[j] < 0)
+                            j++;
+                        if (j >= n)
+                            break;
+                        RotationUtils.rightRotateByReversal(arr, 1, i, j);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Input :  arr[] = {1, 2, 0, 4, 3, 0, 5, 0};
+         * Output : arr[] = {1, 2, 4, 3, 5, 0, 0};
+         * <p>
+         * Input : arr[]  = {1, 2, 0, 0, 0, 3, 6};
+         * Output : arr[] = {1, 2, 3, 6, 0, 0, 0};
+         *
+         * @param arr
+         */
+        public static void moveAllZeroesAtEnd(int[] arr) {
+            if (arr == null)
+                return;
+            int n = arr.length;
+            int lastNonZeroIndex = n - 1;
+            int startIndex = 0;
+            while (startIndex < lastNonZeroIndex) {
+                if (arr[startIndex] == 0) {
+                    while (arr[lastNonZeroIndex] == 0)
+                        lastNonZeroIndex--;
+                    RotationUtils.leftRotateByReversal(arr, 1, startIndex, lastNonZeroIndex);
+                }
+                startIndex++;
+            }
+        }
+
+        /**
+         * Input:  arr[]   = [50, 40, 70, 60, 90]
+         * index[] = [3,  0,  4,  1,  2]
+         * Output: arr[]   = [40, 60, 90, 50, 70]
+         * index[] = [0,  1,  2,  3,   4]
+         *
+         * @param arr
+         * @param indexes
+         */
+        @Important
+        @Medium
+        public static void sortAsPerIndexedArray(int[] arr, int[] indexes) {
+            if (arr == null || indexes == null || arr.length != indexes.length)
+                return;
+            for (int i = 0; i < indexes.length; i++) {
+                while (indexes[i] != i) {
+                    int currentElement = arr[i];
+                    int currentElementTargedIndex = indexes[i]; // index to put current element
+                    int targetElement  = arr[currentElementTargedIndex]; // element at the target indexed
+                    int targetElementsTargetIndex = indexes[currentElementTargedIndex]; // index of the element at target index.
+
+                    // swap current index + element with targets index + element
+                    indexes[currentElementTargedIndex] = currentElementTargedIndex; // copy current elemt to target
+                    arr[currentElementTargedIndex] = currentElement; // copy current index to target
+
+                    indexes[i] = targetElementsTargetIndex;
+                    arr[i] = targetElement;
+                }
+            }
+        }
+    }
+
+    public static class RotationUtils {
+
+        /**
+         * Let us take the same example arr[] = [1, 2, 3, 4, 5, 6, 7], d = 2
+         * Rotate arr[] by one 2 times
+         * We get [2, 3, 4, 5, 6, 7, 1] after first rotation and [ 3, 4, 5, 6, 7, 1, 2] after second rotation.
+         *
+         * @param arr
+         * @param d
+         */
+        static public void leftRotate(int[] arr, int d) {
+            if (arr == null) return;
+            int n = arr.length;
+            d = d % n;
+            for (int i = 0; i < d; i++) {
+                int first = arr[0];
+                int j = 0;
+                for (; j < n - 1; j++) {
+                    arr[j] = arr[j + 1];
+                }
+                arr[j] = first;
+            }
+        }
+
+        /**
+         * Let us take the same example arr[] = [1, 2, 3, 4, 5, 6, 7, 8], d = 2
+         * Rotate arr[] by one 2 times
+         * gcd (8, 2) = 2
+         * two loops
+         * first pass : [3, 2, 5, 4, 7, 6, 1, 8]
+         * second pass : [3, 4, 5, 6, 7, 8, 1, 2]
+         *
+         * @param arr
+         * @param d
+         */
+        static public void leftRotateByGCD(int[] arr, int d) {
+            leftRotateByGCD(arr, d, 0, arr.length);
+        }
+
+        static public void leftRotateByGCD(int[] arr, int d, int start) {
+            leftRotateByGCD(arr, d, start, arr.length);
+        }
+
+        static public void leftRotateByGCD(int[] arr, int d, int start, int end) {
+            if (arr == null || start > end || start < 0 || end < 0) return;
+            int n = end - start;
+            int gcd = Math.gcd(n, d);
+            for (int i = start; i < start + (d % n); i++) {
+                int k = gcd == 1 ? start : i;
+                int temp = arr[k];
+                while (k < end) {
+                    int next = k + gcd;
+                    if (next >= end) {
+                        arr[k] = temp;
+                    } else {
+                        arr[k] = arr[next];
+                    }
+                    k = next;
+                }
+            }
+        }
+
+        static public void leftRotateByReversal(int[] arr, int d) {
+            if (arr == null)
+                return;
+            leftRotateByReversal(arr, d, 0, arr.length - 1);
+        }
+
+        static public void leftRotateByReversal(int[] arr, int d, int startIndex, int endIndex) {
+            if (arr == null)
+                return;
+            int n = endIndex - startIndex + 1;
+            d = d % n;
+            reverse(arr, startIndex, d - 1);
+            reverse(arr, startIndex + d, endIndex);
+            reverse(arr, startIndex, endIndex);
+        }
+
+        static public void rightRotateByReversal(int[] arr, int d) {
+            if (arr == null)
+                return;
+            rightRotateByReversal(arr, d, 0, arr.length - 1);
+        }
+
+        public static void rightRotateByReversal(int[] arr, int d, int startIndex, int endIndex) {
+            if (arr == null)
+                return;
+            int n = endIndex - startIndex + 1;
+            d = d % n;
+            reverse(arr, endIndex - d + 1, endIndex);
+            reverse(arr, startIndex, endIndex - d);
+            reverse(arr, startIndex, endIndex);
+        }
+    }
+
+    @Important
+    @Medium
+    public static int containerWithMaxWater(int [] arr) {
+        if (arr == null) {
+            return 0;
+        }
+        int start = 0;
+        int end = arr.length - 1;
+        int capacity = 0;
+        while (start < end) {
+            capacity = Math.max(capacity, Math.min(arr[start], arr[end]) * (end - start));
+            if (arr[start] < arr[end]) {
+                start++;
+            } else {
+                end--;
+            }
+        }
+        return capacity;
+    }
+
+    @Important
+    @Medium
+    public static int totalRainWaterTrapped(int [] arr) {
+        if (arr == null) {
+            return 0;
+        }
+
+        int n = arr.length;
+        int [] maxWaterCapacity = new int[n];
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            max = Math.max(max, arr[i]);
+            maxWaterCapacity[i] = max;
+        }
+
+        max = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            max = Math.max(max, arr[i]);
+            maxWaterCapacity[i] = Math.min(max, maxWaterCapacity[i]);
+        }
+
+        int totalCapacity = 0;
+        for (int i =0; i < n; i++) {
+            totalCapacity += (maxWaterCapacity[i] - arr[i]);
+        }
+        return totalCapacity;
     }
 }

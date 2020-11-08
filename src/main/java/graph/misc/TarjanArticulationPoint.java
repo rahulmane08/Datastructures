@@ -60,7 +60,8 @@ public class TarjanArticulationPoint {
      * | /
      * B
      * <p>
-     * start vertex = C, so we start DFS with C, hence its parent is null. parents{C,NULL} , time = 0, lowTimes{C,0}, visitTimes{C,0}, visited(C)
+     * start vertex = C, so we start DFS with C, hence its parent is null.
+     * parents{C,NULL} , time = 0, lowTimes{C,0}, visitTimes{C,0}, visited(C)
      * DFS(C):
      * time=1
      * move to A: , parents{A,C} , lowTimes{A,1}, visitTimes{A,1} , visited(A)
