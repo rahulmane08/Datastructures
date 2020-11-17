@@ -1,9 +1,6 @@
 package stack;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static stack.ExpressionUtils.checkIfDuplicateParentheses;
 import static stack.ExpressionUtils.infixToPostfix;
 import static stack.ExpressionUtils.removeDuplicateParentheses;
 

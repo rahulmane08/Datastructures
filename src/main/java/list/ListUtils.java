@@ -337,8 +337,7 @@ public class ListUtils {
         while (curr != null) {
             if (i == N) {
                 first = list.start;
-            }
-            else if (i > N) {
+            } else if (i > N) {
                 first = first.next;
             }
             curr = curr.next;
@@ -346,80 +345,6 @@ public class ListUtils {
         }
         System.out.printf("Node at position:%d from the end is %d%n", N, (first != null ? first.data : null));
     }
-
-    // ================ LOOPED LIST========================
-    public static class LoopUtils {
-
-        /**
-         * @param list
-         * @param <T>
-         * @return
-         */
-        public static <T> boolean detectLoop(LinkedList<T> list) {
-            if (list == null || list.start == null)
-                return false;
-            Node<T> slow = list.start;
-            Node<T> fast = list.start;
-            while (slow != null && fast != null && fast.next != null) {
-                slow = fast.next;
-                fast = fast.next.next;
-                if (fast == slow)
-                    return true;
-            }
-            return false;
-        }
-
-        public static <T> int countLoopLength(LinkedList<T> list) {
-            if (list == null || list.start == null)
-                return 0;
-            Node<T> slow = list.start;
-            Node<T> fast = list.start;
-            while (slow != null && fast != null && fast.next != null) {
-                slow = fast.next;
-                fast = fast.next.next;
-                if (fast == slow) {
-                    int i = 0;
-                    do {
-                        fast = fast.next;
-                        i++;
-                    } while (fast != slow);
-                    return i;
-                }
-            }
-            return 0;
-        }
-
-        /**
-         * This method is also dependent on Floyd’s Cycle detection algorithm.
-         * Detect Loop using Floyd’s Cycle detection algorithm and get the pointer to a loop node.
-         * Count the number of nodes in loop. Let the count be k.
-         * Fix one pointer to the head and another to a kth node from the head.
-         * Move both pointers at the same pace, they will meet at loop starting node.
-         * Get a pointer to the last node of the loop and make next of it as NULL.
-         *
-         * @param list
-         * @param <T>
-         */
-        public static <T> void deleteLoop(LinkedList<T> list) {
-            int loopLength = countLoopLength(list);
-            if (loopLength == 0)
-                return;
-            Node<T> first = list.start;
-            Node<T> second = list.start;
-            for (int i = 0; i < loopLength; i++)
-                second = second.next;
-            while (first != second) {
-                first = first.next;
-                second = second.next;
-            }
-            while (second.next != first)
-                second = second.next;
-            second.next = null;
-        }
-    }
-
-
-
 
     /**
      * 1,2,3,4,5  middle = 3
@@ -532,7 +457,7 @@ public class ListUtils {
                 } else {
                     nextEnd.next = curr.prev;
                 }
-                for ( ;nextEnd != null && nextEnd.next != null; nextEnd = nextEnd.next);
+                for (; nextEnd != null && nextEnd.next != null; nextEnd = nextEnd.next) ;
                 curr.prev = null;
             }
             prev = curr;
@@ -550,25 +475,26 @@ public class ListUtils {
     /**
      * Input:
      * 1 - 2 - 3 - 4
-     *     |
-     *     7 -  8 - 10 - 12
-     *     |    |    |
-     *     9    16   11
-     *     |    |
-     *     14   17 - 18 - 19 - 20
-     *     |                    |
-     *     15 - 23             21
-     *          |
-     *          24
-     *
+     * |
+     * 7 -  8 - 10 - 12
+     * |    |    |
+     * 9    16   11
+     * |    |
+     * 14   17 - 18 - 19 - 20
+     * |                    |
+     * 15 - 23             21
+     * |
+     * 24
+     * <p>
      * Output:
      * Linked List to be flattened to
      * 1 - 2 - 7 - 9 - 14 - 15 - 23 - 24 - 8
-     *  - 16 - 17 - 18 - 19 - 20 - 21 - 10 -
+     * - 16 - 17 - 18 - 19 - 20 - 21 - 10 -
      * 11 - 12 - 3 - 4
      * Note : 9 appears before 8 (When we are
      * at a node, we process down pointer before
      * right pointer)
+     *
      * @param list
      * @param <T>
      */
@@ -586,7 +512,7 @@ public class ListUtils {
         Node<T> next = start.next;
         start.next = flattenMultilevelListDepthWise(start.prev);
         Node<T> end = start;
-        for (; end.next != null; end = end.next);
+        for (; end.next != null; end = end.next) ;
         end.next = flattenMultilevelListDepthWise(next);
         start.prev = null;
         return start;
@@ -594,20 +520,21 @@ public class ListUtils {
 
     /**
      * Input:  (0,10)->(1,10)->(5,10)->(7,10)
-     *                                   |
-     *                                 (7,5)->(20,5)->(40,5)
+     * |
+     * (7,5)->(20,5)->(40,5)
      * Output: Linked List should be changed to following
-     *         (0,10)->(7,10)
-     *                   |
-     *                 (7,5)->(40,5)
+     * (0,10)->(7,10)
+     * |
+     * (7,5)->(40,5)
      * The given linked list represents a horizontal line from (0,10)
      * to (7, 10) followed by a vertical line from (7, 10) to (7, 5),
      * followed by a horizontal line from (7, 5) to (40, 5).
-     *
+     * <p>
      * Input:     (2,3)->(4,3)->(6,3)->(10,3)->(12,3)
      * Output: Linked List should be changed to following
-     *     (2,3)->(12,3)
+     * (2,3)->(12,3)
      * There is only one vertical line, so all middle points are removed.
+     *
      * @param list
      */
     @Important
@@ -621,9 +548,9 @@ public class ListUtils {
         while (end != null && end.next != null) {
             Node<Point> prev = null;
             if (start.data.x != end.data.x) {
-                for (; end.next != null && end.data.x != end.next.data.x; prev = end, end = end.next);
+                for (; end.next != null && end.data.x != end.next.data.x; prev = end, end = end.next) ;
             } else if (start.data.y != end.data.y) {
-                for (; end.next != null && end.data.y != end.next.data.y; prev = end, end = end.next);
+                for (; end.next != null && end.data.y != end.next.data.y; prev = end, end = end.next) ;
             }
             if (prev != null) {
                 prev.next = null;
@@ -659,7 +586,7 @@ public class ListUtils {
         if (list == null || list.start == null)
             return;
         Node<Integer> actualStart = list.start;
-        for (Node<Integer> curr = actualStart; curr != null; curr.random = curr.next, curr = curr.next);
+        for (Node<Integer> curr = actualStart; curr != null; curr.random = curr.next, curr = curr.next) ;
         SortUtils.mergeSort(list);
 
         for (Node<Integer> curr = actualStart; curr != null; ) {
@@ -668,6 +595,77 @@ public class ListUtils {
             curr.next = nextRandom;
             curr.random = next;
             curr = curr.next;
+        }
+    }
+
+    // ================ LOOPED LIST========================
+    public static class LoopUtils {
+
+        /**
+         * @param list
+         * @param <T>
+         * @return
+         */
+        public static <T> boolean detectLoop(LinkedList<T> list) {
+            if (list == null || list.start == null)
+                return false;
+            Node<T> slow = list.start;
+            Node<T> fast = list.start;
+            while (slow != null && fast != null && fast.next != null) {
+                slow = fast.next;
+                fast = fast.next.next;
+                if (fast == slow)
+                    return true;
+            }
+            return false;
+        }
+
+        public static <T> int countLoopLength(LinkedList<T> list) {
+            if (list == null || list.start == null)
+                return 0;
+            Node<T> slow = list.start;
+            Node<T> fast = list.start;
+            while (slow != null && fast != null && fast.next != null) {
+                slow = fast.next;
+                fast = fast.next.next;
+                if (fast == slow) {
+                    int i = 0;
+                    do {
+                        fast = fast.next;
+                        i++;
+                    } while (fast != slow);
+                    return i;
+                }
+            }
+            return 0;
+        }
+
+        /**
+         * This method is also dependent on Floyd’s Cycle detection algorithm.
+         * Detect Loop using Floyd’s Cycle detection algorithm and get the pointer to a loop node.
+         * Count the number of nodes in loop. Let the count be k.
+         * Fix one pointer to the head and another to a kth node from the head.
+         * Move both pointers at the same pace, they will meet at loop starting node.
+         * Get a pointer to the last node of the loop and make next of it as NULL.
+         *
+         * @param list
+         * @param <T>
+         */
+        public static <T> void deleteLoop(LinkedList<T> list) {
+            int loopLength = countLoopLength(list);
+            if (loopLength == 0)
+                return;
+            Node<T> first = list.start;
+            Node<T> second = list.start;
+            for (int i = 0; i < loopLength; i++)
+                second = second.next;
+            while (first != second) {
+                first = first.next;
+                second = second.next;
+            }
+            while (second.next != first)
+                second = second.next;
+            second.next = null;
         }
     }
 
@@ -864,11 +862,8 @@ public class ListUtils {
          * 3. Reverse the list again to retain the original order. Time Complexity:
          * O(n)
          *
-         * @param list
-         * The list 12->15->10->11->5->6->2->3->NULL should be changed to 15->11->6->3->NULL.
-         * Note that 12, 10, 5 and 2 have been deleted because there is a greater value on the right side.
-         *
-         *
+         * @param list The list 12->15->10->11->5->6->2->3->NULL should be changed to 15->11->6->3->NULL.
+         *             Note that 12, 10, 5 and 2 have been deleted because there is a greater value on the right side.
          */
 
         static public void deleteIfRightIsHigher(LinkedList<Integer> list) {
@@ -962,37 +957,6 @@ public class ListUtils {
             nthNode.next = nodeToInsert;
         }
 
-        public static class  DeleteMiddleRecursiveUtil<T> {
-            int size = 0;
-            LinkedList<T> list;
-
-            public DeleteMiddleRecursiveUtil(LinkedList<T> list) {
-                this.list = list;
-            }
-
-            public void deleteMiddle() {
-                delete(this.list.start, 0);
-            }
-
-            private Node<T> delete (Node<T> root, int x) {
-                if (root == null) {
-                    this.size = x;
-                    return null;
-                }
-
-                Node next = delete(root.next, x + 1);
-                if (this.size != 0 && this.size / 2 == x) {
-                    root.next = null;
-                    if (root == this.list.start) {
-                        this.list.start = null;
-                    }
-                    return next;
-                }
-                root.next = next;
-                return root;
-            }
-        }
-
         /**
          * ip: 1-2-3-4-2-5, data = 2
          * op: 1-2-3-4-5
@@ -1031,7 +995,7 @@ public class ListUtils {
             Node<T> prev, curr;
             prev = curr = list.start;
             while (curr != null) {
-                for (; curr.next != null && curr.next.data == prev.data; curr = curr.next);
+                for (; curr.next != null && curr.next.data == prev.data; curr = curr.next) ;
 
                 if (prev == curr) {
                     // no dupe
@@ -1063,6 +1027,37 @@ public class ListUtils {
                     prev = curr;
                     curr = curr.next;
                 }
+            }
+        }
+
+        public static class DeleteMiddleRecursiveUtil<T> {
+            int size = 0;
+            LinkedList<T> list;
+
+            public DeleteMiddleRecursiveUtil(LinkedList<T> list) {
+                this.list = list;
+            }
+
+            public void deleteMiddle() {
+                delete(this.list.start, 0);
+            }
+
+            private Node<T> delete(Node<T> root, int x) {
+                if (root == null) {
+                    this.size = x;
+                    return null;
+                }
+
+                Node next = delete(root.next, x + 1);
+                if (this.size != 0 && this.size / 2 == x) {
+                    root.next = null;
+                    if (root == this.list.start) {
+                        this.list.start = null;
+                    }
+                    return next;
+                }
+                root.next = next;
+                return root;
             }
         }
     }
@@ -1128,7 +1123,7 @@ public class ListUtils {
                 curr = curr.next;
             }
         }
-        
+
         static public <T> void reversePairsRecursively(LinkedList<T> list) {
             if (list == null) {
                 return;
@@ -1202,7 +1197,7 @@ public class ListUtils {
             }
 
             Node<T> curr = root;
-            for (int i = 1 ; i < n; i++) {
+            for (int i = 1; i < n; i++) {
                 if (curr.next != null) {
                     curr = curr.next;
                 } else {
@@ -1217,7 +1212,7 @@ public class ListUtils {
 
             Node<T> next = curr.next;
             curr.next = null;
-            for (curr = next; curr.next != null; curr = curr.next);
+            for (curr = next; curr.next != null; curr = curr.next) ;
             curr.next = root;
             return next;
         }
@@ -1236,7 +1231,7 @@ public class ListUtils {
             list.start = rotateRightBy(list.start, n);
         }
 
-        public static  <T> Node<T> rotateRightBy(Node<T> root, int n) {
+        public static <T> Node<T> rotateRightBy(Node<T> root, int n) {
             if (root == null) {
                 return null;
             }
@@ -1255,7 +1250,7 @@ public class ListUtils {
                 return root;
             }
 
-            for (slow = root; fast.next != null; fast = fast.next, slow = slow.next);
+            for (slow = root; fast.next != null; fast = fast.next, slow = slow.next) ;
 
             fast.next = root;
             Node<T> next = slow.next;
@@ -1407,23 +1402,24 @@ public class ListUtils {
 
         /**
          * Input: 1->2->3->4->5->6->7->8->9->NULL,
-         *         k = 3
-         *         d = 1
+         * k = 3
+         * d = 1
          * Output: 3->1->2->6->4->5->9->7->8->NULL
          * Explanation: Here blocks of size 3 are
          * rotated towards right(as d is positive)
          * by 1.
-         *
+         * <p>
          * Input: 1->2->3->4->5->6->7->8->9->10->
-         *                11->12->13->14->15->NULL,
-         *         k = 4
-         *         d = -1
+         * 11->12->13->14->15->NULL,
+         * k = 4
+         * d = -1
          * Output: 2->3->4->1->6->7->8->5->10->11
-         *              ->12->9->14->15->13->NULL
+         * ->12->9->14->15->13->NULL
          * Explanation: Here, at the end of linked
          * list, remaining nodes are less than k, i.e.
          * only three nodes are left while k is 4.
          * Rotate those 3 nodes also by d.
+         *
          * @param list
          * @param k
          * @param r
@@ -1508,8 +1504,8 @@ public class ListUtils {
                 return; // all elements match
             }
 
-            for (curr = mismatchingPrev; curr.next != null; curr = curr.next);
-            
+            for (curr = mismatchingPrev; curr.next != null; curr = curr.next) ;
+
             for (int i = 0; i < frequency; i++) {
                 curr.next = new Node<>(k);
                 curr = curr.next;
@@ -1664,7 +1660,7 @@ public class ListUtils {
             LinkedList<T> secondList = partitionAlternatively(list);
             ArrangementUtils.reverse(secondList);
             Node<T> curr;
-            for (curr = list.start; curr.next != null; curr = curr.next);
+            for (curr = list.start; curr.next != null; curr = curr.next) ;
             curr.next = secondList.start;
             secondList.start = null;
         }
@@ -1676,7 +1672,7 @@ public class ListUtils {
             Node<T> curr1 = list.start;
             Node<T> curr2 = list.start.next;
             Node<T> second = list.start.next;
-            boolean odd  = true;
+            boolean odd = true;
             while (curr1 != null && curr2 != null) {
                 if (odd) {
                     curr1.next = curr2.next;
@@ -1961,7 +1957,7 @@ public class ListUtils {
             int size = list1.size();
             list1.start = merge(list1.start, list2.start);
             Node<Integer> curr = list1.start;
-            for (int i = 1; i < size; i++, curr = curr.next);
+            for (int i = 1; i < size; i++, curr = curr.next) ;
             list2.start = curr.next;
             curr.next = null;
         }

@@ -6,26 +6,27 @@ import static java.lang.Math.pow;
 
 /**
  * A typical Priority Queue requires following operations to be efficient.
- *
+ * <p>
  * Get Top Priority Element (Get minimum or maximum)
  * Insert an element
  * Remove top priority element
  * Decrease Key
  * A Binary Heap supports above operations with following time complexities:
- *
+ * <p>
  * O(1)
  * O(Logn)
  * O(Logn)
  * O(Logn)
- *
+ * <p>
  * Is Binary Heap always better?
  * Although Binary Heap is for Priority Queue, BSTs have their own advantages and the list of advantages
  * is in-fact bigger compared to binary heap.
- *
+ * <p>
  * Searching an element in self-balancing BST is O(Logn) which is O(n) in Binary Heap.
  * We can print all elements of BST in sorted order in O(n) time, but Binary Heap requires O(nLogn) time.
  * Floor and ceil can be found in O(Logn) time.
  * K’th largest/smallest element be found in O(Logn) time by augmenting tree with an additional field.
+ *
  * @param <T>
  */
 public class MinPriorityQueue<T extends Comparable<T>> {
@@ -47,6 +48,7 @@ public class MinPriorityQueue<T extends Comparable<T>> {
 
     /**
      * Time complexity: log(n)
+     *
      * @return
      */
     public boolean add(T elem) {
@@ -120,6 +122,7 @@ public class MinPriorityQueue<T extends Comparable<T>> {
 
     /**
      * Time complexity: log(n)
+     *
      * @return
      */
     public T poll() {

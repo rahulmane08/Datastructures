@@ -3,37 +3,11 @@ package design;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LRUCache<K, V>{
+public class LRUCache<K, V> {
 
-    class CacheNode<K, V> {
-        K key;
-        V value;
-        CacheNode next;
-        CacheNode prev;
-
-        public CacheNode(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            CacheNode<?, ?> cacheNode = (CacheNode<?, ?>) o;
-            return key.equals(cacheNode.key);
-        }
-
-        @Override
-        public int hashCode() {
-            return key.hashCode();
-        }
-    }
-
-    private final Map<K, CacheNode<K,V>> cache;
+    private final Map<K, CacheNode<K, V>> cache;
     private final int capacity;
     private final CacheNode head, tail;
-
     public LRUCache(int capacity) {
         this.cache = new ConcurrentHashMap<>();
         this.capacity = capacity;
@@ -101,6 +75,31 @@ public class LRUCache<K, V>{
         if (cacheNode != null) {
             removeCacheNode(cacheNode);
             addCacheNode(cacheNode);
+        }
+    }
+
+    class CacheNode<K, V> {
+        K key;
+        V value;
+        CacheNode next;
+        CacheNode prev;
+
+        public CacheNode(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CacheNode<?, ?> cacheNode = (CacheNode<?, ?>) o;
+            return key.equals(cacheNode.key);
+        }
+
+        @Override
+        public int hashCode() {
+            return key.hashCode();
         }
     }
 }

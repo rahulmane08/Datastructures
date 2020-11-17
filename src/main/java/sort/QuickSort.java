@@ -20,7 +20,7 @@ public class QuickSort {
                 i++;
             }
             // find first element lower than pivot
-            while (pivot < arr[j])  {
+            while (pivot < arr[j]) {
                 j--;
             }
             // swap such elements

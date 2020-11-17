@@ -3,8 +3,8 @@ package string;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static string.StringUtils.lengthOfLongestSubstringWithNonRepeatingCharacters;
 import static string.StringUtils.lengthOfLongestPalindrome;
+import static string.StringUtils.lengthOfLongestSubstringWithNonRepeatingCharacters;
 import static string.StringUtils.longestPalindrome;
 
 import org.junit.Test;
@@ -52,8 +52,8 @@ public class StringUtilsTest {
 
     @Test
     public void test_lengthOfLongestSubstringWithNonRepeatingCharacters() {
-         System.out.println(lengthOfLongestSubstringWithNonRepeatingCharacters("abcabcbb"));
-         System.out.println(lengthOfLongestSubstringWithNonRepeatingCharacters("abcc"));
+        System.out.println(lengthOfLongestSubstringWithNonRepeatingCharacters("abcabcbb"));
+        System.out.println(lengthOfLongestSubstringWithNonRepeatingCharacters("abcc"));
         System.out.println(lengthOfLongestSubstringWithNonRepeatingCharacters("aab"));
 
     }

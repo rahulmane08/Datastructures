@@ -17,6 +17,10 @@ import org.junit.Test;
 
 public class ArrayUtilsTest {
 
+    private static void print(int[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }
+
     @Test
     public void test_FindIndexEqualsElementInSortedArrayUtil() {
         FindIndexEqualsElementInSortedArrayUtil util = new FindIndexEqualsElementInSortedArrayUtil();
@@ -38,12 +42,12 @@ public class ArrayUtilsTest {
 
     @Test
     public void test_findMedianSortedArrays() {
-        System.out.println(ArrayUtils.findMedianSortedArrays(new int[] {1,2}, new int[] {3,4}));
+        System.out.println(ArrayUtils.findMedianSortedArrays(new int[]{1, 2}, new int[]{3, 4}));
     }
 
     @Test
     public void test_reverse() {
-        int [] a = new int[]{5, 6, 7, 8};
+        int[] a = new int[]{5, 6, 7, 8};
         ArrayUtils.reverse(a);
         System.out.println(Arrays.toString(a));
         ArrayUtils.reverse(a, 2, 3);
@@ -65,9 +69,9 @@ public class ArrayUtilsTest {
 
     @Test
     public void test_concatenateArrayToLargestNumber() {
-        assertEquals("6054854654", concatenateArrayToLargestNumber(new Integer[] {54, 546, 548, 60}));
+        assertEquals("6054854654", concatenateArrayToLargestNumber(new Integer[]{54, 546, 548, 60}));
         assertEquals("998764543431",
-                concatenateArrayToLargestNumber(new Integer[] {1, 34, 3, 98, 9, 76, 45, 4}));
+                concatenateArrayToLargestNumber(new Integer[]{1, 34, 3, 98, 9, 76, 45, 4}));
     }
 
     @Test
@@ -83,7 +87,7 @@ public class ArrayUtilsTest {
 
     @Test
     public void test_findMaxJMinusI() {
-        System.out.println(findMaxJMinusI(new int[] {12, 11, 10, 9, 8, 7}));
+        System.out.println(findMaxJMinusI(new int[]{12, 11, 10, 9, 8, 7}));
         System.out.println(findMaxJMinusI(new int[]{34, 8, 10, 3, 2, 80, 30, 33, 1}));
     }
 
@@ -96,8 +100,8 @@ public class ArrayUtilsTest {
 
     @Test
     public void test_sortAsPerIndexedArray() {
-        int [] order = new int[] {3,  0,  4,  1,  2};
-        int [] arr = new int[] {50, 40, 70, 60, 90};
+        int[] order = new int[]{3, 0, 4, 1, 2};
+        int[] arr = new int[]{50, 40, 70, 60, 90};
         sortAsPerIndexedArray(arr, order);
         print(arr);
         print(order);
@@ -105,10 +109,6 @@ public class ArrayUtilsTest {
 
     @Test
     public void test_totalRainWaterTrapped() {
-        System.out.println(totalRainWaterTrapped(new int[] {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
-    }
-
-    private static void print(int[] arr) {
-        System.out.println(Arrays.toString(arr));
+        System.out.println(totalRainWaterTrapped(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
     }
 }

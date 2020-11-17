@@ -23,6 +23,7 @@ public class MaxPriorityQueue<T extends Comparable<T>> {
 
     /**
      * Time complexity: log(n)
+     *
      * @param elem
      * @return
      */
@@ -97,6 +98,7 @@ public class MaxPriorityQueue<T extends Comparable<T>> {
 
     /**
      * Time complexity: log(n)
+     *
      * @return
      */
     public T poll() {

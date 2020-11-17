@@ -29,7 +29,7 @@ public class LongestCommonSubstring {
                     lcs[i][j] = 1 + lcs[i - 1][j - 1];
                     if (this.length < lcs[i][j]) {
                         this.length = lcs[i][j];
-                        this.substring += str1.charAt(i-1);
+                        this.substring += str1.charAt(i - 1);
                     }
                 } else {
                     lcs[i][j] = 0;

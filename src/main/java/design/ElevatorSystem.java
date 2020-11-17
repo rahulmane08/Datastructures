@@ -1,6 +1,5 @@
 package design;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -11,8 +10,18 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Data;
 
-enum ButtonType{
+enum ButtonType {
     EMERGENCY, UP, DOWN, NUMERIC;
+}
+
+interface ButtonCommand {
+    void execute();
+
+    void undo();
+}
+
+interface ElevatorAllocationStrategy {
+    void allocateElevator(int floor);
 }
 
 @Data
@@ -175,11 +184,6 @@ class ElevatorCar {
     }
 }
 
-interface ButtonCommand {
-    void execute();
-    void undo();
-}
-
 @Data
 @Builder
 class ElevatorConfiguration {
@@ -187,10 +191,6 @@ class ElevatorConfiguration {
     private int totalElevators;
     private int load;
     private Zone zone;
-}
-
-interface ElevatorAllocationStrategy {
-    void allocateElevator(int floor);
 }
 
 class FcfsElevatorAllocationStrategy implements ElevatorAllocationStrategy {

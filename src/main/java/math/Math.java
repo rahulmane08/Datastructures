@@ -68,6 +68,37 @@ public class Math {
         return negative ? -result : result / 10;
     }
 
+    public static double pow(int x, int y) {
+        double power = powerUtil(x, y);
+        if (y < 1) {
+            return 1 / power;
+        }
+        return power;
+    }
+
+    private static double powerUtil(int x, int y) {
+        if (y == 0) {
+            return 1;
+        }
+        if (y % 2 == 0) {
+            return pow(x, y / 2);
+        }
+        return x * pow(x * x, y / 2);
+    }
+
+    public static int[] fibonacci(int n) {
+        if (n == 0) {
+            return null;
+        }
+        int[] dp = new int[n];
+        dp[0] = 0;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp;
+    }
+
     public static void main(String[] args) {
         System.out.println(parseInt("1234"));
         System.out.println(parseInt("-2147483648"));

@@ -2,7 +2,6 @@ package sort;
 
 import static pq.HeapUtils.maxHeapify;
 
-import pq.HeapUtils;
 import utils.Swapper;
 
 public class HeapSort {

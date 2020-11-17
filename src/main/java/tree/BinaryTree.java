@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BinaryTree implements Cloneable{
+public class BinaryTree implements Cloneable {
     public Node root;
 
     public BinaryTree() {
@@ -88,11 +88,11 @@ public class BinaryTree implements Cloneable{
         BinaryTree clone = new BinaryTree();
         Queue<Node> queue = new LinkedList<>();
         queue.offer(this.root);
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             Node curr = queue.poll();
             clone.insert(curr.data);
-            if(curr.left != null) queue.offer(curr.left);
-            if(curr.right != null) queue.offer(curr.right);
+            if (curr.left != null) queue.offer(curr.left);
+            if (curr.right != null) queue.offer(curr.right);
         }
         return clone;
     }

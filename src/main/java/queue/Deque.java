@@ -2,8 +2,8 @@ package queue;
 
 public class Deque<T> {
 
-    private Object[] arr;
     private final int capacity;
+    private Object[] arr;
     private int front, rear;
 
     public Deque(int capacity) {

@@ -199,11 +199,11 @@ public class BSTUtils {
     }
 
     /**
-     *           9
-     *        /    \
-     *      5       12
-     *    /  \    /  \
-     *   3    6  11   14
+     * 9
+     * /    \
+     * 5       12
+     * /  \    /  \
+     * 3    6  11   14
      * Ceil (10): 11
      * Ceil (3): 3
      * Ceil (5): 5
@@ -332,6 +332,7 @@ public class BSTUtils {
         computeCommonNodes(root1, root2, commonNodes);
         return commonNodes;
     }
+
     private static void computeCommonNodes(Node root1, Node root2, List<Integer> commonNodes) {
         if (root1 == null || root2 == null)
             return;
@@ -436,7 +437,7 @@ public class BSTUtils {
         for (int i = 1; i < preorder.length; i++) {
             Node node = new Node(preorder[i]);
             Node temp = null;
-            for (; !stack.isEmpty() && stack.peek().data < node.data; temp = stack.pop());
+            for (; !stack.isEmpty() && stack.peek().data < node.data; temp = stack.pop()) ;
             if (temp != null) {
                 temp.right = node;
             } else {
@@ -452,6 +453,46 @@ public class BSTUtils {
     @Medium
     public static Node createBstUsingPostorderSequence(Integer[] postorder) {
         return null;
+    }
+
+    public static Node inorderPredecessor(Node root, int data) {
+        if (root == null) {
+            return null;
+        }
+        if (root.data == data) {
+            return max(root.left);
+        }
+        Node predecessor;
+        if (data < root.data) {
+            predecessor = inorderPredecessor(root.left, data);
+        } else {
+            predecessor = inorderPredecessor(root.right, data);
+        }
+
+        if (predecessor == null && root.data < data) {
+            return root;
+        }
+        return predecessor;
+    }
+
+    public static Node inorderSuccessor(Node root, int data) {
+        if (root == null) {
+            return null;
+        }
+        if (root.data == data) {
+            return min(root.right);
+        }
+        Node successor;
+        if (data < root.data) {
+            successor = inorderSuccessor(root.left, data);
+        } else {
+            successor = inorderSuccessor(root.right, data);
+        }
+
+        if (successor == null && root.data > data) {
+            return root;
+        }
+        return successor;
     }
 
     // merge two bsts.
@@ -551,46 +592,6 @@ public class BSTUtils {
             currentSum = root.data;
             convertToTreeWithMaxNodeSum(root.left);
         }
-    }
-
-    public static Node inorderPredecessor(Node root, int data) {
-        if (root == null) {
-            return null;
-        }
-        if (root.data == data) {
-            return max(root.left);
-        }
-        Node predecessor;
-        if (data < root.data) {
-            predecessor = inorderPredecessor(root.left, data);
-        } else {
-            predecessor = inorderPredecessor(root.right, data);
-        }
-
-        if (predecessor == null && root.data < data) {
-            return root;
-        }
-        return predecessor;
-    }
-
-    public static Node inorderSuccessor(Node root, int data) {
-        if (root == null) {
-            return null;
-        }
-        if (root.data == data) {
-            return min(root.right);
-        }
-        Node successor;
-        if (data < root.data) {
-            successor = inorderSuccessor(root.left, data);
-        } else {
-            successor = inorderSuccessor(root.right, data);
-        }
-
-        if (successor == null && root.data > data) {
-            return root;
-        }
-        return successor;
     }
 
     @Important

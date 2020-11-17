@@ -1,6 +1,5 @@
 package array;
 
-import static array.ArrayUtils.RotationUtils.rightRotateByReversal;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
@@ -44,7 +43,7 @@ public class ArrayUtils {
         for (int i = 0; i < arr.length; i++) {
             int diff = N - arr[i];
             int j = map.getOrDefault(diff, -1);
-            if (j != -1 && j != i ) {
+            if (j != -1 && j != i) {
                 System.out.printf("Found pair: ( %d, %d) %n)", arr[i], arr[j]);
                 count++;
             }
@@ -386,8 +385,7 @@ public class ArrayUtils {
             if (LMin[i] < RMax[j]) {
                 maxDiff = Math.max(maxDiff, j - i);
                 j = j + 1;
-            }
-            else {
+            } else {
                 i = i + 1;
             }
         }
@@ -602,6 +600,54 @@ public class ArrayUtils {
         }
     }
 
+    @Important
+    @Medium
+    public static int containerWithMaxWater(int[] arr) {
+        if (arr == null) {
+            return 0;
+        }
+        int start = 0;
+        int end = arr.length - 1;
+        int capacity = 0;
+        while (start < end) {
+            capacity = Math.max(capacity, Math.min(arr[start], arr[end]) * (end - start));
+            if (arr[start] < arr[end]) {
+                start++;
+            } else {
+                end--;
+            }
+        }
+        return capacity;
+    }
+
+    @Important
+    @Medium
+    public static int totalRainWaterTrapped(int[] arr) {
+        if (arr == null) {
+            return 0;
+        }
+
+        int n = arr.length;
+        int[] maxWaterCapacity = new int[n];
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            max = Math.max(max, arr[i]);
+            maxWaterCapacity[i] = max;
+        }
+
+        max = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            max = Math.max(max, arr[i]);
+            maxWaterCapacity[i] = Math.min(max, maxWaterCapacity[i]);
+        }
+
+        int totalCapacity = 0;
+        for (int i = 0; i < n; i++) {
+            totalCapacity += (maxWaterCapacity[i] - arr[i]);
+        }
+        return totalCapacity;
+    }
+
     /**
      * {1 ,2, 2, 4}
      * o/p: 2
@@ -734,7 +780,7 @@ public class ArrayUtils {
                 while (indexes[i] != i) {
                     int currentElement = arr[i];
                     int currentElementTargedIndex = indexes[i]; // index to put current element
-                    int targetElement  = arr[currentElementTargedIndex]; // element at the target indexed
+                    int targetElement = arr[currentElementTargedIndex]; // element at the target indexed
                     int targetElementsTargetIndex = indexes[currentElementTargedIndex]; // index of the element at target index.
 
                     // swap current index + element with targets index + element
@@ -841,53 +887,5 @@ public class ArrayUtils {
             reverse(arr, startIndex, endIndex - d);
             reverse(arr, startIndex, endIndex);
         }
-    }
-
-    @Important
-    @Medium
-    public static int containerWithMaxWater(int [] arr) {
-        if (arr == null) {
-            return 0;
-        }
-        int start = 0;
-        int end = arr.length - 1;
-        int capacity = 0;
-        while (start < end) {
-            capacity = Math.max(capacity, Math.min(arr[start], arr[end]) * (end - start));
-            if (arr[start] < arr[end]) {
-                start++;
-            } else {
-                end--;
-            }
-        }
-        return capacity;
-    }
-
-    @Important
-    @Medium
-    public static int totalRainWaterTrapped(int [] arr) {
-        if (arr == null) {
-            return 0;
-        }
-
-        int n = arr.length;
-        int [] maxWaterCapacity = new int[n];
-        int max = 0;
-        for (int i = 0; i < n; i++) {
-            max = Math.max(max, arr[i]);
-            maxWaterCapacity[i] = max;
-        }
-
-        max = 0;
-        for (int i = n - 1; i >= 0; i--) {
-            max = Math.max(max, arr[i]);
-            maxWaterCapacity[i] = Math.min(max, maxWaterCapacity[i]);
-        }
-
-        int totalCapacity = 0;
-        for (int i =0; i < n; i++) {
-            totalCapacity += (maxWaterCapacity[i] - arr[i]);
-        }
-        return totalCapacity;
     }
 }

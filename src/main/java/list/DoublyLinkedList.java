@@ -80,7 +80,7 @@ public class DoublyLinkedList<T> {
 
     public Node<T> nodeAt(int index) {
         Node<T> curr = start;
-        for (int i=0; i < index && curr != null; i++, curr = curr.next);
+        for (int i = 0; i < index && curr != null; i++, curr = curr.next) ;
         return curr;
     }
 

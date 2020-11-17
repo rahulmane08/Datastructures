@@ -34,7 +34,7 @@ public class LinkedList<T> implements Cloneable {
             return;
         }
         Node<T> curr = start;
-        for (; curr.next != null; curr = curr.next);
+        for (; curr.next != null; curr = curr.next) ;
         curr.next = node;
     }
 
@@ -61,7 +61,7 @@ public class LinkedList<T> implements Cloneable {
 
     public int size() {
         int size = 0;
-        for (Node<T> curr = this.start; curr != null; ++size, curr = curr.next);
+        for (Node<T> curr = this.start; curr != null; ++size, curr = curr.next) ;
         return size;
     }
 
@@ -76,7 +76,7 @@ public class LinkedList<T> implements Cloneable {
         }
 
         Node<T> curr = start;
-        for (; curr.next != null && curr.next.data != data; curr = curr.next);
+        for (; curr.next != null && curr.next.data != data; curr = curr.next) ;
         if (curr.next == null) {
             // node not found
             return false;
@@ -89,7 +89,7 @@ public class LinkedList<T> implements Cloneable {
 
     public boolean contains(T data) {
         Node<T> curr = start;
-        for (; curr != null && !curr.data.equals(data); curr = curr.next);
+        for (; curr != null && !curr.data.equals(data); curr = curr.next) ;
         return curr != null;
     }
 
@@ -103,7 +103,7 @@ public class LinkedList<T> implements Cloneable {
 
     public Node<T> nodeAt(int index) {
         Node<T> curr = start;
-        for (int i=0; i < index && curr != null; i++, curr = curr.next);
+        for (int i = 0; i < index && curr != null; i++, curr = curr.next) ;
         return curr;
     }
 

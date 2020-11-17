@@ -4,6 +4,60 @@ import utils.Utils;
 
 public class MatrixUtils {
 
+    static public int findPairWithMaxDiff(int mat[][], int N) {
+        int[][] maxArray = new int[N][N];
+        int maxDiff = Integer.MIN_VALUE;
+
+        int max = mat[N - 1][N - 1]; //init max to last element
+
+
+        /* mat[3][3]
+         * 1,2,3
+         * 4,5,6
+         * 7,8,9
+         *
+         * maxArr[3][3]
+         * 0,0,0
+         * 0,0,0
+         * 0,0,9
+         */
+
+
+        //fill the entire last row of maxArr with the max element of last row in actual arr
+        for (int j = N - 2; j >= 0; j--) {
+            if (mat[N - 1][j] > max)
+                max = mat[N - 1][j];
+            maxArray[N - 1][j] = max;
+        }
+
+
+        for (int j = N - 2; j >= 0; j--) {
+            if (mat[j][N - 1] > max)
+                max = mat[j][N - 1];
+            maxArray[j][N - 1] = max;
+        }
+
+        /**
+         * maxArr[3][3]
+         * 0,0,9
+         * 0,0,9
+         * 9,9,9
+         */
+
+        for (int i = N - 2; i >= 0; i--) {
+            for (int j = N - 2; j >= 0; j--) {
+                // Update maxValue
+                if (maxArray[i + 1][j + 1] - mat[i][j] > max)
+                    max = maxArray[i + 1][j + 1] - mat[i][j];
+
+                // set maxArr (i, j)
+                maxArray[i][j] = Math.max(mat[i][j], Math.max(maxArray[i][j + 1], maxArray[i + 1][j]));
+            }
+        }
+
+        return maxDiff;
+    }
+
     public static class PrintUtils {
 
         public static void printZigzagOrder(int[][] arr) {
@@ -41,7 +95,6 @@ public class MatrixUtils {
          * 18    15    12
          * 19    16
          * 20
-         *
          */
         static public void printDiagonally(int arr[][]) {
             int m = arr.length - 1;
@@ -121,60 +174,5 @@ public class MatrixUtils {
                 }
             }
         }
-    }
-
-
-    static public int findPairWithMaxDiff(int mat[][], int N) {
-        int[][] maxArray = new int[N][N];
-        int maxDiff = Integer.MIN_VALUE;
-
-        int max = mat[N - 1][N - 1]; //init max to last element
-
-
-        /* mat[3][3]
-         * 1,2,3
-         * 4,5,6
-         * 7,8,9
-         *
-         * maxArr[3][3]
-         * 0,0,0
-         * 0,0,0
-         * 0,0,9
-         */
-
-
-        //fill the entire last row of maxArr with the max element of last row in actual arr
-        for (int j = N - 2; j >= 0; j--) {
-            if (mat[N - 1][j] > max)
-                max = mat[N - 1][j];
-            maxArray[N - 1][j] = max;
-        }
-
-
-        for (int j = N - 2; j >= 0; j--) {
-            if (mat[j][N - 1] > max)
-                max = mat[j][N - 1];
-            maxArray[j][N - 1] = max;
-        }
-
-        /**
-         * maxArr[3][3]
-         * 0,0,9
-         * 0,0,9
-         * 9,9,9
-         */
-
-        for (int i = N - 2; i >= 0; i--) {
-            for (int j = N - 2; j >= 0; j--) {
-                // Update maxValue
-                if (maxArray[i + 1][j + 1] - mat[i][j] > max)
-                    max = maxArray[i + 1][j + 1] - mat[i][j];
-
-                // set maxArr (i, j)
-                maxArray[i][j] = Math.max(mat[i][j], Math.max(maxArray[i][j + 1], maxArray[i + 1][j]));
-            }
-        }
-
-        return maxDiff;
     }
 }

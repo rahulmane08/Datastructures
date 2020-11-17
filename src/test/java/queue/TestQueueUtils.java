@@ -141,7 +141,7 @@ public class TestQueueUtils {
 
     @Test
     public void test_printLargestMultipleOf3() {
-        printLargestMultipleOf3(new int[] {8, 1, 9});
-        printLargestMultipleOf3(new int[] {8, 1, 7, 6, 0});
+        printLargestMultipleOf3(new int[]{8, 1, 9});
+        printLargestMultipleOf3(new int[]{8, 1, 7, 6, 0});
     }
 }

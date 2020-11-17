@@ -1,7 +1,5 @@
 package sort;
 
-import utils.Swapper;
-
 public class MergeSortOptimised {
     private static final int INSERTIONSORT_THRESHOLD = 7;
 

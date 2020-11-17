@@ -1,7 +1,5 @@
 package pq;
 
-import static pq.HeapUtils.CheckerUtils.checkIfArrayIsMaxHeap;
-
 public class Test {
     public static void main(String[] args) {
         /*int k = 3;

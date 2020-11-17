@@ -46,7 +46,7 @@ public class BinarySearchTree extends BinaryTree {
 
     public Node min(Node root) {
         Node node;
-        for (node = root; node != null && node.left != null; node = node.left);
+        for (node = root; node != null && node.left != null; node = node.left) ;
         return node;
     }
 
@@ -56,7 +56,7 @@ public class BinarySearchTree extends BinaryTree {
 
     public Node max(Node root) {
         Node node;
-        for (node = root; node != null && node.left != null; node = node.left);
+        for (node = root; node != null && node.left != null; node = node.left) ;
         return node;
     }
 

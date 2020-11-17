@@ -5,9 +5,9 @@ import static list.ListUtils.ArrangementUtils.rearrageOddEvenTogether;
 import static list.ListUtils.ArrangementUtils.rearrangeInPlace;
 import static list.ListUtils.ArrangementUtils.reversePairs;
 import static list.ListUtils.ArrangementUtils.reversePairsRecursively;
+import static list.ListUtils.ArrangementUtils.rotateInBlocks;
 import static list.ListUtils.ArrangementUtils.rotateLeftBy;
 import static list.ListUtils.ArrangementUtils.rotateRightBy;
-import static list.ListUtils.ArrangementUtils.rotateInBlocks;
 import static list.ListUtils.InsertDeleteUtils.deleteAlternate;
 import static list.ListUtils.InsertDeleteUtils.deleteAlternateRecursive;
 import static list.ListUtils.InsertDeleteUtils.deleteDupesFromSortedList;
@@ -18,12 +18,12 @@ import static list.ListUtils.InsertDeleteUtils.deleteMiddle;
 import static list.ListUtils.InsertDeleteUtils.deleteNAfterMNodes;
 import static list.ListUtils.PalindromeUtils.checkIfListIsPalindrome;
 import static list.ListUtils.PalindromeUtils.lengthOfLargestPalindrome;
+import static list.ListUtils.SwapUtils.swap;
 import static list.ListUtils.areIdentical;
 import static list.ListUtils.containsSublist;
 import static list.ListUtils.flattenMultilevelList;
 import static list.ListUtils.flattenMultilevelListDepthWise;
 import static list.ListUtils.getMiddle;
-import static list.ListUtils.SwapUtils.swap;
 import static list.ListUtils.partitionlist;
 import static list.ListUtils.pointRandomToNextHigherNode;
 import static list.ListUtils.removeMiddlePoints;
@@ -585,7 +585,7 @@ public class TestListUtils {
                 new LinkedList<>(new Integer[]{1, 6, 2, 5, 4}),
                 new LinkedList<>(new Integer[]{1, 6, 2, 5, 3, 4})));
     }
-    
+
     @Test
     public void test_lengthOfLargestPalindrome() {
         LinkedList<Integer> list = new LinkedList<>(new Integer[]{2, 3, 7, 3, 2, 12, 24});
@@ -597,7 +597,7 @@ public class TestListUtils {
         list = new LinkedList<>(new Integer[]{12, 4, 4, 4, 4, 3, 14});
         assertEquals(4, lengthOfLargestPalindrome(list));
     }
-    
+
     @Test
     public void test_partitionlist() {
         LinkedList<Integer> list = new LinkedList<>(new Integer[]{1, 4, 3, 2, 5, 2, 3});
@@ -615,8 +615,8 @@ public class TestListUtils {
 
     @Test
     public void test_decimalToBinary() {
-        assertEquals(new LinkedList<>(new Integer[]{1,1,0}), ListUtils.ArithematicUtils.decimalToBinary(6));
-        assertEquals(new LinkedList<>(new Integer[]{1,0,0,1}), ListUtils.ArithematicUtils.decimalToBinary(9));
+        assertEquals(new LinkedList<>(new Integer[]{1, 1, 0}), ListUtils.ArithematicUtils.decimalToBinary(6));
+        assertEquals(new LinkedList<>(new Integer[]{1, 0, 0, 1}), ListUtils.ArithematicUtils.decimalToBinary(9));
     }
 
     @Test
@@ -658,21 +658,21 @@ public class TestListUtils {
 
     @Test
     public void test_flattenListDepthwise() {
-        Node head=new Node(1);
+        Node head = new Node(1);
         head.next = new Node(2);
         head.next.next = new Node(3);
         head.next.next.next = new Node(4);
         head.next.prev = new Node(7);
         head.next.prev.prev = new Node(9);
         head.next.prev.prev.prev = new Node(14);
-        head.next.prev.prev.prev.prev= new Node(15);
-        head.next.prev.prev.prev.prev.next= new Node(23);
+        head.next.prev.prev.prev.prev = new Node(15);
+        head.next.prev.prev.prev.prev.next = new Node(23);
         head.next.prev.prev.prev.prev.next.prev = new Node(24);
         head.next.prev.next = new Node(8);
         head.next.prev.next.prev = new Node(16);
-        head.next.prev.next.prev.prev= new Node(17);
-        head.next.prev.next.prev.prev.next= new Node(18);
-        head.next.prev.next.prev.prev.next.next= new Node(19);
+        head.next.prev.next.prev.prev = new Node(17);
+        head.next.prev.next.prev.prev.next = new Node(18);
+        head.next.prev.next.prev.prev.next.next = new Node(19);
         head.next.prev.next.prev.prev.next.next.next
                 = new Node(20);
         head.next.prev.next.prev.prev.next.next.next.prev
@@ -682,42 +682,42 @@ public class TestListUtils {
         head.next.prev.next.next.next = new Node(12);
         LinkedList<Integer> list = new LinkedList<>(head);
         flattenMultilevelListDepthWise(list);
-        LinkedList<Integer> output = 
-                new LinkedList<>(new Integer[]{1,2,7,9,14,15,23,24,8,16,17,18,19,20,21,10,11,12,3,4});
+        LinkedList<Integer> output =
+                new LinkedList<>(new Integer[]{1, 2, 7, 9, 14, 15, 23, 24, 8, 16, 17, 18, 19, 20, 21, 10, 11, 12, 3, 4});
         assertEquals(output, list);
     }
 
     /**
      * Input:
      * 1 - 2 - 3 - 4
-     *     |
-     *     7 -  8 - 10 - 12
-     *     |    |    |
-     *     9    16   11
-     *     |    |
-     *     14   17 - 18 - 19 - 20
-     *     |                    |
-     *     15 - 23             21
-     *          |
-     *          24
+     * |
+     * 7 -  8 - 10 - 12
+     * |    |    |
+     * 9    16   11
+     * |    |
+     * 14   17 - 18 - 19 - 20
+     * |                    |
+     * 15 - 23             21
+     * |
+     * 24
      */
     @Test
     public void test_flattenList() {
-        Node head=new Node(1);
+        Node head = new Node(1);
         head.next = new Node(2);
         head.next.next = new Node(3);
         head.next.next.next = new Node(4);
         head.next.prev = new Node(7);
         head.next.prev.prev = new Node(9);
         head.next.prev.prev.prev = new Node(14);
-        head.next.prev.prev.prev.prev= new Node(15);
-        head.next.prev.prev.prev.prev.next= new Node(23);
+        head.next.prev.prev.prev.prev = new Node(15);
+        head.next.prev.prev.prev.prev.next = new Node(23);
         head.next.prev.prev.prev.prev.next.prev = new Node(24);
         head.next.prev.next = new Node(8);
         head.next.prev.next.prev = new Node(16);
-        head.next.prev.next.prev.prev= new Node(17);
-        head.next.prev.next.prev.prev.next= new Node(18);
-        head.next.prev.next.prev.prev.next.next= new Node(19);
+        head.next.prev.next.prev.prev = new Node(17);
+        head.next.prev.next.prev.prev.next = new Node(18);
+        head.next.prev.next.prev.prev.next.next = new Node(19);
         head.next.prev.next.prev.prev.next.next.next
                 = new Node(20);
         head.next.prev.next.prev.prev.next.next.next.prev

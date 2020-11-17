@@ -8,6 +8,11 @@ public class PatternMatching {
         solve(str, pattern);
     }
 
+    public static void main(String[] args) {
+        PatternMatching matching = new PatternMatching("xaylmz", "x?y");
+        System.out.println(matching.isMatch());
+    }
+
     private void solve(String str, String pattern) {
         if (str == null && pattern == null) {
             return;
@@ -28,7 +33,7 @@ public class PatternMatching {
 
         int m = str.length();
         int n = concisePattern.length();
-        int [][] dp = new int[m + 1][n + 1];
+        int[][] dp = new int[m + 1][n + 1];
 
         if (pattern.charAt(0) == '*') {
             dp[0][1] = 1;
@@ -50,10 +55,5 @@ public class PatternMatching {
 
     public boolean isMatch() {
         return match;
-    }
-
-    public static void main(String[] args) {
-        PatternMatching matching = new PatternMatching("xaylmz", "x?y");
-        System.out.println(matching.isMatch());
     }
 }

@@ -147,7 +147,7 @@ public class DLLUtils {
                 return;
             Node<T> curr = list.start;
             int i = 1;
-            for (; i <= n ; i++) {
+            for (; i <= n; i++) {
                 curr = curr.next;
                 if (curr == null)
                     curr = list.start;
@@ -157,7 +157,7 @@ public class DLLUtils {
             curr.prev.next = null;
             curr.prev = null;
             Node<T> end = curr;
-            for (; end.next != null; end = end.next);
+            for (; end.next != null; end = end.next) ;
             end.next = list.start;
             list.start.prev = end;
             list.start = curr;
@@ -183,7 +183,7 @@ public class DLLUtils {
             if (curr == list.start)
                 return;
             Node<T> end = list.start;
-            for (; curr.next != null; curr = curr.next, end = end.next);
+            for (; curr.next != null; curr = curr.next, end = end.next) ;
             Node<T> start = end.next;
             start.prev = null;
             end.next = null;

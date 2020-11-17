@@ -116,6 +116,7 @@ public class StringUtils {
 
     /**
      * s = abcabcd , ans = 3 (abc)
+     *
      * @param s
      * @return
      */
@@ -143,7 +144,7 @@ public class StringUtils {
         int maxLength = 0;
         for (int i = 0; i < s.length(); i++) {
             int even = countSameForwards(s, i) + 1;
-            int odd = 2 * countSameBothWays(s, i-1, i + 1) + 1;
+            int odd = 2 * countSameBothWays(s, i - 1, i + 1) + 1;
             int current = Math.max(even, odd);
             maxLength = Math.max(maxLength, current);
         }
@@ -152,13 +153,13 @@ public class StringUtils {
 
     private static int countSameForwards(String s, int index) {
         int count = 0;
-        for (; index < s.length() - 1 && s.charAt(index) == s.charAt(index + 1); index++, count++);
+        for (; index < s.length() - 1 && s.charAt(index) == s.charAt(index + 1); index++, count++) ;
         return count;
     }
 
     private static int countSameBothWays(String s, int left, int right) {
         int count = 0;
-        for (; left >= 0 && right < s.length() && s.charAt(left--) == s.charAt(right++); count++);
+        for (; left >= 0 && right < s.length() && s.charAt(left--) == s.charAt(right++); count++) ;
         return count;
     }
 
@@ -166,7 +167,7 @@ public class StringUtils {
         String palindrome = "";
         for (int i = 0; i < s.length(); i++) {
             int index = i;
-            for (; index < s.length() - 1 && s.charAt(index) == s.charAt(index + 1); index++);
+            for (; index < s.length() - 1 && s.charAt(index) == s.charAt(index + 1); index++) ;
             String forwards = s.substring(i, index - i);
 
             String bothways = String.valueOf(s.charAt(i));

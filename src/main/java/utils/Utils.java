@@ -52,7 +52,7 @@ public class Utils {
         System.out.println(mostSignificantDigit(n, countDigits(n)));
 
         int xor = 0;
-        for (int i: new int[]{6, 3, 3, 1, 3, 6, 6}) {
+        for (int i : new int[]{6, 3, 3, 1, 3, 6, 6}) {
             xor ^= i;
         }
         System.out.println(xor);

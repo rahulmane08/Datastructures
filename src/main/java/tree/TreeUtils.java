@@ -206,7 +206,6 @@ public class TreeUtils {
             return 0;
         }
 
-
         int depth = depth(root.left, data);
         if (depth != -1) {
             return 1 + depth;
@@ -217,7 +216,6 @@ public class TreeUtils {
         }
         return -1;
     }
-
 
     /**
      * level ordered traversals
@@ -1079,9 +1077,9 @@ public class TreeUtils {
         public static void diagonalTraversal(Node root) {
             Map<Integer, ArrayList<Integer>> diagonalPaths = new TreeMap<>();
             populateDiagalPaths(root, diagonalPaths, 0);
-            diagonalPaths.forEach((level, path) -> {
-                System.out.printf("diagonal level = %d: nodes = %s%n", level, path);
-            });
+            diagonalPaths.entrySet().stream()
+                    .sorted(Comparator.comparingInt(Map.Entry::getKey))
+                    .forEach(e -> System.out.printf("diagonal level = %d: nodes = %s%n", e.getKey(), e.getValue()));
         }
 
         private static void populateDiagalPaths(Node root, Map<Integer, ArrayList<Integer>> diagonalPaths, int level) {
@@ -1215,8 +1213,7 @@ public class TreeUtils {
             int lHeight = computeDiameter(root.left);
             int nodeDiameter = 1 + lHeight + rHeight;
             int nodeHeight = 1 + Math.max(lHeight, rHeight);
-            if (nodeDiameter > diameter)
-                diameter = nodeDiameter;
+            diameter = Math.max(diameter, nodeDiameter);
             return nodeHeight;
         }
     }
@@ -1798,6 +1795,7 @@ public class TreeUtils {
     public static class TreeSerializeDeserializeUtil {
 
         private int index = 0;
+
         public static List<Integer> serialize(Node root) {
             if (root == null) {
                 return null;
