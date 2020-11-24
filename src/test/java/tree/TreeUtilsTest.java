@@ -54,7 +54,7 @@ import org.junit.Before;
 import org.junit.Test;
 import tree.TreeUtils.CheckerUtils.InternalNodeWithOneChildChecker;
 import tree.TreeUtils.CheckerUtils.SumTreeChecker;
-import tree.TreeUtils.DeepestHorrizontalLevelSumUtil;
+import tree.TreeUtils.PathQueryUtils.DeepestHorrizontalLevelSumUtil;
 import tree.TreeUtils.OrderedArrays;
 import tree.TreeUtils.PathQueryUtils.MaxSumOfAny2LeafPathUtil;
 import tree.TreeUtils.PathQueryUtils.MaxSumOfAnyPathUtil;

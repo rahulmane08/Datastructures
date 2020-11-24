@@ -16,4 +16,25 @@ public class BinarySearch {
     static public boolean search(int[] arr, int elem) {
         return search(arr, 0, arr.length - 1, elem);
     }
+
+    static public boolean searchIteratively(int[] arr, int elem) {
+        if (arr == null || arr.length == 0) {
+            return false;
+        }
+        int low = 0;
+        int high = arr.length - 1;
+        boolean found = false;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (arr[mid] == elem) {
+                found = true;
+                break;
+            } else if (arr[mid] < elem) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return found;
+    }
 }

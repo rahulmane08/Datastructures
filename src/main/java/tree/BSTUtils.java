@@ -441,8 +441,7 @@ public class BSTUtils {
             if (temp != null) {
                 temp.right = node;
             } else {
-                temp = stack.peek();
-                temp.left = node;
+                stack.peek().left = node;
             }
             stack.push(node);
         }
@@ -519,6 +518,8 @@ public class BSTUtils {
      * @author rahul
      */
 
+    @Important
+    @Medium
     static public class KthSmallestLargestUtil {
         private int currVisit;
         private Node smallest;
@@ -594,6 +595,22 @@ public class BSTUtils {
         }
     }
 
+    /**
+     * Input Tree:
+     *          10
+     *         /  \
+     *        5    8
+     *       / \
+     *      2   20
+     *
+     * In the above tree, nodes 20 and 8 must be swapped to fix the tree.
+     * Following is the output tree
+     *          10
+     *         /  \
+     *        5    20
+     *       / \
+     *      2   8
+     */
     @Important
     @Medium
     static public class CorrectBST {

@@ -1,4 +1,4 @@
-package algos.dynamicprogramming;
+package algos.dynamicprogramming.string.patternmatching;
 
 public class PatternMatching {
 
@@ -33,24 +33,24 @@ public class PatternMatching {
 
         int m = str.length();
         int n = concisePattern.length();
-        int[][] dp = new int[m + 1][n + 1];
+        boolean [][] dp = new boolean[m + 1][n + 1];
 
         if (pattern.charAt(0) == '*') {
-            dp[0][1] = 1;
+            dp[0][1] = true;
         }
-        dp[0][0] = 1; // empty string match
+        dp[0][0] = true; // empty string match
 
         for (int i = 1; i <= m; i++) {
             for (int j = 1; j <= n; j++) {
                 if (str.charAt(i - 1) == pattern.charAt(j - 1) || pattern.charAt(j - 1) == '?') {
                     dp[i][j] = dp[i - 1][j - 1];
                 } else if (pattern.charAt(j - 1) == '*') {
-                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                    dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
                 }
             }
         }
 
-        this.match = dp[m][n] == 1 ? true : false;
+        this.match = dp[m][n];
     }
 
     public boolean isMatch() {

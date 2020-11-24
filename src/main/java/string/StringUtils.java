@@ -2,9 +2,13 @@ package string;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import interfaces.Important;
 
 public class StringUtils {
 
@@ -105,6 +109,21 @@ public class StringUtils {
         }
     }
 
+    public static void combinations(String str) {
+        combinations(str, 0, "");
+    }
+
+    private static void combinations(String str, int start, String prefix) {
+        if (start == str.length()) {
+            if (!prefix.isEmpty()) {
+                System.out.println(prefix);
+            }
+            return;
+        }
+        combinations(str, start + 1, prefix + str.charAt(start));
+        combinations(str, start + 1, prefix);
+    }
+
     public static void swap(char[] charArray, int i, int j) {
         if (i == j) {
             return;
@@ -120,6 +139,7 @@ public class StringUtils {
      * @param s
      * @return
      */
+    @Important
     public static int lengthOfLongestSubstringWithNonRepeatingCharacters(String s) {
         if (s == null) {
             return 0;
@@ -190,4 +210,82 @@ public class StringUtils {
         return palindrome;
     }
 
+    public static String minWindow(String s, String t) {
+        int n = s.length();
+        HashSet<Character> characters = new HashSet<>();
+        Map<Character, Integer> map = new HashMap<>();
+        int minCount = n + 1;
+        String minSubstr = "";
+
+        for (int i = 0; i < t.length(); i++) {
+            characters.add(t.charAt(i));
+        }
+
+        for (int i = 0, start = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!characters.contains(c)) {
+                continue;
+            }
+
+            map.compute(c, (k, v) -> v == null ? 1 : v + 1);
+            if (map.size() == characters.size()) {
+                // keep moving start ahead until the t remains totally matched.
+
+                int freq = 0;
+                for (char startChar = s.charAt(start); (freq = map.getOrDefault(startChar, 0)) != 1; ) {
+                    if (freq > 1) {
+                        map.put(startChar, freq - 1);
+                    }
+                    startChar = s.charAt(++start);
+                }
+
+                if (minCount > i - start + 1) {
+                    minCount = i - start + 1;
+                    minSubstr = s.substring(start, start + minCount);
+                    // there cant be a string minimum that t.
+                    if (minCount == t.length()) {
+                        return minSubstr;
+                    }
+                }
+
+                // make it unmatched again.
+                map.remove(s.charAt(start++));
+            }
+        }
+
+        if (minCount != n + 1) {
+            return minSubstr;
+        }
+        return null;
+    }
+
+    public static int lengthOfLongestSubstringTwoDistinct(String s) {
+        if (s == null || s.isEmpty()) {
+            return 0;
+        }
+
+        int n = s.length();
+        int maxCount = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0, start = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (map.size() < 2 || (map.size() == 2 && map.containsKey(c))) {
+                map.compute(c, (k, v) -> v == null ? 1 : v + 1);
+            } else {
+                maxCount = Math.max(maxCount, i - start);
+                do {
+                    char startChar = s.charAt(start++);
+                    int count = map.get(startChar);
+                    if (count == 1) {
+                        map.remove(startChar);
+                    } else {
+                        map.compute(startChar, (k, v) -> v - 1);
+                    }
+                } while (map.size() != 1);
+                map.put(c, 1);
+            }
+        }
+        maxCount = Math.max(maxCount, map.values().stream().reduce(0, Integer::sum));
+        return maxCount;
+    }
 }

@@ -5,6 +5,7 @@ import static java.lang.Math.min;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Stack;
 
@@ -15,7 +16,7 @@ import interfaces.Medium;
 import math.Math;
 
 public class ArrayUtils {
-    static public int countPairsEqualToN(int[] arr, int N) {
+    static public int twoSum(int[] arr, int N) {
         java.util.Arrays.sort(arr);// nlog(n)
         int end = arr.length - 1, start = 0;
         for (; arr[end] >= N; end--) {
@@ -37,21 +38,22 @@ public class ArrayUtils {
         return count;
     }
 
-    static public int countPairsEqualToNWithHashing(int[] arr, int N) {
+    static public int twoSumWithHashing(int[] arr, int sum) {
         Map<Integer, Integer> map = new HashMap();
         int count = 0;
         for (int i = 0; i < arr.length; i++) {
-            int diff = N - arr[i];
+            int diff = sum - arr[i];
             int j = map.getOrDefault(diff, -1);
             if (j != -1 && j != i) {
                 System.out.printf("Found pair: ( %d, %d) %n)", arr[i], arr[j]);
                 count++;
             }
+            map.put(arr[j], j);
         }
         return count;
     }
 
-    static public int countTripletsEqualToN(int[] arr, int N) {
+    static public int threeSum(int[] arr, int sum) {
         java.util.Arrays.sort(arr);// nlog(n)
         int count = 0;
         int fixed, left, right;
@@ -62,12 +64,12 @@ public class ArrayUtils {
 
             while (left < right) {
                 int curSum = arr[fixed] + arr[left] + arr[right];
-                if (curSum == N) {
+                if (curSum == sum) {
                     System.out.printf("Triplet (%d,%d,%d)%n", arr[fixed], arr[left], arr[right]);
                     left++;
                     right--;
                     count++;
-                } else if (curSum > N) {
+                } else if (curSum > sum) {
                     right--;
                 } else {
                     left++;
@@ -75,6 +77,27 @@ public class ArrayUtils {
             }
         }
         System.out.println("Total Pairs = " + count);
+        return count;
+    }
+
+    static public int threeSumWithHashing(int[] arr, int sum) {
+        HashSet<Integer> dupes = new HashSet<>();
+        Map<Integer, Integer> complements = new HashMap<>();
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (dupes.contains(arr[i])) {
+                continue;
+            }
+            dupes.add(arr[i]);
+            for (int j = i + 1; j < arr.length; j++) {
+                int complement = sum - (arr[i] + arr[j]);
+                if (complements.getOrDefault(complements, -1) == i) {
+                    System.out.printf("Triplet (%d,%d,%d)%n", arr[i], arr[j], complement);
+                    count++;
+                }
+                complements.put(arr[j], i);
+            }
+        }
         return count;
     }
 
@@ -257,7 +280,7 @@ public class ArrayUtils {
         Arrays.sort(arr, (e1, e2) -> {
             String x = String.valueOf(e1);
             String y = String.valueOf(e2);
-            return -(x + y).compareTo(y + x);
+            return (y + x).compareTo(x + y);
         });
         StringBuilder result = new StringBuilder();
         for (int i : arr)

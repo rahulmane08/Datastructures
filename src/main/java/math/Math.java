@@ -99,9 +99,37 @@ public class Math {
         return dp;
     }
 
+    public static double sqrt(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (n <= 1) {
+            return n;
+        }
+
+        int start = 1;
+        int end = n / 2;
+        int sqrt = 1;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            int y = mid * mid;
+            if (y == n) {
+                sqrt = mid;
+                break;
+            } else if (y < n) {
+                start = mid + 1;
+                sqrt = mid;
+            } else {
+                end = mid - 1;
+            }
+        }
+        return sqrt;
+    }
+
     public static void main(String[] args) {
-        System.out.println(parseInt("1234"));
+        /*System.out.println(parseInt("1234"));
         System.out.println(parseInt("-2147483648"));
-        System.out.println(Integer.parseInt("0.888"));
+        System.out.println(Integer.parseInt("0.888"));*/
+        System.out.println(sqrt(169));
     }
 }

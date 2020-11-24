@@ -87,7 +87,7 @@ public class ArrayUtilsTest {
 
     @Test
     public void test_findMaxJMinusI() {
-        System.out.println(findMaxJMinusI(new int[]{12, 11, 10, 9, 8, 7}));
+        // System.out.println(findMaxJMinusI(new int[]{12, 11, 10, 9, 8, 7}));
         System.out.println(findMaxJMinusI(new int[]{34, 8, 10, 3, 2, 80, 30, 33, 1}));
     }
 

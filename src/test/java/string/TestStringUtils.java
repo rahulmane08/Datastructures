@@ -3,13 +3,16 @@ package string;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static string.StringUtils.combinations;
 import static string.StringUtils.lengthOfLongestPalindrome;
+import static string.StringUtils.lengthOfLongestSubstringTwoDistinct;
 import static string.StringUtils.lengthOfLongestSubstringWithNonRepeatingCharacters;
 import static string.StringUtils.longestPalindrome;
+import static string.StringUtils.minWindow;
 
 import org.junit.Test;
 
-public class StringUtilsTest {
+public class TestStringUtils {
 
     @Test
     public void test_removeKdigits() {
@@ -68,5 +71,21 @@ public class StringUtilsTest {
     public void test_longestPalindrome() {
         System.out.println(longestPalindrome("babad"));
         System.out.println(longestPalindrome("cbbd"));
+    }
+
+    @Test
+    public void test_combinations() {
+        combinations("abcd");
+    }
+
+    @Test
+    public void test_minWindow() {
+        System.out.println(minWindow("ADOBECODEBANC", "ABC"));
+    }
+
+    @Test
+    public void test_lengthOfLongestSubstringTwoDistinct() {
+        System.out.println(lengthOfLongestSubstringTwoDistinct(("ccaabbaba")));
+        System.out.println(lengthOfLongestSubstringTwoDistinct(("bacc")));
     }
 }

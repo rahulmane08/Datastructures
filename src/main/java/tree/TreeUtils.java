@@ -272,6 +272,17 @@ public class TreeUtils {
 
     }
 
+    public static Node image1(Node root) {
+        if (root == null) {
+            return null;
+        }
+        Node left = image1(root.left);
+        Node right = image1(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
     /**
      * Inorder sequence: D B E A F C
      * Preorder sequence: A B D E C F
@@ -761,8 +772,6 @@ public class TreeUtils {
     }
 
     public static class PrintBoundaryNodesUtil {
-        private static Node rightBoundaryEnd = null;
-
         public static void printLeftBoundaryTopDown(Node root) {
             if (root == null)
                 return;
@@ -970,10 +979,12 @@ public class TreeUtils {
             while (!tempStack.isEmpty()) {
                 root = tempStack.pop();
                 finalStack.push(root);
-                if (root.left != null)
+                if (root.left != null) {
                     tempStack.push(root.left);
-                if (root.right != null)
+                }
+                if (root.right != null) {
                     tempStack.push(root.right);
+                }
             }
             while (!finalStack.isEmpty())
                 System.out.println(finalStack.pop());
@@ -1038,15 +1049,19 @@ public class TreeUtils {
                 Node curr = currentLevel.pop();
                 System.out.println(curr.data);
                 if (leftToRight) {
-                    if (curr.left != null)
+                    if (curr.left != null) {
                         nextLevel.push(curr.left);
-                    if (curr.right != null)
+                    }
+                    if (curr.right != null) {
                         nextLevel.push(curr.right);
+                    }
                 } else {
-                    if (curr.right != null)
+                    if (curr.right != null) {
                         nextLevel.push(curr.right);
-                    if (curr.left != null)
+                    }
+                    if (curr.left != null) {
                         nextLevel.push(curr.left);
+                    }
                 }
                 if (currentLevel.isEmpty()) {
                     currentLevel = nextLevel;
@@ -1085,9 +1100,9 @@ public class TreeUtils {
         private static void populateDiagalPaths(Node root, Map<Integer, ArrayList<Integer>> diagonalPaths, int level) {
             if (root == null)
                 return;
-            ArrayList<Integer> vPath = diagonalPaths.getOrDefault(level, new ArrayList<>());
-            vPath.add(root.data);
-            diagonalPaths.put(level, vPath);
+            ArrayList<Integer> dPath = diagonalPaths.getOrDefault(level, new ArrayList<>());
+            dPath.add(root.data);
+            diagonalPaths.put(level, dPath);
             populateDiagalPaths(root.left, diagonalPaths, level + 1);
             populateDiagalPaths(root.right, diagonalPaths, level);
         }
@@ -1245,16 +1260,19 @@ public class TreeUtils {
                         maxSum = currSum;
                         maxLevel = level;
                     }
-                    if (!queue.isEmpty())
+                    if (!queue.isEmpty()) {
                         queue.offer(marker); //adding marker for next level
+                    }
                     currSum = 0;//reset the currSum for the next level sum
                     ++level;
                 } else {
                     currSum += curr.data;
-                    if (curr.left != null)
+                    if (curr.left != null) {
                         queue.offer(curr.left);
-                    if (curr.right != null)
+                    }
+                    if (curr.right != null) {
                         queue.offer(curr.right);
+                    }
                 }
             }
             return maxLevel;
@@ -1288,9 +1306,8 @@ public class TreeUtils {
         public static void printAllRootToLeafPaths(Node root, String path) {
             if (root == null)
                 return;
-            path += " " + root.data;
-            printAllRootToLeafPaths(root.left, path);
-            printAllRootToLeafPaths(root.right, path);
+            printAllRootToLeafPaths(root.left, path + " " + root.data);
+            printAllRootToLeafPaths(root.right, path + " " + root.data);
             if (isLeaf(root)) {
                 System.out.println("Found a path: " + path);
             }
@@ -1520,7 +1537,7 @@ public class TreeUtils {
 
         @Important
         public static class MaxSumOfRootToLeafPathsUtil {
-            List<Integer> pathWithMaxSum = new ArrayList<>();
+            Deque<Integer> pathWithMaxSum = new ArrayDeque<>();
             private int maxSum = 0, sum = 0;
 
             public MaxSumOfRootToLeafPathsUtil(Node root) {
@@ -1535,11 +1552,8 @@ public class TreeUtils {
                 sum += root.data;
                 if (isLeaf(root)) {
                     if (maxSum < sum) {
-                        pathWithMaxSum.clear();
+                        pathWithMaxSum = new ArrayDeque<>(queue);
                         maxSum = sum;
-                        while (!queue.isEmpty())
-                            pathWithMaxSum.add(queue.pollFirst());
-                        pathWithMaxSum.stream().forEach(queue::offer);
                     }
                 }
                 computePathWithMaxSum(root.left, queue);
@@ -1552,7 +1566,7 @@ public class TreeUtils {
                 return maxSum;
             }
 
-            public List<Integer> getPathWithMaxSum() {
+            public Deque<Integer> getPathWithMaxSum() {
                 return pathWithMaxSum;
             }
         }
@@ -1697,43 +1711,43 @@ public class TreeUtils {
                 return sum;
             }
         }
-    }
 
-    @Important
-    public static class DeepestHorrizontalLevelSumUtil {
-        private int deepestLevel = -1;
-        private List<Integer> deepestNodes = new ArrayList<>();
-        private int deepestNodesSum = 0;
+        @Important
+        public static class DeepestHorrizontalLevelSumUtil {
+            private int deepestLevel = -1;
+            private List<Integer> deepestNodes = new ArrayList<>();
+            private int deepestNodesSum = 0;
 
-        public DeepestHorrizontalLevelSumUtil(Node root) {
-            compute(root, 0);
-            this.deepestNodesSum = deepestNodes.stream().reduce(0, Integer::sum);
-        }
-
-        private void compute(Node root, int hLevel) {
-            if (root == null)
-                return;
-            compute(root.left, hLevel + 1);
-            compute(root.right, hLevel + 1);
-            if (hLevel > this.deepestLevel) {
-                this.deepestNodes.clear();
-                this.deepestLevel = hLevel;
-                this.deepestNodes.add(root.data);
-            } else if (hLevel == this.deepestLevel) {
-                this.deepestNodes.add(root.data);
+            public DeepestHorrizontalLevelSumUtil(Node root) {
+                compute(root, 0);
+                this.deepestNodesSum = deepestNodes.stream().reduce(0, Integer::sum);
             }
-        }
 
-        public int getDeepestLevel() {
-            return deepestLevel;
-        }
+            private void compute(Node root, int hLevel) {
+                if (root == null)
+                    return;
+                compute(root.left, hLevel + 1);
+                compute(root.right, hLevel + 1);
+                if (hLevel > this.deepestLevel) {
+                    this.deepestNodes.clear();
+                    this.deepestLevel = hLevel;
+                    this.deepestNodes.add(root.data);
+                } else if (hLevel == this.deepestLevel) {
+                    this.deepestNodes.add(root.data);
+                }
+            }
 
-        public List<Integer> getDeepestNodes() {
-            return deepestNodes;
-        }
+            public int getDeepestLevel() {
+                return deepestLevel;
+            }
 
-        public int getDeepestNodesSum() {
-            return deepestNodesSum;
+            public List<Integer> getDeepestNodes() {
+                return deepestNodes;
+            }
+
+            public int getDeepestNodesSum() {
+                return deepestNodesSum;
+            }
         }
     }
 
@@ -1819,18 +1833,18 @@ public class TreeUtils {
             if (preorderList == null || preorderList.isEmpty()) {
                 return null;
             }
-            return deserializeUtil(preorderList, new AtomicInteger(0), preorderList.size());
+            return deserializeUtil(preorderList, new AtomicInteger(0));
         }
 
-        private static Node deserializeUtil(List<Integer> preorderList, AtomicInteger i, int n) {
+        private static Node deserializeUtil(List<Integer> preorderList, AtomicInteger i) {
             if (preorderList.get(i.get()) == -1) {
                 return null;
             }
             Node root = new Node(preorderList.get(i.get()));
-            i.set(i.incrementAndGet());
-            root.left = deserializeUtil(preorderList, i, n);
-            i.set(i.incrementAndGet());
-            root.right = deserializeUtil(preorderList, i, n);
+            i.incrementAndGet();
+            root.left = deserializeUtil(preorderList, i);
+            i.incrementAndGet();
+            root.right = deserializeUtil(preorderList, i);
             return root;
         }
     }
