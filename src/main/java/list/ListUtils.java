@@ -279,27 +279,6 @@ public class ListUtils {
         System.out.println("Intersection = " + intersection);
     }
 
-    static public <T> void swapKthFromStartAndEnd(LinkedList<T> list, int k) {
-        if (list == null || list.start == null)
-            return;
-        if (k < 1)
-            return;
-        int i = 1;
-        Node<T> first = null, second = null, curr = list.start;
-        while (curr != null) {
-            if (i == k) {
-                first = curr;
-                second = list.start;
-            }
-            if (i > k) {
-                second = second.next;
-            }
-            i++;
-            curr = curr.next;
-        }
-        SwapUtils.swap(list, first, second);
-    }
-
     static public boolean identical(LinkedList<Integer> list1, LinkedList<Integer> list2) {
         if (list1 == null && list2 == null)
             return true;
@@ -776,6 +755,27 @@ public class ListUtils {
                 return next;
             }
             return root;
+        }
+
+        static public <T> void swapKthFromStartAndEnd(LinkedList<T> list, int k) {
+            if (list == null || list.start == null)
+                return;
+            if (k < 1)
+                return;
+            int i = 1;
+            Node<T> first = null, second = null, curr = list.start;
+            while (curr != null) {
+                if (i == k) {
+                    first = curr;
+                    second = list.start;
+                }
+                if (i > k) {
+                    second = second.next;
+                }
+                i++;
+                curr = curr.next;
+            }
+            swap(list, first, second);
         }
     }
 
@@ -1307,12 +1307,8 @@ public class ListUtils {
             }
             Node<T> curr = list.start;
             while (curr != null) {
-                Node<T> next = rotateRightBy(curr.next, 1);
-                if (next == null) {
-                    break;
-                }
-                curr.next = next;
-                curr = next.next;
+                curr.next = rotateRightBy(curr.next, 1);
+                curr = curr.next;
             }
         }
 
@@ -1362,6 +1358,7 @@ public class ListUtils {
          *
          * @param list
          */
+        @Important
         public static void rearrangeOddAtOddPositionAndEvenAtEvenPosition(LinkedList<Integer> list) {
             if (list == null || list.start == null)
                 return;

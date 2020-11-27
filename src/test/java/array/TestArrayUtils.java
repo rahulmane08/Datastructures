@@ -15,7 +15,7 @@ import array.ArrayUtils.FindIndexEqualsElementInSortedArrayUtil;
 import matrix.MatrixUtils;
 import org.junit.Test;
 
-public class ArrayUtilsTest {
+public class TestArrayUtils {
 
     private static void print(int[] arr) {
         System.out.println(Arrays.toString(arr));
@@ -110,5 +110,17 @@ public class ArrayUtilsTest {
     @Test
     public void test_totalRainWaterTrapped() {
         System.out.println(totalRainWaterTrapped(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
+    }
+
+    @Test
+    public void test_rearrageAlternatePositiveAndNegative() {
+
+    }
+
+    @Test
+    public void test_leftRotateByReversal() {
+        int [] arr = {1,2,3,4,5,6,7};
+        ArrayUtils.RotationUtils.leftRotateByReversal(arr, 4, 1, 6);
+        System.out.println(Arrays.toString(arr));
     }
 }

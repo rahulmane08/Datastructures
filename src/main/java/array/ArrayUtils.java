@@ -738,7 +738,7 @@ public class ArrayUtils {
             if (arr == null)
                 return;
             int n = arr.length;
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < n - 1; i++) {
                 int j = i + 1;
                 if (i % 2 == 0) {
                     if (arr[i] >= 0) {
@@ -890,7 +890,7 @@ public class ArrayUtils {
                 return;
             int n = endIndex - startIndex + 1;
             d = d % n;
-            reverse(arr, startIndex, d - 1);
+            reverse(arr, startIndex, startIndex + d - 1);
             reverse(arr, startIndex + d, endIndex);
             reverse(arr, startIndex, endIndex);
         }

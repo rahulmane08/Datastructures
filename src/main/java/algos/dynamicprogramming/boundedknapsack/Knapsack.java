@@ -1,5 +1,7 @@
 package algos.dynamicprogramming.boundedknapsack;
 
+import java.util.Arrays;
+
 public class Knapsack {
 
     public static void main(String[] args) {
@@ -8,10 +10,12 @@ public class Knapsack {
 
         int[] profits = {1, 6, 10, 16};
         int[] weights = {1, 2, 3, 5};
-        System.out.println("Total knapsack profit (BU) ---> " + bottomUp.solve(profits, weights, 7));
+        System.out.printf("Total knapsack profit (BU) ---> %s, %s %n",
+                bottomUp.solve(profits, weights, 7), Arrays.toString(bottomUp.getSolution()));
         System.out.println("Total knapsack profit (TD) ---> " + topDown.solve(profits, weights, 7));
 
-        System.out.println("Total knapsack profit (BU) ---> " + bottomUp.solve(profits, weights, 6));
+        System.out.printf("Total knapsack profit (BU) ---> %s, %s %n",
+                bottomUp.solve(profits, weights, 6), Arrays.toString(bottomUp.getSolution()));
         System.out.println("Total knapsack profit (TD) ---> " + topDown.solve(profits, weights, 6));
     }
 
@@ -44,6 +48,8 @@ public class Knapsack {
     }
 
     public static class BottomUp {
+        private int [] solution;
+
         public int solve(int[] profits, int[] weights, int capacity) {
             // basic checks
             if (capacity <= 0 || profits.length == 0 || weights.length != profits.length)
@@ -51,6 +57,7 @@ public class Knapsack {
 
             int n = profits.length;
             int[][] dp = new int[n][capacity + 1];
+            solution = new int[n];
 
             // populate the capacity=0 columns, with '0' capacity we have '0' profit
             for (int i = 0; i < n; i++)
@@ -76,11 +83,21 @@ public class Knapsack {
                 }
             }
 
+            int maxProfit = dp[n - 1][capacity];
+            for (int i = n - 1, c = capacity; i > 0; i--) {
+                if (dp[i-1][c] != maxProfit) {
+                    c -= weights[i];
+                    maxProfit -= profits[i];
+                    solution[i] = 1;
+                }
+            }
+
             // maximum profit will be at the bottom-right corner.
             return dp[n - 1][capacity];
         }
+
+        public int[] getSolution() {
+            return solution;
+        }
     }
-
-
-
 }
