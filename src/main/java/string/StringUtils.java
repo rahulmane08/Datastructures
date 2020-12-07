@@ -288,4 +288,37 @@ public class StringUtils {
         maxCount = Math.max(maxCount, map.values().stream().reduce(0, Integer::sum));
         return maxCount;
     }
+
+    public List<String> findAmbigramicStrings(List<String> inputs,
+                                              Map<Character, Character> ambigramicEquivalents) {
+        if (inputs == null || inputs.size() == 0) {
+            return null;
+        }
+
+        List<String> results = new ArrayList<>();
+        for(String str : inputs) {
+            String result = "";
+            int n = str.length();
+            for (int i = 0; i < n; i++) {
+                if (ambigramicEquivalents.containsKey(str.charAt(i))) {
+                    result += ambigramicEquivalents.get(str.charAt(i));
+                } else {
+                    break;
+                }
+            }
+            if (result.length() == n) {
+                boolean isAmbigram = true;
+                for (int i = 0; i < n; i++) {
+                    if (str.charAt(i) != result.charAt(n - 1 - i)) {
+                        isAmbigram = false;
+                        break;
+                    }
+                }
+                if (isAmbigram) {
+                    results.add(str);
+                }
+            }
+        }
+        return results;
+    }
 }

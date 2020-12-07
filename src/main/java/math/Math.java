@@ -81,7 +81,7 @@ public class Math {
             return 1;
         }
         if (y % 2 == 0) {
-            return pow(x, y / 2);
+            return pow(x * x, y / 2);
         }
         return x * pow(x * x, y / 2);
     }
@@ -99,7 +99,7 @@ public class Math {
         return dp;
     }
 
-    public static double sqrt(int n) {
+    public static int floorSqrt(int n) {
         if (n < 0) {
             throw new IllegalArgumentException();
         }
@@ -112,11 +112,11 @@ public class Math {
         int sqrt = 1;
         while (start <= end) {
             int mid = start + (end - start) / 2;
-            int y = mid * mid;
-            if (y == n) {
+            int square = mid * mid;
+            if (square == n) {
                 sqrt = mid;
                 break;
-            } else if (y < n) {
+            } else if (square < n) {
                 start = mid + 1;
                 sqrt = mid;
             } else {
@@ -126,10 +126,38 @@ public class Math {
         return sqrt;
     }
 
+    public static int ceilSqrt(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (n <= 1) {
+            return n;
+        }
+
+        int start = 1, end  = n/2;
+        int sqrt = 1;
+        while (start <= end) {
+            int mid = (start + end) / 2;
+            int square = mid * mid;
+            if (square == n) {
+                return mid;
+            } else if (square < n) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+                sqrt = mid;
+            }
+        }
+        return sqrt;
+    }
+
     public static void main(String[] args) {
         /*System.out.println(parseInt("1234"));
         System.out.println(parseInt("-2147483648"));
         System.out.println(Integer.parseInt("0.888"));*/
-        System.out.println(sqrt(169));
+        System.out.println(floorSqrt(169));
+        System.out.println(ceilSqrt(169));
+        System.out.println(floorSqrt(28));
+        System.out.println(ceilSqrt(28));
     }
 }

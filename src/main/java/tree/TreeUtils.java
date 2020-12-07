@@ -783,7 +783,6 @@ public class TreeUtils {
                 System.out.print(root.data + " ");
                 printLeftBoundaryTopDown(root.right);
             }
-
         }
 
         public static void printRightBoundaryBottomUp(Node root) {
@@ -797,7 +796,6 @@ public class TreeUtils {
                 printRightBoundaryBottomUp(root.left);
                 System.out.print(root.data + " ");
             }
-
         }
 
         public static void printLeavesLeftToRight(Node root) {
@@ -1689,6 +1687,7 @@ public class TreeUtils {
             }
         }
 
+        @Important
         public static class SumOfAllLeftLeafNodes {
             private int sum;
 

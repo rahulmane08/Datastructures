@@ -29,10 +29,13 @@ public class LongestCommonSubstring {
             }
 
             if (str1.charAt(index1) == str2.charAt(index2)) {
-                return 1 + solve(str1, str2, index1 + 1, index2 + 2, count + 1, dp);
+                length = 1 + solve(str1, str2, index1 + 1, index2 + 2, count + 1, dp);
+            } else {
+                length =  Math.max(solve(str1, str2, index1 + 1, index2, count, dp),
+                        solve(str1, str2, index1, index2 + 1, count, dp));
             }
-            return Math.max(solve(str1, str2, index1 + 1, index2, count, dp),
-                    solve(str1, str2, index1, index2 + 1, count, dp));
+            dp.put(key, length);
+            return length;
         }
     }
 

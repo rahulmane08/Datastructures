@@ -52,7 +52,7 @@ public class MaxPriorityQueue<T extends Comparable<T>> {
         if (parent >= 0) {
             T elem = (T) this.arr[i];
             T parentElem = (T) this.arr[parent];
-            if (parentElem != null && elem.compareTo(parentElem) > 0) {
+            if (parentElem != null && parentElem.compareTo(elem) < 0) {
                 smallest = parent;
             }
         }
@@ -71,7 +71,7 @@ public class MaxPriorityQueue<T extends Comparable<T>> {
         if (left < this.size) {
             T elem = (T) arr[largest];
             T leftChild = (T) arr[left];
-            if (elem != null && elem.compareTo(leftChild) < 0) {
+            if (leftChild != null && elem.compareTo(leftChild) < 0) {
                 largest = left;
             }
         }

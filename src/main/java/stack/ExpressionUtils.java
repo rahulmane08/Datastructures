@@ -364,7 +364,11 @@ public class ExpressionUtils {
                 stack.push(String.valueOf(c));
             }
         }
-        return stack.pop();
+        String result = "";
+        while (!stack.isEmpty()) {
+            result = stack.pop() + result;
+        }
+        return result;
     }
 
     /**

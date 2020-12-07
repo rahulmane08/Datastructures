@@ -32,6 +32,8 @@ public class LRUCache<K, V> {
         } else {
             if (cache.size() == this.capacity) {
                 evictOldEntries();
+                cacheNode = new CacheNode<>(key, value);
+                addCacheNode(cacheNode);
             }
         }
     }
@@ -78,6 +80,11 @@ public class LRUCache<K, V> {
         }
     }
 
+    /**
+     * Doubly linked list cache node
+     * @param <K>
+     * @param <V>
+     */
     class CacheNode<K, V> {
         K key;
         V value;

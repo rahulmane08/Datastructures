@@ -11,7 +11,7 @@ import static stack.StackUtils.countPatternOccurences;
 import static stack.StackUtils.countPatternOccurences1;
 import static stack.StackUtils.countPermutationsGreaterThanEqualToOriginalNumber;
 import static stack.StackUtils.decodeStringByCount;
-import static stack.StackUtils.deleteFirstKElements;
+import static stack.StackUtils.deleteBottomKElements;
 import static stack.StackUtils.deleteMiddle;
 import static stack.StackUtils.findMinimumNumberForGivenSequence;
 import static stack.StackUtils.findNextGreaterOrSmallerElement;
@@ -98,6 +98,11 @@ public class TestStackUtils {
 
         arr = new int[]{1, 2, 3, 4};
         expected = new int[]{3, 2, 1, 0};
+        result = StackUtils.findNumberOfNextGreaterElements(arr);
+        assertTrue(Arrays.equals(result, expected));
+
+        arr = new int[]{1, 2, 3, 6, 5};
+        expected = new int[]{4, 3, 2, 0, 0};
         result = StackUtils.findNumberOfNextGreaterElements(arr);
         assertTrue(Arrays.equals(result, expected));
     }
@@ -374,13 +379,13 @@ public class TestStackUtils {
         for (int i = 0; i < 10; i++) {
             stack.push(i);
         }
-        deleteFirstKElements(stack, 4);
+        deleteBottomKElements(stack, 4);
         assertEquals(6, stack.size());
         System.out.println(stack);
-        deleteFirstKElements(stack, 4);
+        deleteBottomKElements(stack, 4);
         assertEquals(2, stack.size());
         System.out.println(stack);
-        deleteFirstKElements(stack, 4);
+        deleteBottomKElements(stack, 4);
         assertEquals(0, stack.size());
         System.out.println(stack);
     }

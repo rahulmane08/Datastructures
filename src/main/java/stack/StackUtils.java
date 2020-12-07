@@ -335,12 +335,12 @@ public class StackUtils {
     }
 
     @Important
-    public static int deleteFirstKElements(Stack<Integer> stack, int k) {
+    public static int deleteBottomKElements(Stack<Integer> stack, int k) {
         if (stack == null || stack.isEmpty()) {
             return 0;
         }
         int top = stack.pop();
-        int visitedCount = deleteFirstKElements(stack, k);
+        int visitedCount = deleteBottomKElements(stack, k);
         if (k - visitedCount <= 0) {
             stack.push(top);
         }
@@ -348,12 +348,12 @@ public class StackUtils {
     }
 
     @Important
-    public static int deleteBottomKElements(Stack<Integer> stack, int k) {
+    public static int deleteTopKElements(Stack<Integer> stack, int k) {
         if (stack == null || stack.isEmpty()) {
             return 0;
         }
         int top = stack.pop();
-        int visitedCount = deleteFirstKElements(stack, k);
+        int visitedCount = deleteBottomKElements(stack, k);
         if (k - visitedCount > 0) {
             stack.push(top);
         }
@@ -425,7 +425,8 @@ public class StackUtils {
     /**
      * Input : 1 1 1 1 0 1 1 1 1 1
      * Output : 24
-     * For {1, 1, 1, 1, 0, 1, 1, 1, 1, 1} all element are same except 0. So only for zero their exist greater element
+     * For {1, 1, 1, 1, 0, 1, 1, 1, 1, 1} all element are same except 0.
+     * So only for zero their exist greater element
      * and for others it will be zero. for zero, on left 4th element is closest and greater than zero
      * and on right 6th element is closest and greater. so maximum
      * product will be 4*6 = 24.
@@ -788,6 +789,14 @@ public class StackUtils {
         return occurences + countPatternOccurences(residueString, pattern);
     }
 
+    /**
+     * Input :
+     * Pattern : ABC
+     * Text : BABABCABCC
+     * @param str
+     * @param pattern
+     * @return
+     */
     public static int countPatternOccurences1(String str, String pattern) {
         if (str == null || str.length() == 0 || pattern == null || pattern.length() == 0 || pattern.length() > str.length()) {
             return 0;

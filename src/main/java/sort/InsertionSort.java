@@ -8,6 +8,8 @@ package sort;
  * If the inversion count is O(n), then the time complexity of insertion sort is O(n).
  * In worst case, there can be n*(n-1)/2 inversions.
  * The worst case occurs when the array is sorted in reverse order. So the worst case time complexity of insertion sort is O(n2).
+ * Best case: O(n)
+ * Worst case: O(n^2)
  */
 public class InsertionSort {
     static public void sort(int[] arr) {
@@ -18,5 +20,9 @@ public class InsertionSort {
             for (; j >= 0 && key < arr[j]; arr[j + 1] = arr[j--]) ;
             arr[j + 1] = key;
         }
+    }
+
+    public static void main(String[] args) {
+        InsertionSort.sort(new int[]{5,4,3,2,1});
     }
 }
