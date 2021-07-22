@@ -1,10 +1,6 @@
 package graph.mst;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.UUID;
+import java.util.*;
 
 import graph.Edge;
 import graph.Graph;
@@ -20,7 +16,7 @@ import lombok.Getter;
 public class PrimMST {
     static private final Integer INF = Integer.MAX_VALUE;
     //Comparator based on the weight of PrimNode
-    static private Comparator<PrimNode> weightComparator = new Comparator<PrimNode>() {
+    static private final Comparator<PrimNode> weightComparator = new Comparator<PrimNode>() {
 
         @Override
         public int compare(PrimNode o1, PrimNode o2) {
@@ -47,7 +43,6 @@ public class PrimMST {
                 start = true;
             } else
                 primNode.setEdgeWeight(INF);
-            ;
             primNodeMap.put(v.getId(), primNode);
             primNodeByMinEdgeWeightHeap.add(primNode);
         }
@@ -120,11 +115,8 @@ public class PrimMST {
                 return false;
             PrimNode other = (PrimNode) obj;
             if (vertexID == null) {
-                if (other.vertexID != null)
-                    return false;
-            } else if (!vertexID.equals(other.vertexID))
-                return false;
-            return true;
+                return other.vertexID == null;
+            } else return vertexID.equals(other.vertexID);
         }
 
         @Override

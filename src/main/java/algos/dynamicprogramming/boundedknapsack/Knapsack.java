@@ -22,7 +22,7 @@ public class Knapsack {
     public static class TopDown {
         public int solve(int[] profits, int[] weights, int capacity) {
             int n = profits.length;
-            Integer [][] dp = new Integer[n][capacity + 1];
+            Integer[][] dp = new Integer[n][capacity + 1];
             return solve(profits, weights, capacity, 0, dp);
         }
 
@@ -48,7 +48,7 @@ public class Knapsack {
     }
 
     public static class BottomUp {
-        private int [] solution;
+        private int[] solution;
 
         public int solve(int[] profits, int[] weights, int capacity) {
             // basic checks
@@ -85,7 +85,7 @@ public class Knapsack {
 
             int maxProfit = dp[n - 1][capacity];
             for (int i = n - 1, c = capacity; i > 0; i--) {
-                if (dp[i-1][c] != maxProfit) {
+                if (dp[i - 1][c] != maxProfit) {
                     c -= weights[i];
                     maxProfit -= profits[i];
                     solution[i] = 1;

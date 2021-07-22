@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class StringPermutations {
-    private Map<Character, Integer> countsByChars = new LinkedHashMap<>();
+    private final Map<Character, Integer> countsByChars = new LinkedHashMap<>();
 
     public static void main(String[] args) {
         new StringPermutations().permute("AABC");

@@ -2,8 +2,16 @@ package algos.dynamicprogramming.unboundedknapsack;
 
 public class CoinChange {
 
+    public static void main(String[] args) {
+        int[] denominations = {1, 2, 3};
+        TopDown topDown = new TopDown();
+        System.out.println(topDown.solve(denominations, 5));
+        BottomUp bottomUp = new BottomUp();
+        System.out.println(bottomUp.solve(denominations, 5));
+    }
+
     public static class TopDown {
-        public int solve(int [] denominations, int amount) {
+        public int solve(int[] denominations, int amount) {
             if (denominations == null || denominations.length == 0) {
                 return 0;
             }
@@ -12,7 +20,7 @@ public class CoinChange {
             return solve(denominations, amount, 0, dp);
         }
 
-        public int solve(int [] denominations, int amount, int i, Integer[][] dp) {
+        public int solve(int[] denominations, int amount, int i, Integer[][] dp) {
             if (amount == 0) {
                 return 1;
             }
@@ -36,7 +44,7 @@ public class CoinChange {
     }
 
     public static class BottomUp {
-        public int solve(int [] denominations, int amount) {
+        public int solve(int[] denominations, int amount) {
             if (denominations == null || denominations.length == 0) {
                 return 0;
             }
@@ -51,7 +59,7 @@ public class CoinChange {
             for (int i = 0; i < n; i++) {
                 for (int s = 1; s <= amount; s++) {
                     if (i > 0) {
-                        dp[i][s] = dp[i-1][s];
+                        dp[i][s] = dp[i - 1][s];
                     }
                     if (denominations[i] <= s) {
                         dp[i][s] += dp[i][s - denominations[i]];
@@ -61,13 +69,5 @@ public class CoinChange {
 
             return dp[n - 1][amount];
         }
-    }
-
-    public static void main(String[] args) {
-        int[] denominations = {1, 2, 3};
-        TopDown topDown = new TopDown();
-        System.out.println(topDown.solve(denominations, 5));
-        BottomUp bottomUp = new BottomUp();
-        System.out.println(bottomUp.solve(denominations, 5));
     }
 }

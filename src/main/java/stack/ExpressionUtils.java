@@ -19,8 +19,8 @@ import interfaces.Medium;
 public class ExpressionUtils {
     static HashMap<String, Integer> priortyMap = new HashMap<>();
     static HashMap<Character, Character> parenthesisPairs = new HashMap<>();
-    private static List<Character> operators = Arrays.asList(new Character[]{'/', '-', '+', '*'});
-    private static List<Character> parenthesis = Arrays.asList(new Character[]{'(', ')', '{', '}', '[', ']'});
+    private static final List<Character> operators = Arrays.asList('/', '-', '+', '*');
+    private static final List<Character> parenthesis = Arrays.asList('(', ')', '{', '}', '[', ']');
 
     static {
         ExpressionUtils.priortyMap.put("+", 1);

@@ -6,6 +6,13 @@ import java.util.Map;
 public class LongestIncreasingSubsequence {
     private String subsequence = "";
 
+    public static void main(String[] args) {
+        int[] arr = {4, 1, 3, 6, 2, 10};
+        LongestIncreasingSubsequence util = new LongestIncreasingSubsequence();
+        System.out.println(util.solveBottomUp(arr));
+        System.out.println(util.solveTopDown(arr));
+    }
+
     public int solveTopDown(int[] arr) {
         if (arr == null || arr.length == 0) {
             return 0;
@@ -29,7 +36,7 @@ public class LongestIncreasingSubsequence {
         int c1 = 0;
         if (prev == -1 || arr[prev] <= arr[curr]) {
             subsequence += arr[curr];
-            c1 = 1 +solveRecursively(arr, curr, curr + 1, dp);
+            c1 = 1 + solveRecursively(arr, curr, curr + 1, dp);
         }
         int c2 = solveRecursively(arr, prev, curr + 1, dp);
         length = Math.max(c1, c2);
@@ -43,7 +50,7 @@ public class LongestIncreasingSubsequence {
         }
 
         int n = arr.length;
-        int [] dp = new int[n];
+        int[] dp = new int[n];
         int maxLength = 1;
         for (int i = 0; i < n; i++) {
             dp[i] = 1;
@@ -55,12 +62,5 @@ public class LongestIncreasingSubsequence {
             }
         }
         return maxLength;
-    }
-
-    public static void main(String[] args) {
-        int[] arr = {4, 1, 3, 6, 2, 10};
-        LongestIncreasingSubsequence util = new LongestIncreasingSubsequence();
-        System.out.println(util.solveBottomUp(arr));
-        System.out.println(util.solveTopDown(arr));
     }
 }

@@ -1,15 +1,6 @@
 package tree;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Stack;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import interfaces.Hard;
@@ -189,11 +180,9 @@ public class TreeUtils {
             return leftLca;
 
         // Only right key present, its the LCA
-        if (rightLca != null)
-            return rightLca;
+        return rightLca;
 
         // both keys absent.
-        return null;
     }
 
     @Important
@@ -630,7 +619,7 @@ public class TreeUtils {
          */
         @Important
         public static class InternalNodeWithOneChildChecker {
-            private Node root;
+            private final Node root;
             private boolean check = false;
 
             public InternalNodeWithOneChildChecker(Node root) {
@@ -1484,7 +1473,7 @@ public class TreeUtils {
         @Important
         public static class SumOfRootToLeafPathsUtil {
             private double sum = 0;
-            private Stack<Integer> stack = new Stack<>();
+            private final Stack<Integer> stack = new Stack<>();
 
             public SumOfRootToLeafPathsUtil(Node root) {
                 compute(root);
@@ -1509,7 +1498,7 @@ public class TreeUtils {
 
         public static class SumOfRootToLeafPathsUtil1 {
             private double sum = 0;
-            private List<String> paths = new ArrayList<>();
+            private final List<String> paths = new ArrayList<>();
 
             public SumOfRootToLeafPathsUtil1(Node root) {
                 compute(root, "");
@@ -1642,7 +1631,7 @@ public class TreeUtils {
         @Hard
         public static class MaxSumOfNonAdjacentNodesUtil {
             private int maxSum = Integer.MIN_VALUE;
-            private Map<Integer, Integer> nodeSums = new HashMap<>(); // memoization
+            private final Map<Integer, Integer> nodeSums = new HashMap<>(); // memoization
 
             public MaxSumOfNonAdjacentNodesUtil(Node root) {
                 this.maxSum = computeMaxSum(root);
@@ -1714,7 +1703,7 @@ public class TreeUtils {
         @Important
         public static class DeepestHorrizontalLevelSumUtil {
             private int deepestLevel = -1;
-            private List<Integer> deepestNodes = new ArrayList<>();
+            private final List<Integer> deepestNodes = new ArrayList<>();
             private int deepestNodesSum = 0;
 
             public DeepestHorrizontalLevelSumUtil(Node root) {
@@ -1807,7 +1796,7 @@ public class TreeUtils {
 
     public static class TreeSerializeDeserializeUtil {
 
-        private int index = 0;
+        private final int index = 0;
 
         public static List<Integer> serialize(Node root) {
             if (root == null) {

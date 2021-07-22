@@ -1,8 +1,6 @@
 package pq;
 
-import static java.lang.Math.ceil;
-import static java.lang.Math.log;
-import static java.lang.Math.pow;
+import static java.lang.Math.*;
 
 /**
  * A typical Priority Queue requires following operations to be efficient.

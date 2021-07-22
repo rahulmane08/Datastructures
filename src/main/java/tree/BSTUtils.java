@@ -522,8 +522,8 @@ public class BSTUtils {
     @Medium
     static public class KthSmallestLargestUtil {
         private int currVisit;
-        private Node smallest;
-        private Node largest;
+        private final Node smallest;
+        private final Node largest;
 
         public KthSmallestLargestUtil(Node root, int k) {
             smallest = computeKthSmallest(root, k);
@@ -597,19 +597,19 @@ public class BSTUtils {
 
     /**
      * Input Tree:
-     *          10
-     *         /  \
-     *        5    8
-     *       / \
-     *      2   20
-     *
+     * 10
+     * /  \
+     * 5    8
+     * / \
+     * 2   20
+     * <p>
      * In the above tree, nodes 20 and 8 must be swapped to fix the tree.
      * Following is the output tree
-     *          10
-     *         /  \
-     *        5    20
-     *       / \
-     *      2   8
+     * 10
+     * /  \
+     * 5    20
+     * / \
+     * 2   8
      */
     @Important
     @Medium

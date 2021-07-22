@@ -70,7 +70,7 @@ public class MinimumCoinChange {
             for (int i = 0; i < n; i++) {
                 for (int c = 1; c <= amount; c++) {
                     if (i > 0) {
-                        dp[i][c] = dp[i -1][c];
+                        dp[i][c] = dp[i - 1][c];
                     }
                     if (deno[i] <= c) {
                         if (dp[i][c - deno[i]] != Integer.MAX_VALUE) {

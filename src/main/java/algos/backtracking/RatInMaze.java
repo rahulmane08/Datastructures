@@ -25,9 +25,6 @@ public class RatInMaze {
     }
 
     private static boolean isValid(int x, int y, int M, int N) {
-        if (x < 0 || x == M || y < 0 || y == N) {
-            return false;
-        }
-        return true;
+        return x >= 0 && x != M && y >= 0 && y != N;
     }
 }

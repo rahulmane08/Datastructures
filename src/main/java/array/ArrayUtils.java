@@ -3,11 +3,7 @@ package array;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 import interfaces.*;
 import math.Math;
@@ -16,6 +12,7 @@ public class ArrayUtils {
 
     /**
      * https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/727/
+     *
      * @param nums
      * @return
      */
@@ -34,7 +31,7 @@ public class ArrayUtils {
         int j;
         for (; i + 1 < nums.length; i++) {
             if (nums[i] == nums[i + 1]) {
-                for (j = i + 1; j + 1 < nums.length && nums[j] == nums[j+1]; j++);
+                for (j = i + 1; j + 1 < nums.length && nums[j] == nums[j + 1]; j++) ;
                 if (j == nums.length - 1) {
                     break;
                 }
@@ -413,8 +410,8 @@ public class ArrayUtils {
         int maxDiff;
         int i, j;
 
-        int RMax[] = new int[n];
-        int LMin[] = new int[n];
+        int[] RMax = new int[n];
+        int[] LMin = new int[n];
 
         /* Construct LMin[] such that LMin[i] stores the minimum value
            from (arr[0], arr[1], ... arr[i]) */

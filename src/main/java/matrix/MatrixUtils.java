@@ -6,7 +6,7 @@ import utils.Utils;
 
 public class MatrixUtils {
 
-    static public int findPairWithMaxDiff(int mat[][], int N) {
+    static public int findPairWithMaxDiff(int[][] mat, int N) {
         int[][] maxArray = new int[N][N];
         int maxDiff = Integer.MIN_VALUE;
 
@@ -60,6 +60,13 @@ public class MatrixUtils {
         return maxDiff;
     }
 
+    public static void main(String[] args) {
+        int[][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        ArrangementUtils.rotateRight(a);
+        for (int i = 0; i < a.length; i++)
+            System.out.println(Arrays.toString(a[i]));
+    }
+
     public static class PrintUtils {
 
         public static void printZigzagOrder(int[][] arr) {
@@ -98,7 +105,7 @@ public class MatrixUtils {
          * 19    16
          * 20
          */
-        static public void printDiagonally(int arr[][]) {
+        static public void printDiagonally(int[][] arr) {
             int m = arr.length - 1;
             int n = arr[0].length - 2;
             int LINES = m + n + 1;
@@ -107,7 +114,6 @@ public class MatrixUtils {
                 int row_idx = Math.min(line, m);
                 int col_idx = Math.max(0, line - n);
                 int elements = Utils.min(line, n - col_idx, m) + 1;
-                ;
                 for (int i = 0; i < elements; i++) {
                     int x = (row_idx - i);
                     int y = Math.abs(i - col_idx);
@@ -117,7 +123,7 @@ public class MatrixUtils {
             }
         }
 
-        static void printSpiralOrder(int arr[][]) {
+        static void printSpiralOrder(int[][] arr) {
             int TOP = 0;
             int BOTTOM = arr.length - 1;
             int LEFT = 0;
@@ -153,7 +159,7 @@ public class MatrixUtils {
     }
 
     public static class ArrangementUtils {
-        static public void rotateLeft(int mat[][], int N) {
+        static public void rotateLeft(int[][] mat, int N) {
             // Consider all squares one by one
             for (int x = 0; x < N / 2; x++) {
                 // Consider elements in group of 4 in
@@ -182,19 +188,12 @@ public class MatrixUtils {
             for (int x = 0; x < N / 2; x++) {
                 for (int y = x; y < N - 1 - x; y++) {
                     int temp = matrix[x][y];
-                    matrix[x][y] = matrix[N-1-y][x];
-                    matrix[N-1-y][x] = matrix[N-1-x][N-1-y];
-                    matrix[N-1-x][N-1-y] = matrix[y][N-1-x];
-                    matrix[y][N-1-x] = temp;
+                    matrix[x][y] = matrix[N - 1 - y][x];
+                    matrix[N - 1 - y][x] = matrix[N - 1 - x][N - 1 - y];
+                    matrix[N - 1 - x][N - 1 - y] = matrix[y][N - 1 - x];
+                    matrix[y][N - 1 - x] = temp;
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-        int [][] a = {{1,2,3},{4,5,6},{7,8,9}};
-        ArrangementUtils.rotateRight(a);
-        for (int i = 0; i < a.length; i++)
-            System.out.println(Arrays.toString(a[i]));
     }
 }

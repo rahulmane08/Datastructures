@@ -2,14 +2,23 @@ package algos.dynamicprogramming.boundedknapsack;
 
 public class CountSubsetsMatchingSum {
 
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3};
+        int sum = 3;
+        TopDown topDown = new TopDown();
+        BottomUp bottomUp = new BottomUp();
+        System.out.printf("TD: #subsets = %s %n", topDown.solve(arr, sum));
+        System.out.printf("TD: #subsets = %s %n", bottomUp.solve(arr, sum));
+    }
+
     public static class TopDown {
-        public int solve(int [] arr, int sum) {
+        public int solve(int[] arr, int sum) {
             if (arr == null) {
                 return -1;
             }
 
             int n = arr.length;
-            Integer [][] dp = new Integer[n][sum + 1];
+            Integer[][] dp = new Integer[n][sum + 1];
             return solve(arr, sum, 0, dp);
         }
 
@@ -51,27 +60,18 @@ public class CountSubsetsMatchingSum {
             }
 
             for (int s = 0; s < sum; s++) {
-                dp[0][s] = arr[0] == s ? 1: 0;
+                dp[0][s] = arr[0] == s ? 1 : 0;
             }
 
             for (int i = 1; i < n; i++) {
                 for (int s = 1; s <= sum; s++) {
-                    dp[i][s] = dp[i-1][s];
+                    dp[i][s] = dp[i - 1][s];
                     if (arr[i] <= sum) {
-                        dp[i][s] = dp[i-1][s] + dp[i-1][s - arr[i]];
+                        dp[i][s] = dp[i - 1][s] + dp[i - 1][s - arr[i]];
                     }
                 }
             }
             return dp[n - 1][sum];
         }
-    }
-
-    public static void main(String[] args) {
-        int[] arr = {1,2,3};
-        int sum = 3;
-        TopDown topDown = new TopDown();
-        BottomUp bottomUp = new BottomUp();
-        System.out.printf("TD: #subsets = %s %n", topDown.solve(arr, sum));
-        System.out.printf("TD: #subsets = %s %n", bottomUp.solve(arr, sum));
     }
 }

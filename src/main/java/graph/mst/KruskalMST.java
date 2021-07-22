@@ -1,10 +1,6 @@
 package graph.mst;
 
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 
 import graph.DisjointSet;
 import graph.DisjointSet.Node;

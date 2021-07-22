@@ -134,7 +134,7 @@ public class Math {
             return n;
         }
 
-        int start = 1, end  = n/2;
+        int start = 1, end = n / 2;
         int sqrt = 1;
         while (start <= end) {
             int mid = (start + end) / 2;

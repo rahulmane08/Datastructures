@@ -2,6 +2,14 @@ package algos.dynamicprogramming.string.lps;
 
 public class LongestPalidromicSubstring {
 
+    public static void main(String[] args) {
+        TopDown topDown = new TopDown();
+        BottomUp bottomUp = new BottomUp();
+        String str = "cddpd";
+        System.out.println(topDown.solve(str));
+        System.out.println(bottomUp.solve(str) + "," + bottomUp.getCount());
+    }
+
     public static class TopDown {
         public int solve(String str) {
             if (str == null || str.isEmpty()) {
@@ -10,7 +18,7 @@ public class LongestPalidromicSubstring {
 
             int n = str.length();
             int[][] dp = new int[n][n];
-            return solve(str, 0, n-1, dp);
+            return solve(str, 0, n - 1, dp);
         }
 
         private int solve(String str, int start, int end, int[][] dp) {
@@ -26,7 +34,7 @@ public class LongestPalidromicSubstring {
                 return dp[start][end];
             }
 
-            if(str.charAt(start) == str.charAt(end)) {
+            if (str.charAt(start) == str.charAt(end)) {
                 if (end - start == 1) {
                     // 2 character string
                     dp[start][end] = 2;
@@ -48,6 +56,7 @@ public class LongestPalidromicSubstring {
 
     public static class BottomUp {
         private int count;
+
         public int solve(String str) {
             if (str == null || str.isEmpty()) {
                 return 0;
@@ -77,13 +86,5 @@ public class LongestPalidromicSubstring {
         public int getCount() {
             return count;
         }
-    }
-
-    public static void main(String[] args) {
-        TopDown topDown = new TopDown();
-        BottomUp bottomUp = new BottomUp();
-        String str = "cddpd";
-        System.out.println(topDown.solve(str));
-        System.out.println(bottomUp.solve(str) + "," + bottomUp.getCount());
     }
 }

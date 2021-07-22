@@ -33,7 +33,7 @@ public class PatternMatching {
 
         int m = str.length();
         int n = concisePattern.length();
-        boolean [][] dp = new boolean[m + 1][n + 1];
+        boolean[][] dp = new boolean[m + 1][n + 1];
 
         if (pattern.charAt(0) == '*') {
             dp[0][1] = true;

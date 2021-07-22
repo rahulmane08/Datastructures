@@ -1,13 +1,7 @@
 package graph.shortestpath;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 import graph.Edge;
 import graph.Graph;
@@ -21,7 +15,7 @@ import graph.Vertex;
 public class DjikstraShortestPath {
     private static final int INF = Integer.MAX_VALUE;
 
-    private static Comparator<Entry<UUID, Integer>> weightComparator = Comparator.comparingInt(Entry::getValue);
+    private static final Comparator<Entry<UUID, Integer>> weightComparator = Comparator.comparingInt(Entry::getValue);
 
     /*
      * 1. for each vertex set the minweight as INF, for start vertex set it as 0 and parents(start,NULL)

@@ -1,12 +1,6 @@
 package string;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import interfaces.Important;
 
@@ -296,7 +290,7 @@ public class StringUtils {
         }
 
         List<String> results = new ArrayList<>();
-        for(String str : inputs) {
+        for (String str : inputs) {
             String result = "";
             int n = str.length();
             for (int i = 0; i < n; i++) {

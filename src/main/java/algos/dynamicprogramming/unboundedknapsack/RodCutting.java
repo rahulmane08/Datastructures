@@ -18,6 +18,7 @@ public class RodCutting {
 
     public static class TopDown {
         private int[] solution;
+
         public int solve(int[] lengths, int[] prices, int totalLength) {
             // base checks
             if (totalLength <= 0 || prices.length == 0 || prices.length != lengths.length) {
@@ -25,7 +26,7 @@ public class RodCutting {
             }
 
             int n = prices.length;
-            Integer [][] dp = new Integer[n][totalLength + 1];
+            Integer[][] dp = new Integer[n][totalLength + 1];
             this.solution = new int[n];
             return solve(lengths, prices, totalLength, 0, dp);
         }
@@ -50,6 +51,7 @@ public class RodCutting {
 
     public static class BottomUp {
         private int[] solution;
+
         public int solve(int[] lengths, int[] prices, int totalLength) {
             // base checks
             if (totalLength <= 0 || prices.length == 0 || prices.length != lengths.length) {
@@ -61,21 +63,21 @@ public class RodCutting {
             this.solution = new int[totalLength];
 
             // process all rod lengths for all prices
-            for(int i=0; i < n; i++) {
-                for(int len=1; len <= totalLength; len++) {
-                    int p1=0, p2=0;
-                    if(lengths[i] <= len) {
-                        p1 = prices[i] + dp[i][len-lengths[i]];
+            for (int i = 0; i < n; i++) {
+                for (int len = 1; len <= totalLength; len++) {
+                    int p1 = 0, p2 = 0;
+                    if (lengths[i] <= len) {
+                        p1 = prices[i] + dp[i][len - lengths[i]];
                     }
-                    if( i > 0 ) {
-                        p2 = dp[i-1][len];
+                    if (i > 0) {
+                        p2 = dp[i - 1][len];
                     }
                     dp[i][len] = Math.max(p1, p2);
                 }
             }
 
-            for (int i = prices.length - 1, j = totalLength; i > 0;) {
-                if (dp[i][j] != dp[i-1][j]) {
+            for (int i = prices.length - 1, j = totalLength; i > 0; ) {
+                if (dp[i][j] != dp[i - 1][j]) {
                     j = j - lengths[i];
                     solution[i]++;
                 } else {
@@ -87,7 +89,7 @@ public class RodCutting {
             }
 
             // maximum price will be at the bottom-right corner.
-            return dp[n-1][totalLength];
+            return dp[n - 1][totalLength];
         }
 
         public int[] getSolution() {

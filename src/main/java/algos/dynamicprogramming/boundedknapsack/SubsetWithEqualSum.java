@@ -37,7 +37,7 @@ public class SubsetWithEqualSum {
 
         // with only one number, we can form a subset only when the required sum is equal to its value
         for (int s = 1; s <= sum; s++) {
-            dp[0][s] = (num[0] == s ? true : false);
+            dp[0][s] = (num[0] == s);
         }
 
         // process all subsets for all sums
@@ -67,7 +67,7 @@ public class SubsetWithEqualSum {
         if (sum % 2 != 0)
             return false;
 
-        Boolean [][] dp =  new Boolean[num.length][sum / 2 + 1];
+        Boolean[][] dp = new Boolean[num.length][sum / 2 + 1];
         return solveRecursively(num, sum / 2, 0, dp);
     }
 

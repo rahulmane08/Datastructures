@@ -2,6 +2,14 @@ package algos.dynamicprogramming.string.lps;
 
 public class LongestPalindromicSubsequence {
 
+    public static void main(String[] args) {
+        TopDown topDown = new TopDown();
+        BottomUp bottomUp = new BottomUp();
+        String str = "babccaba";
+        System.out.println(topDown.solve(str));
+        System.out.println(bottomUp.solve(str));
+    }
+
     public static class TopDown {
         public int solve(String str) {
             if (str == null || str.isEmpty()) {
@@ -10,7 +18,7 @@ public class LongestPalindromicSubsequence {
 
             int n = str.length();
             Integer[][] dp = new Integer[n][n];
-            return solve(str, 0, n-1, dp);
+            return solve(str, 0, n - 1, dp);
         }
 
         private int solve(String str, int start, int end, Integer[][] dp) {
@@ -26,7 +34,7 @@ public class LongestPalindromicSubsequence {
                 return dp[start][end];
             }
 
-            if(str.charAt(start) == str.charAt(end)) {
+            if (str.charAt(start) == str.charAt(end)) {
                 dp[start][end] = 2 + solve(str, start + 1, end - 1, dp);
             } else {
                 int left = solve(str, start + 1, end, dp);
@@ -59,15 +67,7 @@ public class LongestPalindromicSubsequence {
                     }
                 }
             }
-            return dp[0][n-1];
+            return dp[0][n - 1];
         }
-    }
-
-    public static void main(String[] args) {
-        TopDown topDown = new TopDown();
-        BottomUp bottomUp = new BottomUp();
-        String str = "babccaba";
-        System.out.println(topDown.solve(str));
-        System.out.println(bottomUp.solve(str));
     }
 }

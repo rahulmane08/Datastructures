@@ -2,11 +2,7 @@ package hackerrank;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 public class Solution {
     static public String[] findNonMatching(String s, String t) {
@@ -109,7 +105,6 @@ public class Solution {
 
 //		System.out.println(Arrays.toString(findNonMatching("I am using Hackerrank to improve programming", "am hackerrank to improve")));
         System.out.println(Arrays.toString(formatDates(new String[]{"1st Mar 1984", "1st Mar 1986"})));
-        ;
     }
 
 }

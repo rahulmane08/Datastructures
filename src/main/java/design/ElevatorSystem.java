@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 
 enum ButtonType {
-    EMERGENCY, UP, DOWN, NUMERIC;
+    EMERGENCY, UP, DOWN, NUMERIC
 }
 
 interface ButtonCommand {
@@ -167,7 +167,7 @@ class ElevatorCar {
     }
 
     public void moveTo(int floor) {
-        if (zone != null && !zone.getFloors().values().contains(floor)) {
+        if (zone != null && !zone.getFloors().containsValue(floor)) {
             return;
         }
         this.moving = true;

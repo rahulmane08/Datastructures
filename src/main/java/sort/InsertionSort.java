@@ -23,6 +23,6 @@ public class InsertionSort {
     }
 
     public static void main(String[] args) {
-        InsertionSort.sort(new int[]{5,4,3,2,1});
+        InsertionSort.sort(new int[]{5, 4, 3, 2, 1});
     }
 }

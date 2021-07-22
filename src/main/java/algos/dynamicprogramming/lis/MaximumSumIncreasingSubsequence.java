@@ -4,8 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MaximumSumIncreasingSubsequence {
+    public static void main(String[] args) {
+        TopDown topDown = new TopDown();
+        BottomUp bottomUp = new BottomUp();
+        int[] arr = {4, 1, 2, 6, 10, 1, 12};
+        System.out.println(topDown.solve(arr));
+        System.out.println(bottomUp.solve(arr));
+    }
+
     public static class TopDown {
-        public int solve(int [] arr) {
+        public int solve(int[] arr) {
             if (arr == null || arr.length == 0) {
                 return 0;
             }
@@ -36,13 +44,13 @@ public class MaximumSumIncreasingSubsequence {
     }
 
     public static class BottomUp {
-        public int solve(int [] arr) {
+        public int solve(int[] arr) {
             if (arr == null || arr.length == 0) {
                 return 0;
             }
 
             int n = arr.length;
-            int [] dp = new int[n];
+            int[] dp = new int[n];
             int maxSum = arr[0];
             for (int i = 0; i < n; i++) {
                 dp[i] = arr[i];
@@ -55,13 +63,5 @@ public class MaximumSumIncreasingSubsequence {
             }
             return maxSum;
         }
-    }
-
-    public static void main(String[] args) {
-        TopDown topDown = new TopDown();
-        BottomUp bottomUp = new BottomUp();
-        int[] arr = {4,1,2,6,10,1,12};
-        System.out.println(topDown.solve(arr));
-        System.out.println(bottomUp.solve(arr));
     }
 }

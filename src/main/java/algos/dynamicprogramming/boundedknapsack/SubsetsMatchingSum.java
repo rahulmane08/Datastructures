@@ -4,15 +4,26 @@ import java.util.Arrays;
 
 public class SubsetsMatchingSum {
 
-    public static class TopDown {
-        boolean [] solution;
+    public static void main(String[] args) {
+        TopDown topDown = new TopDown();
+        int[] arr = {1, 2, 3, 4};
+        System.out.printf("TD, possible : %s, solution: %s %n ",
+                topDown.solve(arr, 7), Arrays.toString(topDown.getSolution()));
 
-        public boolean solve(int [] arr, int sum) {
+        BottomUp bottomUp = new BottomUp();
+        System.out.printf("BU, possible : %s %n ",
+                bottomUp.solve(arr, 7));
+    }
+
+    public static class TopDown {
+        boolean[] solution;
+
+        public boolean solve(int[] arr, int sum) {
             if (arr == null) {
                 return false;
             }
 
-            Boolean [][] dp = new Boolean[arr.length][sum + 1];
+            Boolean[][] dp = new Boolean[arr.length][sum + 1];
             solution = new boolean[arr.length];
             return solve(arr, sum, 0, dp);
         }
@@ -53,32 +64,21 @@ public class SubsetsMatchingSum {
             }
 
             int n = arr.length;
-            boolean [][] dp = new boolean[n][sum + 1];
+            boolean[][] dp = new boolean[n][sum + 1];
             for (int i = 0; i < n; i++) {
                 dp[i][0] = true;
             }
 
             for (int i = 1; i < n; i++) {
                 for (int c = 1; c <= sum; c++) {
-                    if (dp[i-1][c]) {
+                    if (dp[i - 1][c]) {
                         dp[i][c] = true;
-                    } else if (arr[i] <= c){
-                        dp[i][c] = dp[i-1][c - arr[i]];
+                    } else if (arr[i] <= c) {
+                        dp[i][c] = dp[i - 1][c - arr[i]];
                     }
                 }
             }
-            return dp[n-1][sum];
+            return dp[n - 1][sum];
         }
-    }
-
-    public static void main(String[] args) {
-        TopDown topDown = new TopDown();
-        int [] arr = {1,2,3,4};
-        System.out.printf("TD, possible : %s, solution: %s %n ",
-                topDown.solve(arr, 7), Arrays.toString(topDown.getSolution()));
-
-        BottomUp bottomUp = new BottomUp();
-        System.out.printf("BU, possible : %s %n ",
-                bottomUp.solve(arr, 7));
     }
 }

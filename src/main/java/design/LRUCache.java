@@ -8,6 +8,7 @@ public class LRUCache<K, V> {
     private final Map<K, CacheNode<K, V>> cache;
     private final int capacity;
     private final CacheNode head, tail;
+
     public LRUCache(int capacity) {
         this.cache = new ConcurrentHashMap<>();
         this.capacity = capacity;
@@ -82,6 +83,7 @@ public class LRUCache<K, V> {
 
     /**
      * Doubly linked list cache node
+     *
      * @param <K>
      * @param <V>
      */

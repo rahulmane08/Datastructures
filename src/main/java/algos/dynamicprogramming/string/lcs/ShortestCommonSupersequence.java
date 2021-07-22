@@ -30,14 +30,14 @@ public class ShortestCommonSupersequence {
 
             int left = 1 + solve(str1, str2, index1 + 1, index2, dp);
             int right = 1 + solve(str1, str2, index1, index2 + 1, dp);
-            dp[index1][index2] = 1 + Math.min(left,right);
+            dp[index1][index2] = 1 + Math.min(left, right);
             return dp[index1][index2];
         }
     }
 
     public static class BottomUp {
         private int length = 0;
-        private String supersequence = "";
+        private final String supersequence = "";
 
         public BottomUp(String str1, String str2) {
             solve(str1, str2);

@@ -5,6 +5,11 @@ import java.util.Map;
 
 public class LongestCommonSubstring {
 
+    public static void main(String[] args) {
+        BottomUp lcs = new BottomUp("longest", "stone");
+        System.out.printf("Length = %s, Substring = %s%n", lcs.getLength(), lcs.getSubstring());
+    }
+
     public static class TopDown {
         public int solve(String str1, String str2) {
             if (str1 == null || str2 == null) {
@@ -31,7 +36,7 @@ public class LongestCommonSubstring {
             if (str1.charAt(index1) == str2.charAt(index2)) {
                 length = 1 + solve(str1, str2, index1 + 1, index2 + 2, count + 1, dp);
             } else {
-                length =  Math.max(solve(str1, str2, index1 + 1, index2, count, dp),
+                length = Math.max(solve(str1, str2, index1 + 1, index2, count, dp),
                         solve(str1, str2, index1, index2 + 1, count, dp));
             }
             dp.put(key, length);
@@ -79,10 +84,5 @@ public class LongestCommonSubstring {
         public String getSubstring() {
             return substring;
         }
-    }
-
-    public static void main(String[] args) {
-        BottomUp lcs = new BottomUp("longest", "stone");
-        System.out.printf("Length = %s, Substring = %s%n", lcs.getLength(), lcs.getSubstring());
     }
 }

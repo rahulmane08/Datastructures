@@ -793,6 +793,7 @@ public class StackUtils {
      * Input :
      * Pattern : ABC
      * Text : BABABCABCC
+     *
      * @param str
      * @param pattern
      * @return

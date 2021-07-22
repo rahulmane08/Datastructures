@@ -38,9 +38,6 @@ public class KnightTour {
     }
 
     private static boolean isValid(int[][] arr, int x, int y, int M, int N) {
-        if (x < 0 || x >= M || y < 0 || y >= N || arr[x][y] != 0) {
-            return false;
-        }
-        return true;
+        return x >= 0 && x < M && y >= 0 && y < N && arr[x][y] == 0;
     }
 }

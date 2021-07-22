@@ -1,14 +1,6 @@
 package pq;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
 
@@ -872,11 +864,12 @@ public class HeapUtils {
      * 10   // (A : 2) + (B : 8)
      */
     public static class PrintKMaxSumsOfTwoEquallySizedArraysUtil {
-        private int[] arr1, arr2;
+        private final int[] arr1;
+        private final int[] arr2;
         private int k;
-        private MaxPriorityQueue<Node> pq = new MaxPriorityQueue<>(k);
-        private HashSet<Node> visited = new HashSet<>();
-        private List<Integer> result = new ArrayList<>();
+        private final MaxPriorityQueue<Node> pq = new MaxPriorityQueue<>(k);
+        private final HashSet<Node> visited = new HashSet<>();
+        private final List<Integer> result = new ArrayList<>();
 
         public PrintKMaxSumsOfTwoEquallySizedArraysUtil(int[] arr1, int[] arr2, int k) {
             this.arr1 = arr1;

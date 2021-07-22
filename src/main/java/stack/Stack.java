@@ -1,7 +1,7 @@
 package stack;
 
 public class Stack<T> {
-    private Object[] array;
+    private final Object[] array;
     private int top;
 
     public Stack(int capacity) {
@@ -16,15 +16,11 @@ public class Stack<T> {
     }
 
     public boolean isEmpty() {
-        if (top == -1)
-            return true;
-        return false;
+        return top == -1;
     }
 
     public boolean isFull() {
-        if (array != null && array.length - 1 == top)
-            return true;
-        return false;
+        return array != null && array.length - 1 == top;
     }
 
     public T pop() {

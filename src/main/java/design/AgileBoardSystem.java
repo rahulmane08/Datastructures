@@ -6,11 +6,11 @@ import java.util.List;
 import lombok.Data;
 
 enum UserAuthority {
-    ADMIN, PROJECT_MEMBER;
+    ADMIN, PROJECT_MEMBER
 }
 
 enum JiraPriority {
-    P0, P1, P2, P3;
+    P0, P1, P2, P3
 }
 
 @Data

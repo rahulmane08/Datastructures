@@ -1,10 +1,7 @@
 package queue;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import interfaces.Important;
 import interfaces.Medium;
