@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.PriorityQueue;
 
 public class FeaturedProducts {
@@ -17,11 +18,9 @@ public class FeaturedProducts {
         products.forEach(p -> frequency.compute(p, (k, v) -> (v == null) ? 1 : v + 1));
         Comparator<Map.Entry<String, Integer>> comparator = Comparator
                 .comparing((Map.Entry<String, Integer> entry) -> entry.getValue())
-                .thenComparing((Map.Entry<String, Integer> entry) -> entry.getKey())
-                .reversed();
-        PriorityQueue<Map.Entry<String, Integer>> pq = new PriorityQueue<>(frequency.size(), comparator);
-        frequency.entrySet().forEach(pq::add);
-        return pq.poll().getKey();
+                .thenComparing((Map.Entry<String, Integer> entry) -> entry.getKey());
+        Optional<Map.Entry<String, Integer>> maxEntryOpt = frequency.entrySet().stream().max(comparator);
+        return maxEntryOpt.get().getKey();
     }
 
     public static void main(String[] args) {

@@ -9,13 +9,44 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Stack;
 
-import interfaces.DynamicProgramming;
-import interfaces.Hard;
-import interfaces.Important;
-import interfaces.Medium;
+import interfaces.*;
 import math.Math;
 
 public class ArrayUtils {
+
+    /**
+     * https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/727/
+     * @param nums
+     * @return
+     */
+    @LeetcodeEasy
+    static public int removeDuplicates(int[] nums) {
+        /**
+         * 1 1 1 2 3 3 4 4
+         *
+         * 1 2 2 2 3 3 4 4
+         *
+         * 1 2 3 3 3 3 4 4
+         *
+         * 1 2 3 4 4 4 4 4
+         */
+        int i = 0;
+        int j;
+        for (; i + 1 < nums.length; i++) {
+            if (nums[i] == nums[i + 1]) {
+                for (j = i + 1; j + 1 < nums.length && nums[j] == nums[j+1]; j++);
+                if (j == nums.length - 1) {
+                    break;
+                }
+                int greater = nums[j + 1];
+                for (; j >= i + 1; j--) {
+                    nums[j] = greater;
+                }
+            }
+        }
+        return i + 1;
+    }
+
     static public int twoSum(int[] arr, int N) {
         java.util.Arrays.sort(arr);// nlog(n)
         int end = arr.length - 1, start = 0;
@@ -789,7 +820,6 @@ public class ArrayUtils {
          * Input:  arr[]   = [50, 40, 70, 60, 90]
          * index[] = [3,  0,  4,  1,  2]
          * Output: arr[]   = [40, 60, 90, 50, 70]
-         * index[] = [0,  1,  2,  3,   4]
          *
          * @param arr
          * @param indexes
