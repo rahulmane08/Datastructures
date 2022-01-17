@@ -1,5 +1,8 @@
 package math;
 
+import interfaces.Hard;
+import interfaces.Important;
+
 public class Math {
     static public int gcd(int a, int b) {
         if (a == 0)
@@ -29,6 +32,8 @@ public class Math {
         return max;
     }
 
+    @Hard
+    @Important
     static public int parseInt(String s) {
         if (s == null || s.isEmpty()) {
             throw new NumberFormatException("string is null");

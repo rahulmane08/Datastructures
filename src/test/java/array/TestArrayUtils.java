@@ -1,7 +1,6 @@
 package array;
 
-import static array.ArrayUtils.ArrangementUtils.moveAllZeroesAtEnd;
-import static array.ArrayUtils.ArrangementUtils.sortAsPerIndexedArray;
+import static array.ArrayUtils.ArrangementUtils.*;
 import static array.ArrayUtils.concatenateArrayToLargestNumber;
 import static array.ArrayUtils.findMajorityElement;
 import static array.ArrayUtils.findMaxJMinusI;
@@ -95,6 +94,17 @@ public class TestArrayUtils {
     public void test_moveAllZeroesAtEnd() {
         int arr[] = {1, 2, 0, 4, 3, 0, 5, 0};
         moveAllZeroesAtEnd(arr);
+        print(arr);
+    }
+
+    @Test
+    public void test_moveAllZeroesAtEndUsingTwoPointers() {
+        int arr[] = {1, 2, 0, 4, 3, 0, 5, 0};
+        moveAllZeroesAtEndUsingTwoPointers(arr);
+        print(arr);
+
+        arr = new int[]{1, 2, 0, 4,0, 0, 3, 0, 5, 0};
+        moveAllZeroesAtEndUsingTwoPointers(arr);
         print(arr);
     }
 

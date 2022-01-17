@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
 import java.util.*;
+import java.util.function.Function;
 
 import interfaces.*;
 import math.Math;
@@ -44,6 +45,7 @@ public class ArrayUtils {
         return i + 1;
     }
 
+    @LeetcodeEasy
     static public int twoSum(int[] arr, int N) {
         java.util.Arrays.sort(arr);// nlog(n)
         int end = arr.length - 1, start = 0;
@@ -66,6 +68,7 @@ public class ArrayUtils {
         return count;
     }
 
+    @LeetcodeEasy
     static public int twoSumWithHashing(int[] arr, int sum) {
         Map<Integer, Integer> map = new HashMap();
         int count = 0;
@@ -813,6 +816,26 @@ public class ArrayUtils {
             }
         }
 
+        public static void moveAllZeroesAtEndUsingTwoPointers(int[] nums) {
+            if (nums == null || nums.length == 0) {
+                return;
+            }
+            int x = 0; // tracking 0 element index
+            for (int i = 0; i < nums.length; i++) {
+                if (nums[i] == 0) {
+                    if (nums[x] != 0) {
+                        x = i;
+                    }
+                } else {
+                    if (nums[x] == 0) {
+                        nums[x] = nums[i];
+                        nums[i] = 0;
+                        x++;
+                    }
+                }
+            }
+        }
+
         /**
          * Input:  arr[]   = [50, 40, 70, 60, 90]
          * index[] = [3,  0,  4,  1,  2]
@@ -937,5 +960,28 @@ public class ArrayUtils {
             reverse(arr, startIndex, endIndex - d);
             reverse(arr, startIndex, endIndex);
         }
+    }
+
+    public int[] intersect(int[] nums1, int[] nums2) {
+        List<Integer> result = new ArrayList();
+        int m = nums1.length;
+        int n = nums2.length;
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        int i = 0, j = 0;
+
+        for (; i < m && j < n;) {
+            if(nums1[i] < nums2[j]) {
+                i++;
+            } else if (nums2[j] < nums1[i]) {
+                j++;
+            } else {
+                result.add(nums1[i]);
+                i++;
+                j++;
+            }
+        }
+        return result.stream().mapToInt(x -> x).toArray();
     }
 }
