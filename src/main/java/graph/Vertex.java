@@ -2,8 +2,10 @@ package graph;
 
 import java.util.*;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Adjacency List implementation.
@@ -11,9 +13,16 @@ import lombok.Setter;
  * @param <T>
  */
 @Getter
+@EqualsAndHashCode
+@ToString
 public class Vertex<T> {
-    private final T data;
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private final UUID id;
+
+    @ToString.Include
+    private final T data;
+
     private final Set<Edge<T>> edges = new HashSet<>();
     private final Set<Vertex<T>> adjacentVertexes = new HashSet<>();
 
@@ -28,10 +37,6 @@ public class Vertex<T> {
     public Vertex(UUID uuid, T data) {
         this.id = uuid;
         this.data = data;
-    }
-
-    public Set<Edge<T>> getEdges() {
-        return edges;
     }
 
     public Set<Vertex<T>> getAdjacentVertexes() {
@@ -87,25 +92,5 @@ public class Vertex<T> {
         edges.clear();
         adjacentVertexes.clear();
         return edges;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Vertex<?> vertex = (Vertex<?>) o;
-
-        return id.equals(vertex.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(data);
     }
 }

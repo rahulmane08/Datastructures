@@ -4,7 +4,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
 import java.util.*;
-import java.util.function.Function;
 
 import interfaces.*;
 import math.Math;
@@ -17,7 +16,7 @@ public class ArrayUtils {
      * @param nums
      * @return
      */
-    @LeetcodeEasy
+    @LCEasy
     static public int removeDuplicates(int[] nums) {
         /**
          * 1 1 1 2 3 3 4 4
@@ -45,7 +44,7 @@ public class ArrayUtils {
         return i + 1;
     }
 
-    @LeetcodeEasy
+    @LCEasy
     static public int twoSum(int[] arr, int N) {
         java.util.Arrays.sort(arr);// nlog(n)
         int end = arr.length - 1, start = 0;
@@ -68,7 +67,7 @@ public class ArrayUtils {
         return count;
     }
 
-    @LeetcodeEasy
+    @LCEasy
     static public int twoSumWithHashing(int[] arr, int sum) {
         Map<Integer, Integer> map = new HashMap();
         int count = 0;
