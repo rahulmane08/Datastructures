@@ -1,13 +1,16 @@
 package graph;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
+@Data
+@EqualsAndHashCode
 public class Edge<T> {
-    private final boolean isDirected;
     private final Vertex<T> vertex1;
     private final Vertex<T> vertex2;
+    private final boolean isDirected;
     @Setter
     private int weight;
 

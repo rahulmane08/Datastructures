@@ -36,7 +36,7 @@ public class DisjointSet<T> {
         return findSet(map.get(data));
     }
 
-    private Node<T> findSet(Node<T> node) {
+    public Node<T> findSet(Node<T> node) {
         if (node == null)
             return null;
         if (node.parent == node)
@@ -82,6 +82,5 @@ public class DisjointSet<T> {
             super();
             this.data = data;
         }
-
     }
 }

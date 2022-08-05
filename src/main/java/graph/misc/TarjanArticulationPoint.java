@@ -43,8 +43,9 @@ public class TarjanArticulationPoint {
         Map<Vertex<T>, Integer> lowTimes = new HashMap<>();
         Map<Vertex<T>, Vertex<T>> parents = new HashMap<>();
 
+        // take any node as the root node.
         Vertex<T> start = graph.getAllVertexes().iterator().next();
-        this.apUtil(graph, start, visited, visitTimes, lowTimes, parents, articulationPoints);
+        this.apUtil(start, visited, visitTimes, lowTimes, parents, articulationPoints);
         time = 0;
         return articulationPoints;
     }
@@ -75,7 +76,6 @@ public class TarjanArticulationPoint {
      * parents{D,C} , lowTimes{D,4}, visitTimes{D,4}, childCount(C) = 2
      * check visitedTime[C] < = lowTimes[D] , 1 <= 4 and C is also the start vertex as parent[C] = NULL, yes its a AP for D.
      *
-     * @param graph
      * @param vertex
      * @param visited
      * @param visitTimes
@@ -83,8 +83,7 @@ public class TarjanArticulationPoint {
      * @param parents
      * @param articulationPoints
      */
-    private <T> void apUtil(Graph<T> graph
-            , Vertex<T> vertex
+    private <T> void apUtil(Vertex<T> vertex
             , Set<UUID> visited
             , Map<Vertex<T>, Integer> visitTimes
             , Map<Vertex<T>, Integer> lowTimes
@@ -102,7 +101,7 @@ public class TarjanArticulationPoint {
             if (!visited.contains(adj.getId())) {
                 parents.put(adj, vertex);
                 childCount++;
-                apUtil(graph, adj, visited, visitTimes, lowTimes, parents, articulationPoints);
+                apUtil(adj, visited, visitTimes, lowTimes, parents, articulationPoints);
 
                 if (visitTimes.get(vertex) <= lowTimes.get(adj))
                     isArticulationPoint = true;

@@ -13,7 +13,7 @@ import lombok.ToString;
  * @param <T>
  */
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class Vertex<T> {
     @EqualsAndHashCode.Include
