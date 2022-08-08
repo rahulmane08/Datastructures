@@ -1,6 +1,6 @@
 package sort;
 
-import static pq.HeapUtils.maxHeapify;
+import static datastructures.pq.HeapUtils.maxHeapify;
 
 import utils.Swapper;
 

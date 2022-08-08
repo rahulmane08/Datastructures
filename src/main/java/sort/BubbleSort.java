@@ -1,6 +1,6 @@
 package sort;
 
-import array.ArrayUtils;
+import datastructures.array.ArrayUtils;
 
 public class BubbleSort {
     static public void sort(int[] arr) {
