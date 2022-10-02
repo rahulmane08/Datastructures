@@ -71,6 +71,8 @@ public class TestArrayUtils {
         assertEquals("6054854654", concatenateArrayToLargestNumber(new Integer[]{54, 546, 548, 60}));
         assertEquals("998764543431",
                 concatenateArrayToLargestNumber(new Integer[]{1, 34, 3, 98, 9, 76, 45, 4}));
+        assertEquals("550110",
+                concatenateArrayToLargestNumber(new Integer[]{50, 5, 10, 1}));
     }
 
     @Test

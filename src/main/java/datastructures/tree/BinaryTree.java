@@ -60,8 +60,10 @@ public class BinaryTree implements Cloneable {
         queue.offer(root);
         while (!queue.isEmpty()) {
             deepestNode = queue.poll();
-            if (nodeToDelete == null && deepestNode.data == data)
+            if (nodeToDelete == null && deepestNode.data == data) {
                 nodeToDelete = deepestNode;
+            }
+
             if (deepestNode.left != null) {
                 deepestParent = deepestNode;
                 queue.offer(deepestNode.left);

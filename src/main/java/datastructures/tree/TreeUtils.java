@@ -828,24 +828,18 @@ public class TreeUtils {
             return inorderArr;
         }
 
-        public int[] toPreorderArray(Node root) {
-            int[] preOrderArr = new int[TreeUtils.size(root)];
-            fillPreOrderArray(root, preOrderArr);
-            return preOrderArr;
-        }
-
-        public int[] toPostorderArray(Node root) {
-            int[] postOrderArr = new int[TreeUtils.size(root)];
-            fillPostOrderArray(root, postOrderArr);
-            return postOrderArr;
-        }
-
         private void fillInOrderArray(Node root, int[] inorderArr) {
             if (root == null)
                 return;
             fillInOrderArray(root.left, inorderArr);
             inorderArr[index++] = root.data;
             fillInOrderArray(root.right, inorderArr);
+        }
+
+        public int[] toPreorderArray(Node root) {
+            int[] preOrderArr = new int[TreeUtils.size(root)];
+            fillPreOrderArray(root, preOrderArr);
+            return preOrderArr;
         }
 
         private void fillPreOrderArray(Node root, int[] inorderArr) {
@@ -856,6 +850,12 @@ public class TreeUtils {
             fillPreOrderArray(root.right, inorderArr);
         }
 
+        public int[] toPostorderArray(Node root) {
+            int[] postOrderArr = new int[TreeUtils.size(root)];
+            fillPostOrderArray(root, postOrderArr);
+            return postOrderArr;
+        }
+
         private void fillPostOrderArray(Node root, int[] inorderArr) {
             if (root == null)
                 return;
@@ -864,6 +864,8 @@ public class TreeUtils {
             inorderArr[index++] = root.data;
         }
 
+
+        // Array to Tree
         public void fillTreeWithInorderArr(Node root, int[] inorder) {
             if (root == null)
                 return;
@@ -887,8 +889,6 @@ public class TreeUtils {
             fillTreeWithPostOrderArr(root.right, inorder);
             root.data = inorder[index++];
         }
-
-
     }
 
     public static class Traversals {
@@ -1078,20 +1078,20 @@ public class TreeUtils {
 
         public static void diagonalTraversal(Node root) {
             Map<Integer, ArrayList<Integer>> diagonalPaths = new TreeMap<>();
-            populateDiagalPaths(root, diagonalPaths, 0);
+            populateDiagonalPaths(root, diagonalPaths, 0);
             diagonalPaths.entrySet().stream()
                     .sorted(Comparator.comparingInt(Map.Entry::getKey))
                     .forEach(e -> System.out.printf("diagonal level = %d: nodes = %s%n", e.getKey(), e.getValue()));
         }
 
-        private static void populateDiagalPaths(Node root, Map<Integer, ArrayList<Integer>> diagonalPaths, int level) {
+        private static void populateDiagonalPaths(Node root, Map<Integer, ArrayList<Integer>> diagonalPaths, int level) {
             if (root == null)
                 return;
             ArrayList<Integer> dPath = diagonalPaths.getOrDefault(level, new ArrayList<>());
             dPath.add(root.data);
             diagonalPaths.put(level, dPath);
-            populateDiagalPaths(root.left, diagonalPaths, level + 1);
-            populateDiagalPaths(root.right, diagonalPaths, level);
+            populateDiagonalPaths(root.left, diagonalPaths, level + 1);
+            populateDiagonalPaths(root.right, diagonalPaths, level);
         }
 
         public static void diagonalTraversalIterative(Node root) {
@@ -1579,9 +1579,9 @@ public class TreeUtils {
                 int left = compute(root.left);
                 int right = compute(root.right);
 
-                int leftSum = left + root.data;
-                int rightSum = right + root.data;
-                int allSum = left + right + root.data;
+                int leftSum = root.data + left; // left path
+                int rightSum = root.data + right; // right path
+                int allSum = root.data + left + right; // entire path
 
                 maxSum = Utils.max(maxSum, allSum);
                 return Utils.max(root.data, leftSum, rightSum);
@@ -1796,8 +1796,6 @@ public class TreeUtils {
 
     public static class TreeSerializeDeserializeUtil {
 
-        private final int index = 0;
-
         public static List<Integer> serialize(Node root) {
             if (root == null) {
                 return null;
@@ -1829,7 +1827,6 @@ public class TreeUtils {
                 return null;
             }
             Node root = new Node(preorderList.get(i.get()));
-            i.incrementAndGet();
             root.left = deserializeUtil(preorderList, i);
             i.incrementAndGet();
             root.right = deserializeUtil(preorderList, i);

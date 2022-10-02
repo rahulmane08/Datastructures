@@ -98,6 +98,11 @@ public class HeapUtils {
      * Time Complexity: If we omit the way how stream was read, complexity of median finding is O(N log N),
      * as we need to read the stream, and due to heap insertions/deletions.
      *
+     * After reading 1st element of stream - 5 -> median - 5
+     * After reading 2nd element of stream - 5, 15 -> median - 10
+     * After reading 3rd element of stream - 5, 15, 1 -> median - 5
+     * After reading 4th element of stream - 5, 15, 1, 3 -> median - 4, so on...
+     *
      * @param a
      */
     @Important
@@ -372,23 +377,27 @@ public class HeapUtils {
      *
      * @param str
      */
+    @Medium
+    @Important
     static public void printStringWithNonRepeatingChars(String str) {
         Map<Character, Integer> charFreq = new HashMap<>();
         for (int i = 0; i < str.length(); i++) {
             charFreq.compute(str.charAt(i), (k, v) -> v == null ? 1 : v + 1);
         }
-        java.util.PriorityQueue<Map.Entry<Character, Integer>> pq =
+        java.util.PriorityQueue<Map.Entry<Character, Integer>> maxPq =
                 new java.util.PriorityQueue<>((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-        for (Map.Entry<Character, Integer> entry : charFreq.entrySet())
-            pq.offer(entry);
+
+        // Max Heap based on number of occurences.
+        charFreq.entrySet().forEach(maxPq::offer);
+
         String output = "";
         Map.Entry<Character, Integer> prevEntry = null;
-        while (!pq.isEmpty()) {
-            Map.Entry<Character, Integer> currEntry = pq.poll();
+        while (!maxPq.isEmpty()) {
+            Map.Entry<Character, Integer> currEntry = maxPq.poll();
             Character curr = currEntry.getKey();
             output += curr;
             if (prevEntry != null && prevEntry.getValue() > 0)
-                pq.offer(prevEntry);
+                maxPq.offer(prevEntry);
             currEntry.setValue(currEntry.getValue() - 1);
             prevEntry = currEntry;
         }
@@ -398,6 +407,7 @@ public class HeapUtils {
         }
         System.out.println(output);
     }
+
 
     /**
      * Input : arr[] = {5, 7, 5, 5, 1, 2, 2}, k = 3
@@ -425,21 +435,19 @@ public class HeapUtils {
                 frequencies.compute(arr[i], (key, v) -> v == null ? 1 : v + 1);
             }
 
-            java.util.PriorityQueue<Map.Entry<Integer, Integer>> pq =
-                    new java.util.PriorityQueue<>((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-            for (Map.Entry<Integer, Integer> entry : frequencies.entrySet()) {
-                pq.offer(entry);
-            }
+            java.util.PriorityQueue<Map.Entry<Integer, Integer>> maxPq =
+                    new java.util.PriorityQueue<>(Comparator.comparingInt(Map.Entry::getValue));
+            frequencies.entrySet().forEach(maxPq::offer);
 
             for (int i = 0; i < k; i++) {
-                Map.Entry<Integer, Integer> current = pq.poll();
+                Map.Entry<Integer, Integer> current = maxPq.poll();
                 if (current.getValue() != 1) {
                     // re add if there are more occurences with freq - 1.
                     current.setValue(current.getValue() - 1);
-                    pq.offer(current);
+                    maxPq.offer(current);
                 }
             }
-            return pq.size();
+            return maxPq.size();
         }
         return -1;
     }

@@ -255,7 +255,7 @@ public class StackUtils {
 
     /**
      * Input : a[] = [1, 1, 2, 3, 4, 2, 1]
-     * Output : [-1, -1, 1, 2, 2, 1, -1]
+     * Output :      [-1, -1, 1, 2, 2, 1, -1]
      * Explanation:
      * Given array a[] = [1, 1, 2, 3, 4, 2, 1]
      * Frequency of each element is: 3, 3, 2, 1, 1, 2, 3
@@ -530,7 +530,7 @@ public class StackUtils {
     @Hard
     @Important
     public static int[][] mergeIntervals(int[][] intervals) {
-        if (intervals == null || intervals.length == 0)
+        if (intervals == null || intervals.length == 0 || intervals[0].length != 2)
             return null;
         Stack<int[]> stack = new Stack<>();
         for (int[] arr : intervals) {
@@ -544,19 +544,23 @@ public class StackUtils {
         return merged;
     }
 
-    private static void mergedInsert(Stack<int[]> stack, int[] arr) {
-        if (stack.isEmpty() || stack.peek()[1] < arr[0]) {
-            stack.push(arr);
+    private static void mergedInsert(Stack<int[]> stack, int[] curr) {
+        if (stack.isEmpty() || stack.peek()[1] < curr[0]) {
+            // current is non overlapping greater interval, simply add and proceed
+            stack.push(curr);
             return;
         }
         int[] top = stack.pop();
-        if (arr[1] < top[0]) {
-            // lesser interval
-            mergedInsert(stack, arr);
-        } else if ((top[0] <= arr[0] && arr[0] <= top[1]) || (top[0] <= arr[1] && arr[1] <= top[1])) {
-            // merge
-            int x = Math.min(top[0], arr[0]);
-            int y = Math.max(top[1], arr[1]);
+        if (curr[1] < top[0]) {
+            // current is non overlapping lesser interval, find its correct place
+            mergedInsert(stack, curr);
+        } else if ((top[0] <= curr[0] && curr[0] <= top[1])
+                || (top[0] <= curr[1] && curr[1] <= top[1])
+                || (curr[0] <= top[0] && top[0] <= curr[1])
+                || (curr[0] <= top[1] && top[1] <= curr[1])) {
+            // merge overlapping interval
+            int x = Math.min(top[0], curr[0]);
+            int y = Math.max(top[1], curr[1]);
             top = new int[]{x, y};
         }
         mergedInsert(stack, top);
@@ -816,17 +820,15 @@ public class StackUtils {
                 // pattern found
                 i = i + j; // move to j
                 occurences++;
-            } else {
-                if (j != 0) {
-                    // partial match
-                    for (int x = i; x < i + j; x++) {
-                        residueString += str.charAt(x);
-                    }
-                    i = i + j; // move to j
-                } else {
-                    residueString += str.charAt(i);
-                    i++;
+            } else if (j != 0) {
+                // partial match
+                for (int x = i; x < i + j; x++) {
+                    residueString += str.charAt(x);
                 }
+                i = i + j; // move to j
+            } else {
+                residueString += str.charAt(i);
+                i++;
             }
         }
 

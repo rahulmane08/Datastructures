@@ -72,8 +72,8 @@ public class ArrayUtils {
         Map<Integer, Integer> map = new HashMap();
         int count = 0;
         for (int i = 0; i < arr.length; i++) {
-            int diff = sum - arr[i];
-            int j = map.getOrDefault(diff, -1);
+            int complement = sum - arr[i];
+            int j = map.getOrDefault(complement, -1);
             if (j != -1 && j != i) {
                 System.out.printf("Found pair: ( %d, %d) %n)", arr[i], arr[j]);
                 count++;
@@ -114,18 +114,18 @@ public class ArrayUtils {
         HashSet<Integer> dupes = new HashSet<>();
         Map<Integer, Integer> complements = new HashMap<>();
         int count = 0;
-        for (int i = 0; i < arr.length; i++) {
-            if (dupes.contains(arr[i])) {
+        for (int fixed = 0; fixed < arr.length; fixed++) {
+            if (dupes.contains(arr[fixed])) {
                 continue;
             }
-            dupes.add(arr[i]);
-            for (int j = i + 1; j < arr.length; j++) {
-                int complement = sum - (arr[i] + arr[j]);
-                if (complements.getOrDefault(complements, -1) == i) {
-                    System.out.printf("Triplet (%d,%d,%d)%n", arr[i], arr[j], complement);
+            dupes.add(arr[fixed]);
+            for (int i = fixed + 1; i < arr.length; i++) {
+                int complement = sum - (arr[fixed] + arr[i]);
+                if (complements.getOrDefault(complement, -1) == fixed) {
+                    System.out.printf("Triplet (%d,%d,%d)%n", arr[fixed], arr[i], complement);
                     count++;
                 }
-                complements.put(arr[j], i);
+                complements.put(arr[i], fixed);
             }
         }
         return count;
@@ -308,10 +308,14 @@ public class ArrayUtils {
 
     public static String concatenateArrayToLargestNumber(Integer[] arr) {
         Arrays.sort(arr, (e1, e2) -> {
+            System.out.println(Arrays.toString(arr));
             String x = String.valueOf(e1);
             String y = String.valueOf(e2);
-            return (y + x).compareTo(x + y);
+            int compare = (y + x).compareTo(x + y);
+            System.out.printf("compare(%s,%s) = %d%n", e1, e2, compare);
+            return compare;
         });
+        System.out.println(Arrays.toString(arr));
         StringBuilder result = new StringBuilder();
         for (int i : arr)
             result.append(i);
@@ -748,8 +752,7 @@ public class ArrayUtils {
             int mid = (n % 2 == 0) ? n / 2 : (n / 2) + 1;
             int end = (n % 2 == 0) ? n - 2 : n - 1;
             for (int i = 0; i < mid; ) {
-                int j = end - i;
-                swap(arr, i, j);
+                swap(arr, i, end - i);
                 i = i + 2;
             }
         }

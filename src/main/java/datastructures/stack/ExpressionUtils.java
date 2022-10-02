@@ -52,6 +52,7 @@ public class ExpressionUtils {
     }
 
     @Important
+    @Medium
     public static String infixToPostfix(String infix) {
         if (infix == null || infix.length() == 0) {
             return null;
@@ -111,6 +112,26 @@ public class ExpressionUtils {
         return Double.valueOf(s.pop());
     }
 
+    static private double compute(double a, double b, char operator) {
+        double result = 0;
+        switch (operator) {
+            case '+':
+                result = a + b;
+                break;
+            case '-':
+                result = a - b;
+                break;
+            case '*':
+                result = a * b;
+                break;
+            case '/':
+                result = a / b;
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
 
     /**
      * - read the prefix string reverse
@@ -265,27 +286,6 @@ public class ExpressionUtils {
         return stack.isEmpty();
     }
 
-    static private double compute(double a, double b, char operator) {
-        double result = 0;
-        switch (operator) {
-            case '+':
-                result = a + b;
-                break;
-            case '-':
-                result = a - b;
-                break;
-            case '*':
-                result = a * b;
-                break;
-            case '/':
-                result = a / b;
-                break;
-            default:
-                break;
-        }
-        return result;
-    }
-
     /**
      * Below expressions have duplicate parenthesis -
      * ((a+b)+((c+d)))
@@ -313,6 +313,7 @@ public class ExpressionUtils {
      * @return
      */
     @Important
+    @Medium
     public static boolean checkIfDuplicateParentheses(String expression) {
         if (expression != null && !expression.isEmpty()) {
             Stack<Character> stack = new Stack<>();
@@ -337,6 +338,7 @@ public class ExpressionUtils {
     }
 
     @Important
+    @Medium
     public static String removeDuplicateParentheses(String expression) {
         if (expression == null || expression.isEmpty()) {
             return null;

@@ -3,6 +3,7 @@ package datastructures.queue;
 import java.util.Deque;
 import java.util.*;
 
+import interfaces.Hard;
 import interfaces.Important;
 import interfaces.Medium;
 import datastructures.stack.Stack;
@@ -296,7 +297,7 @@ public class QueueUtils {
      * @return
      */
     @Important
-    @Medium
+    @Hard
     public static Vertex findFirstPointForCircularTour(Vertex[] pumps) {
         if (pumps == null || pumps.length == 0)
             return null;
