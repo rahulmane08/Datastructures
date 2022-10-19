@@ -114,7 +114,7 @@ public class TestArrayUtils {
     public void test_sortAsPerIndexedArray() {
         int[] order = new int[]{3, 0, 4, 1, 2};
         int[] arr = new int[]{50, 40, 70, 60, 90};
-        sortAsPerIndexedArray(arr, order);
+        reorderAsPerIndexedArray(arr, order);
         print(arr);
         print(order);
     }

@@ -843,24 +843,35 @@ public class ArrayUtils {
          * index[] = [3,  0,  4,  1,  2]
          * Output: arr[]   = [40, 60, 90, 50, 70]
          *
+         * Input:  arr[]   = [10, 11, 12];
+         *         index[] = [1, 0, 2];
+         * Output: arr[]   = [11, 10, 12]
+         *         index[] = [0,  1,  2]
+         *
+         * Input:  arr[]   = [50, 40, 70, 60, 90]
+         *         index[] = [3,  0,  4,  1,  2]
+         * Output: arr[]   = [40, 60, 90, 50, 70]
+         *         index[] = [0,  1,  2,  3,   4]
+         *
          * @param arr
          * @param indexes
          */
         @Important
         @Medium
-        public static void sortAsPerIndexedArray(int[] arr, int[] indexes) {
+        public static void reorderAsPerIndexedArray(int[] arr, int[] indexes) {
             if (arr == null || indexes == null || arr.length != indexes.length)
                 return;
             for (int i = 0; i < indexes.length; i++) {
                 while (indexes[i] != i) {
-                    int currentElement = arr[i];
-                    int currentElementTargedIndex = indexes[i]; // index to put current element
-                    int targetElement = arr[currentElementTargedIndex]; // element at the target indexed
-                    int targetElementsTargetIndex = indexes[currentElementTargedIndex]; // index of the element at target index.
+                    int curr = arr[i];
+                    int targetIndex = indexes[i]; // index to put current element
+
+                    int targetElement = arr[targetIndex]; // element at the target indexed
+                    int targetElementsTargetIndex = indexes[targetIndex]; // index of the element at target index.
 
                     // swap current index + element with targets index + element
-                    indexes[currentElementTargedIndex] = currentElementTargedIndex; // copy current elemt to target
-                    arr[currentElementTargedIndex] = currentElement; // copy current index to target
+                    indexes[targetIndex] = targetIndex; // copy current elemt to target
+                    arr[targetIndex] = curr; // copy current index to target
 
                     indexes[i] = targetElementsTargetIndex;
                     arr[i] = targetElement;
