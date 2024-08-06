@@ -77,6 +77,37 @@ public class AllInFamily {
         return false;
     }
 
+    public boolean hasCommonAncestor1(Map<Integer, Set<Integer>> graph, int left, int right) {
+        Set<Integer> leftParents = new HashSet<>();
+        Stack<Integer> stack = new Stack<>();
+        stack.push(left);
+
+        while (!stack.isEmpty()) {
+            int curr = stack.pop();
+            Set<Integer> parents = graph.getOrDefault(curr, new HashSet<>());
+            for(int p : parents) {
+                if (p == right) {
+                    return true;
+                }
+                stack.push(p);
+                leftParents.add(p);
+            }
+        }
+
+        stack.push(right);
+        while (!stack.isEmpty()) {
+            int curr = stack.pop();
+            Set<Integer> parents = graph.getOrDefault(curr, new HashSet<>());
+            for(int p : parents) {
+                if (leftParents.contains(p)) {
+                    return true;
+                }
+                stack.push(p);
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         AllInFamily allInFamily = new AllInFamily();
         int[][] input = {{1, 3}, {2, 3}, {3, 6}, {5, 6}, {5, 7}, {4, 5}, {4, 8}, {8, 9}, {10, 2}};
@@ -89,5 +120,11 @@ public class AllInFamily {
         System.out.println(allInFamily.hasCommonAncestor(graph, 6, 4));
         System.out.println(allInFamily.hasCommonAncestor(graph, 6, 3));
         System.out.println(allInFamily.hasCommonAncestor(graph, 3, 9));
+
+        System.out.println();
+        System.out.println(allInFamily.hasCommonAncestor1(graph, 6, 9));
+        System.out.println(allInFamily.hasCommonAncestor1(graph, 6, 4));
+        System.out.println(allInFamily.hasCommonAncestor1(graph, 6, 3));
+        System.out.println(allInFamily.hasCommonAncestor1(graph, 3, 9));
     }
 }

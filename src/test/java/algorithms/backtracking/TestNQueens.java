@@ -1,6 +1,6 @@
 package algorithms.backtracking;
 
-import static algorithms.backtracking.NQueens.solve;
+import static algorithms.backtracking.hard.NQueens.solve;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

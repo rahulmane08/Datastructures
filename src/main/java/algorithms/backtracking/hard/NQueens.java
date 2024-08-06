@@ -1,4 +1,4 @@
-package algorithms.backtracking;
+package algorithms.backtracking.hard;
 
 import java.util.Arrays;
 
@@ -31,6 +31,7 @@ public class NQueens {
         return false;
     }
 
+    // Bounding function
     private static boolean isValid(int[][] board, int row, int col, int N) {
         int i, j;
 

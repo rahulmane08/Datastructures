@@ -3,6 +3,7 @@ package algorithms.backtracking;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import algorithms.backtracking.hard.KnightTour;
 import org.junit.Test;
 
 public class TestKnightTour {

@@ -1,6 +1,6 @@
 package algorithms.backtracking;
 
-import static algorithms.backtracking.RatInMaze.solve;
+import static algorithms.backtracking.hard.RatInMaze.solve;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

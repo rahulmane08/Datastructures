@@ -1,4 +1,4 @@
-package algorithms.backtracking;
+package algorithms.backtracking.medium;
 
 import string.StringUtils;
 

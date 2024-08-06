@@ -31,6 +31,24 @@ public class FindCoupon {
         return coupon;
     }
 
+    public String getCouponConstantTime(String category) {
+        if (category == null) {
+            return null;
+        }
+
+        if (couponMap.containsKey(category)) {
+            return couponMap.get(category);
+        }
+
+        String coupon = getCouponConstantTime(categoryMap.get(category));
+
+        if (coupon != null) {
+            // memorize
+            couponMap.put(category, coupon);
+        }
+        return coupon;
+    }
+
     public static void main(String[] args) {
         String[][] coupons = {{"Comforter Sets", "Comforters Sale"},
             {"Bedding", "Savings on Bedding"},
@@ -56,5 +74,11 @@ public class FindCoupon {
         System.out.println(util.getCoupon("Bathroom Accessories"));
         System.out.println(util.getCoupon("Soap Dispensers"));
         System.out.println(util.getCoupon("Toy Organizers"));
+
+        System.out.println(util.getCouponConstantTime("Comforter Sets"));
+        System.out.println(util.getCouponConstantTime("Bedding"));
+        System.out.println(util.getCouponConstantTime("Bathroom Accessories"));
+        System.out.println(util.getCouponConstantTime("Soap Dispensers"));
+        System.out.println(util.getCouponConstantTime("Toy Organizers"));
     }
 }

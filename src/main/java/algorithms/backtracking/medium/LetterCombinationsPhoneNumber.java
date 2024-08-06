@@ -1,4 +1,4 @@
-package leetcode.medium;
+package algorithms.backtracking.medium;
 
 import java.util.*;
 
@@ -48,6 +48,6 @@ public class LetterCombinationsPhoneNumber {
 
     public static void main(String[] args) {
         LetterCombinationsPhoneNumber util = new LetterCombinationsPhoneNumber();
-        System.out.println(util.letterCombinations("234"));
+        System.out.println(util.letterCombinations("23"));
     }
 }

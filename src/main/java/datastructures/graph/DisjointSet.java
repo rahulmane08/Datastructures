@@ -41,8 +41,7 @@ public class DisjointSet<T> {
             return null;
         if (node.parent == node)
             return node;
-        node.parent = findSet(node.parent);
-        return node.parent;
+        return (node.parent = findSet(node.parent));
     }
 
     public boolean union(T data1, T data2) {

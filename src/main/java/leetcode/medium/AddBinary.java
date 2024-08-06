@@ -18,11 +18,10 @@ public class AddBinary {
         }
         int n1 = a.length();
         int n2 = b.length();
-        int k = Math.max(a.length(), b.length());
         StringBuilder result = new StringBuilder("");
         char carry = '0';
         int i = n1 - 1, j = n2 - 1;
-        while (i >= 0 && j >= 0) {
+        while (i > -1 && j > -1) {
             char x = a.charAt(i);
             char y = b.charAt(j);
             carry = addToResult(result, add("" + carry + x + y));
@@ -30,13 +29,13 @@ public class AddBinary {
             j--;
         }
 
-        while (i >= 0) {
+        while (i > -1) {
             char x = a.charAt(i);
             carry = addToResult(result, add("" + carry + x + "0"));
             i--;
         }
 
-        while (j >= 0) {
+        while (j > -1) {
             char y = b.charAt(j);
             carry = addToResult(result, add("" + carry + "0" + y));
             j--;

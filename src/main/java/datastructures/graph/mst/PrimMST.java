@@ -1,5 +1,6 @@
 package datastructures.graph.mst;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
