@@ -18,6 +18,7 @@ public class TreeUtils {
      * 2. for the current node, find the left tree max and right tree max
      * 3. Return max amongst curr, left max and right max.
      *
+     * T(n) = 2T(n/2) + 1 => a=2,b=2, log(a) = 1, k = 0, p = 0, Case 1 => O(n) = n.
      * @param root
      * @return
      */
@@ -38,7 +39,7 @@ public class TreeUtils {
 
     /**
      * PRE ORDER
-     *
+     * T(n) = 2T(n/2) + 1 => a=2,b=2, log(a) = 1, k = 0, p = 0, Case 1 => O(n) = n.
      * @param data
      * @param root
      * @return
@@ -49,24 +50,45 @@ public class TreeUtils {
         return (root.data == data) || exists(data, root.left) || exists(data, root.right);
     }
 
+    /**
+     * T(n) = 2T(n/2) + 1 => a=2,b=2, log(a) = 1, k = 0, p = 0, Case 1 => O(n) = n.
+     * @param root
+     * @return
+     */
     public static int size(Node root) {
         if (root == null)
             return 0;
         return 1 + size(root.left) + size(root.right);
     }
 
+    /**
+     * T(n) = 2T(n/2) + 1 => a=2,b=2, log(a) = 1, k = 0, p = 0, Case 1 => O(n) = n.
+     * @param root
+     * @return
+     */
     public static int sum(Node root) {
         if (root == null)
             return 0;
         return root.data + sum(root.left) + sum(root.right);
     }
 
+    /**
+     * O(1)
+     * @param root
+     * @return
+     */
     public static boolean isLeaf(Node root) {
         if (root == null)
             return false;
         return (root.left == null && root.right == null);
     }
 
+
+    /**
+     * O(n) = n
+     * @param root
+     * @return
+     */
     public static int sizeIterative(Node root) {
         if (root == null)
             return 0;
@@ -107,7 +129,7 @@ public class TreeUtils {
 
     /**
      * POST ORDER
-     *
+     * T(n) = 2T(n/2) + 1 => a=2,b=2, log(a) = 1, k = 0, p = 0, Case 1 => O(n) = n.
      * @param root
      * @return
      */
@@ -152,6 +174,7 @@ public class TreeUtils {
      * 5. if both are non null which means from the current root the recursion went down
      * and returned the left and right nodes itself,in which case return the current root
      *
+     * T(n) = 2T(n/2) + 1 => a=2,b=2, log(a) = 1, k = 0, p = 0, Case 1 => O(n) = n.
      * @param root
      * @param left
      * @param right
@@ -185,6 +208,12 @@ public class TreeUtils {
         // both keys absent.
     }
 
+    /**
+     * T(n) = 2T(n/2) + 1 => a=2,b=2, log(a) = 1, k = 0, p = 0, Case 1 => O(n) = n.
+     * @param root
+     * @param data
+     * @return
+     */
     @Important
     public static int depth(Node root, int data) {
         if (root == null) {
@@ -209,7 +238,7 @@ public class TreeUtils {
     /**
      * level ordered traversals
      * if the currently popped root is a left increment the count
-     *
+     * O(n) = n
      * @param root
      * @return
      */
@@ -234,7 +263,7 @@ public class TreeUtils {
 
     /**
      * using post order, find left and right leaf nodes and add them.
-     *
+     * O(n) = n.
      * @param root
      * @return
      */
@@ -313,7 +342,7 @@ public class TreeUtils {
     /**
      * add next pointer to each tree node.
      * do LOT and add current popped element.next = queue.peek()
-     *
+     * O(n) = n
      * @param root
      */
     public static void fillNextSiblings(Node root) {
@@ -341,6 +370,7 @@ public class TreeUtils {
     }
 
     /**
+     * O(n) = n
      * @param root
      */
     public static void printVerticalSum(Node root) {
@@ -482,6 +512,7 @@ public class TreeUtils {
      * / \   \
      * 5   4   7
      *
+     * O(n) = n.
      * @param root1
      * @param root2
      * @return

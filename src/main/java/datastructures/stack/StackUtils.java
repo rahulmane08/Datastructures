@@ -26,6 +26,12 @@ public class StackUtils {
         insertAtBottom(s, elem);
     }
 
+    /**
+     * T(n) = T(n-1) + 1
+     * @param s
+     * @param elem
+     * @param <T>
+     */
     private static <T> void insertAtBottom(Stack<T> s, T elem) {
         if (s.isEmpty()) {
             s.push(elem);
@@ -314,7 +320,7 @@ public class StackUtils {
      * 1. calculate mid
      * 2. pop the top and recursively call the deleteMiddle , push the top back
      * 3. if current recursion round == mid , end the recursion.
-     *
+     * O(n) = n
      * @param stack
      */
     @Important
@@ -721,7 +727,7 @@ public class StackUtils {
     }
 
     @Important
-    @Medium
+    @Hard
     public static int minHistogramArea(int[] arr) {
         if (arr == null || arr.length == 0)
             return 0;

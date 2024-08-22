@@ -24,13 +24,18 @@ public class BinarySearchTree extends BinaryTree {
         insert(this.root, data);
     }
 
+    /**
+     * Time Complexity:
+     *  T(n) = T(n/2) + 1 , log(1) = 0, k = 0, p = 0 -> Case 2.1 = log(n)
+     *
+     * @param root
+     * @param data
+     * @return
+     */
     private Node insert(Node root, int data) {
         if (root == null) {
             return new Node(null, null, data);
         }
-
-        if (root.data == data)
-            return root;
 
         if (root.data > data)
             root.left = insert(root.left, data);
@@ -44,6 +49,7 @@ public class BinarySearchTree extends BinaryTree {
         return min(this.root);
     }
 
+    // O(log(n))
     public Node min(Node root) {
         Node node;
         for (node = root; node != null && node.left != null; node = node.left) ;
@@ -54,12 +60,14 @@ public class BinarySearchTree extends BinaryTree {
         return max(this.root);
     }
 
+    // O(log(n))
     public Node max(Node root) {
         Node node;
         for (node = root; node != null && node.left != null; node = node.left) ;
         return node;
     }
 
+    // log(n)
     public Node search(int data) {
         return search(this.root, data);
     }
