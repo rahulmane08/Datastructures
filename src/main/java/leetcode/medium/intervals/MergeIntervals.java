@@ -9,7 +9,7 @@ public class MergeIntervals {
 
     public static void main(String[] args) {
         int [][] intervals = {{1,3},{2,6},{8,10},{15,18}};
-        System.out.println(Arrays.deepToString(merge(intervals)));
+        System.out.println(Arrays.deepToString(merge1(intervals)));
     }
 
     public static int[][] merge(int[][] intervals) {
@@ -35,6 +35,45 @@ public class MergeIntervals {
             }
         }
         return result.toArray(new int[0][2]);
+    }
+
+    static public int[][] merge1(int[][] intervals) {
+        if (intervals.length < 2) {
+            return intervals;
+        }
+        final int maxValue = 18 + 1;
+        final int[] starts = new int[maxValue + 1];
+        final int[] ends = new int[maxValue + 1];
+
+        int maxSeen = 0;
+        for (int i = 0; i < intervals.length; i++) {
+            starts[intervals[i][0]]++;
+            ends[intervals[i][1]]++;
+            maxSeen = Math.max(maxSeen, intervals[i][1]);
+        }
+
+        int layers = 0, currentStart = 0;
+        final List<int[]> result = new ArrayList<>();
+
+        for (int value = 0; value <= maxSeen; value++) {
+
+            if (starts[value] != 0) {
+                if (layers == 0) {
+                    currentStart = value;
+                }
+                layers += starts[value];
+            }
+
+            if (ends[value] != 0) {
+                layers -= ends[value];
+                if (layers == 0) {
+                    result.add(new int[] {currentStart, value});
+                }
+            }
+
+        }
+
+        return result.toArray(new int[0][]);
     }
 
     public static boolean isOverlapping(int[] curr, int[] next) {
