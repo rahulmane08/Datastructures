@@ -24,12 +24,12 @@ public class HeapUtils {
     int largest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
-      if (left < n && arr[left] > arr[largest]) {
-          largest = left;
-      }
-      if (right < n && arr[right] > arr[largest]) {
-          largest = right;
-      }
+    if (left < n && arr[left] > arr[largest]) {
+      largest = left;
+    }
+    if (right < n && arr[right] > arr[largest]) {
+      largest = right;
+    }
     if (largest != i) {
       Swapper.swap(arr, i, largest);
       maxHeapify(arr, n, largest);
@@ -40,12 +40,12 @@ public class HeapUtils {
     int smallest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
-      if (left < n && arr[left] < arr[smallest]) {
-          smallest = left;
-      }
-      if (right < n && arr[right] < arr[smallest]) {
-          smallest = right;
-      }
+    if (left < n && arr[left] < arr[smallest]) {
+      smallest = left;
+    }
+    if (right < n && arr[right] < arr[smallest]) {
+      smallest = right;
+    }
     if (smallest != i) {
       Swapper.swap(arr, i, smallest);
       maxHeapify(arr, n, smallest);
@@ -69,12 +69,12 @@ public class HeapUtils {
    * @return
    */
   public static int minCostOfConnectingRopes(int[] arr) {
-      if (arr == null) {
-          return -1;
-      }
-      if (arr.length == 1) {
-          return arr[0];
-      }
+    if (arr == null) {
+      return -1;
+    }
+    if (arr.length == 1) {
+      return arr[0];
+    }
     int minCost = 0;
     PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.naturalOrder());
     for (int cost : arr) {
@@ -147,21 +147,21 @@ public class HeapUtils {
 
       if (maxHeap.size() > minHeap.size()) {
         // case1(left side heap has more elements)
-          if (x < med) {
-              minHeap.add(maxHeap.remove());
-              maxHeap.add(x);
-          } else {
-              minHeap.add(x);
-          }
+        if (x < med) {
+          minHeap.add(maxHeap.remove());
+          maxHeap.add(x);
+        } else {
+          minHeap.add(x);
+        }
         med = (double) (maxHeap.peek() + minHeap.peek()) / 2;
       } else if (maxHeap.size() < minHeap.size()) {
         // case2 (right side heap has more elements)
-          if (x > med) {
-              maxHeap.add(minHeap.remove());
-              minHeap.add(x);
-          } else {
-              maxHeap.add(x);
-          }
+        if (x > med) {
+          maxHeap.add(minHeap.remove());
+          minHeap.add(x);
+        } else {
+          maxHeap.add(x);
+        }
         med = (double) (maxHeap.peek() + minHeap.peek()) / 2;
 
       } else {
@@ -182,9 +182,9 @@ public class HeapUtils {
   @Important
   @Hard
   public static void printMedian1(int[] arr) {
-      if (arr == null || arr.length == 0) {
-          return;
-      }
+    if (arr == null || arr.length == 0) {
+      return;
+    }
     int n = arr.length;
     MinPriorityQueue<Integer> minPq = new MinPriorityQueue<>(n / 2);
     MaxPriorityQueue<Integer> maxPq = new MaxPriorityQueue<>(n / 2);
@@ -225,9 +225,9 @@ public class HeapUtils {
   }
 
   public static void convertBstToMinHeap(Node root) {
-      if (root == null) {
-          return;
-      }
+    if (root == null) {
+      return;
+    }
     int[] inorderedArr = TreeUtils.OrderedArrays.getInstance().toInorderArray(root);
     TreeUtils.OrderedArrays.getInstance().fillTreeWithPreOrderArr(root, inorderedArr);
   }
@@ -240,9 +240,9 @@ public class HeapUtils {
    * @param root
    */
   public static void convertBstToMaxHeap(Node root) {
-      if (root == null) {
-          return;
-      }
+    if (root == null) {
+      return;
+    }
     int[] inorderedArr = TreeUtils.OrderedArrays.getInstance().toInorderArray(root);
     ArrayUtils.reverse(inorderedArr);
     TreeUtils.OrderedArrays.getInstance().fillTreeWithPreOrderArr(root, inorderedArr);
@@ -250,9 +250,9 @@ public class HeapUtils {
 
   @Important
   public static Integer[] mergeMaxHeaps(Integer[] arr1, Integer[] arr2) {
-      if (arr1 == null && arr2 == null) {
-          return null;
-      }
+    if (arr1 == null && arr2 == null) {
+      return null;
+    }
     int n = 0;
     Integer[] arr = null;
     if (arr2 == null) {
@@ -270,9 +270,9 @@ public class HeapUtils {
       System.arraycopy(arr2, 0, arr, arr1.length, arr2.length);
     }
 
-      for (int i = (n / 2) - 1; i >= 0; i--) {
-          maxHeapify(arr, n, i);
-      }
+    for (int i = (n / 2) - 1; i >= 0; i--) {
+      maxHeapify(arr, n, i);
+    }
     return arr;
   }
 
@@ -308,36 +308,36 @@ public class HeapUtils {
     boolean startFound = false;
     boolean endFound = false;
     for (int i = 0; i < n; i++) {
-        if (startFound && endFound) {
-            break;
-        }
-        if (start >= end) {
-            return; // array is already sorted
-        }
-        if (!startFound && arr[i] < arr[i + 1]) {
-            start++;
-        } else {
-            startFound = true;
-        }
-        if (!endFound && arr[n - i - 2] < arr[n - i - 1]) {
-            end--;
-        } else {
-            endFound = true;
-        }
-    }
-      while (end + 1 < n && arr[start] > arr[end + 1]) {
-          end++;
+      if (startFound && endFound) {
+        break;
       }
+      if (start >= end) {
+        return; // array is already sorted
+      }
+      if (!startFound && arr[i] < arr[i + 1]) {
+        start++;
+      } else {
+        startFound = true;
+      }
+      if (!endFound && arr[n - i - 2] < arr[n - i - 1]) {
+        end--;
+      } else {
+        endFound = true;
+      }
+    }
+    while (end + 1 < n && arr[start] > arr[end + 1]) {
+      end++;
+    }
 
     MinPriorityQueue<Integer> pq = new MinPriorityQueue(end - start + 1);
-      for (int i = start; i <= end; i++) {
-          pq.add(arr[i]);
-      }
+    for (int i = start; i <= end; i++) {
+      pq.add(arr[i]);
+    }
 
 
-      for (int i = start; i <= end; i++) {
-          arr[i] = pq.poll();
-      }
+    for (int i = start; i <= end; i++) {
+      arr[i] = pq.poll();
+    }
   }
 
   /**
@@ -374,9 +374,9 @@ public class HeapUtils {
       Map.Entry<Character, Integer> currEntry = maxPq.poll();
       Character curr = currEntry.getKey();
       output += curr;
-        if (prevEntry != null && prevEntry.getValue() > 0) {
-            maxPq.offer(prevEntry);
-        }
+      if (prevEntry != null && prevEntry.getValue() > 0) {
+        maxPq.offer(prevEntry);
+      }
       currEntry.setValue(currEntry.getValue() - 1);
       prevEntry = currEntry;
     }
@@ -405,9 +405,9 @@ public class HeapUtils {
    * @return
    */
   public static int maxNumberOfDistinctElementsAfterKRemovals(int[] arr, int k) {
-      if (arr == null) {
-          return -1;
-      }
+    if (arr == null) {
+      return -1;
+    }
     int n = arr.length;
     if (0 < k && k < n) {
       Map<Integer, Integer> frequencies = new HashMap<>();
@@ -444,17 +444,17 @@ public class HeapUtils {
    * Output : 1400
    */
   public static long minProductOfKNumbers(int[] arr, int k) {
-      if (arr == null) {
-          return 0;
-      }
+    if (arr == null) {
+      return 0;
+    }
     MaxPriorityQueue<Integer> maxPriorityQueue = new MaxPriorityQueue<>(k);
-      for (int x : arr) {
-          addIfPossible(k, maxPriorityQueue, x);
-      }
+    for (int x : arr) {
+      addIfPossible(k, maxPriorityQueue, x);
+    }
     long prod = 1;
-      while (!maxPriorityQueue.isEmpty()) {
-          prod = prod * maxPriorityQueue.poll();
-      }
+    while (!maxPriorityQueue.isEmpty()) {
+      prod = prod * maxPriorityQueue.poll();
+    }
     return prod;
   }
 
@@ -466,14 +466,14 @@ public class HeapUtils {
    * @param k
    */
   public static void printKLargestElements(int[] arr, int k) {
-      if (arr == null || k > arr.length) {
-          return;
-      }
+    if (arr == null || k > arr.length) {
+      return;
+    }
     MinPriorityQueue<Integer> minPriorityQueue = new MinPriorityQueue<>(k);
     int i = 0;
-      for (; i < k; i++) {
-          minPriorityQueue.add(arr[i]);
-      }
+    for (; i < k; i++) {
+      minPriorityQueue.add(arr[i]);
+    }
     for (; i < arr.length; i++) {
       if (arr[i] > minPriorityQueue.peek()) {
         minPriorityQueue.poll();
@@ -516,24 +516,24 @@ public class HeapUtils {
   }
 
   private static void printAllElementsLessThanXInMinHeapUtil(int[] arr, int x, int index, int n) {
-      if (index > n || arr[index] >= x) {
-          return;
-      }
+    if (index > n || arr[index] >= x) {
+      return;
+    }
     System.out.print(arr[index] + " ");
     printAllElementsLessThanXInMinHeapUtil(arr, x, 2 * index + 1, n);
     printAllElementsLessThanXInMinHeapUtil(arr, x, 2 * index + 2, n);
   }
 
   public static void printTopKNumbersWithMaxFrequency(int[] arr, int k) {
-      if (arr == null) {
-          return;
-      }
-      if (k < 0) {
-          return;
-      }
-      if (k > arr.length) {
-          k = arr.length;
-      }
+    if (arr == null) {
+      return;
+    }
+    if (k < 0) {
+      return;
+    }
+    if (k > arr.length) {
+      k = arr.length;
+    }
     Map<Integer, Integer> frequencies = new HashMap<>();
     for (int i = 0; i < arr.length; i++) {
       frequencies.compute(arr[i], (key, v) -> v == null ? 1 : v + 1);
@@ -545,24 +545,24 @@ public class HeapUtils {
             .thenComparingInt(Map.Entry::getKey));
 
     for (Map.Entry<Integer, Integer> entry : frequencies.entrySet()) {
-        if (pq.size() < k) {
-            pq.add(entry);
-        } else {
-            boolean qualifies = (pq.peek().getValue() < entry.getValue())
-                || (pq.peek().getValue() == entry.getValue() && pq.peek().getKey() < entry.getKey());
-            if (qualifies) {
-                pq.poll();
-                pq.add(entry);
-            }
+      if (pq.size() < k) {
+        pq.add(entry);
+      } else {
+        boolean qualifies = (pq.peek().getValue() < entry.getValue())
+            || (pq.peek().getValue() == entry.getValue() && pq.peek().getKey() < entry.getKey());
+        if (qualifies) {
+          pq.poll();
+          pq.add(entry);
         }
+      }
     }
     printReverse(pq, entry -> System.out.printf("Element: %d, freq: %d%n", entry.getKey(), entry.getValue()));
   }
 
   private static <T> void printReverse(PriorityQueue<T> pq, Consumer<T> printFunction) {
-      if (pq.isEmpty()) {
-          return;
-      }
+    if (pq.isEmpty()) {
+      return;
+    }
     T top = pq.poll();
     printReverse(pq, printFunction);
     printFunction.accept(top);
@@ -570,17 +570,17 @@ public class HeapUtils {
   }
 
   public static void printMinProductOfKIntegers(int[] arr, int k) {
-      if (arr == null || arr.length < k) {
-          return;
-      }
+    if (arr == null || arr.length < k) {
+      return;
+    }
     MaxPriorityQueue<Integer> pq = new MaxPriorityQueue<>(k);
     for (int i : arr) {
       addIfPossible(k, pq, i);
     }
     int product = 1;
-      while (!pq.isEmpty()) {
-          product *= pq.poll();
-      }
+    while (!pq.isEmpty()) {
+      product *= pq.poll();
+    }
     System.out.printf("Min product of %d elements in arr: %s = %d%n", k, Arrays.toString(arr), product);
   }
 
@@ -652,22 +652,22 @@ public class HeapUtils {
      */
     @Important
     public static int kthLargestUsingMaxHeap(int[] arr, int k) {
-        if (arr == null) {
-            return -1;
-        }
+      if (arr == null) {
+        return -1;
+      }
       int n = arr.length;
-        if (k > n) {
-            return -1;
-        }
+      if (k > n) {
+        return -1;
+      }
 
       MaxPriorityQueue<Integer> pq = new MaxPriorityQueue<>(n);
-        for (int i : arr) {
-            pq.add(i);
-        }
+      for (int i : arr) {
+        pq.add(i);
+      }
       int kthLargest = -1;
-        for (int i = 0; i < k; i++) {
-            kthLargest = pq.poll();
-        }
+      for (int i = 0; i < k; i++) {
+        kthLargest = pq.poll();
+      }
       return kthLargest;
     }
 
@@ -680,9 +680,9 @@ public class HeapUtils {
      */
     @Important
     public static int kthLargestUsingMinHeap(Integer[] arr, int k) {
-        if (arr == null || arr.length == 0 || k > arr.length || k < 1) {
-            return -1;
-        }
+      if (arr == null || arr.length == 0 || k > arr.length || k < 1) {
+        return -1;
+      }
       int n = arr.length;
       /**
        * min heapify first k elements ie create a Min heap of first K elements
@@ -716,9 +716,9 @@ public class HeapUtils {
      */
     @Important
     public static int kthSmallestUsingMaxHeap(Integer[] arr, int k) {
-        if (arr == null || arr.length == 0 || k > arr.length || k < 1) {
-            return -1;
-        }
+      if (arr == null || arr.length == 0 || k > arr.length || k < 1) {
+        return -1;
+      }
       int n = arr.length;
       // min heapify first k elements
       // log(k)
@@ -816,15 +816,15 @@ public class HeapUtils {
   @Important
   public static class MergeKSortedArraysIntoOneUtil {
     public static int[] mergeSortedArraysIntoOne(int[][] arr) {
-        if (arr == null) {
-            return null;
-        }
+      if (arr == null) {
+        return null;
+      }
       int n = arr.length;
       int k = arr[0].length;
       PriorityQueue<Node> pq = new PriorityQueue<>(k, Comparator.comparingInt(Node::getData));
-        for (int i = 0; i < n; i++) {
-            pq.add(new Node(arr[i][0], i, 0));
-        }
+      for (int i = 0; i < n; i++) {
+        pq.add(new Node(arr[i][0], i, 0));
+      }
       int[] sorted = new int[n * k];
       int idx = 0;
       while (!pq.isEmpty()) {
@@ -874,10 +874,10 @@ public class HeapUtils {
   public static class PrintKMaxSumsOfTwoEquallySizedArraysUtil {
     private final int[] arr1;
     private final int[] arr2;
-    private int k;
-    private final MaxPriorityQueue<Node> pq = new MaxPriorityQueue<>(k);
     private final HashSet<Node> visited = new HashSet<>();
     private final List<Integer> result = new ArrayList<>();
+    private int k;
+    private final MaxPriorityQueue<Node> pq = new MaxPriorityQueue<>(k);
 
     public PrintKMaxSumsOfTwoEquallySizedArraysUtil(int[] arr1, int[] arr2, int k) {
       this.arr1 = arr1;
@@ -887,12 +887,12 @@ public class HeapUtils {
     }
 
     private void compute() {
-        if (this.arr1 == null || this.arr2 == null) {
-            return;
-        }
-        if (this.arr1.length != this.arr2.length) {
-            return;
-        }
+      if (this.arr1 == null || this.arr2 == null) {
+        return;
+      }
+      if (this.arr1.length != this.arr2.length) {
+        return;
+      }
       int n = this.arr1.length;
 
       Arrays.sort(arr1);
@@ -934,12 +934,12 @@ public class HeapUtils {
 
       @Override
       public boolean equals(Object o) {
-          if (this == o) {
-              return true;
-          }
-          if (o == null || getClass() != o.getClass()) {
-              return false;
-          }
+        if (this == o) {
+          return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+          return false;
+        }
         Node node = (Node) o;
         return x == node.x &&
             y == node.y;

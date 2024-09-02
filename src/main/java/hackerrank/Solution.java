@@ -2,96 +2,107 @@ package hackerrank;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 public class Solution {
-    static public String[] findNonMatching(String s, String t) {
-        if (t == null || t.trim().length() == 0)
-            return s.split("\\s+");
-
-        List<String> subsequence = new ArrayList<>();
-        String[] main = s.split("\\s+");
-        String[] sub = t.split("\\s+");
-        LinkedHashSet<String> set = new LinkedHashSet<>();
-        for (String x : main)
-            set.add(x);
-        for (String x : sub)
-            if (!set.contains(x))
-                break;
-            else
-                set.remove(x);
-        for (String x : set)
-            subsequence.add(x);
-        return subsequence.toArray(new String[subsequence.size()]);
+  static public String[] findNonMatching(String s, String t) {
+    if (t == null || t.trim().length() == 0) {
+      return s.split("\\s+");
     }
 
-    static public String[] findNonMatching1(String s, String t) {
-        List<String> subsequence = new ArrayList<>();
-        String[] main = s.split("\\s+");
-        String[] sub = t.split("\\s+");
-
-        int i = 0, j = 0;
-        for (; i < main.length && j < sub.length; i++) {
-            if (!main[i].equals(sub[j]))
-                subsequence.add(main[i]);
-            else
-                j++;
-
-        }
-
-        for (int k = i; k < main.length; k++)
-            subsequence.add(main[k]);
-        return subsequence.toArray(new String[subsequence.size()]);
+    List<String> subsequence = new ArrayList<>();
+    String[] main = s.split("\\s+");
+    String[] sub = t.split("\\s+");
+    LinkedHashSet<String> set = new LinkedHashSet<>();
+    Collections.addAll(set, main);
+    for (String x : sub) {
+      if (!set.contains(x)) {
+        break;
+      } else {
+        set.remove(x);
+      }
     }
+    for (String x : set) {
+      subsequence.add(x);
+    }
+    return subsequence.toArray(new String[subsequence.size()]);
+  }
 
-    static int maxDifference(int[] a) {
-        int temp = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        for (int i : a) {
-            if (temp >= i) {
-                temp = i;
-                continue;
-            }
+  static public String[] findNonMatching1(String s, String t) {
+    List<String> subsequence = new ArrayList<>();
+    String[] main = s.split("\\s+");
+    String[] sub = t.split("\\s+");
 
-            int currMax = i - temp;
-            if (currMax > max)
-                max = currMax;
-        }
-        if (max == Integer.MIN_VALUE)
-            return -1;
-        return max;
+    int i = 0, j = 0;
+    for (; i < main.length && j < sub.length; i++) {
+      if (!main[i].equals(sub[j])) {
+        subsequence.add(main[i]);
+      } else {
+        j++;
+      }
 
     }
 
-    static public String[] formatDates(String[] dates) {
-        String[] output = new String[dates.length];
-        for (int i = 0; i < dates.length; ++i) {
-            String s = dates[i];
-            String[] parts = s.split(" ");
-            if (parts[0].length() == 3)
-                parts[0] = parts[0].substring(0, 1);
-            else
-                parts[0] = parts[0].substring(0, 2);
+    subsequence.addAll(Arrays.asList(main).subList(i, main.length));
+    return subsequence.toArray(new String[subsequence.size()]);
+  }
 
-            s = String.join(" ", parts);
+  static int maxDifference(int[] a) {
+    int temp = Integer.MAX_VALUE;
+    int max = Integer.MIN_VALUE;
+    for (int i : a) {
+      if (temp >= i) {
+        temp = i;
+        continue;
+      }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy");
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-            Date d = null;
-            try {
-                d = sdf.parse(s);
-                output[i] = sdf1.format(d);
+      int currMax = i - temp;
+      if (currMax > max) {
+        max = currMax;
+      }
+    }
+    if (max == Integer.MIN_VALUE) {
+      return -1;
+    }
+    return max;
 
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+  }
 
-        return output;
+  static public String[] formatDates(String[] dates) {
+    String[] output = new String[dates.length];
+    for (int i = 0; i < dates.length; ++i) {
+      String s = dates[i];
+      String[] parts = s.split(" ");
+      if (parts[0].length() == 3) {
+        parts[0] = parts[0].substring(0, 1);
+      } else {
+        parts[0] = parts[0].substring(0, 2);
+      }
+
+      s = String.join(" ", parts);
+
+      SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy");
+      SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+      Date d = null;
+      try {
+        d = sdf.parse(s);
+        output[i] = sdf1.format(d);
+
+      } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
 
-    public static void main(String[] args) {
+    return output;
+  }
+
+  public static void main(String[] args) {
 		/*int [] n = {7,9,5,6,3,2};
 		System.out.println(maxDifference(n));
 		n = new int[]{2,3,10,2,4,8,1};
@@ -104,7 +115,7 @@ public class Solution {
 		System.out.println(maxDifference(n));*/
 
 //		System.out.println(Arrays.toString(findNonMatching("I am using Hackerrank to improve programming", "am hackerrank to improve")));
-        System.out.println(Arrays.toString(formatDates(new String[]{"1st Mar 1984", "1st Mar 1986"})));
-    }
+    System.out.println(Arrays.toString(formatDates(new String[] {"1st Mar 1984", "1st Mar 1986"})));
+  }
 
 }

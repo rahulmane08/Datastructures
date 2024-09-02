@@ -2,6 +2,24 @@ package leetcode.medium;
 
 public class SearchInRotatedArray {
 
+  public static void main(String[] args) {
+    SearchInRotatedArray util = new SearchInRotatedArray();
+    int[] nums = new int[] {1, 2, 3, 5, 6, 7};
+    System.out.println(util.search(nums, 4));
+    nums = new int[] {5, 6, 7, 1, 2, 3};
+    System.out.println(util.search(nums, 1));
+    nums = new int[] {3, 5, 6, 7, 1, 2};
+    System.out.println(util.search(nums, 1));
+    nums = new int[] {3, 5, 6, 7, 1, 2};
+    System.out.println(util.search(nums, 4));
+    nums = new int[] {1};
+    System.out.println(util.search(nums, 1));
+    nums = new int[] {1};
+    System.out.println(util.search(nums, 4));
+    nums = new int[] {3, 1};
+    System.out.println(util.search(nums, 1));
+  }
+
   public int search(int[] nums, int target) {
     int pivot = findPivot(nums, 0, nums.length - 1);
     if (pivot == -1) {
@@ -34,7 +52,7 @@ public class SearchInRotatedArray {
     }
     if (nums[low] > nums[high]) {
       int mid = low + ((high - low) / 2);
-      if (mid - 1 > low && nums[mid-1] > nums[mid]) {
+      if (mid - 1 > low && nums[mid - 1] > nums[mid]) {
         return mid;
       }
 
@@ -53,23 +71,5 @@ public class SearchInRotatedArray {
       return rightPivot;
     }
     return -1;
-  }
-
-  public static void main(String[] args) {
-    SearchInRotatedArray util = new SearchInRotatedArray();
-    int[] nums = new int[] {1, 2, 3, 5, 6, 7};
-    System.out.println(util.search(nums, 4));
-    nums = new int[] {5, 6, 7, 1, 2, 3};
-    System.out.println(util.search(nums, 1));
-    nums = new int[] {3, 5, 6, 7, 1, 2};
-    System.out.println(util.search(nums, 1));
-    nums = new int[] {3, 5, 6, 7, 1, 2};
-    System.out.println(util.search(nums, 4));
-    nums = new int[] {1};
-    System.out.println(util.search(nums, 1));
-    nums = new int[] {1};
-    System.out.println(util.search(nums, 4));
-    nums = new int[] {3, 1};
-    System.out.println(util.search(nums, 1));
   }
 }

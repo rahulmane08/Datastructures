@@ -22,6 +22,11 @@ import java.util.Comparator;
  */
 public class EraseOverlappingIntervals {
 
+  public static void main(String[] args) {
+    EraseOverlappingIntervals util = new EraseOverlappingIntervals();
+    System.out.println(util.eraseOverlapIntervals1(new int[][] {{1, 2}, {2, 3}, {3, 4}, {1, 3}}));
+  }
+
   public int eraseOverlapIntervals(int[][] intervals) {
     if (intervals == null) {
       return 0;
@@ -77,10 +82,5 @@ public class EraseOverlappingIntervals {
     }
 
     return intervals.length - nonOverlapIntervalsCount;
-  }
-
-  public static void main(String[] args) {
-    EraseOverlappingIntervals util = new EraseOverlappingIntervals();
-    System.out.println(util.eraseOverlapIntervals1(new int[][] {{1, 2}, {2, 3}, {3, 4}, {1, 3}}));
   }
 }

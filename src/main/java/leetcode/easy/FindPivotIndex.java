@@ -2,17 +2,17 @@ package leetcode.easy;
 
 /**
  * Given an array of integers nums, calculate the pivot index of this array.
- *
+ * <p>
  * The pivot index is the index where the sum of all the numbers strictly to the left of the index is equal to the sum of all the numbers strictly to the index's right.
- *
+ * <p>
  * If the index is on the left edge of the array, then the left sum is 0 because there are no elements to the left. This also applies to the right edge of the array.
- *
+ * <p>
  * Return the leftmost pivot index. If no such index exists, return -1.
- *
- *
- *
+ * <p>
+ * <p>
+ * <p>
  * Example 1:
- *
+ * <p>
  * Input: nums = [1,7,3,6,5,6]
  * Output: 3
  * Explanation:
@@ -20,13 +20,13 @@ package leetcode.easy;
  * Left sum = nums[0] + nums[1] + nums[2] = 1 + 7 + 3 = 11
  * Right sum = nums[4] + nums[5] = 5 + 6 = 11
  * Example 2:
- *
+ * <p>
  * Input: nums = [1,2,3]
  * Output: -1
  * Explanation:
  * There is no index that satisfies the conditions in the problem statement.
  * Example 3:
- *
+ * <p>
  * Input: nums = [2,1,-1]
  * Output: 0
  * Explanation:
@@ -36,38 +36,39 @@ package leetcode.easy;
  */
 public class FindPivotIndex {
 
-    static class Test {
+  public static void main(String[] args) {
+    Test t = new Test();
+    FindPivotIndex util = new FindPivotIndex();
+    System.out.println(util.pivotIndex(new int[] {1, 7, 3, 6, 5, 6}));
+    System.out.println(util.pivotIndex(new int[] {1, 2, 3}));
+    System.out.println(util.pivotIndex(new int[] {2, 1, -1}));
+    System.out.println(util.pivotIndex(new int[] {0}));
+  }
 
+  public int pivotIndex(int[] nums) {
+    if (nums == null) {
+      return -1;
     }
-    public int pivotIndex(int[] nums) {
-        if (nums == null) {
-            return -1;
-        }
-        int leftSum = 0;
-        int rightSum = 0;
-        for (int i = 0; i < nums.length; i++) {
-            rightSum += nums[i];
-        }
-
-        for (int i = 0; i < nums.length; i++) {
-            if (i > 0) {
-                leftSum += nums[i-1];
-            }
-            rightSum -= nums[i];
-            if (leftSum == rightSum) {
-                return i;
-            }
-        }
-
-        return -1;
+    int leftSum = 0;
+    int rightSum = 0;
+    for (int i = 0; i < nums.length; i++) {
+      rightSum += nums[i];
     }
 
-    public static void main(String[] args) {
-        Test t = new Test();
-        FindPivotIndex util = new FindPivotIndex();
-        System.out.println(util.pivotIndex(new int[]{1,7,3,6,5,6}));
-        System.out.println(util.pivotIndex(new int[]{1,2,3}));
-        System.out.println(util.pivotIndex(new int[]{2, 1, -1}));
-        System.out.println(util.pivotIndex(new int[]{0}));
+    for (int i = 0; i < nums.length; i++) {
+      if (i > 0) {
+        leftSum += nums[i - 1];
+      }
+      rightSum -= nums[i];
+      if (leftSum == rightSum) {
+        return i;
+      }
     }
+
+    return -1;
+  }
+
+  static class Test {
+
+  }
 }

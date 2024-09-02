@@ -5,16 +5,16 @@ package algorithms.backtracking.medium;
  */
 public class KthSortedHappyString {
 
-    private char[] happy = new char[]{'a', 'b', 'c'};
+  private final char[] happy = new char[] {'a', 'b', 'c'};
 
-    public String getHappyString(int n, int k) {
-        if (n == 1) {
-            if (k > happy.length) {
-                return String.valueOf(happy[k]);
-            }
-            return String.valueOf(happy[k-1]);
-        }
-
-        return null;
+  public String getHappyString(int n, int k) {
+    if (n == 1) {
+      if (k > happy.length) {
+        return String.valueOf(happy[k]);
+      }
+      return String.valueOf(happy[k - 1]);
     }
+
+    return null;
+  }
 }

@@ -8,13 +8,24 @@ import java.util.PriorityQueue;
  */
 public class MedianFinder {
 
-  private PriorityQueue<Integer> maxHeap, minHeap;
+  private final PriorityQueue<Integer> maxHeap;
+  private final PriorityQueue<Integer> minHeap;
   private double median;
 
   public MedianFinder() {
     this.minHeap = new PriorityQueue<>(Comparator.naturalOrder());
     this.maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
     this.median = 0d;
+  }
+
+  public static void main(String[] args) {
+    MedianFinder util = new MedianFinder();
+    util.addNum(1);
+    System.out.println(util.findMedian());
+    util.addNum(2);
+    System.out.println(util.findMedian());
+    util.addNum(3);
+    System.out.println(util.findMedian());
   }
 
   public void addNum(int num) {
@@ -57,15 +68,5 @@ public class MedianFinder {
 
   public double findMedian() {
     return median;
-  }
-
-  public static void main(String[] args) {
-    MedianFinder util = new MedianFinder();
-    util.addNum(1);
-    System.out.println(util.findMedian());
-    util.addNum(2);
-    System.out.println(util.findMedian());
-    util.addNum(3);
-    System.out.println(util.findMedian());
   }
 }

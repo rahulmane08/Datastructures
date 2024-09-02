@@ -2,7 +2,7 @@ package algorithms.dynamicprogramming.boundedknapsack;
 
 public class MinSubsetDifference {
 
-    public static class TopDown {
+  public static class TopDown {
 
         /*public int solve(int[] arr) {
             if (arr == null) {
@@ -17,5 +17,5 @@ public class MinSubsetDifference {
 
             Integer [][] dp = new Integer[n + 1][totalSum + 1];
         }*/
-    }
+  }
 }

@@ -6,6 +6,11 @@ import java.util.PriorityQueue;
 
 public class MeetingRooms2 {
 
+  public static void main(String[] args) {
+    MeetingRooms2 util = new MeetingRooms2();
+    System.out.println(util.minMeetingRooms1(new int[][] {{0, 30}, {5, 10}, {15, 20}}));
+  }
+
   public int minMeetingRooms(int[][] intervals) {
     if (intervals == null || intervals.length == 0) {
       return 0;
@@ -31,10 +36,5 @@ public class MeetingRooms2 {
       rooms.offer(curr);
     }
     return rooms.size();
-  }
-
-  public static void main(String[] args) {
-    MeetingRooms2 util = new MeetingRooms2();
-    System.out.println(util.minMeetingRooms1(new int[][] {{0, 30}, {5, 10}, {15, 20}}));
   }
 }

@@ -3,6 +3,16 @@ package leetcode.medium;
 import java.util.Arrays;
 
 public class RemoveDuplicates2 {
+  public static void main(String[] args) {
+    int[] nums = new int[] {1, 1, 1, 2, 3, 3, 3, 4};
+    RemoveDuplicates2 util = new RemoveDuplicates2();
+    System.out.println(util.removeDuplicates(nums) + ":" + Arrays.toString(nums));
+    nums = new int[] {1};
+    System.out.println(util.removeDuplicates(nums) + ":" + Arrays.toString(nums));
+    nums = new int[] {1, 1, 1};
+    System.out.println(util.removeDuplicates(nums) + ":" + Arrays.toString(nums));
+  }
+
   public int removeDuplicates(int[] nums) {
     if (nums == null) {
       return -1;
@@ -25,15 +35,5 @@ public class RemoveDuplicates2 {
       j++;
     }
     return copy - 1;
-  }
-
-  public static void main(String[] args) {
-    int[] nums = new int[] {1, 1, 1, 2, 3, 3, 3, 4};
-    RemoveDuplicates2 util = new RemoveDuplicates2();
-    System.out.println(util.removeDuplicates(nums) + ":" + Arrays.toString(nums));
-    nums = new int[] {1};
-    System.out.println(util.removeDuplicates(nums) + ":" + Arrays.toString(nums));
-    nums = new int[] {1, 1, 1};
-    System.out.println(util.removeDuplicates(nums) + ":" + Arrays.toString(nums));
   }
 }

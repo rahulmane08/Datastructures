@@ -23,63 +23,65 @@ import java.util.Map;
  * @author rahul
  */
 public class DisjointSet<T> {
-    Map<T, Node<T>> map = new HashMap<>();
+  Map<T, Node<T>> map = new HashMap<>();
 
-    public void makeSet(T data) {
-        Node<T> node = new Node<>(data);
-        node.rank = 0;
-        node.parent = node;
-        map.put(data, node);
+  public void makeSet(T data) {
+    Node<T> node = new Node<>(data);
+    node.rank = 0;
+    node.parent = node;
+    map.put(data, node);
+  }
+
+  public Node<T> findSet(T data) {
+    return findSet(map.get(data));
+  }
+
+  public Node<T> findSet(Node<T> node) {
+    if (node == null) {
+      return null;
+    }
+    if (node.parent == node) {
+      return node;
+    }
+    return (node.parent = findSet(node.parent));
+  }
+
+  public boolean union(T data1, T data2) {
+    if (data1 == null || data2 == null) {
+      return false;
     }
 
-    public Node<T> findSet(T data) {
-        return findSet(map.get(data));
+    if (data1.equals(data2)) {
+      return false;
     }
 
-    public Node<T> findSet(Node<T> node) {
-        if (node == null)
-            return null;
-        if (node.parent == node)
-            return node;
-        return (node.parent = findSet(node.parent));
+    Node<T> parent1 = findSet(data1);
+    Node<T> parent2 = findSet(data2);
+
+    if (parent1 == null || parent2 == null) {
+      return false;
     }
 
-    public boolean union(T data1, T data2) {
-        if (data1 == null || data2 == null) {
-            return false;
-        }
-
-        if (data1.equals(data2)) {
-            return false;
-        }
-
-        Node<T> parent1 = findSet(data1);
-        Node<T> parent2 = findSet(data2);
-
-        if (parent1 == null || parent2 == null) {
-            return false;
-        }
-
-        if (parent1.rank > parent2.rank) {
-            parent2.parent = parent1;
-        } else if (parent2.rank > parent1.rank) {
-            parent1.parent = parent2;
-        } else {
-            // make any 1 as parent and increment the rank of new parent
-            parent2.parent = parent1;
-            parent1.rank += 1;
-        }
-        return true;
+    if (parent1.rank > parent2.rank) {
+      parent2.parent = parent1;
+    } else if (parent2.rank > parent1.rank) {
+      parent1.parent = parent2;
+    } else {
+      // make any 1 as parent and increment the rank of new parent
+      parent2.parent = parent1;
+      parent1.rank += 1;
     }
+    return true;
+  }
 
-    static public class Node<T> {
-        T data;
-        int rank;
-        Node parent;
+  static public class Node<T> {
+    T data;
+    int rank;
+    Node parent;
 
-        public Node(T data) {
-            super();
-            this.data = data;
-        }
+    public Node(T data) {
+      super();
+      this.data = data;
     }
+  }
 }

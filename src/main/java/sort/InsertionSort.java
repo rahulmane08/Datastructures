@@ -10,7 +10,7 @@ package sort;
  * The worst case occurs when the array is sorted in reverse order. So the worst case time complexity of insertion sort is O(n2).
  * Best case: O(n)
  * Worst case: O(n^2)
- *
+ * <p>
  * [5, 6, 2, 1, 3]
  * i = 1, key = 6 : [5, 6, 2, 1, 3]
  * i = 2, key = 2 : [5, 6, 6, 1, 3] -> [5, 5, 6, 1, 3] -> [2, 5, 6, 1, 3]
@@ -18,17 +18,17 @@ package sort;
  * and so on...
  */
 public class InsertionSort {
-    static public void sort(int[] arr) {
-        int n = arr.length;
-        for (int i = 1; i < n; i++) {
-            int key = arr[i];
-            int j = i - 1;
-            for (; j >= 0 && key < arr[j]; arr[j + 1] = arr[j--]) ;
-            arr[j + 1] = key;
-        }
+  static public void sort(int[] arr) {
+    int n = arr.length;
+    for (int i = 1; i < n; i++) {
+      int key = arr[i];
+      int j = i - 1;
+      for (; j >= 0 && key < arr[j]; arr[j + 1] = arr[j--]) ;
+      arr[j + 1] = key;
     }
+  }
 
-    public static void main(String[] args) {
-        InsertionSort.sort(new int[]{5, 4, 3, 2, 1});
-    }
+  public static void main(String[] args) {
+    InsertionSort.sort(new int[] {5, 4, 3, 2, 1});
+  }
 }
