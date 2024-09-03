@@ -1341,18 +1341,6 @@ public class TreeUtils {
       printAllLeaves(root.right);
     }
 
-    public static void printKthLevelNodes(Node root, int k) {
-      if (root == null || k < 0) {
-        return;
-      }
-      if (k == 0) {
-        System.out.print(root.data + " ");
-        return;
-      }
-      printKthLevelNodes(root.left, k - 1);
-      printKthLevelNodes(root.right, k - 1);
-    }
-
     public static int lengthOfLongestPathOfNode(Node root) {
       if (root == null) {
         return 0;
@@ -1361,24 +1349,6 @@ public class TreeUtils {
       int rightHeight = heightRecursive(root.right);
       int nodesInLongestPath = leftHeight + rightHeight + 1;
       return nodesInLongestPath;
-    }
-
-    public static int distanceBetweenAnyTwoNodes(Node root, int data1, int data2) {
-      Node lca = lca(root, data1, data2);
-      if (lca == null) {
-        return -1;
-      }
-      int depth1 = depth(lca, data1);
-      if (depth1 == -1) {
-        return -1;
-      }
-
-      int depth2 = depth(lca, data2);
-      if (depth2 == -1) {
-        return -1;
-      }
-
-      return depth1 + depth2;
     }
 
     /**
@@ -1598,30 +1568,6 @@ public class TreeUtils {
         nodeSums.put(root.data, Utils.max(rootAndGrandChildrenSum, childrenSum));
         System.out.printf("Node: %d, maxSum: %d%n", root.data, nodeSums.get(root.data));
         return nodeSums.get(root.data);
-      }
-    }
-
-    @Important
-    public static class SumOfAllLeftLeafNodes {
-      private int sum;
-
-      public SumOfAllLeftLeafNodes(Node root) {
-        compute(null, root);
-      }
-
-      private void compute(Node prev, Node root) {
-        if (root == null) {
-          return;
-        }
-        compute(root, root.left);
-        if (isLeaf(root) && prev != null && prev.left == root) {
-          sum += root.data;
-        }
-        compute(root, root.right);
-      }
-
-      public int getSum() {
-        return sum;
       }
     }
 
