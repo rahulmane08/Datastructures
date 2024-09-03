@@ -53,7 +53,7 @@ import java.util.Stack;
 import org.junit.Before;
 import org.junit.Test;
 import datastructures.tree.TreeUtils.CheckerUtils.InternalNodeWithOneChildChecker;
-import datastructures.tree.TreeUtils.CheckerUtils.SumTreeChecker;
+import leetcode.trees.medium.SumTreeChecker;
 import datastructures.tree.TreeUtils.PathQueryUtils.DeepestHorrizontalLevelSumUtil;
 import datastructures.tree.TreeUtils.OrderedArrays;
 import datastructures.tree.TreeUtils.PathQueryUtils.MaxSumOfAny2LeafPathUtil;

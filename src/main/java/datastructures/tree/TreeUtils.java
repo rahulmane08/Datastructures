@@ -637,27 +637,6 @@ public class TreeUtils {
     }
 
     /**
-     * Every non leaf node has left and right child
-     * In other words each node can have exactly 0 or 2 children.
-     *
-     * @param root
-     * @return
-     */
-    static public boolean checkIfStrictTree(Node root) {
-      if (root == null) {
-        return true;
-      }
-      int children = 0;
-      if (root.left != null) {
-        ++children;
-      }
-      if (root.right != null) {
-        ++children;
-      }
-      return (children % 2 == 0) && checkIfStrictTree(root.left) && checkIfStrictTree(root.right);
-    }
-
-    /**
      * POST ORDER
      * AVL tree check
      * AVL property: Difference between left and right height is <= 1.
@@ -734,32 +713,6 @@ public class TreeUtils {
       }
     }
 
-    public static class SumTreeChecker {
-      private boolean check = true;
-
-      public SumTreeChecker(Node root) {
-        checkSum(root);
-      }
-
-      private int checkSum(Node root) {
-        if (root == null) {
-          return 0;
-        }
-        if (isLeaf(root)) {
-          return root.data;
-        }
-        int leftSum = checkSum(root.left);
-        int rightSum = checkSum(root.right);
-        if (check) {
-          check = (root.data == leftSum + rightSum);
-        }
-        return 2 * root.data;
-      }
-
-      public boolean isCheck() {
-        return check;
-      }
-    }
   }
 
   public static class ViewUtils {
@@ -1969,4 +1922,5 @@ public class TreeUtils {
       return root;
     }
   }
+
 }
