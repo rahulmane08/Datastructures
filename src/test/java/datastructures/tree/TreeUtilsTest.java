@@ -46,7 +46,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import datastructures.tree.TreeUtils.CheckerUtils.InternalNodeWithOneChildChecker;
+import leetcode.trees.medium.InternalNodeWithOneChildChecker;
 import datastructures.tree.TreeUtils.OrderedArrays;
 import datastructures.tree.TreeUtils.PathQueryUtils.DeepestHorrizontalLevelSumUtil;
 import datastructures.tree.TreeUtils.PathQueryUtils.MaxSumOfAny2LeafPathUtil;
