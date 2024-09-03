@@ -588,58 +588,6 @@ public class HeapUtils {
     return (int) Math.floor(arr.length / 2) + 1;
   }
 
-  @Important
-  public static void largestDerangement(int[] arr) {
-    if (arr == null || arr.length == 0) {
-      return;
-    }
-    MaxPriorityQueue<Integer> maxPq = new MaxPriorityQueue<>(arr.length);
-    for (int i : arr) {
-      maxPq.add(i);
-    }
-    for (int i = 0; i < arr.length; i++) {
-      int top = maxPq.poll();
-      if (top != arr[i]) {
-        arr[i] = top;
-      } else {
-        // last element but at the same position
-        if (maxPq.isEmpty()) {
-          Swapper.swap(arr, i - 1, i);
-        } else {
-          int next = maxPq.poll();
-          arr[i] = next;
-          maxPq.add(top);
-        }
-      }
-    }
-  }
-
-  @Important
-  public static void smallestDerangement(int[] arr) {
-    if (arr == null || arr.length == 0) {
-      return;
-    }
-    MinPriorityQueue<Integer> minPq = new MinPriorityQueue<>(arr.length);
-    for (int i : arr) {
-      minPq.add(i);
-    }
-    for (int i = 0; i < arr.length; i++) {
-      int top = minPq.poll();
-      if (top != arr[i]) {
-        arr[i] = top;
-      } else {
-        // last element but at the same position
-        if (minPq.isEmpty()) {
-          Swapper.swap(arr, i - 1, i);
-        } else {
-          int next = minPq.poll();
-          arr[i] = next;
-          minPq.add(top);
-        }
-      }
-    }
-  }
-
   public static class KthSmallestLargestUtil {
 
     /**

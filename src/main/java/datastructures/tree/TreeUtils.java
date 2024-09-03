@@ -389,41 +389,6 @@ public class TreeUtils {
   }
 
   /**
-   * add next pointer to each tree node.
-   * do LOT and add current popped element.next = queue.peek()
-   * O(n) = n
-   *
-   * @param root
-   */
-  public static void fillNextSiblings(Node root) {
-    if (root == null) {
-      return;
-    }
-    Node marker = new Node(Integer.MIN_VALUE);
-    Queue<Node> queue = new ArrayDeque<>();
-    queue.offer(root);
-    queue.offer(marker);
-    while (!queue.isEmpty()) {
-      Node curr = queue.poll();
-      if (curr == marker) {
-        if (!queue.isEmpty()) {
-          queue.offer(marker);
-        }
-      } else {
-        if (queue.peek() != marker) {
-          curr.nextSibling = queue.peek();
-        }
-        if (curr.left != null) {
-          queue.offer(curr.left);
-        }
-        if (curr.right != null) {
-          queue.offer(curr.right);
-        }
-      }
-    }
-  }
-
-  /**
    * O(n) = n
    *
    * @param root
@@ -435,11 +400,12 @@ public class TreeUtils {
         .forEach(entry -> System.out.format("Level:%d, Sum:%d%n", entry.getKey(), entry.getValue()));
   }
 
+  // T(n) = 2T(n/2) + log(Levels) ->
   private static void computeVerticalSum(Node root, Map<Integer, Integer> levelSum, Integer level) {
     if (root == null) {
       return;
     }
-    levelSum.compute(level, (k, v) -> v == null ? root.data : root.data + v);
+    levelSum.compute(level, (k, v) -> v == null ? root.data : root.data + v); // log(Levels)
     computeVerticalSum(root.left, levelSum, level - 1);
     computeVerticalSum(root.right, levelSum, level + 1);
   }
