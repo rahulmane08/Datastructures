@@ -3,10 +3,17 @@ package leetcode.trees.medium;
 import datastructures.tree.Node;
 import datastructures.tree.TreeUtils;
 
-public class SumTreeChecker {
+/**
+ *        10
+ *     4      6
+ *   1   3   2   4
+ *
+ *   Each non leaf node is sum of immediate children.
+ */
+public class SumTreeChecker2 {
   private boolean check = true;
 
-  public SumTreeChecker(Node root) {
+  public SumTreeChecker2(Node root) {
     checkSum(root);
   }
 
@@ -22,7 +29,7 @@ public class SumTreeChecker {
     if (check) {
       check = (root.data == leftSum + rightSum);
     }
-    return 2 * root.data;
+    return root.data;
   }
 
   public boolean isCheck() {

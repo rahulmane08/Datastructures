@@ -8,9 +8,9 @@ import org.junit.Test;
 
 public class TestKnightTour {
 
-    @Test
-    public void test() {
-        assertTrue(KnightTour.solve(8, 8));
-        assertFalse(KnightTour.solve(4, 4));
-    }
+  @Test
+  public void test() {
+    assertTrue(KnightTour.solve(8, 8));
+    assertFalse(KnightTour.solve(4, 4));
+  }
 }

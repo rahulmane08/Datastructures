@@ -8,9 +8,9 @@ import org.junit.Test;
 
 public class TestNQueens {
 
-    @Test
-    public void test() {
-        assertTrue(solve(4));
-        assertFalse(solve(2));
-    }
+  @Test
+  public void test() {
+    assertTrue(solve(4));
+    assertFalse(solve(2));
+  }
 }
