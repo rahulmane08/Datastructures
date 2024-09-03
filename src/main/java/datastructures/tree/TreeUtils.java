@@ -1279,22 +1279,6 @@ public class TreeUtils {
     }
 
     @Important
-    public static boolean printFirstRootToLeafPath(Node root, Stack<Integer> path) {
-      if (root == null) {
-        return false;
-      }
-      path.push(root.data);
-      if (isLeaf(root)) {
-        System.out.println("Found a path = " + path);
-        return true;
-      }
-      boolean pathFound =
-          printFirstRootToLeafPath(root.left, path) || printFirstRootToLeafPath(root.right, path);
-      path.pop();
-      return pathFound;
-    }
-
-    @Important
     public static void printAllPathsMatchingSum(Node root, Stack<Integer> path, int sum) {
       if (root == null) {
         return;
@@ -1355,29 +1339,6 @@ public class TreeUtils {
       }
       printAllLeaves(root.left);
       printAllLeaves(root.right);
-    }
-
-    /**
-     * POST ORDER
-     *
-     * @param root
-     * @param data
-     * @return
-     */
-    @Important
-    @Medium
-    public static boolean printAncestorsOfGivenNode(Node root, int data) {
-      if (root == null) {
-        return false;
-      }
-      if (data == root.data) {
-        return true;
-      }
-      if (printAncestorsOfGivenNode(root.left, data) || printAncestorsOfGivenNode(root.right, data)) {
-        System.out.println(root.data);
-        return true;
-      }
-      return false;
     }
 
     public static void printKthLevelNodes(Node root, int k) {
