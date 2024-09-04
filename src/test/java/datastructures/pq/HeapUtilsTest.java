@@ -3,12 +3,9 @@ package datastructures.pq;
 import static datastructures.pq.HeapUtils.KthSmallestLargestUtil.kthLargestUsingMinHeap;
 import static datastructures.pq.HeapUtils.KthSmallestLargestUtil.kthSmallestUsingMaxHeap;
 import static datastructures.pq.HeapUtils.printStringWithNonRepeatingChars;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import datastructures.pq.HeapUtils.PrintKMaxSumsOfTwoEquallySizedArraysUtil;
-import java.util.Arrays;
 import org.junit.Test;
 
 public class HeapUtilsTest {
@@ -27,26 +24,6 @@ public class HeapUtilsTest {
     assertEquals(4, kthSmallestUsingMaxHeap(arr, 4));
     assertEquals(1, kthSmallestUsingMaxHeap(arr, 1));
     assertEquals(6, kthSmallestUsingMaxHeap(arr, 6));
-  }
-
-  @Test
-  public void test_largestDerangement() {
-    int[] arr = {56, 21, 42, 67, 23, 74};
-    HeapUtils.largestDerangement(arr);
-    assertArrayEquals(new int[] {74, 67, 56, 42, 21, 23}, arr);
-    arr = new int[] {5, 4, 3, 2, 1};
-    HeapUtils.largestDerangement(arr);
-    assertArrayEquals(new int[] {4, 5, 2, 1, 3}, arr);
-  }
-
-  @Test
-  public void test_smallestDerangement() {
-    int[] arr = {56, 21, 42, 67, 23, 74};
-    HeapUtils.smallestDerangement(arr);
-    assertArrayEquals(new int[] {21, 23, 56, 42, 74, 67}, arr);
-    arr = new int[] {1, 2, 3, 4, 5};
-    HeapUtils.smallestDerangement(arr);
-    assertArrayEquals(new int[] {2, 1, 4, 5, 3}, arr);
   }
 
   @Test

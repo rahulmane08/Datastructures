@@ -1116,46 +1116,6 @@ public class TreeUtils {
 
   }
 
-  /**
-   * 1
-   * / \
-   * 2   3
-   * / \
-   * 4   5
-   * \
-   * 6
-   * \
-   * 7
-   * \
-   * 8
-   * Diameter = 7 (8-7-6-5-2-1-3)
-   */
-  static public class DiameterOptimised {
-
-    private int diameter = 0;
-
-    public DiameterOptimised(Node root) {
-      computeDiameter(root);
-    }
-
-    public int getDiameter() {
-      return diameter;
-    }
-
-    private int computeDiameter(Node root) {
-      if (root == null) {
-        return 0;
-      }
-
-      int rHeight = computeDiameter(root.right);
-      int lHeight = computeDiameter(root.left);
-      int nodeDiameter = 1 + lHeight + rHeight;
-      int nodeHeight = 1 + Math.max(lHeight, rHeight);
-      diameter = Math.max(diameter, nodeDiameter);
-      return nodeHeight;
-    }
-  }
-
   public static class PathQueryUtils {
 
     @Important
