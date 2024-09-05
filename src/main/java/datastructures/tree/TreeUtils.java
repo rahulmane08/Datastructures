@@ -320,31 +320,6 @@ public class TreeUtils {
     return leftLeaves + rightLeaves;
   }
 
-  public static void image(Node root) {
-    if (root == null) {
-      return;
-    }
-
-    image(root.left);
-    image(root.right);
-
-    Node temp = root.right;
-    root.right = root.left;
-    root.left = temp;
-
-  }
-
-  public static Node image1(Node root) {
-    if (root == null) {
-      return null;
-    }
-    Node left = image1(root.left);
-    Node right = image1(root.right);
-    root.left = right;
-    root.right = left;
-    return root;
-  }
-
   /**
    * Inorder sequence: D B E A F C
    * Preorder sequence: A B D E C F
@@ -520,44 +495,6 @@ public class TreeUtils {
     root.left = doubleRoot;
     createDoubleTree(doubleRoot.left);
     createDoubleTree(root.right);
-  }
-
-  /**
-   * Input:
-   * Tree 1                     Tree 2
-   * 1                         2
-   * / \                       / \
-   * 3   2                     1   3
-   * /                           \   \
-   * 5                             4   7
-   * Output:
-   * Merged tree:
-   * 3
-   * / \
-   * 4   5
-   * / \   \
-   * 5   4   7
-   * <p>
-   * O(n) = n.
-   *
-   * @param root1
-   * @param root2
-   * @return
-   */
-  public static Node addTrees(Node root1, Node root2) {
-    if (root1 == null && root2 == null) {
-      return null;
-    }
-    if (root2 == null) {
-      return new Node(root1.data);
-    }
-    if (root1 == null) {
-      return new Node(root2.data);
-    }
-    Node mergedNode = new Node(root1.data + root2.data);
-    mergedNode.left = addTrees(root1.left, root2.left);
-    mergedNode.right = addTrees(root1.right, root2.right);
-    return mergedNode;
   }
 
   public static class CheckerUtils {
@@ -1377,64 +1314,6 @@ public class TreeUtils {
 
         maxSum = Utils.max(maxSum, allSum);
         return Utils.max(leftSum, rightSum);
-      }
-    }
-
-    /**
-     * ``````````` 50  max(217, 100 + 5 + 9 + 90) = 254
-     * ``````` ``/      \
-     * ``````` 8 (108)       2 (99)
-     * ``````/   \        /     \
-     * ````3(103) 5 (5)  9 (9)    90 (90)
-     * ``/
-     * 100 (100)
-     */
-    @Important
-    @Hard
-    public static class MaxSumOfNonAdjacentNodesUtil {
-      private final Map<Integer, Integer> nodeSums = new HashMap<>(); // memoization
-      private int maxSum = Integer.MIN_VALUE;
-
-      public MaxSumOfNonAdjacentNodesUtil(Node root) {
-        this.maxSum = computeMaxSum(root);
-      }
-
-      public int getMaxSum() {
-        return maxSum;
-      }
-
-      private int sumOfGrandChildren(Node root) {
-        if (root == null) {
-          return 0;
-        }
-
-        int leftGrandChildrenSum = 0;
-        if (root.left != null) {
-          leftGrandChildrenSum = computeMaxSum(root.left.left) + computeMaxSum(root.left.right);
-        }
-
-        int rightGrandChildrenSum = 0;
-        if (root.right != null) {
-          rightGrandChildrenSum = computeMaxSum(root.right.left) + computeMaxSum(root.right.right);
-        }
-
-        return leftGrandChildrenSum + rightGrandChildrenSum;
-      }
-
-      private int computeMaxSum(Node root) {
-        if (root == null) {
-          return 0;
-        }
-
-        if (nodeSums.containsKey(root.data)) {
-          return nodeSums.get(root.data);
-        }
-
-        int rootAndGrandChildrenSum = root.data + sumOfGrandChildren(root);
-        int childrenSum = computeMaxSum(root.left) + computeMaxSum(root.right);
-        nodeSums.put(root.data, Utils.max(rootAndGrandChildrenSum, childrenSum));
-        System.out.printf("Node: %d, maxSum: %d%n", root.data, nodeSums.get(root.data));
-        return nodeSums.get(root.data);
       }
     }
 

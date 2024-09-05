@@ -1,33 +1,15 @@
 package leetcode.trees.hard;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import leetcode.trees.TreeNode;
 
 /**
  * https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/description/
  */
 public class TreeVerticalOrderTraversal {
-  static class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode() {
-    }
-
-    TreeNode(int val) {
-      this.val = val;
-    }
-
-    TreeNode(int val, TreeNode left, TreeNode right) {
-      this.val = val;
-      this.left = left;
-      this.right = right;
-    }
-  }
 
   public List<List<Integer>> verticalTraversal(TreeNode root) {
     Map<Integer, List<Integer>> levels = new TreeMap<>();

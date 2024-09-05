@@ -12,22 +12,6 @@ import java.util.Stack;
 
 public class BSTUtils {
 
-  public static Node lca(Node root, int elem1, int elem2) {
-    if (root == null) {
-      return null;
-    }
-    if (root.data == elem1 || root.data == elem2) {
-      return root;
-    }
-    if (elem1 < root.data && elem2 < root.data) {
-      return lca(root.left, elem1, elem2);
-    }
-    if (elem1 > root.data && elem2 > root.data) {
-      return lca(root.right, elem1, elem2);
-    }
-    return root;
-  }
-
   /**
    * this is a wrong algo
    *
