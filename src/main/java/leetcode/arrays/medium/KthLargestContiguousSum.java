@@ -1,4 +1,4 @@
-package leetcode.medium;
+package leetcode.arrays.medium;
 
 import datastructures.pq.MinPriorityQueue;
 

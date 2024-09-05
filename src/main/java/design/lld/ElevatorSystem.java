@@ -1,4 +1,4 @@
-package design;
+package design.lld;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package leetcode.medium;
+package leetcode.arrays.medium;
 
 import java.util.ArrayList;
 import java.util.Arrays;

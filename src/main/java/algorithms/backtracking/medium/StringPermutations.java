@@ -1,6 +1,6 @@
 package algorithms.backtracking.medium;
 
-import string.StringUtils;
+import leetcode.string.medium.StringUtils;
 
 public class StringPermutations {
   public static void main(String[] args) {

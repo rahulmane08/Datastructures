@@ -1,4 +1,4 @@
-package string;
+package leetcode.string.medium;
 
 import interfaces.Important;
 import java.util.ArrayList;

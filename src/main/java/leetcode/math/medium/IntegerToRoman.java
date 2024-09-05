@@ -1,4 +1,4 @@
-package leetcode.medium;
+package leetcode.math.medium;
 
 /**
  * https://leetcode.com/problems/integer-to-roman/description/

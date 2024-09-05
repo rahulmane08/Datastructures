@@ -1,4 +1,4 @@
-package string;
+package leetcode.string.medium;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

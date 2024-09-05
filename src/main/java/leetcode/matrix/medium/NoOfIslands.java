@@ -1,4 +1,4 @@
-package leetcode.medium;
+package leetcode.matrix.medium;
 
 import java.util.LinkedList;
 import java.util.Queue;

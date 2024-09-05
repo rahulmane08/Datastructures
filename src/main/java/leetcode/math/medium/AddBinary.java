@@ -1,4 +1,4 @@
-package leetcode.medium;
+package leetcode.math.medium;
 
 public class AddBinary {
 

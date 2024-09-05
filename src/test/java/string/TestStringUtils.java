@@ -3,13 +3,14 @@ package string;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static string.StringUtils.combinations;
-import static string.StringUtils.lengthOfLongestPalindrome;
-import static string.StringUtils.lengthOfLongestSubstringTwoDistinct;
-import static string.StringUtils.lengthOfLongestSubstringWithNonRepeatingCharacters;
-import static string.StringUtils.longestPalindrome;
-import static string.StringUtils.minWindow;
+import static leetcode.string.medium.StringUtils.combinations;
+import static leetcode.string.medium.StringUtils.lengthOfLongestPalindrome;
+import static leetcode.string.medium.StringUtils.lengthOfLongestSubstringTwoDistinct;
+import static leetcode.string.medium.StringUtils.lengthOfLongestSubstringWithNonRepeatingCharacters;
+import static leetcode.string.medium.StringUtils.longestPalindrome;
+import static leetcode.string.medium.StringUtils.minWindow;
 
+import leetcode.string.medium.StringUtils;
 import org.junit.Test;
 
 public class TestStringUtils {
