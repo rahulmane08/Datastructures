@@ -1,4 +1,4 @@
-package leetcode.misc.easy;
+package leetcode.arrays.easy;
 
 /**
  * Example 1:
