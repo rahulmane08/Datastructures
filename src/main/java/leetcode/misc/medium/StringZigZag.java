@@ -1,4 +1,4 @@
-package leetcode.medium;
+package leetcode.misc.medium;
 
 /**
  * https://leetcode.com/problems/zigzag-conversion/

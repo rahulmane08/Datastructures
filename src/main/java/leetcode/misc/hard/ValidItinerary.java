@@ -1,4 +1,4 @@
-package leetcode.hard;
+package leetcode.misc.hard;
 
 import static java.util.Arrays.asList;
 
