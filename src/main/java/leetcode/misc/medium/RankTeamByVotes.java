@@ -1,4 +1,4 @@
-package leetcode.matrix.medium;
+package leetcode.misc.medium;
 
 import java.util.Arrays;
 import java.util.Comparator;
