@@ -2,7 +2,7 @@ package leetcode.trees.medium;
 
 import leetcode.trees.TreeNode;
 
-public class TreeIsStrictBT {
+public class CheckIfCompleteBT {
   public boolean checkIfStrictTree(TreeNode root) {
     if (root == null) {
       return true;
