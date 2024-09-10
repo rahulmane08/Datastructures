@@ -10,10 +10,7 @@ import interfaces.LCEasy;
 import interfaces.Medium;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 import math.Math;
 
@@ -53,94 +50,7 @@ public class ArrayUtils {
     return i + 1;
   }
 
-  @LCEasy
-  static public int twoSum(int[] arr, int N) {
-    java.util.Arrays.sort(arr);// nlog(n)
-    int end = arr.length - 1, start = 0;
-    for (; arr[end] >= N; end--) {
-    }
-    int count = 0;
-    while (start < end) {
-      int sum = arr[start] + arr[end];
-      if (sum == N) {
-        ++count;
-        ++start;
-        --end;
-      } else if (sum > N) {
-        --end;
-      } else {
-        ++start;
-      }
-    }
-    System.out.println("Total Pairs = " + count);
-    return count;
-  }
-
-  @LCEasy
-  static public int twoSumWithHashing(int[] arr, int sum) {
-    Map<Integer, Integer> map = new HashMap();
-    int count = 0;
-    for (int i = 0; i < arr.length; i++) {
-      int complement = sum - arr[i];
-      int j = map.getOrDefault(complement, -1);
-      if (j != -1 && j != i) {
-        System.out.printf("Found pair: ( %d, %d) %n)", arr[i], arr[j]);
-        count++;
-      }
-      map.put(arr[j], j);
-    }
-    return count;
-  }
-
-  static public int threeSum(int[] arr, int sum) {
-    java.util.Arrays.sort(arr);// nlog(n)
-    int count = 0;
-    int fixed, left, right;
-    for (int i = 0; i < arr.length; i++) {
-      fixed = i;
-      left = i + 1;
-      right = arr.length - 1;
-
-      while (left < right) {
-        int curSum = arr[fixed] + arr[left] + arr[right];
-        if (curSum == sum) {
-          System.out.printf("Triplet (%d,%d,%d)%n", arr[fixed], arr[left], arr[right]);
-          left++;
-          right--;
-          count++;
-        } else if (curSum > sum) {
-          right--;
-        } else {
-          left++;
-        }
-      }
-    }
-    System.out.println("Total Pairs = " + count);
-    return count;
-  }
-
-  static public int threeSumWithHashing(int[] arr, int sum) {
-    HashSet<Integer> dupes = new HashSet<>();
-    Map<Integer, Integer> complements = new HashMap<>();
-    int count = 0;
-    for (int fixed = 0; fixed < arr.length; fixed++) {
-      if (dupes.contains(arr[fixed])) {
-        continue;
-      }
-      dupes.add(arr[fixed]);
-      for (int i = fixed + 1; i < arr.length; i++) {
-        int complement = sum - (arr[fixed] + arr[i]);
-        if (complements.getOrDefault(complement, -1) == fixed) {
-          System.out.printf("Triplet (%d,%d,%d)%n", arr[fixed], arr[i], complement);
-          count++;
-        }
-        complements.put(arr[i], fixed);
-      }
-    }
-    return count;
-  }
-
-  static public void splitIntoEqualSumSubArrays(int[] arr) {
+  public void splitIntoEqualSumSubArrays(int[] arr) {
     java.util.Arrays.sort(arr); // nlog(n)
     int sum = 0;
     for (int i : arr) {
@@ -161,7 +71,7 @@ public class ArrayUtils {
     System.out.println(java.util.Arrays.toString(java.util.Arrays.copyOfRange(arr, end + 1, arr.length - 1)));
   }
 
-  static public void printNonRepeatingElement(int[] arr) {
+  public void printNonRepeatingElement(int[] arr) {
     int elem = 0;
     for (int i : arr) {
       elem = elem ^ i;

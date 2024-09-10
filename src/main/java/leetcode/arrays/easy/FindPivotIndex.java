@@ -1,4 +1,4 @@
-package leetcode.misc.easy;
+package leetcode.arrays.easy;
 
 /**
  * Given an array of integers nums, calculate the pivot index of this array.
