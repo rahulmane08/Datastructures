@@ -1,4 +1,4 @@
-package leetcode.math.medium;
+package leetcode.math.easy;
 
 import java.util.Scanner;
 
