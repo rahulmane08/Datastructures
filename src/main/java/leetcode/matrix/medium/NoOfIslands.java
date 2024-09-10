@@ -48,6 +48,4 @@ public class NoOfIslands {
     }
     return totalIslands;
   }
-
-
 }
