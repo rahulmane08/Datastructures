@@ -1,4 +1,4 @@
-package algorithms.backtracking.medium;
+package leetcode.backtracking.medium;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,8 @@ public class CombinationSum {
       return;
     }
     current.add(candidates[index]);
-    combinationSum(candidates, output, current, index, sum - candidates[index]);
-    current.remove(current.size() - 1);
-    combinationSum(candidates, output, current, index + 1, sum);
+    combinationSum(candidates, output, current, index, sum - candidates[index]); // include curr
+    current.remove(current.size() - 1); // backtrack
+    combinationSum(candidates, output, current, index + 1, sum); // exclude curr
   }
 }
