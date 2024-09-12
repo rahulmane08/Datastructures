@@ -1,4 +1,4 @@
-package algorithms.backtracking.medium;
+package leetcode.backtracking.medium;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,9 +7,9 @@ import java.util.List;
 /**
  * https://leetcode.com/problems/subsets/
  */
-public class Subsets {
+public class PowerSets {
   public static void main(String[] args) {
-    Subsets util = new Subsets();
+    PowerSets util = new PowerSets();
     System.out.println(util.subsets(new int[] {1, 2, 3}));
   }
 
