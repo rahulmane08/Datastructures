@@ -2,8 +2,10 @@ package leetcode.backtracking.medium;
 
 /**
  * https://leetcode.com/problems/permutation-in-string/description/
+ *
+ * This solution gives TLE, check {@link leetcode.string.medium.PermutationInString}
  */
-public class PermutationInString {
+public class PermutationInStringTLE {
   public boolean checkInclusion(String s1, String s2) {
     return check(s2, s1.toCharArray(), 0, s1.length() - 1);
   }
@@ -32,7 +34,7 @@ public class PermutationInString {
   }
 
   public static void main(String[] args) {
-    PermutationInString util = new PermutationInString();
+    PermutationInStringTLE util = new PermutationInStringTLE();
     System.out.println(util.checkInclusion("ab", "eidbaooo"));
     System.out.println(util.checkInclusion("ab", "eidboaoo"));
   }
