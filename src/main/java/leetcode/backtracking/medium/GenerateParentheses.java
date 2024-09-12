@@ -1,4 +1,4 @@
-package algorithms.backtracking.medium;
+package leetcode.backtracking.medium;
 
 import java.util.ArrayList;
 import java.util.List;
