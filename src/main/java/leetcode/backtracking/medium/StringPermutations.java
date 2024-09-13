@@ -3,7 +3,6 @@ package leetcode.backtracking.medium;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import leetcode.string.medium.StringUtils;
 
 public class StringPermutations {
   public static void main(String[] args) {
