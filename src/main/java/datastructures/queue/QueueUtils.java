@@ -185,67 +185,6 @@ public class QueueUtils {
     }
   }
 
-  /**
-   * 0: Empty cell
-   * 1: Cells have fresh oranges
-   * 2: Cells have rotten oranges
-   * A rotten orange at index [i,j] can rot other fresh orange at indexes [i-1,j], [i+1,j], [i,j-1], [i,j+1]
-   *
-   * @param orangeBox
-   * @param m
-   * @param n
-   */
-  @Important
-  static public int timeToRotOranges(int[][] orangeBox, int m, int n) {
-    Queue<Vertex> vertices = new Queue<Vertex>(m * n);
-    /** put all rotten orange vertices in the queue to begin with **/
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        if (orangeBox[i][j] == 2) {
-          vertices.offer(new Vertex(i, j));
-        }
-      }
-    }
-    /** enter a Dummy vertex to mark end of current time frame **/
-    Vertex dummy = new Vertex();
-    vertices.offer(dummy);
-    int time = 0;
-
-    /** bfs over the queue **/
-    while (!vertices.isEmpty()) {
-      boolean flag = false;
-      while (vertices.first() != dummy) {
-        Vertex curr = vertices.poll();
-        /** right orange **/
-        Vertex right = new Vertex(curr.x + 1, curr.y);
-        Vertex left = new Vertex(curr.x - 1, curr.y);
-        Vertex up = new Vertex(curr.x, curr.y - 1);
-        Vertex down = new Vertex(curr.x, curr.y + 1);
-        Vertex[] neighbors = new Vertex[] {left, right, up, down};
-        for (Vertex sibling : neighbors) {
-          if (isValidIndex(m, n, sibling.x, sibling.y) && orangeBox[sibling.x][sibling.y] == 1) {
-            if (!flag) {
-              flag = true;
-              ++time;
-            }
-            orangeBox[sibling.x][sibling.y] = 2;
-            vertices.offer(sibling);
-          }
-        }
-      }
-      vertices.poll();
-      if (!vertices.isEmpty()) {
-        vertices.offer(dummy);
-      }
-    }
-    System.out.println("Time frame to rot all oranges = " + time);
-    return time;
-  }
-
-  static private boolean isValidIndex(int m, int n, int x, int y) {
-    return !((x < 0) || (x >= m) || (y < 0) || (y >= n));
-  }
-
   @Important
   static public void printLargestMultipleOf3(int[] arr) {
     int[] largestMultiple = new int[arr.length];
