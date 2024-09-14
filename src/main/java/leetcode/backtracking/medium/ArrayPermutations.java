@@ -10,6 +10,11 @@ public class ArrayPermutations {
     System.out.println(util.permute(new Integer[] {1, 2, 3}));
   }
 
+  /**
+   * T(n) = n*T(n-1) + 1
+   * @param nums
+   * @return
+   */
   public List<List<Integer>> permute(Integer[] nums) {
     List<List<Integer>> result = new ArrayList<>();
     permute(nums, result, 0, nums.length - 1);
