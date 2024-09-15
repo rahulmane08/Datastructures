@@ -50,6 +50,6 @@ public class KnightsTour {
 
   public static void main(String[] args) {
     KnightsTour util = new KnightsTour();
-    System.out.println(Arrays.deepToString(util.tourOfKnight(1, 1, 0, 0)));
+    System.out.println(Arrays.deepToString(util.tourOfKnight(5, 5, 0, 0)));
   }
 }
