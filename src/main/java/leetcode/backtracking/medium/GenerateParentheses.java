@@ -18,6 +18,15 @@ public class GenerateParentheses {
     return output;
   }
 
+  /**
+   * T(n) = 2T(n - 1) + 1 , a = 2, b = 1
+   * O(n) = 2 ^ n , case 1.3 decreasing function.
+   * @param n
+   * @param left
+   * @param right
+   * @param current
+   * @param output
+   */
   public void generateParenthesis(int n, int left, int right, String current, List<String> output) {
     if (current.length() == n * 2) {
       output.add(current);

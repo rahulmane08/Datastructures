@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * https://leetcode.com/problems/combination-sum-ii/
@@ -19,64 +20,23 @@ public class CombinationSum2 {
     System.out.println(util.combinationSum(new int[] {10, 1, 2, 7, 6, 1, 5}, 8));
   }
 
+  /**
+   * T(n) = 2T(n - 1) + 1 , a = 2, b = 1
+   * O(n) = 2 ^ n , case 1.3 decreasing function.
+   * @param candidates
+   * @param target
+   * @return
+   */
   public List<List<Integer>> combinationSum(int[] candidates, int target) {
     List<List<Integer>> output = new ArrayList<>();
-    combinationSum(candidates, output, new HashSet<>(), new ArrayList<>(), 0, target);
+    combinationSum(candidates, output, new HashSet<>(), new Stack<>(), 0, target);
     return output;
   }
-/*
-  private void combinationSum1(int[] candidates,
-                               int sum,
-                               int index,
-                               int[] combination,
-                               int[] checker,
-                               List<List<Integer>> result) {
-    if (sum == 0 && !contains(combination, checker)) {
-      addToResult(combination, result);
-      update(combination, checker);
-      return;
-    }
-
-    if (sum < 0 || index == candidates.length) {
-      return;
-    }
-
-    int elem = candidates[index];
-    combination[elem]++; // include current element.
-    combinationSum1(candidates, sum - elem, index + 1, combination, checker, result);
-    combination[elem]++; // backtrack and exclude current element.
-    combinationSum1(candidates, sum, index + 1, combination, checker, result);
-  }
-
-  boolean contains(int[] source, int[] target) {
-    for (int i = 0; i < source.length; i++) {
-      if (source[i] != 0 && target[i] == 0) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  void update(int[] source, int[] target) {
-    for (int i = 0; i < source.length; i++) {
-      target[i] = source[i];
-    }
-  }
-
-  void addToResult(int[] combination, List<List<Integer>> result) {
-    List<Integer> list = new ArrayList<>();
-    for (int i = 0; i < combination.length; i++) {
-      if (combination[i] != 0) {
-        list.add(i);
-      }
-    }
-    result.add(list);
-  }*/
 
   private void combinationSum(int[] candidates,
                               List<List<Integer>> output,
                               Set<String> existing,
-                              List<Integer> current, int index, int sum) {
+                              Stack<Integer> current, int index, int sum) {
     if (sum == 0) {
       ArrayList<Integer> copy = new ArrayList<>(current);
       if (exists(existing, copy)) {
@@ -87,9 +47,9 @@ public class CombinationSum2 {
     if (sum < 0 || index >= candidates.length) {
       return;
     }
-    current.add(candidates[index]);
+    current.push(candidates[index]);
     combinationSum(candidates, output, existing, current, index + 1, sum - candidates[index]);
-    current.remove(current.size() - 1);
+    current.pop();
     combinationSum(candidates, output, existing, current, index + 1, sum);
   }
 
