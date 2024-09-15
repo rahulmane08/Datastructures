@@ -26,7 +26,7 @@ public class KosarajuStronglyConnectedComponent {
     }
 
     // 1st pass
-    Stack<Vertex<T>> stack = TopologicalSort.sort(graph);
+    Stack<Vertex<T>> stack = TopologicalSortUDG.sort(graph);
 
     //transpose the graph
     Graph<T> graphT = GraphUtils.transpose(graph);

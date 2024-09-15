@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Stack;
 import java.util.UUID;
 
-public class TopologicalSort {
+public class TopologicalSortUDG {
 
   public static <T> Stack<Vertex<T>> sort(Graph<T> graph) {
     if (graph == null || !graph.isDirected()) {
