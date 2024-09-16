@@ -28,7 +28,7 @@ public class CourseSchedule2 {
       Integer currentCourse = coursesWithNoPrerequisites.poll();
       courseOrder[index++] = currentCourse;
       for (Integer nextCourse : graph.getOrDefault(currentCourse, Collections.emptyList())) {
-        Integer inDegree = inDegrees.compute(nextCourse, (c, d) -> d = d - 1);
+        Integer inDegree = inDegrees.compute(nextCourse, (c, d) -> d - 1);
         if (inDegree == 0) {
           coursesWithNoPrerequisites.offer(nextCourse);
         }
@@ -52,5 +52,6 @@ public class CourseSchedule2 {
   public static void main(String[] args) {
     CourseSchedule2 util = new CourseSchedule2();
     System.out.println(Arrays.toString(util.findOrder(4, new int[][] {{1, 0}, {2, 0}, {3, 1}, {3, 2}})));
+    System.out.println(Arrays.toString(util.findOrder(4, new int[][] {{1, 0}, {3, 2}})));
   }
 }

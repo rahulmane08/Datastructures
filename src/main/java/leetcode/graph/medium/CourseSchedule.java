@@ -1,5 +1,7 @@
 package leetcode.graph.medium;
 
+import static leetcode.graph.GraphUtil.topSort;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Stack;
+import leetcode.graph.GraphUtil;
 
 /**
  * {{1, 0}, {2, 0}, {3, 1}}
@@ -29,17 +33,33 @@ public class CourseSchedule {
 
     graph.keySet().stream()
         .filter(course -> !inDegrees.containsKey(course)).forEach(coursesWithNoPrerequisites::offer);
+    if (coursesWithNoPrerequisites.isEmpty()) {
+      return false; // cycle present in graph.
+    }
+
     while (!coursesWithNoPrerequisites.isEmpty()) {
       Integer currentCourse = coursesWithNoPrerequisites.poll();
       numCourses--;
       for (Integer nextCourse : graph.getOrDefault(currentCourse, Collections.emptyList())) {
-        Integer inDegree = inDegrees.compute(nextCourse, (c, d) -> d = d - 1);
+        Integer inDegree = inDegrees.compute(nextCourse, (c, d) -> d - 1);
         if (inDegree == 0) {
           coursesWithNoPrerequisites.offer(nextCourse);
         }
       }
     }
-    return numCourses >= 0;
+    return numCourses == 0;
+  }
+
+  public boolean canFinishDfs(int numCourses, int[][] prerequisites) {
+    if (prerequisites == null || prerequisites.length == 0) {
+      return true;
+    }
+    Map<Integer, List<Integer>> graph = new HashMap<>();
+    Map<Integer, Integer> inDegrees = new HashMap<>();
+    populateGraph(prerequisites, graph, inDegrees);
+    Stack<Integer> topSort = topSort(graph);
+    System.out.println("topSort : " + topSort);
+    return topSort.size() == numCourses;
   }
 
   Map<Integer, List<Integer>> populateGraph(int[][] prerequisites,
@@ -55,9 +75,16 @@ public class CourseSchedule {
 
   public static void main(String[] args) {
     CourseSchedule util = new CourseSchedule();
-    System.out.println(util.canFinish(2, new int[][] {{0, 1}}));
+    /*System.out.println(util.canFinish(2, new int[][] {{0, 1}}));
     System.out.println(util.canFinish(3, new int[][] {{1, 0}, {2, 1}}));
     System.out.println(util.canFinish(2, new int[][] {{0, 1}, {1, 0}}));
-    System.out.println(util.canFinish(4, new int[][] {{1, 4}, {2, 4}, {3, 1}, {3, 2}}));
+    System.out.println(util.canFinish(5, new int[][] {{1, 4}, {2, 4}, {3, 1}, {3, 2}}));
+    System.out.println(util.canFinish(4, new int[][] {{0, 1}, {3, 2}}));*/
+
+//    System.out.println(util.canFinishDfs(2, new int[][] {{0, 1}}));
+//    System.out.println(util.canFinishDfs(3, new int[][] {{1, 0}, {2, 1}}));
+//    System.out.println(util.canFinishDfs(2, new int[][] {{0, 1}, {1, 0}}));
+    System.out.println(util.canFinishDfs(5, new int[][] {{1, 4}, {2, 4}, {3, 1}, {3, 2}}));
+//    System.out.println(util.canFinishDfs(4, new int[][] {{0, 1}, {3, 2}}));
   }
 }
