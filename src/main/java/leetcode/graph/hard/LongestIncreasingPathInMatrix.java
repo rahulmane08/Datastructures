@@ -1,4 +1,4 @@
-package leetcode.graph.medium;
+package leetcode.graph.hard;
 
 /**
  *
