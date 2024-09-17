@@ -1,6 +1,8 @@
 package leetcode.graph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,5 +54,19 @@ public class GraphUtil {
   static void moveSet(Integer curr, HashSet<Integer> source, HashSet<Integer> target) {
     source.remove(curr);
     target.add(curr);
+  }
+
+  /**
+   * T(n) = O(V)
+   * Space = O(V+E)
+   *
+   * @param edges
+   * @return
+   */
+  public static Map<Integer, List<Integer>> createGraph(int[][] edges) {
+    Map<Integer, List<Integer>> graph = new HashMap<>();
+    Arrays.stream(edges)
+        .forEach(edge -> graph.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[1]));
+    return graph;
   }
 }
