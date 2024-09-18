@@ -12,8 +12,9 @@ import java.util.Stack;
 public class TopologicalSortUtil {
 
   /**
-   * This algo works only for DG as the for UDG we will never have the vertex with inDegree = 0.
+   * This algo works only for DAG as the for UDG we will never have the vertex with inDegree = 0.
    * Each node is traversed only once, thru the outgoing edges.
+   * S(n) = O(n) for the graph.
    * T(n) = O(V+E)
    */
   public static class KahnsAlgo {

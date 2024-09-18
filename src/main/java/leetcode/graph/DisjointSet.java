@@ -2,30 +2,29 @@ package leetcode.graph;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Space complexity = O(n)
- * Time complexity = O(m) , where = no. of operations.
+ * Time complexity = O(m x alpha(n)) , where m = no. of operations. alpha(n) is inv ackerman function.
+ * https://cs.stackexchange.com/questions/105652/what-does-o-alphan-amortized-time-mean
  * Refer to Tushar Roy video : https://www.youtube.com/watch?v=ID00PMy0-vE
+ *
  */
-public class DisjointSet {
-  private final Map<Integer, Integer> parents;
-  private final Map<Integer, Integer> ranks;
-  private final Set<Integer> vertexes;
+public class DisjointSet<T> {
+  private final Map<T, T> parents;
+  private final Map<T, Integer> ranks;
 
-  public DisjointSet(Set<Integer> vertexes) {
-    this.vertexes = vertexes;
+  public DisjointSet() {
     this.parents = new HashMap<>();
     this.ranks = new HashMap<>();
-    vertexes.forEach(this::makeSet);
   }
 
   /**
    * T(n) = O(1)
+   *
    * @param vertex
    */
-  void makeSet(Integer vertex) {
+  public void makeSet(T vertex) {
     parents.putIfAbsent(vertex, vertex);
     ranks.putIfAbsent(vertex, 0);
   }
@@ -33,10 +32,11 @@ public class DisjointSet {
   /**
    * T(n) = T(n-1) + 1
    * Case 1.2 : O(n)
+   *
    * @param vertex
    * @return
    */
-  public Integer findSet(Integer vertex) {
+  public T findSet(T vertex) {
     if (!parents.containsKey(vertex)) {
       return null;
     }
@@ -45,7 +45,7 @@ public class DisjointSet {
       return vertex;
     }
 
-    Integer parent = findSet(parents.get(vertex));
+    T parent = findSet(parents.get(vertex));
     parents.put(vertex, parent);
     return parent;
   }
@@ -53,15 +53,16 @@ public class DisjointSet {
   /**
    * T(n) = 2T(n-1) + 1
    * Case 1.3 :
+   *
    * @param v1
    * @param v2
    */
-  public void union(Integer v1, Integer v2) {
+  public void union(T v1, T v2) {
     if (v1 == v2) {
       return;
     }
-    int parent1 = findSet(v1);
-    int parent2 = findSet(v2);
+    T parent1 = findSet(v1);
+    T parent2 = findSet(v2);
     if (parent1 == parent2) {
       return;
     }

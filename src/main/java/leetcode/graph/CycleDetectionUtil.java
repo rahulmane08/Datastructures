@@ -7,17 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Queue;
-import java.util.Set;
 
 public class CycleDetectionUtil {
 
   public static boolean detectCycleInUDG(int[][] edges) {
-    Set<Integer> vertexes = new HashSet<>();
+    DisjointSet<Integer> disjointSet = new DisjointSet();
     Arrays.stream(edges).forEach(edge -> {
-      vertexes.add(edge[0]);
-      vertexes.add(edge[1]);
+      disjointSet.makeSet(edge[0]);
+      disjointSet.makeSet(edge[1]);
     });
-    DisjointSet disjointSet = new DisjointSet(vertexes);
     for (int[] edge : edges) {
       int parent1 = disjointSet.findSet(edge[0]);
       int parent2 = disjointSet.findSet(edge[1]);
