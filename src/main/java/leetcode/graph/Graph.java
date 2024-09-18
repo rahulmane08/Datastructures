@@ -20,22 +20,25 @@ public class Graph {
     this.adjacencyList = new HashMap<>();
     this.inDegrees = new HashMap<>();
     this.outDegrees = new HashMap<>();
-    Arrays.stream(edges)
-        .forEach(edge -> {
-          if (directed) {
-            adjacencyList.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[1]);
-            adjacencyList.compute(edge[1], (v, list) -> list == null ? new ArrayList<>() : list);
-            inDegrees.compute(edge[1], (v, degree) -> degree == null ? 1 : degree + 1);
-            outDegrees.compute(edge[0], (v, degree) -> degree == null ? 1 : degree + 1);
-          } else {
-            adjacencyList.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[1]);
-            adjacencyList.compute(edge[1], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[0]);
-            inDegrees.compute(edge[1], (v, degree) -> degree == null ? 1 : degree + 1);
-            inDegrees.compute(edge[0], (v, degree) -> degree == null ? 1 : degree + 1);
-            outDegrees.compute(edge[0], (v, degree) -> degree == null ? 1 : degree + 1);
-            outDegrees.compute(edge[1], (v, degree) -> degree == null ? 1 : degree + 1);
-          }
-        });
+    Arrays.stream(edges).forEach(this::addEdge);
+  }
+
+  private void addEdge(int[] edge) {
+    if (directed) {
+      adjacencyList.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[1]);
+      adjacencyList.compute(edge[1], (v, list) -> list == null ? new ArrayList<>() : list);
+      inDegrees.compute(edge[0], (v, degree) -> degree == null ? 0 : degree);
+      inDegrees.compute(edge[1], (v, degree) -> degree == null ? 1 : degree + 1);
+      outDegrees.compute(edge[0], (v, degree) -> degree == null ? 1 : degree + 1);
+      outDegrees.compute(edge[1], (v, degree) -> degree == null ? 0 : degree);
+    } else {
+      adjacencyList.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[1]);
+      adjacencyList.compute(edge[1], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[0]);
+      inDegrees.compute(edge[0], (v, degree) -> degree == null ? 1 : degree + 1);
+      inDegrees.compute(edge[1], (v, degree) -> degree == null ? 1 : degree + 1);
+      outDegrees.compute(edge[0], (v, degree) -> degree == null ? 1 : degree + 1);
+      outDegrees.compute(edge[1], (v, degree) -> degree == null ? 1 : degree + 1);
+    }
   }
 
   public int[][] getEdges() {
@@ -64,5 +67,17 @@ public class Graph {
 
   public Integer getOutDegrees(Integer vertex) {
     return outDegrees.getOrDefault(vertex, 0);
+  }
+
+  public Map<Integer, Integer> getInDegrees() {
+    return new HashMap<>(inDegrees);
+  }
+
+  public Map<Integer, Integer> getOutDegrees() {
+    return new HashMap<>(outDegrees);
+  }
+
+  public int getVertexCount() {
+    return adjacencyList.keySet().size();
   }
 }
