@@ -1,8 +1,6 @@
 package leetcode.graph.medium;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,64 +21,49 @@ public class CourseSchedule {
     System.out.println(util.canFinish(2, new int[][] {{0, 1}, {1, 0}}));
     System.out.println(util.canFinish(5, new int[][] {{1, 4}, {2, 4}, {3, 1}, {3, 2}}));
     System.out.println(util.canFinish(4, new int[][] {{0, 1}, {3, 2}}));
-
-//    System.out.println(util.canFinishDfs(2, new int[][] {{0, 1}}));
-//    System.out.println(util.canFinishDfs(3, new int[][] {{1, 0}, {2, 1}}));
-//    System.out.println(util.canFinishDfs(2, new int[][] {{0, 1}, {1, 0}}));
-//    System.out.println(util.canFinishDfs(5, new int[][] {{1, 4}, {2, 4}, {3, 1}, {3, 2}}));
-//    System.out.println(util.canFinishDfs(4, new int[][] {{0, 1}, {3, 2}}));
+    System.out.println(util.canFinish(1, new int[][] {}));
+    System.out.println(util.canFinish(4, new int[][] {{0, 1}, {3, 1}, {3, 3}}));
+    System.out.println(util.canFinish(1, new int[][] {}));
+    System.out.println(util.canFinish(1, new int[][] {{1, 0}, {1, 2}, {0, 1}}));
   }
-
-  /*public boolean canFinishDfs(int numCourses, int[][] prerequisites) {
-    if (prerequisites == null || prerequisites.length == 0) {
-      return true;
-    }
-    Map<Integer, List<Integer>> graph = new HashMap<>();
-    Map<Integer, Integer> inDegrees = new HashMap<>();
-    populateGraph(prerequisites, graph, inDegrees);
-    Stack<Integer> topSort = topSort(graph);
-    System.out.println("topSort : " + topSort);
-    return topSort.size() == numCourses;
-  }*/
 
   public boolean canFinish(int numCourses, int[][] prerequisites) {
     if (prerequisites == null || prerequisites.length == 0) {
       return true;
     }
     Map<Integer, List<Integer>> graph = new HashMap<>();
-    Map<Integer, Integer> inDegrees = new HashMap<>();
-    populateGraph(prerequisites, graph, inDegrees);
+    Map<Integer, Integer> inDegree = new HashMap<>();
+    for (int[] edge : prerequisites) {
+      if (edge[0] == edge[1]) {
+        return false;
+      }
+      graph.compute(edge[1], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[0]);
+      graph.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list);
+      inDegree.compute(edge[0], (v, d) -> d == null ? 1 : d + 1);
+      inDegree.compute(edge[1], (v, d) -> d == null ? 0 : d);
+    }
+    Queue<Integer> courseTracker = new LinkedList<>();
 
-    // bfs queue only for courses with no pre-req, i.e. courses with indegree = 0;
-    Queue<Integer> coursesWithNoPrerequisites = new LinkedList<>();
+    // start with courses with no prerequisites
+    inDegree.entrySet().stream().filter(e -> e.getValue() == 0).map(Map.Entry::getKey).forEach(courseTracker::offer);
 
-    graph.keySet().stream()
-        .filter(course -> !inDegrees.containsKey(course)).forEach(coursesWithNoPrerequisites::offer);
-    if (coursesWithNoPrerequisites.isEmpty()) {
-      return false; // cycle present in graph.
+    if (courseTracker.isEmpty()) {
+      // graph has a cycle, so no starting course can be found.
+      return false;
     }
 
-    while (!coursesWithNoPrerequisites.isEmpty()) {
-      Integer currentCourse = coursesWithNoPrerequisites.poll();
-      numCourses--;
-      for (Integer nextCourse : graph.getOrDefault(currentCourse, Collections.emptyList())) {
-        Integer inDegree = inDegrees.compute(nextCourse, (c, d) -> d - 1);
-        if (inDegree == 0) {
-          coursesWithNoPrerequisites.offer(nextCourse);
+    int coursesTaken = 0;
+    while (!courseTracker.isEmpty()) {
+      Integer currentCourse = courseTracker.poll();
+      coursesTaken++;
+      for (Integer nextCourse : graph.get(currentCourse)) {
+        Integer currentPrerequisites = inDegree.compute(nextCourse, (v, d) -> d - 1);
+        if (currentPrerequisites == 0) {
+          courseTracker.offer(nextCourse);
         }
       }
     }
-    return numCourses == 0;
-  }
 
-  Map<Integer, List<Integer>> populateGraph(int[][] prerequisites,
-                                            final Map<Integer, List<Integer>> graph,
-                                            final Map<Integer, Integer> inDegrees) {
-    Arrays.stream(prerequisites)
-        .forEach(a -> {
-          graph.compute(a[1], (pre, courses) -> courses == null ? new ArrayList<>() : courses).add(a[0]);
-          inDegrees.compute(a[0], (course, degree) -> degree == null ? 1 : degree + 1);
-        });
-    return graph;
+    return coursesTaken == graph.size() && numCourses >= coursesTaken;
   }
 }

@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Space complexity = O(n)
+ * Time complexity = O(m) , where = no. of operations.
+ * Refer to Tushar Roy video : https://www.youtube.com/watch?v=ID00PMy0-vE
+ */
 public class DisjointSet {
   private final Map<Integer, Integer> parents;
   private final Map<Integer, Integer> ranks;
@@ -16,11 +21,21 @@ public class DisjointSet {
     vertexes.forEach(this::makeSet);
   }
 
+  /**
+   * T(n) = O(1)
+   * @param vertex
+   */
   void makeSet(Integer vertex) {
     parents.putIfAbsent(vertex, vertex);
     ranks.putIfAbsent(vertex, 0);
   }
 
+  /**
+   * T(n) = T(n-1) + 1
+   * Case 1.2 : O(n)
+   * @param vertex
+   * @return
+   */
   public Integer findSet(Integer vertex) {
     if (!parents.containsKey(vertex)) {
       return null;
@@ -35,6 +50,12 @@ public class DisjointSet {
     return parent;
   }
 
+  /**
+   * T(n) = 2T(n-1) + 1
+   * Case 1.3 :
+   * @param v1
+   * @param v2
+   */
   public void union(Integer v1, Integer v2) {
     if (v1 == v2) {
       return;
