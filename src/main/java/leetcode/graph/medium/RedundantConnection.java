@@ -3,7 +3,7 @@ package leetcode.graph.medium;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import leetcode.graph.DisjointSet;
+import datastructures.advanced.DisjointSet;
 
 /**
  * https://leetcode.com/problems/redundant-connection/

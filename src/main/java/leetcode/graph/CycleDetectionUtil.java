@@ -3,6 +3,7 @@ package leetcode.graph;
 import static leetcode.graph.CycleDetectionUtil.GraphColoringUtil.detectCycleInDGUsingGraphColoring;
 import static leetcode.graph.CycleDetectionUtil.KahnsAlgo.detectCycleInDG;
 
+import datastructures.advanced.DisjointSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;

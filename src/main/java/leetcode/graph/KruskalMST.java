@@ -1,5 +1,6 @@
 package leetcode.graph;
 
+import datastructures.advanced.DisjointSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;

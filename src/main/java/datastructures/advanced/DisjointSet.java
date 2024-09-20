@@ -1,4 +1,4 @@
-package leetcode.graph;
+package datastructures.advanced;
 
 import java.util.HashMap;
 import java.util.Map;
