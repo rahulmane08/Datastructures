@@ -31,6 +31,9 @@ public class CombinationSum {
       output.add(new ArrayList<>(current));
       return;
     }
+
+    // sum goes to negative but more elements in the array.
+    // sum is positive but array is exhausted.
     if (sum < 0 || index >= candidates.length) {
       return;
     }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class StringPermutations {
   public static void main(String[] args) {
-    String str = "ABC";
+    String str = "AAC";
     System.out.printf("Permutations of %s = %s%n", str, new StringPermutations().permute(str));
   }
 
@@ -19,6 +19,7 @@ public class StringPermutations {
   void compute(char[] chars, int fixed, int end, List<String> permutations) {
     if (fixed == end) {
       permutations.add(Arrays.toString(chars));
+      System.out.println(permutations);
       return;
     }
     for (int i = fixed; i <= end; i++) {

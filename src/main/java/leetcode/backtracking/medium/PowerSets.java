@@ -3,6 +3,7 @@ package leetcode.backtracking.medium;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * https://leetcode.com/problems/subsets/
@@ -16,19 +17,19 @@ public class PowerSets {
   public List<List<Integer>> subsets(int[] nums) {
     Arrays.sort(nums);
     List<List<Integer>> subsets = new ArrayList<>();
-    find(nums, subsets, new ArrayList<>(), 0);
+    find(nums, subsets, new Stack<>(), 0);
     return subsets;
   }
 
-  private void find(int[] nums, List<List<Integer>> subsets, List<Integer> curr, int index) {
+  private void find(int[] nums, List<List<Integer>> subsets, Stack<Integer> stack, int index) {
     if (index == nums.length) {
-      subsets.add(new ArrayList<>(curr));
+      subsets.add(new ArrayList<>(stack));
       return;
     }
     // include
-    curr.add(nums[index]);
-    find(nums, subsets, curr, index + 1);
-    curr.remove(curr.size() - 1);
-    find(nums, subsets, curr, index + 1);
+    stack.push(nums[index]);
+    find(nums, subsets, stack, index + 1);
+    stack.pop();
+    find(nums, subsets, stack, index + 1);
   }
 }

@@ -55,5 +55,16 @@ public class CheatSheet {
     Comparator<int[]> comparator2 = Comparator.comparing(a -> a[1]);
     Arrays.sort(nums, comparator1.thenComparing(comparator2));
     System.out.println(Arrays.deepToString(nums));
+
+    // string modification
+    String s = "abc";
+    char[] chars = s.toCharArray();
+    char temp = chars[0];
+    chars[0] = chars[2];
+    chars[2] = temp;
+    // the above wont modify actual string
+    System.out.println("String after char swap: " + new String(chars));
+
+
   }
 }
