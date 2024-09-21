@@ -3,6 +3,8 @@ package leetcode.backtracking.hard;
 import java.util.Arrays;
 
 /**
+ * Check if the knight can cover all tiles on the board.
+ *
  * https://leetcode.com/problems/the-knights-tour/description/
  */
 public class KnightsTour {
@@ -40,7 +42,7 @@ public class KnightsTour {
         }
       }
     }
-    board[row][col] = -1;
+    board[row][col] = -1; // backtrack
     return false;
   }
 

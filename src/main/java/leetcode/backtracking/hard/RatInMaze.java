@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Find all paths the rat can use to exit the maze.
+ *
  * Time Complexity: O(4^(m*n)), because on every cell we have to try 3 different directions ,
  * as we will not check for the cell from which we have visited in the last move.
  * Auxiliary Space: O(m*n), Maximum Depth of the recursion tree(auxiliary space).
@@ -40,7 +42,9 @@ public class RatInMaze {
       paths.add(path);
       return;
     }
+    // mark the current tile as visited.
     visited[row][col] = 1;
+    // Do the DFS in all valid directions.
     for (String move : moves.keySet()) {
       int[] directions = moves.get(move);
       int x = row + directions[0];
@@ -49,6 +53,7 @@ public class RatInMaze {
         find(maze, x, y, rows, cols, path + move, paths, visited);
       }
     }
+    // mark the current tile as unvisited , backtrack, so that it can be considered again in another valid path.
     visited[row][col] = 0;
   }
 

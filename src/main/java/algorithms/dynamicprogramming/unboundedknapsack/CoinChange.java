@@ -3,11 +3,11 @@ package algorithms.dynamicprogramming.unboundedknapsack;
 public class CoinChange {
 
   public static void main(String[] args) {
-    int[] denominations = {1, 2, 3};
+    int[] denominations = {2, 3};
     TopDown topDown = new TopDown();
-    System.out.println(topDown.solve(denominations, 5));
+    System.out.println(topDown.solve(denominations, 7));
     BottomUp bottomUp = new BottomUp();
-    System.out.println(bottomUp.solve(denominations, 5));
+    System.out.println(bottomUp.solve(denominations, 7));
   }
 
   public static class TopDown {
@@ -25,18 +25,15 @@ public class CoinChange {
         return 1;
       }
 
-      if (i >= denominations.length) {
-        return 0; // no such combination is formed
+      if (amount < 0 || i >= denominations.length) {
+        return 0;
       }
 
       if (dp[i][amount] != null) {
         return dp[i][amount];
       }
 
-      int c1 = 0;
-      if (denominations[i] <= amount) {
-        c1 = solve(denominations, amount - denominations[i], i, dp);
-      }
+      int c1 = solve(denominations, amount - denominations[i], i, dp);
       int c2 = solve(denominations, amount, i + 1, dp);
       dp[i][amount] = c1 + c2;
       return dp[i][amount];
