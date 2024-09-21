@@ -5,7 +5,8 @@ import java.util.Comparator;
 import java.util.Stack;
 
 /**
- * Given an array of meeting time intervals where intervals[i] = [starti, endi], determine if a person could attend all meetings.
+ * Given an array of meeting time intervals where intervals[i] = [starti, endi],
+ * determine if a person could attend all meetings.
  * <p>
  * <p>
  * <p>
@@ -35,6 +36,7 @@ public class MeetingRooms {
     return true;
   }
 
+  // TLE
   public static boolean canAttendMeetings(int[][] intervals) {
     if (intervals == null || intervals.length == 0) {
       return true;

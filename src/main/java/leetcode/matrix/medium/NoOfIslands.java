@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class NoOfIslands {
+  int[][] moves = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
   public int numIslands(char[][] grid) {
     if (grid == null || grid.length == 0) {
       return 0;
@@ -47,5 +49,57 @@ public class NoOfIslands {
       }
     }
     return totalIslands;
+  }
+
+  public int numIslandsDfs(char[][] grid) {
+    int rows = grid.length;
+    int cols = grid[0].length;
+    int totalIslands = 0;
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        if (grid[i][j] == '1') {
+          dfs(grid, i, j, rows, cols);
+          totalIslands++;
+        }
+      }
+    }
+    return totalIslands;
+  }
+
+  public void dfs(char[][] grid, int i, int j, int rows, int cols) {
+    if (!isValid(grid, i, j, rows, cols)) {
+      return;
+    }
+    grid[i][j] = '0';
+    for (int [] move : moves) {
+      dfs(grid, i + move[0], j + move[1], rows, cols);
+    }
+  }
+
+  boolean isValid(char[][] grid, int i, int j, int rows, int cols) {
+    return i >= 0 && i < rows && j >= 0 && j < cols && grid[i][j] == '1';
+  }
+
+  public static void main(String[] args) {
+    char[][] grid = {
+        {'1', '1', '1', '1', '0'},
+        {'1', '1', '0', '1', '0'},
+        {'1', '1', '0', '0', '0'},
+        {'0', '0', '0', '0', '0'}
+    };
+
+    NoOfIslands util = new NoOfIslands();
+    System.out.println(util.numIslandsDfs(grid));
+
+    grid = new char[][] {
+        {'1', '1', '0', '0', '0'},
+        {'1', '1', '0', '0', '0'},
+        {'0', '0', '1', '0', '0'},
+        {'0', '0', '0', '1', '1'}
+    };
+    System.out.println(util.numIslandsDfs(grid));
+
+    grid = new char[][] {{'1', '1', '1'}, {'0', '1', '0'}, {'1', '1', '1'}};
+    System.out.println(util.numIslandsDfs(grid));
   }
 }

@@ -30,6 +30,8 @@ public class RottingOranges {
     int totalMinutes = 0;
     int freshOranges = 0;
 
+    // Gather all rotten oranges in the queue.
+    // record the count of fresh oranges.
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         if (grid[i][j] == 2) {
@@ -40,6 +42,7 @@ public class RottingOranges {
       }
     }
 
+    // After the BFS if all the oranges get rotten i.e freshOranges == 0, then return the total count else -1.
     int[][] directions = new int[][] {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
 
     while (!queue.isEmpty()) {
@@ -52,9 +55,10 @@ public class RottingOranges {
       for (int[] direction : directions) {
         int neighborX = x + direction[0];
         int neighborY = y + direction[1];
-        if (neighborX > -1 && neighborX < rows && neighborY > -1 && neighborY < cols &&
-            grid[neighborX][neighborY] == 1) {
+        if (isValid(grid, neighborX, neighborY, rows, cols)) {
+          // fresh orange spotted
           grid[neighborX][neighborY] = 2; // rot orange
+          // add to dfs so that it can rot other neighboring fresh oranges in next bfs.
           queue.offer(new int[] {neighborX, neighborY, minute + 1});
           freshOranges--;
         }
@@ -62,5 +66,10 @@ public class RottingOranges {
     }
 
     return freshOranges == 0 ? totalMinutes : -1;
+  }
+
+  private static boolean isValid(int[][] grid, int i, int j, int rows, int cols) {
+    return i > -1 && i < rows && j > -1 && j < cols &&
+        grid[i][j] == 1;
   }
 }
