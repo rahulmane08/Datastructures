@@ -1,4 +1,4 @@
-package leetcode.string;
+package leetcode.string.medium;
 
 import interfaces.Important;
 import interfaces.Medium;
