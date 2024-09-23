@@ -29,17 +29,17 @@ public class TwoSum {
   }
 
   @LCEasy
-  public int twoSumWithHashing(int[] arr, int sum) {
+  public int twoSumWithHashing(int[] nums, int sum) {
     Map<Integer, Integer> map = new HashMap();
     int count = 0;
-    for (int i = 0; i < arr.length; i++) {
-      int complement = sum - arr[i];
+    for (int i = 0; i < nums.length; i++) {
+      int complement = sum - nums[i];
       int j = map.getOrDefault(complement, -1);
       if (j != -1 && j != i) {
-        System.out.printf("Found pair: ( %d, %d) %n)", arr[i], arr[j]);
+        System.out.printf("Found pair: ( %d, %d) %n)", nums[i], nums[j]);
         count++;
       }
-      map.put(arr[j], j);
+      map.put(nums[j], j);
     }
     return count;
   }

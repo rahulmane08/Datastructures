@@ -24,17 +24,20 @@ public class DICode {
   }
 
   private void sortedInsert(String pattern, Stack<Integer> stack, int count, int index) {
-    if (stack.isEmpty()) {
+    if (stack.isEmpty() ||
+        (pattern.charAt(index) == 'I' && stack.peek() < count) ||
+        (pattern.charAt(index) == 'D' && stack.peek() > count)) {
       stack.push(count);
       return;
     }
     int top = stack.pop();
-    if ((pattern.charAt(index) == 'I' && top < count) || (pattern.charAt(index) == 'D' && top > count)) {
-      stack.push(top);
-      stack.push(count);
-      return;
-    }
     sortedInsert(pattern, stack, count, index - 1);
     stack.push(top);
+  }
+
+  public static void main(String[] args) {
+    DICode util = new DICode();
+    System.out.println(util.smallestNumber("ID"));
+    System.out.println(util.smallestNumber("IDD"));
   }
 }
