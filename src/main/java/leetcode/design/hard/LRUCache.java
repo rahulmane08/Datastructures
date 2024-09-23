@@ -3,19 +3,44 @@ package leetcode.design.hard;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Supports following public functions:
+ * put
+ * get
+ * remove
+ * <p>
+ * internal helper functions
+ * addCacheNode : adds the CacheNode to front of list
+ * removeCacheNode : delinks the CacheNode from the list.
+ * evictEldestEntry : removes the last CacheNode prev to tail.
+ * moveToHead : removeCacheNode + addCacheNode
+ *
+ * @param <K>
+ * @param <V>
+ */
 public class LRUCache<K, V> {
 
-  private final Map<K, CacheNode<K, V>> cache;
-  private final int capacity;
-  private final CacheNode head, tail;
+  protected final Map<K, CacheNode<K, V>> cache;
+
+  // indicates if the cache size, when cache hits the capacity its full, we need to evict old entries.
+  protected final int capacity;
+  protected final CacheNode head, tail;
 
   public LRUCache(int capacity) {
     this.cache = new ConcurrentHashMap<>();
     this.capacity = capacity;
-    this.head = new CacheNode(null, null);
-    this.tail = new CacheNode(null, null);
+    this.head = new CacheNode(null, null); // dummy node
+    this.tail = new CacheNode(null, null); // dummy node
+    this.head.next = this.tail;
+    this.tail.prev = this.head;
   }
 
+  /**
+   * If the cache node exists, the move it to head as its the most recently accessed.
+   *
+   * @param key
+   * @return
+   */
   public V get(K key) {
     CacheNode<K, V> cacheNode = cache.getOrDefault(key, null);
     if (cacheNode != null) {
@@ -25,14 +50,21 @@ public class LRUCache<K, V> {
     return null;
   }
 
+  /**
+   * This function upserts a cacheNode, always moves it to head of list.
+   * If the cache is full then evictEldestEntry and add a new node.
+   *
+   * @param key
+   * @param value
+   */
   public void put(K key, V value) {
-    CacheNode<K, V> cacheNode = cache.getOrDefault(key, null);
+    CacheNode<K, V> cacheNode = cache.get(key);
     if (cacheNode != null) {
       moveToHead(cacheNode);
       cacheNode.value = value;
     } else {
       if (cache.size() == this.capacity) {
-        evictOldEntries();
+        evictEldestEntry();
         cacheNode = new CacheNode<>(key, value);
         addCacheNode(cacheNode);
       }
@@ -46,73 +78,44 @@ public class LRUCache<K, V> {
     }
   }
 
-  private void evictOldEntries() {
-    CacheNode<K, V> oldNode = tail.prev;
-    removeCacheNode(oldNode);
-  }
-
-  private void addCacheNode(CacheNode<K, V> cacheNode) {
-    if (head.next == null) {
-      head.next = cacheNode;
-      tail.prev = cacheNode;
-      cacheNode.next = tail;
-      cacheNode.prev = head;
-    } else {
-      cacheNode.next = head.next;
-      cacheNode.next.prev = cacheNode;
-      cacheNode.prev = head;
-      head.next = cacheNode;
-    }
-  }
-
-  private void removeCacheNode(CacheNode<K, V> cacheNode) {
-    if (cacheNode != null) {
-      cacheNode.next.prev = cacheNode.prev;
-      cacheNode.prev.next = cacheNode.next;
-      cacheNode.prev = null;
-      cacheNode.next = null;
-    }
-  }
-
-  private void moveToHead(CacheNode<K, V> cacheNode) {
-    if (cacheNode != null) {
-      removeCacheNode(cacheNode);
-      addCacheNode(cacheNode);
+  /**
+   * Removes the entry previous to tail.
+   */
+  protected void evictEldestEntry() {
+    if (tail.prev != head) {
+      CacheNode<K, V> oldNode = tail.prev;
+      removeCacheNode(oldNode);
     }
   }
 
   /**
-   * Doubly linked list cache node
+   * Adds a cache node at the front of the list.
    *
-   * @param <K>
-   * @param <V>
+   * @param cacheNode
    */
-  class CacheNode<K, V> {
-    K key;
-    V value;
-    CacheNode next;
-    CacheNode prev;
+  protected void addCacheNode(CacheNode<K, V> cacheNode) {
+    cacheNode.next = head.next;
+    cacheNode.next.prev = cacheNode;
+    cacheNode.prev = head;
+    head.next = cacheNode;
+    cache.put(cacheNode.key, cacheNode);
+  }
 
-    public CacheNode(K key, V value) {
-      this.key = key;
-      this.value = value;
-    }
+  /**
+   * Delinks the node from the cache.
+   *
+   * @param cacheNode
+   */
+  protected void removeCacheNode(CacheNode<K, V> cacheNode) {
+    cacheNode.next.prev = cacheNode.prev;
+    cacheNode.prev.next = cacheNode.next;
+    cacheNode.prev = null;
+    cacheNode.next = null;
+    cache.remove(cacheNode.key);
+  }
 
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      CacheNode<?, ?> cacheNode = (CacheNode<?, ?>) o;
-      return key.equals(cacheNode.key);
-    }
-
-    @Override
-    public int hashCode() {
-      return key.hashCode();
-    }
+  protected void moveToHead(CacheNode<K, V> cacheNode) {
+    removeCacheNode(cacheNode);
+    addCacheNode(cacheNode);
   }
 }

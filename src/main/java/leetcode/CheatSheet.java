@@ -64,7 +64,5 @@ public class CheatSheet {
     chars[2] = temp;
     // the above wont modify actual string
     System.out.println("String after char swap: " + new String(chars));
-
-
   }
 }
