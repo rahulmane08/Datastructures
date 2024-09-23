@@ -26,4 +26,9 @@ public class LongestSubstringWithRepeatingCharacters {
     }
     return maxLength;
   }
+
+  public static void main(String[] args) {
+    LongestSubstringWithRepeatingCharacters util = new LongestSubstringWithRepeatingCharacters();
+    System.out.println(util.lengthOfLongestSubstring("pwwkew"));
+  }
 }

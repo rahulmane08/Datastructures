@@ -340,53 +340,6 @@ public class HeapUtils {
     }
   }
 
-  /**
-   * Input: aaabc
-   * Output: abaca
-   * <p>
-   * Input: aaabb
-   * Output: ababa
-   * <p>
-   * Input: aa
-   * Output: Not Possible
-   * <p>
-   * Input: aaaabc
-   * Output: Not Possible
-   *
-   * @param str
-   */
-  @Medium
-  @Important
-  static public void printStringWithNonRepeatingChars(String str) {
-    Map<Character, Integer> charFreq = new HashMap<>();
-    for (int i = 0; i < str.length(); i++) {
-      charFreq.compute(str.charAt(i), (k, v) -> v == null ? 1 : v + 1);
-    }
-    java.util.PriorityQueue<Map.Entry<Character, Integer>> maxPq =
-        new java.util.PriorityQueue<>((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-
-    // Max Heap based on number of occurences.
-    charFreq.entrySet().forEach(maxPq::offer);
-
-    String output = "";
-    Map.Entry<Character, Integer> prevEntry = null;
-    while (!maxPq.isEmpty()) {
-      Map.Entry<Character, Integer> currEntry = maxPq.poll();
-      Character curr = currEntry.getKey();
-      output += curr;
-      if (prevEntry != null && prevEntry.getValue() > 0) {
-        maxPq.offer(prevEntry);
-      }
-      currEntry.setValue(currEntry.getValue() - 1);
-      prevEntry = currEntry;
-    }
-    if (output.length() != str.length()) {
-      System.out.println("Not possible");
-      return;
-    }
-    System.out.println(output);
-  }
-
 
   /**
    * Input : arr[] = {5, 7, 5, 5, 1, 2, 2}, k = 3
