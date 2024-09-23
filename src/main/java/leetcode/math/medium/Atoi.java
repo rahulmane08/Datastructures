@@ -7,7 +7,12 @@ public class Atoi {
 
   /**
    * Lets suppose the max value of an integer is 333
-   * so
+   * maxValue = 33
+   * maxLsd = 3
+   * <p>
+   * so if the input is 421
+   * i = 0, curr = 4, result = 4
+   * i = 1, curr = 2, result = 42 > maxValue , fail
    *
    * @param s
    * @return
@@ -34,7 +39,7 @@ public class Atoi {
       int digit = s.charAt(i) - '0';
 
       if (result > maxValue || (result == maxValue && digit > maxLSD)) {
-        return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE; // or throw NumberFormatException.
       }
       result = 10 * result + digit;
     }
