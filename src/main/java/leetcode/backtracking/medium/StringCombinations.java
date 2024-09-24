@@ -15,7 +15,9 @@ public class StringCombinations {
       combinations.add(prefix);
       return;
     }
+    // include
     compute(chars, index + 1, prefix + chars[index], combinations);
+    // exclude
     compute(chars, index + 1, prefix, combinations);
   }
 

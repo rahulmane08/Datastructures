@@ -29,6 +29,7 @@ public class PowerSets {
     // include
     stack.push(nums[index]);
     find(nums, subsets, stack, index + 1);
+    // exclude
     stack.pop();
     find(nums, subsets, stack, index + 1);
   }
