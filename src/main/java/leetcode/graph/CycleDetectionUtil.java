@@ -35,6 +35,9 @@ public class CycleDetectionUtil {
     return detectCycleInUDG(edges);
   }
 
+  /**
+   * This algo works only for DG.
+   */
   public static class GraphColoringUtil {
     public static boolean detectCycleInDGUsingGraphColoring(int[][] edges) {
       Graph graph = new Graph(edges, true);
@@ -44,11 +47,11 @@ public class CycleDetectionUtil {
 
       graph.getVertexes().forEach(whiteSet::add);
       for (Integer curr : new ArrayList<>(whiteSet)) {
-        if (!detectCycleInDGUtil(graph, curr, whiteSet, greySet, blackSet)) {
-          return false;
+        if (detectCycleInDGUtil(graph, curr, whiteSet, greySet, blackSet)) {
+          return true;
         }
       }
-      return true;
+      return false;
     }
 
     private static boolean detectCycleInDGUtil(Graph graph,
@@ -56,20 +59,25 @@ public class CycleDetectionUtil {
                                                HashSet<Integer> whiteSet,
                                                HashSet<Integer> greySet,
                                                HashSet<Integer> blackSet) {
+      // move to greySet indicating, start of DFS.
       moveSet(curr, whiteSet, greySet);
       for (Integer neighbor : graph.getNeighbors(curr)) {
+        // completely visited node, skip it.
         if (blackSet.contains(neighbor)) {
           continue;
         }
 
+        // found a node who is undergoing a dfs, hence its a cycle.
         if (greySet.contains(neighbor)) {
           return true;
         }
 
+        // break the DFS if a cycle is found.
         if (detectCycleInDGUtil(graph, neighbor, whiteSet, greySet, blackSet)) {
           return true;
         }
       }
+      // no cycle found for current node, move it to black set.
       moveSet(curr, greySet, blackSet);
       return false;
     }

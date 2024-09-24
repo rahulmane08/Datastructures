@@ -8,7 +8,6 @@ import java.util.Map;
  * Time complexity = O(m x alpha(n)) , where m = no. of operations. alpha(n) is inv ackerman function.
  * https://cs.stackexchange.com/questions/105652/what-does-o-alphan-amortized-time-mean
  * Refer to Tushar Roy video : https://www.youtube.com/watch?v=ID00PMy0-vE
- *
  */
 public class DisjointSet<T> {
   private final Map<T, T> parents;
@@ -46,7 +45,7 @@ public class DisjointSet<T> {
     }
 
     T parent = findSet(parents.get(vertex));
-    parents.put(vertex, parent);
+    parents.put(vertex, parent); // path compression.
     return parent;
   }
 
