@@ -1,4 +1,4 @@
-package leetcode.dp.unboundedknapsack;
+package leetcode.dp.medium;
 
 /**
  * https://leetcode.com/problems/coin-change/description/
