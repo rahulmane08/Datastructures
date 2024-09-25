@@ -14,6 +14,10 @@ public class Graph {
   private final int[][] edges;
   private final Map<Integer, List<Integer>> adjacencyList;
 
+  public Graph(boolean directed) {
+    this(new int[][] {}, directed);
+  }
+
   public Graph(int[][] edges, boolean directed) {
     this.directed = directed;
     this.edges = edges;
@@ -23,7 +27,7 @@ public class Graph {
     Arrays.stream(edges).forEach(this::addEdge);
   }
 
-  private void addEdge(int[] edge) {
+  public void addEdge(int[] edge) {
     if (directed) {
       adjacencyList.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[1]);
       adjacencyList.compute(edge[1], (v, list) -> list == null ? new ArrayList<>() : list);
@@ -79,5 +83,16 @@ public class Graph {
 
   public int getVertexCount() {
     return adjacencyList.keySet().size();
+  }
+
+  public Graph reverse() {
+    if (!isDirected()) {
+      return this;
+    }
+    Graph graph = new Graph(true);
+    for (int[] edge : edges) {
+      graph.addEdge(new int[] {edge[1], edge[0]});
+    }
+    return graph;
   }
 }

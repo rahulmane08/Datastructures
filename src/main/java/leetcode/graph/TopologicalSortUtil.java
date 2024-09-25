@@ -54,10 +54,14 @@ public class TopologicalSortUtil {
     Stack<Integer> topSort = new Stack<>();
     HashSet<Integer> visited = new HashSet<>();
     Graph graph = new Graph(edges, directed);
+    topSortDfs(graph, visited, topSort);
+    return topSort;
+  }
+
+  public static void topSortDfs(Graph graph, HashSet<Integer> visited, Stack<Integer> topSort) {
     for (Integer vertex : graph.getVertexes()) {
       topSortDfsUtil(graph, vertex, visited, topSort);
     }
-    return topSort;
   }
 
   public static void topSortDfsUtil(Graph graph, Integer curr, HashSet<Integer> visited, Stack<Integer> topSort) {

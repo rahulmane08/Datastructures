@@ -21,7 +21,9 @@ public class GasStation {
    */
   public int canCompleteCircuit(int[] gas, int[] cost) {
     int stations = gas.length;
-    int start = gas[0];
+    int start = 0;
+    int end = 0;
+
     return -1;
   }
 }
