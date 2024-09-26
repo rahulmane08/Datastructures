@@ -5,13 +5,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Supports following public functions:
- * put
- * get
- * remove
+ * put :
+ * get : gets the cacheNode if present in map and moves to front of list.
+ * remove : removes the CacheNode prev to tail.
  * <p>
  * internal helper functions
- * addCacheNode : adds the CacheNode to front of list
- * removeCacheNode : delinks the CacheNode from the list.
+ * addCacheNode : adds the CacheNode to front of list and map.
+ * removeCacheNode : delinks the CacheNode from the list and map.
  * evictEldestEntry : removes the last CacheNode prev to tail.
  * moveToHead : removeCacheNode + addCacheNode
  *

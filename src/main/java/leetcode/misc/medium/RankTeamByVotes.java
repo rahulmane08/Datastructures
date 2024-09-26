@@ -32,6 +32,13 @@ public class RankTeamByVotes {
         result.compute(contender, (c, votesByRank) -> votesByRank != null ? votesByRank : new int[ranks])[i]++;
       }
     }
+    /**
+     * {
+     *    A : [2,3,0],
+     *    B : [2,2,1],
+     *    C : [1,0,4]
+     * }
+     */
     Comparator<Map.Entry<Character, int[]>> comparator = (entry1, entry2) -> {
       char contender1 = entry1.getKey();
       int[] results1 = entry1.getValue();
@@ -39,11 +46,12 @@ public class RankTeamByVotes {
       int[] results2 = entry2.getValue();
       for (int i = 0; i < ranks; i++) {
         if (results1[i] != results2[i]) {
-          return Integer.compare(results2[i], results1[i]);
+          return Integer.compare(results2[i], results1[i]); // reverse sort.
         }
       }
-      return Character.compare(contender1, contender2);
+      return Character.compare(contender1, contender2); // natural sort on lexical order.
     };
+
     List<Map.Entry<Character, int[]>> entries = result.entrySet().stream().collect(Collectors.toList());
     entries.sort(comparator);
     StringBuilder voteResult = new StringBuilder();
@@ -74,14 +82,53 @@ public class RankTeamByVotes {
     return "";
   }
 
+  public String rankBasedOnFirstArrival(String[] votes) {
+    int ranks = votes[0].length();
+    Map<Character, long[][]> votesByRankAndTimestamp = new HashMap<>();
+    for (String vote : votes) {
+      for (int i = 0; i < vote.length(); i++) {
+        Character contender = vote.charAt(i);
+        long[][] stats = votesByRankAndTimestamp.compute(contender,
+            (c, statistics) -> statistics == null ? new long[ranks][2] : statistics);
+        stats[i][0]++;
+        stats[i][1] = System.currentTimeMillis();
+      }
+    }
+    Comparator<Map.Entry<Character, long[][]>> comparator = (entry1, entry2) -> {
+      Character contender1 = entry1.getKey();
+      Character contender2 = entry2.getKey();
+      long[][] stats1 = entry1.getValue();
+      long[][] stats2 = entry2.getValue();
+      for (int i = 0; i < ranks; i++) {
+        int compare = Long.compare(stats2[i][0], stats1[i][0]);
+        if (compare == 0) {
+          compare = Long.compare(stats1[i][1], stats2[i][1]);
+        }
+        if (compare != 0) {
+          return compare;
+        }
+      }
+
+      return Character.compare(contender1, contender2);
+    };
+    List<Map.Entry<Character, long[][]>> entries = votesByRankAndTimestamp.entrySet().stream().collect(Collectors.toList());
+    entries.sort(comparator);
+    StringBuilder voteResult = new StringBuilder();
+    for (Character c : entries.stream().map(Map.Entry::getKey).toList()) {
+      voteResult.append(c);
+    }
+    return voteResult.toString();
+  }
+
   public static void main(String[] args) {
     RankTeamByVotes util = new RankTeamByVotes();
     String[] votes = new String[] {"ABC", "BAC", "ABC", "BAC", "CAB"};
     System.out.println(util.rankTeams(votes));
-    votes = new String[] {"ABC", "BAC", "ABC", "BAC"};
+    votes = new String[] {"ABC", "BAC", "ABC", "BAC", "CBA"};
     System.out.println(util.rankTeams(votes));
     votes = new String[] {"ABC", "BAC", "BAC", "BAC", "CAB"};
     System.out.println(util.rankTeams(votes));
-    util.rankTeamsOptimized(votes);
+    votes = new String[] {"ABC", "BAC", "BAC", "ABC"};
+    System.out.println(util.rankBasedOnFirstArrival(votes));
   }
 }

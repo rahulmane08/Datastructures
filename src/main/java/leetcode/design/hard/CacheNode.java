@@ -17,6 +17,7 @@ class CacheNode<K, V> {
   CacheNode prev;
   long accessTime;
   long expiryInterval;
+  int frequency;
 
   public CacheNode(K key, V value) {
     this.key = key;
