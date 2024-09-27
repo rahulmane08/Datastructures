@@ -9,35 +9,40 @@ public class CircularArrayLoop2 {
     int fast = 0;
     HashSet<Integer> visited = new HashSet<>();
     for (int i = 0; i < n; i++) {
+      boolean direction = nums[i] >= 0;
       if (!visited.contains(i)) {
         while (true) {
-          slow = getNextIndex(nums, slow);
+          slow = getNextIndex(nums, slow, direction);
           if (slow == -1) {
             break; // cycle found
           }
 
-          fast = getNextIndex(nums, fast);
+          fast = getNextIndex(nums, fast, direction);
           if (fast == -1) {
-            return false; // cycle found
+            break; // cycle found
           }
 
-          fast = getNextIndex(nums, fast);
+          fast = getNextIndex(nums, fast, direction);
           if (fast == -1) {
-            return false; // cycle found
+            break; // cycle found
           }
 
           if (fast == slow) {
-            break;
+            return true;
           }
           visited.add(slow);
           visited.add(fast);
         }
       }
     }
-    return true;
+    return false;
   }
 
-  private int getNextIndex(int[] nums, int index) {
+  private int getNextIndex(int[] nums, int index, boolean direction) {
+    boolean currDirection = nums[index] >= 0;
+    if (direction != currDirection) {
+      return -1;
+    }
     int n = nums.length;
     int nextIndex = (index + nums[index]) % n;
     if (nextIndex < 0) {
@@ -51,6 +56,6 @@ public class CircularArrayLoop2 {
 
   public static void main(String[] args) {
     CircularArrayLoop2 util = new CircularArrayLoop2();
-    System.out.println(util.circularArrayLoop(new int[] {-2, 1, -1, -2, -2}));
+    System.out.println(util.circularArrayLoop(new int[] {-1, -2, -3, -4, -5, 6}));
   }
 }
