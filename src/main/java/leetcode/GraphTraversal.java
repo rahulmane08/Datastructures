@@ -50,14 +50,14 @@ public class GraphTraversal {
     if (visited.contains(vertex)) {
       return;
     }
-    Queue<Integer> queue = new LinkedList<>();
-    queue.offer(vertex);
+    Queue<Integer> bfs = new LinkedList<>();
+    bfs.offer(vertex);
     visited.add(vertex);
-    while (!queue.isEmpty()) {
-      Integer curr = queue.poll();
+    while (!bfs.isEmpty()) {
+      Integer curr = bfs.poll();
       for (Integer neighbor : graph.getNeighbors(curr)) {
         if (!visited.contains(neighbor)) {
-          queue.offer(neighbor);
+          bfs.offer(neighbor);
           visited.add(neighbor);
         }
       }
