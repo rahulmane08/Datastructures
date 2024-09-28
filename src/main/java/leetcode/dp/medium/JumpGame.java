@@ -11,6 +11,30 @@ package leetcode.dp.medium;
  */
 public class JumpGame {
   public boolean canJump(int[] nums) {
+    return bottomUp(nums);
+  }
+
+  public boolean canJump1(int[] nums) {
+    return topDown(nums, 0, new Boolean[nums.length]);
+  }
+
+  private boolean topDown(int[] nums, int index, Boolean[] dp) {
+    if (index >= nums.length) {
+      return true;
+    }
+    if (dp[index] == null) {
+      dp[index] = false;
+      for (int i = nums[index]; i > 0; i--) {
+        if (topDown(nums, index + i, dp)) {
+          dp[index] = true;
+          break;
+        }
+      }
+    }
+    return dp[index];
+  }
+
+  private boolean bottomUp(int[] nums) {
     int n = nums.length;
     boolean[] dp = new boolean[n];
     int target = n - 1;
@@ -25,7 +49,7 @@ public class JumpGame {
 
   public static void main(String[] args) {
     JumpGame util = new JumpGame();
-    System.out.println(util.canJump(new int[] {2, 3, 1, 1, 4}));
-    System.out.println(util.canJump(new int[] {3, 2, 1, 0, 4}));
+    System.out.println(util.canJump1(new int[] {2, 3, 1, 1, 4}));
+    System.out.println(util.canJump1(new int[] {3, 2, 1, 0, 4}));
   }
 }
