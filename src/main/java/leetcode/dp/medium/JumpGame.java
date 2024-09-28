@@ -49,7 +49,9 @@ public class JumpGame {
 
   public static void main(String[] args) {
     JumpGame util = new JumpGame();
-    System.out.println(util.canJump1(new int[] {2, 3, 1, 1, 4}));
-    System.out.println(util.canJump1(new int[] {3, 2, 1, 0, 4}));
+    System.out.println("bottomUp = " + util.canJump(new int[] {2, 3, 1, 1, 4}));
+    System.out.println("topDown = " + util.canJump1(new int[] {2, 3, 1, 1, 4}));
+    System.out.println("bottomUp = " + util.canJump(new int[] {3, 2, 1, 0, 4}));
+    System.out.println("topDown = " + util.canJump1(new int[] {3, 2, 1, 0, 4}));
   }
 }
