@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -64,5 +65,12 @@ public class CheatSheet {
     chars[2] = temp;
     // the above wont modify actual string
     System.out.println("String after char swap: " + new String(chars));
+
+    Stack<Character> stack = new Stack<>();
+    stack.push('A');
+    stack.push('B');
+    stack.push('C');
+    String result = stack.stream().map(String::valueOf).collect(Collectors.joining());
+    System.out.println(result);
   }
 }

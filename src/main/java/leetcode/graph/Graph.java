@@ -27,6 +27,10 @@ public class Graph {
     Arrays.stream(edges).forEach(this::addEdge);
   }
 
+  /**
+   * Space Complexity = O(2E) , since for every edge we are storing the nodes twice.
+   * @param edge
+   */
   public void addEdge(int[] edge) {
     if (directed) {
       adjacencyList.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[1]);
