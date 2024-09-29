@@ -4,11 +4,18 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-import leetcode.graph.Graph;
 
 public class GraphTraversal {
 
   //DFS
+
+  /**
+   * T(n) = O(V+E) for DG
+   * T(n) = O(V+2E) for DG
+   *
+   * @param edges
+   * @param directed
+   */
   public static void dfs(int[][] edges, boolean directed) {
     Graph graph = new Graph(directed);
     Arrays.stream(edges).forEach(graph::addEdge);
@@ -33,6 +40,14 @@ public class GraphTraversal {
   }
 
   //BFS
+
+  /**
+   * T(n) = O(V+E) for DG
+   * T(n) = O(V+2E) for DG
+   *
+   * @param edges
+   * @param directed
+   */
   public static void bfs(int[][] edges, boolean directed) {
     Graph graph = new Graph(directed);
     Arrays.stream(edges).forEach(graph::addEdge);
