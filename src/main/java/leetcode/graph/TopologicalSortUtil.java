@@ -60,17 +60,18 @@ public class TopologicalSortUtil {
 
   public static void topSortDfs(Graph graph, HashSet<Integer> visited, Stack<Integer> topSort) {
     for (Integer vertex : graph.getVertexes()) {
-      topSortDfsUtil(graph, vertex, visited, topSort);
+      if (!visited.contains(vertex)) {
+        topSortDfsUtil(graph, vertex, visited, topSort);
+      }
     }
   }
 
   public static void topSortDfsUtil(Graph graph, Integer curr, HashSet<Integer> visited, Stack<Integer> topSort) {
-    if (visited.contains(curr)) {
-      return;
-    }
     visited.add(curr);
     for (Integer neighbor : graph.getNeighbors(curr)) {
-      topSortDfsUtil(graph, neighbor, visited, topSort);
+      if (!visited.contains(neighbor)) {
+        topSortDfsUtil(graph, neighbor, visited, topSort);
+      }
     }
     topSort.push(curr);
   }
