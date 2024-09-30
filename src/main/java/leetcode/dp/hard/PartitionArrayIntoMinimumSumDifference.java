@@ -6,12 +6,12 @@ public class PartitionArrayIntoMinimumSumDifference {
   public int minimumDifference(int[] nums) {
     int sum = Arrays.stream(nums).map(Math::abs).sum();
     Integer[][] dp = new Integer[nums.length][sum + 1];
-    return Math.abs(topDown(nums, 0, 0, 0, dp));
+    return topDown(nums, 0, 0, 0, dp);
   }
 
   private int topDown(int[] nums, int sum1, int sum2, int index, Integer[][] dp) {
     if (index == nums.length) {
-      return sum1 - sum2;
+      return Math.abs(sum1 - sum2);
     }
 
     if (dp[index][Math.abs(sum1)] == null) {
