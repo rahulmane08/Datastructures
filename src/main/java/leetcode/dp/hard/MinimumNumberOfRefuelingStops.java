@@ -15,11 +15,29 @@ import java.util.PriorityQueue;
  */
 public class MinimumNumberOfRefuelingStops {
   public int minRefuelStops(int target, int startFuel, int[][] stations) {
-    return greedy(target, startFuel, stations);
+    // return greedy(target, startFuel, stations);
+    return dp(target, startFuel, stations);
   }
 
-  private int topDown(int target, int startFuel, int[][] stations) {
-    return -1;
+  private int dp(int target, int startFuel, int[][] stations) {
+    int minStops = topDown(target, startFuel, stations, -1, 0);
+    return minStops == Integer.MAX_VALUE ? -1 : minStops;
+  }
+
+  private int topDown(int target, int startFuel, int[][] stations, int index, int count) {
+    if (index == stations.length) {
+      if (target <= 0) {
+        return count;
+      }
+      return Integer.MAX_VALUE;
+    }
+
+    int minStops = Integer.MAX_VALUE;
+    for (int i = index + 1; i + 1 < stations.length && startFuel >= stations[i + 1][0]; i++) {
+      int current = topDown(target - stations[i][0], stations[i][1], stations, i + 1, count + 1);
+      minStops = Math.min(minStops, current);
+    }
+    return minStops;
   }
 
   private int greedy(int target, int startFuel, int[][] stations) {
