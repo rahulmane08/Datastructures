@@ -1,11 +1,14 @@
 package leetcode.dp.medium;
 
+/**
+ * sum of combinations
+ */
 public class RobotUniquePaths {
   private int[][] moves = {{0, 1}, {1, 0}}; // R,D
 
   public int uniquePaths(int m, int n) {
     Integer[][] dp = new Integer[m][n];
-    dp[m - 1][n - 1] = 1;
+    dp[m - 1][n - 1] = 1; // destination
     return topDown(0, 0, m, n, dp);
   }
 

@@ -17,8 +17,8 @@ public class HouseThief {
       return 0;
     }
     if (dp[index] == -1) {
-      int sum1 = nums[index] + topDown(nums, index + 2, dp);
-      int sum2 = topDown(nums, index + 1, dp);
+      int sum1 = nums[index] + topDown(nums, index + 2, dp); // include current, try next non adjacent node.
+      int sum2 = topDown(nums, index + 1, dp); // exclude current, try next node.
       dp[index] = Math.max(sum1, sum2);
     }
     return dp[index];

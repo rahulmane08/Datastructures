@@ -26,7 +26,7 @@ public class JumpGame2 {
    * <p>
    * Now if 4th index was 1
    * for topDown(2)
-   * = topDown(3)  = MAX_VAL, topDown(4) -> topDown(5) = 0
+   * = topDown(3)  = MAX_VAL, 1 + topDown(4) -> 1 + topDown(5) = 1 + 0 = 1
    * = min(MAX_VAL, 1)
    * = 1 -> add 1 = 2.
    *
