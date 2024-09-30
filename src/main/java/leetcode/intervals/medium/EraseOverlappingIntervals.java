@@ -1,4 +1,4 @@
-package leetcode.misc.medium.intervals;
+package leetcode.intervals.medium;
 
 import java.util.Arrays;
 import java.util.Comparator;
