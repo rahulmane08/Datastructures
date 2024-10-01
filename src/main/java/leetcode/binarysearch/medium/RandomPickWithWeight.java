@@ -24,34 +24,24 @@ public class RandomPickWithWeight {
 
   public int pickIndex() {
     int random = min + new Random().nextInt(max - min + 1);
-    return getRandomIndex(random, 0, runningWeights.length - 1);
+    int insertPosition = getInsertPosition(random);
+    return insertPosition == runningWeights.length ? insertPosition - 1 : insertPosition;
   }
 
-  /**
-   * [1, 3, 6, 10, 16]
-   * 2
-   * @param random
-   * @param low
-   * @param high
-   * @return
-   */
-  private int getRandomIndex(int random, int low, int high) {
-    if (low > high) {
-      return -1;
-    }
-    int mid = (low + high) >>> 1;
-    if (random < runningWeights[mid]) {
-      int left = getRandomIndex(random, low, mid - 1);
-      if (left != -1) {
-        return left;
-      }
-    } else if (runningWeights[mid] < random){
-      int right = getRandomIndex(random, mid + 1, high);
-      if (right != -1) {
-        return right;
+  private int getInsertPosition(int target) {
+    int low = 0;
+    int high = runningWeights.length - 1;
+    while (low <= high) {
+      int mid = (low + high) >>> 1;
+      if (runningWeights[mid] == target) {
+        return mid;
+      } else if (target < runningWeights[mid]) {
+        high = mid - 1;
+      } else {
+        low = mid + 1;
       }
     }
-    return mid;
+    return low + 1;
   }
 
   public static void main(String[] args) {

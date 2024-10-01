@@ -51,6 +51,6 @@ public class SearchInsertPosition {
   public static void main(String[] args) {
     SearchInsertPosition util = new SearchInsertPosition();
     int[] nums = {1, 2, 5, 7, 10};
-    System.out.println(util.searchInsert(nums, 2));
+    System.out.println(util.searchInsert(nums, 100));
   }
 }
