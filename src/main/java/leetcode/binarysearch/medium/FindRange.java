@@ -1,4 +1,4 @@
-package leetcode.binarysearch.easy;
+package leetcode.binarysearch.medium;
 
 import java.util.Arrays;
 
