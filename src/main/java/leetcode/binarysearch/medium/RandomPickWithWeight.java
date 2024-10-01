@@ -1,4 +1,4 @@
-package leetcode.math.medium;
+package leetcode.binarysearch.medium;
 
 import java.util.Random;
 
