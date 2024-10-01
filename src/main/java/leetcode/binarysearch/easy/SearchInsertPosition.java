@@ -1,4 +1,4 @@
-package leetcode.arrays.easy;
+package leetcode.binarysearch.easy;
 
 /**
  * https://leetcode.com/problems/search-insert-position/description/

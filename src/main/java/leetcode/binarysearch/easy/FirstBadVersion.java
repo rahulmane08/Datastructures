@@ -1,4 +1,4 @@
-package leetcode.arrays.easy;
+package leetcode.binarysearch.easy;
 
 /**
  * Example 1:

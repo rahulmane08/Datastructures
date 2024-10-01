@@ -1,4 +1,4 @@
-package leetcode.arrays.medium;
+package leetcode.binarysearch.medium;
 
 public class SearchInRotatedArray {
 
