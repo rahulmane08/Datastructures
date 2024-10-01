@@ -1,72 +1,61 @@
 package leetcode.math.medium;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Random;
 
 public class RandomPickWithWeight {
 
-  private final int[][] indexProbalities;
-
-  private final int[] nums;
-
-  private int currentPointer = 0;
-
-  private int gcd;
+  private final int[] runningWeights;
+  private final int min, max;
 
   public RandomPickWithWeight(int[] w) {
-    this.nums = w;
-    this.indexProbalities = new int[w.length][2];
-    computeGcd();
-    computeProbability();
+    this.runningWeights = new int[w.length];
+    initializeRunningWeights(w);
+    this.min = runningWeights[0];
+    this.max = runningWeights[w.length - 1];
   }
 
-  private void computeGcd() {
-    int gcd = nums[0];
-    for (int i = 1; i < nums.length; i++) {
-      gcd = gcd(nums[i], gcd);
-      if (gcd == 1) {
-        break;
-      }
+  private void initializeRunningWeights(int[] w) {
+    int sum = 0;
+    for (int i = 0; i < w.length; i++) {
+      sum += w[i];
+      runningWeights[i] = sum;
     }
-    this.gcd = gcd;
-  }
-
-  private void computeProbability() {
-    int gcd = nums[0];
-
-    for (int i = 0; i < nums.length; i++) { //O(n)
-      indexProbalities[i][0] = i;
-      indexProbalities[i][1] = nums[i] / gcd;
-    }
-    Comparator<int[]> comparator = Comparator.comparingInt(a -> a[1]);
-    Arrays.sort(indexProbalities, comparator.reversed());
   }
 
   public int pickIndex() {
-    int[] front = indexProbalities[currentPointer];
-    int randomIndex = front[0];
-    if (--front[1] == 0) {
-      front[1] = nums[front[0]] / gcd;
-      currentPointer = (currentPointer + 1) % nums.length;
-    }
-    return randomIndex;
+    int random = min + new Random().nextInt(max - min + 1);
+    return getRandomIndex(random, 0, runningWeights.length - 1);
   }
 
-  private int gcd(int a, int b) {
-    if (a == 1) {
-      return 1;
+  /**
+   * [1, 3, 6, 10, 16]
+   * 2
+   * @param random
+   * @param low
+   * @param high
+   * @return
+   */
+  private int getRandomIndex(int random, int low, int high) {
+    if (low > high) {
+      return -1;
     }
-    if (a == 0) {
-      return b;
+    int mid = (low + high) >>> 1;
+    if (random < runningWeights[mid]) {
+      int left = getRandomIndex(random, low, mid - 1);
+      if (left != -1) {
+        return left;
+      }
+    } else if (runningWeights[mid] < random){
+      int right = getRandomIndex(random, mid + 1, high);
+      if (right != -1) {
+        return right;
+      }
     }
-    if (a > b) {
-      return gcd(a % b, b);
-    }
-    return gcd(b % a, a);
+    return mid;
   }
 
   public static void main(String[] args) {
-    RandomPickWithWeight util = new RandomPickWithWeight(new int[] {5, 5});
+    RandomPickWithWeight util = new RandomPickWithWeight(new int[] {1, 3});
     for (int i = 0; i < 8; i++) {
       System.out.println(util.pickIndex());
     }
