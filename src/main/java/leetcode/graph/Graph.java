@@ -85,7 +85,7 @@ public class Graph {
     return new HashMap<>(outDegrees);
   }
 
-  public int getVertexCount() {
+  public int size() {
     return adjacencyList.keySet().size();
   }
 

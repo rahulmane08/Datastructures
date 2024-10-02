@@ -23,7 +23,9 @@ public class TopologicalSortUtil {
     }
 
     public static Queue<Integer> topSortBfs(Graph graph) {
+      // initialize the indegrees
       Map<Integer, Integer> inDegrees = graph.getInDegrees();
+      // get the indegree = 0 vertexes.
       Map<Integer, Integer> zeroInDegreeMap = vertexesWithInDegree(graph, 0);
       Queue<Integer> traversalQueue = new LinkedList<>(zeroInDegreeMap.keySet());
       Queue<Integer> topSort = new LinkedList<>();
