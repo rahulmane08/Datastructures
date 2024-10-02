@@ -3,7 +3,6 @@ package leetcode.graph.medium;
 import static java.lang.Integer.MAX_VALUE;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +21,7 @@ public class MinHeightTrees {
     }
     int minHeight = MAX_VALUE;
     for (Integer curr : graph.keySet()) {
-      int vertexHeight = compute(graph, curr, new HashSet<>());
+      int vertexHeight = calculateMinHeightTreeForVertex(graph, curr, new HashSet<>());
       System.out.println("vertex: " + curr + ", minHeight: " + vertexHeight);
       if (vertexHeight == minHeight) {
         result.add(curr);
@@ -38,19 +37,17 @@ public class MinHeightTrees {
     return result;
   }
 
-  int compute(Map<Integer, List<Integer>> graph, Integer curr, HashSet<Integer> visited) {
-    visited.add(curr);
-    List<Integer> neighborHeights = new ArrayList<>();
-    for (Integer neighbor : graph.get(curr)) {
-      if (visited.contains(neighbor)) {
-        continue;
+  int calculateMinHeightTreeForVertex(Map<Integer, List<Integer>> graph,
+                                      Integer vertex,
+                                      HashSet<Integer> visited) {
+    visited.add(vertex);
+    int height = MAX_VALUE;
+    for (int neighbor : graph.get(vertex)) {
+      if (!visited.contains(neighbor)) {
+        height = Math.min(height, calculateMinHeightTreeForVertex(graph, neighbor, visited));
       }
-      neighborHeights.add(compute(graph, neighbor, visited));
     }
-    if (neighborHeights.isEmpty()) {
-      return 0;
-    }
-    return 1 + neighborHeights.stream().max(Comparator.naturalOrder()).get();
+    return height != MAX_VALUE ? 1 + height : 0;
   }
 
   public static void main(String[] args) {
