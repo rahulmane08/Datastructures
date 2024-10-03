@@ -21,7 +21,8 @@ public class JumpGame2 {
    * <p>
    * when index = 3 or 4, the for loop wont execute and recursion tree wont proceed.
    * In this case the MAX_VAL will be set in dp array and returned.
-   * At index 2, the recursion tree output for index 3 and 4 will return MAX_VAL, so we dont increment the value
+   * At index 2, the recursion tree output for index 3 and 4 will return MAX_VAL,
+   * so we dont increment the value
    * and set MAX_VAL for index 2.
    * <p>
    * Now if 4th index was 1

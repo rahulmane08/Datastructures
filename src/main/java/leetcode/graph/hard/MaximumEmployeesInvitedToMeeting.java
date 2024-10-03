@@ -17,6 +17,14 @@ public class MaximumEmployeesInvitedToMeeting {
     }
     KosarajuSCC kosarajuSCC = new KosarajuSCC();
     List<Stack<Integer>> allStronglyConnectedComponents = kosarajuSCC.getAllStronglyConnectedComponents(graph);
-    return allStronglyConnectedComponents.stream().map(Stack::size).max(Comparator.naturalOrder()).get();
+    Integer sccWithMaxLength =
+        allStronglyConnectedComponents.stream().map(Stack::size).max(Comparator.naturalOrder()).get();
+    return sccWithMaxLength + Math.min(graph.size() - sccWithMaxLength, sccWithMaxLength / 2);
+  }
+
+  public static void main(String[] args) {
+    int[] favorite = new int[] {2, 2, 1, 2};
+    MaximumEmployeesInvitedToMeeting util = new MaximumEmployeesInvitedToMeeting();
+    System.out.println(util.maximumInvitations(favorite));
   }
 }
