@@ -1,4 +1,4 @@
-package leetcode.arrays.medium;
+package leetcode.greedy.medium;
 
 import java.util.Arrays;
 

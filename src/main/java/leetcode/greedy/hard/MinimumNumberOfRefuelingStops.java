@@ -1,4 +1,4 @@
-package leetcode.dp.hard;
+package leetcode.greedy.hard;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;

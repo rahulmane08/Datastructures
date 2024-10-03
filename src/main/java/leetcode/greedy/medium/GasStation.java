@@ -1,4 +1,4 @@
-package leetcode.misc.medium;
+package leetcode.greedy.medium;
 
 /**
  * https://leetcode.com/problems/gas-station/description/
