@@ -25,7 +25,7 @@ public class DisjointSet<T> {
    */
   public void makeSet(T vertex) {
     parents.putIfAbsent(vertex, vertex);
-    ranks.putIfAbsent(vertex, 0);
+    ranks.putIfAbsent(vertex, 1);
   }
 
   /**
@@ -69,10 +69,28 @@ public class DisjointSet<T> {
     int rank2 = ranks.get(parent2);
     if (rank1 > rank2) {
       parents.put(parent2, parent1);
-      ranks.put(parent1, rank1 + 1);
+      ranks.put(parent1, rank1 + rank2);
+      ranks.put(parent2, 1);
     } else {
       parents.put(parent1, parent2);
-      ranks.put(parent2, rank2 + 1);
+      ranks.put(parent2, rank2 + rank1);
+      ranks.put(parent1, 1);
     }
+  }
+
+  public boolean contains(T elem) {
+    return parents.containsKey(elem);
+  }
+
+  public int rank(T elem) {
+    return ranks.get(elem);
+  }
+
+  public Map<T, T> getParents() {
+    return parents;
+  }
+
+  public Map<T, Integer> getRanks() {
+    return ranks;
   }
 }
