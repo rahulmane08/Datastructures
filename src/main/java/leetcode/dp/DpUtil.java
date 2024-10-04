@@ -63,11 +63,37 @@ public class DpUtil {
     return dp.get(currIndex);
   }
 
+  /**
+   * [1,2,3]
+   * @param nums
+   */
+  void subArraySums(int[] nums) {
+    int start = -1;
+    int end = -1;
+    int max = Integer.MIN_VALUE;
+    for(int i = 0; i < nums.length; i++) {
+      int sum = 0;
+      for (int j = i; j < nums.length; j++) {
+        sum += nums[j];
+        System.out.printf("[%s,%s] = %s%n", i, j, sum);
+        if (sum > max) {
+          max = sum;
+          start = i;
+          end = j;
+        }
+      }
+    }
+    System.out.printf("[%s,%s] , max = %s%n", start, end, max);
+  }
+
   public static void main(String[] args) {
     int[] nums = {1, 2, -3, 4};
     DpUtil util = new DpUtil();
     util.traverse(nums, "", 0);
     System.out.println(util.maxCount(nums, 0, new HashMap<>()));
     System.out.println(util.maxSum(nums, 0, new HashMap<>()));
+
+    nums = new int[] {1,2,3};
+    util.subArraySums(nums);
   }
 }
