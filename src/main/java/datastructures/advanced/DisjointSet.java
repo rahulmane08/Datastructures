@@ -12,6 +12,7 @@ import java.util.Map;
 public class DisjointSet<T> {
   private final Map<T, T> parents;
   private final Map<T, Integer> ranks;
+  private int size;
 
   public DisjointSet() {
     this.parents = new HashMap<>();
@@ -24,8 +25,11 @@ public class DisjointSet<T> {
    * @param vertex
    */
   public void makeSet(T vertex) {
-    parents.putIfAbsent(vertex, vertex);
-    ranks.putIfAbsent(vertex, 1);
+    if (!parents.containsKey(vertex)) {
+      parents.putIfAbsent(vertex, vertex);
+      ranks.putIfAbsent(vertex, 1);
+      this.size++;
+    }
   }
 
   /**
@@ -37,16 +41,21 @@ public class DisjointSet<T> {
    */
   public T findSet(T vertex) {
     if (!parents.containsKey(vertex)) {
-      return null;
+      makeSet(vertex);
+      return vertex;
     }
 
     if (vertex == parents.get(vertex)) {
       return vertex;
     }
 
-    T parent = findSet(parents.get(vertex));
-    parents.put(vertex, parent); // path compression.
-    return parent;
+    T currentParent = parents.get(vertex);
+    T newParent = findSet(currentParent);
+    if (currentParent != newParent) {
+      ranks.put(currentParent, 1); // path compressed.
+    }
+    parents.put(vertex, newParent); // path compression.
+    return newParent;
   }
 
   /**
@@ -76,6 +85,7 @@ public class DisjointSet<T> {
       ranks.put(parent2, rank2 + rank1);
       ranks.put(parent1, 1);
     }
+    this.size--;
   }
 
   public boolean contains(T elem) {
@@ -92,5 +102,9 @@ public class DisjointSet<T> {
 
   public Map<T, Integer> getRanks() {
     return ranks;
+  }
+
+  public int getSize() {
+    return size;
   }
 }
