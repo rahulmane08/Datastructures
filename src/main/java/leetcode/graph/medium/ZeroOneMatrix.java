@@ -1,52 +1,50 @@
 package leetcode.graph.medium;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
+/**
+ * Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+ * <p>
+ * The distance between two adjacent cells is 1.
+ */
 public class ZeroOneMatrix {
   int[][] moves = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
   public int[][] updateMatrix(int[][] mat) {
     int rows = mat.length;
     int cols = mat[0].length;
-    int[][] dp = new int[rows][cols];
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        if (mat[i][j] != 0) {
-          dp[i][j] = -1;
-        }
-      }
-    }
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        if (mat[i][j] == 1) {
-          dfs(mat, dp, i, j, rows, cols);
-        }
-      }
-    }
-    return dp;
-  }
+    int[][] result = new int[rows][cols];
+    boolean[][] visited = new boolean[rows][cols];
 
-  private int dfs(int[][] matrix, int[][] dp, int row, int col, int rows, int cols) {
-    if (dp[row][col] == 0) {
-      return 0;
+    Queue<int[]> bfs = new LinkedList<>();
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        if (mat[i][j] == 0) {
+          bfs.offer(new int[] {i, j, 0});
+          visited[i][j] = true;
+        }
+      }
     }
-    if (dp[row][col] == -1) {
-      dp[row][col] = -2; // ongoing dfs.
-      int distance = rows * cols + 1;
+
+    while (!bfs.isEmpty()) {
+      int[] curr = bfs.poll();
+      result[curr[0]][curr[1]] = curr[2];
       for (int[] move : moves) {
-        int nextRow = row + move[0];
-        int nextCol = col + move[1];
-        if (isValid(nextRow, nextCol, rows, cols) && dp[nextRow][nextCol] != -2) {
-          distance = Math.min(distance, dfs(matrix, dp, nextRow, nextCol, rows, cols));
+        int neighborX = curr[0] + move[0];
+        int neighborY = curr[1] + move[1];
+        if (isValid(mat, visited, neighborX, neighborY, rows, cols)) {
+          visited[neighborX][neighborY] = true;
+          bfs.offer(new int[] {neighborX, neighborY, curr[2] + 1});
         }
       }
-      dp[row][col] = 1 + distance;
     }
-    return dp[row][col];
+    return result;
   }
 
-  boolean isValid(int row, int col, int rows, int cols) {
-    return 0 <= row && row < rows && 0 <= col && col < cols;
+  boolean isValid(int[][] mat, boolean[][] visited, int row, int col, int rows, int cols) {
+    return 0 <= row && row < rows && 0 <= col && col < cols && mat[row][col] == 1 && visited[row][col] == false;
   }
 
   public static void main(String[] args) {
