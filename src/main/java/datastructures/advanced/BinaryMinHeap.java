@@ -10,7 +10,7 @@ import lombok.ToString;
 
 /**
  * Data structure to support following operations
- * * extracMin - O(logn)
+ * * extractMin - O(logn)
  * * add - O(logn)
  * * containsKey - O(1)
  * * decreaseKey - O(logn)
@@ -49,6 +49,9 @@ public class BinaryMinHeap<T> {
    * @param weight
    */
   public void add(T key, int weight) {
+    if (containsKey(key)) {
+      return;
+    }
     Node elem = new Node(key, weight);
     elements.add(elem); // add at the end.
     int position = size() - 1 != 0 ? size() - 1 : 0;
@@ -62,6 +65,9 @@ public class BinaryMinHeap<T> {
    * @param key
    */
   public void decreaseKey(T key, int decreaseBy) {
+    if (!containsKey(key)) {
+      return;
+    }
     int position = getPosition(key);
     if (position != -1) {
       Node<T> elem = elements.get(position);
@@ -115,6 +121,13 @@ public class BinaryMinHeap<T> {
 
   public boolean isEmpty() {
     return size() == 0;
+  }
+
+  public Integer getKeyWeight(T key) {
+    if (containsKey(key)) {
+      return elements.get(getPosition(key)).weight;
+    }
+    return null;
   }
 
   // Heapification functions.
