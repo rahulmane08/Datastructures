@@ -1,7 +1,5 @@
 package leetcode.graph.medium;
 
-import datastructures.advanced.DisjointSet;
-import datastructures.graph.mst.PrimMST;
 import java.util.List;
 import leetcode.graph.KruskalMST;
 
