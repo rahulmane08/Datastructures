@@ -13,7 +13,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 @Data
 public class Graph<T> {
-  private final boolean isDirected;
+  private final boolean directed;
   private List<Edge<T>> edges = new ArrayList<>();
   private Map<UUID, Vertex<T>> vertexesMap = new HashMap<>();
   private AtomicInteger vertexIndex = new AtomicInteger(0);
@@ -22,9 +22,14 @@ public class Graph<T> {
     this(false);
   }
 
-  public Graph(boolean isDirected) {
+  public Graph(boolean directed) {
     super();
-    this.isDirected = isDirected;
+    this.directed = directed;
+  }
+
+  public Graph(boolean directed, List<Edge<T>> edges) {
+    this.directed = directed;
+    this.edges = edges;
   }
 
   public void addEdge(UUID id1, UUID id2, int weight) {
@@ -34,7 +39,7 @@ public class Graph<T> {
       throw new IllegalArgumentException("vertex absent");
     }
 
-    Edge<T> edge = a.addAdjacentVertex(b, weight, this.isDirected);
+    Edge<T> edge = a.addAdjacentVertex(b, weight, this.directed);
     vertexesMap.put(a.getId(), a);
     vertexesMap.put(b.getId(), b);
     edges.add(edge);
@@ -47,7 +52,7 @@ public class Graph<T> {
 
     if (CollectionUtils.isNotEmpty(vertex.getEdges())) {
       boolean match = vertex.getEdges().stream().map(Edge::isDirected)
-          .allMatch(edgeDirection -> this.isDirected == edgeDirection);
+          .allMatch(edgeDirection -> this.directed == edgeDirection);
       if (!match) {
         throw new IllegalArgumentException("Graph Vertex direction mismatch");
       }
