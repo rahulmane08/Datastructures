@@ -43,7 +43,7 @@ class FixedWindowRateLimitingPolicy implements RateLimitingPolicy {
         rateLimiterConfig.compute(clientId, (c, window) -> window == null ? new LinkedList<>() : window);
 
     // remove all the expired windows from front of the queue.
-    while (!windows.isEmpty() && isInvalid(windows.peek())) {
+    while (!windows.isEmpty() && isExpired(windows.peek())) {
       windows.poll();
     }
 
@@ -67,7 +67,7 @@ class FixedWindowRateLimitingPolicy implements RateLimitingPolicy {
     Queue<FixedWindowRateLimitingPolicy.Window> windows =
         rateLimiterConfig.compute(clientId, (c, window) -> window == null ? new LinkedList<>() : window);
     int carryForwardCredits = 0;
-    while (!windows.isEmpty() && isInvalid(windows.peek())) {
+    while (!windows.isEmpty() && isExpired(windows.peek())) {
       // gather the ununsed counts from previous windows as credits.
       carryForwardCredits += windows.poll().getCount();
     }
@@ -92,7 +92,7 @@ class FixedWindowRateLimitingPolicy implements RateLimitingPolicy {
     return true;
   }
 
-  private boolean isInvalid(FixedWindowRateLimitingPolicy.Window window) {
+  private boolean isExpired(FixedWindowRateLimitingPolicy.Window window) {
     return System.currentTimeMillis() - MAX_EXPIRY_PER_WINDOW > window.getStartTime();
   }
 
