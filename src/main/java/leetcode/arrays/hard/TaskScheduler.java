@@ -54,32 +54,28 @@ public class TaskScheduler {
     }
     int currentTime = 0;
     while (!maxHeap.isEmpty() || !waitQ.isEmpty()) {
+      currentTime++;
       Task currentTask = null;
       if (!maxHeap.isEmpty()) {
         currentTask = maxHeap.poll();
       } else {
-        if (waitQ.peek().scheduleTime > currentTime) {
-          waitQ.offer(waitQ.poll());
-        } else {
-          currentTask = waitQ.poll();
-        }
+        currentTask = waitQ.poll();
       }
-
-      currentTime++;
-      if (currentTask != null) {
-        currentTask.scheduleTime = currentTime;
+      if (currentTask.scheduleTime <= currentTime) {
         if (--currentTask.freq != 0) {
-          currentTask.scheduleTime += n + 1;
+          currentTask.scheduleTime += currentTime + n;
           waitQ.offer(currentTask);
         }
+      } else {
+        waitQ.offer(currentTask);
       }
     }
-    return currentTime;
+    return currentTime - 1;
   }
 
   public static void main(String[] args) {
     TaskScheduler util = new TaskScheduler();
     char[] tasks = {'A', 'C', 'A', 'B', 'D', 'B'};
-    System.out.println(util.leastInterval(tasks, 3));
+    System.out.println(util.leastInterval(tasks, 5));
   }
 }
