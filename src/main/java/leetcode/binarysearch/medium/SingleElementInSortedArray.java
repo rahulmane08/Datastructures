@@ -7,7 +7,7 @@ public class SingleElementInSortedArray {
     // if we find an element whose second appearance is at a even index, it means theres a single element present before.
     // ignore the arrays that satisfy even-odd condition
     if (nums.length % 2 == 0) {
-      return -1;
+      return -1; // process only odd length arrays.
     }
     return findSingleElement(nums);
   }
@@ -30,11 +30,8 @@ public class SingleElementInSortedArray {
         return nums[mid];
       }
 
-      if (mid % 2 == 1) {
-
-      }
-
       if ((mid % 2 == 1 && nums[mid - 1] == nums[mid]) || (mid % 2 == 0 && nums[mid] == nums[mid + 1])) {
+        // this part of the array is clean, so move to the next half.
         low = mid + 1;
       } else {
         high = mid - 1;
