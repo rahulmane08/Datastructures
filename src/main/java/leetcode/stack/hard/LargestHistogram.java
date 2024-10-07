@@ -14,10 +14,12 @@ public class LargestHistogram {
       int span = 1;
       if (pse[i] != -1 && nse[i] != -1) {
         span = nse[i] - pse[i] - 1;
-      } else if (pse[i] != -1) {
-        span = i - pse[i];
+      } else if (pse[i] == -1 && nse[i] == -1) {
+        span = heights.length;
       } else if (nse[i] != -1) {
-        span = nse[i] - i;
+        span = heights.length - i;
+      } else {
+        span = i - pse[i];
       }
       int currentArea = span * heights[i];
       maxArea = Math.max(maxArea, currentArea);
@@ -53,5 +55,10 @@ public class LargestHistogram {
       s.push(i);
     }
     return pgse;
+  }
+
+  public static void main(String[] args) {
+    LargestHistogram util = new LargestHistogram();
+    System.out.println(util.largestRectangleArea(new int[] {2, 3}));
   }
 }
