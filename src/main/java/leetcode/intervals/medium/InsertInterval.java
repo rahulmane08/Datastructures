@@ -50,7 +50,7 @@ public class InsertInterval {
           result.add(curr);
           newInterval = null;
         } else {
-          //  merge Case4
+          //  merge Case4, dont insert yet as resulting interval may get merged with whats to follow.
           newInterval = new int[] {
               Math.min(curr[0], newInterval[0]),
               Math.max(curr[1], newInterval[1])
@@ -62,7 +62,7 @@ public class InsertInterval {
       }
     }
 
-    if (newInterval != null) {
+    if (newInterval != null) { // Case3
       result.add(newInterval);
     }
     return result.toArray(new int[0][]);

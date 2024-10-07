@@ -19,7 +19,7 @@ public class DjikstraShortestPath {
     WeightedGraph graph = new WeightedGraph(edges, false); // O(V+E)
 
     // Map that records the min distanceAndParent from the source.
-    // Initialize it as all vertexes lie at INF dist from source.
+    // Initialize it as all vertexes lie at INF dist from source and set the parent as -1.
     Map<Integer, int[]> distanceAndParent =
         graph.getVertexes().stream().collect(toMap(v -> v, d -> new int[] {INF, -1})); // O(V)
 

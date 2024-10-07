@@ -1,34 +1,85 @@
 package leetcode.arrays.hard;
 
-import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * https://leetcode.com/problems/task-scheduler/description/
  */
 public class TaskScheduler {
 
+  class Task {
+    Character id;
+    Integer freq;
+    Integer scheduleTime;
+  }
+
+  /**
+   * AAABBC
+   * A = 3
+   * B = 2
+   * C = 1
+   * <p>
+   * n = 5;
+   * <p>
+   * ct = 0
+   * A,
+   * A : 2,
+   *
+   * @param tasks
+   * @param n
+   * @return
+   */
   public int leastInterval(char[] tasks, int n) {
-    int[] frequencies = new int[26];
-    for (char task : tasks) {
-      frequencies[task - 'A']++;
+    if (n == 0) {
+      return tasks.length;
     }
-    Arrays.sort(frequencies);
-    int maxIndex = 0;
-    int startIndexForANewTask = 0;
-    for (int i = 25; i > -1; i--) {
-      if (frequencies[i] != 0) {
-        int frequency = frequencies[i] - 1;
-        int currentTaskMaxIndex = startIndexForANewTask + frequency * (n + 1);
-        maxIndex = Math.max(maxIndex, currentTaskMaxIndex);
-        startIndexForANewTask++;
+    Map<Character, Integer> frequencies = new HashMap<>();
+    for (char c : tasks) {
+      frequencies.compute(c, (task, freq) -> freq == null ? 1 : freq + 1);
+    }
+    Comparator<Task> comparator = Comparator.comparing((Task t) -> t.freq);
+    PriorityQueue<Task> maxHeap = new PriorityQueue<>(comparator.reversed());
+    Queue<Task> waitQ = new LinkedList<>();
+    for (Map.Entry<Character, Integer> entry : frequencies.entrySet()) {
+      Task task = new Task();
+      task.scheduleTime = 0;
+      task.freq = entry.getValue();
+      task.id = entry.getKey();
+      maxHeap.offer(task);
+    }
+    int currentTime = 0;
+    while (!maxHeap.isEmpty() || !waitQ.isEmpty()) {
+      Task currentTask = null;
+      if (!maxHeap.isEmpty()) {
+        currentTask = maxHeap.poll();
+      } else {
+        if (waitQ.peek().scheduleTime > currentTime) {
+          waitQ.offer(waitQ.poll());
+        } else {
+          currentTask = waitQ.poll();
+        }
+      }
+
+      currentTime++;
+      if (currentTask != null) {
+        currentTask.scheduleTime = currentTime;
+        if (--currentTask.freq != 0) {
+          currentTask.scheduleTime += n + 1;
+          waitQ.offer(currentTask);
+        }
       }
     }
-    return maxIndex + 1;
+    return currentTime;
   }
 
   public static void main(String[] args) {
     TaskScheduler util = new TaskScheduler();
     char[] tasks = {'A', 'C', 'A', 'B', 'D', 'B'};
-    System.out.println(util.leastInterval(tasks, 1));
+    System.out.println(util.leastInterval(tasks, 3));
   }
 }

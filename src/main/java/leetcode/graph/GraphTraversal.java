@@ -25,17 +25,18 @@ public class GraphTraversal {
   public static void dfs(Graph graph) {
     HashSet<Integer> visited = new HashSet<>();
     for (Integer vertex : graph.getVertexes()) {
-      dfs(graph, vertex, visited);
+      if (!visited.contains(vertex)) {
+        dfs(graph, vertex, visited);
+      }
     }
   }
 
   public static void dfs(Graph graph, Integer curr, HashSet<Integer> visited) {
-    if (visited.contains(curr)) {
-      return;
-    }
     visited.add(curr);
     for (Integer neighbor : graph.getNeighbors(curr)) {
-      dfs(graph, neighbor, visited);
+      if (!visited.contains(neighbor)) {
+        dfs(graph, neighbor, visited);
+      }
     }
   }
 
@@ -57,14 +58,13 @@ public class GraphTraversal {
   public static void bfs(Graph graph) {
     HashSet<Integer> visited = new HashSet<>();
     for (Integer vertex : graph.getVertexes()) {
-      bfs(graph, vertex, visited);
+      if (!visited.contains(vertex)) {
+        bfs(graph, vertex, visited);
+      }
     }
   }
 
   public static void bfs(Graph graph, Integer vertex, HashSet<Integer> visited) {
-    if (visited.contains(vertex)) {
-      return;
-    }
     Queue<Integer> bfs = new LinkedList<>();
     bfs.offer(vertex);
     visited.add(vertex);
