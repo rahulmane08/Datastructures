@@ -27,10 +27,10 @@ public class SearchInRotatedArray {
       return search(nums, 0, nums.length - 1, target);
     }
     int index = search(nums, 0, pivot - 1, target);
-    if (index == -1) {
-      index = search(nums, pivot, nums.length - 1, target);
+    if (index != -1) {
+      return index;
     }
-    return index;
+    return search(nums, pivot, nums.length - 1, target);
   }
 
   int search(int[] nums, int low, int high, int target) {
