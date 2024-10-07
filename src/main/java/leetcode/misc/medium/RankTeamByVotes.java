@@ -63,21 +63,22 @@ public class RankTeamByVotes {
 
   public String rankTeamsOptimized(String[] votes) {
     int ranks = votes[0].length();
-    int[][] voteTable = new int[26][ranks];
+    int[][] voteTable = new int[26][ranks + 1];
     for (String vote : votes) {
-      for (int i = 0; i < vote.length(); i++) {
+      for (int i = 1; i < vote.length(); i++) {
         char contender = vote.charAt(i);
+        voteTable[contender - 'A'][0] = contender;
         voteTable[contender - 'A'][i]++;
       }
     }
     Arrays.sort(voteTable, (votes1, votes2) -> {
-      for (int i = 0; i < ranks; i++) {
+      for (int i = 1; i < ranks; i++) {
         int compare = Integer.compare(votes2[i], votes1[1]);
         if (compare != 0) {
           return compare;
         }
       }
-      return 0;
+      return votes1[0] - votes2[0];
     });
     return "";
   }
@@ -111,7 +112,8 @@ public class RankTeamByVotes {
 
       return Character.compare(contender1, contender2);
     };
-    List<Map.Entry<Character, long[][]>> entries = votesByRankAndTimestamp.entrySet().stream().collect(Collectors.toList());
+    List<Map.Entry<Character, long[][]>> entries =
+        votesByRankAndTimestamp.entrySet().stream().collect(Collectors.toList());
     entries.sort(comparator);
     StringBuilder voteResult = new StringBuilder();
     for (Character c : entries.stream().map(Map.Entry::getKey).toList()) {

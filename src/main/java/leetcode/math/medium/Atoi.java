@@ -22,7 +22,7 @@ public class Atoi {
     int sign = 1;
     int result = 0;
     int i = 0;
-    for (; i < n && s.charAt(i) == ' '; i++) ; // skip
+    for (; i < n && s.charAt(i) == ' '; i++) ; // skip blanks
 
     if (i < n && s.charAt(i) == '+') {
       sign = 1;
