@@ -9,7 +9,8 @@ import java.util.Arrays;
  * <p>
  * values = [10, 5, 4, 8]
  * <p>
- * There are four ways of storing items in the knapsack, such that the combined weight of stored items is less than or equal to the knapsack’s capacity.
+ * There are four ways of storing items in the knapsack,
+ * such that the combined weight of stored items is less than or equal to the knapsack’s capacity.
  * <p>
  * Item of weight 1 and weight 2, with a total value of 15.
  * Item of weight 1 and weight 3, with a total value of 14.

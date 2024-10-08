@@ -7,11 +7,11 @@ import java.util.Map;
 
 /**
  * Find all paths the rat can use to exit the maze.
- *
+ * <p>
  * Time Complexity: O(4^(m*n)), because on every cell we have to try 3 different directions ,
  * as we will not check for the cell from which we have visited in the last move.
  * Auxiliary Space: O(m*n), Maximum Depth of the recursion tree(auxiliary space).
- *
+ * <p>
  * T(n) = 4 T(n-1) + 1
  * a = 4, b = 1.
  * here n = MxN
@@ -28,7 +28,7 @@ public class RatInMaze {
     moves.put("U", new int[] {-1, 0});
   }
 
-  public List<String> findAllPaths(int[][] maze, int start, int end) {
+  public List<String> findAllPaths(int[][] maze) {
     int rows = maze.length;
     int cols = maze[0].length;
     int[][] visited = new int[rows][cols];
@@ -68,6 +68,6 @@ public class RatInMaze {
         {0, 1, 1}
     };
     RatInMaze util = new RatInMaze();
-    System.out.println(util.findAllPaths(maze, 0, 0));
+    System.out.println(util.findAllPaths(maze));
   }
 }

@@ -1,6 +1,7 @@
 package leetcode.dp.medium;
 
 import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.min;
 
 import java.util.Arrays;
 
@@ -9,7 +10,7 @@ public class JumpGame2 {
     Integer[] dp = new Integer[nums.length];
     Arrays.fill(dp, -1);
     dp[nums.length - 1] = 0;
-    int minJumps = topDown(nums, 0, dp);
+    int minJumps = topDown1(nums, 0, dp);
     return minJumps == MAX_VALUE ? -1 : minJumps;
   }
 
@@ -57,8 +58,24 @@ public class JumpGame2 {
     return dp[index];
   }
 
+  private int topDown1(int[] nums, int index, Integer[] dp) {
+    if (index >= nums.length) {
+      return 0;
+    }
+    if (dp[index] == -1) {
+      dp[index] = MAX_VALUE;
+      for (int jumpBy = 1; jumpBy <= nums[index]; jumpBy++) {
+        int result = topDown1(nums, index + jumpBy, dp);
+        if (result != MAX_VALUE) {
+          dp[index] = min(dp[index], 1 + result);
+        }
+      }
+    }
+    return dp[index];
+  }
+
   public static void main(String[] args) {
     JumpGame2 util = new JumpGame2();
-    System.out.println(util.jump(new int[] {3, 2, 1, 0, 4}));
+    System.out.println(util.jump(new int[] {3, 1, 1, 0, 4}));
   }
 }

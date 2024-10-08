@@ -60,12 +60,14 @@ public class NQueens {
     }
 
     // horrizontal
+    // down
     for (int i = row; i < n; i++) {
       if (board[i][col] == 1) {
         return false;
       }
     }
 
+    // up
     for (int i = row; i > -1; i--) {
       if (board[i][col] == 1) {
         return false;
@@ -73,12 +75,14 @@ public class NQueens {
     }
 
     // vertical
+    // right
     for (int j = col; j < n; j++) {
       if (board[row][j] == 1) {
         return false;
       }
     }
 
+    // left
     for (int j = col; j > -1; j--) {
       if (board[row][j] == 1) {
         return false;
@@ -86,12 +90,14 @@ public class NQueens {
     }
 
     // forward diagonal
+    // down
     for (int i = row, j = col; i < n && j < n; i++, j++) {
       if (board[i][j] == 1) {
         return false;
       }
     }
 
+    // up
     for (int i = row, j = col; i > -1 && j > -1; i--, j--) {
       if (board[i][j] == 1) {
         return false;
@@ -99,12 +105,14 @@ public class NQueens {
     }
 
     // backward diagonal
+    // down
     for (int i = row, j = col; i < n && j > -1; i++, j--) {
       if (board[i][j] == 1) {
         return false;
       }
     }
 
+    // up
     for (int i = row, j = col; i > -1 && j < n; i--, j++) {
       if (board[i][j] == 1) {
         return false;

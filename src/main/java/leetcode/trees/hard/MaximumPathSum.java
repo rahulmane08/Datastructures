@@ -1,5 +1,6 @@
 package leetcode.trees.hard;
 
+import java.util.Arrays;
 import leetcode.trees.ArrayToTreeUtil;
 import leetcode.trees.TreeNode;
 
@@ -31,6 +32,10 @@ public class MaximumPathSum {
             Math.max(allPathSumIncludingRoot, Math.max(leftPathSumIncludingRoot, rightPathSumIncludingRoot))); // 42
     maxSum = Math.max(maxSum, currentMaxSum); // 42
     return Math.max(root.val, Math.max(leftPathSumIncludingRoot, rightPathSumIncludingRoot)); // 35
+  }
+
+  private int max(int... nums) {
+    return Arrays.stream(nums).max().getAsInt();
   }
 
   public static void main(String[] args) {

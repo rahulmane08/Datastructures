@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Random;
 import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -74,5 +75,7 @@ public class CheatSheet {
     String result = stack.stream().map(String::valueOf).collect(Collectors.joining());
     System.out.println(result);
     System.out.println(new ArrayList<>(stack));
+
+    System.out.println(1 + new Random().nextInt(100 - 1 + 1));
   }
 }
