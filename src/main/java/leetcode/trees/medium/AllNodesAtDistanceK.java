@@ -9,8 +9,8 @@ import leetcode.trees.ArrayToTreeUtil;
 import leetcode.trees.TreeNode;
 
 /**
- * 5
- * 4
+ *       5
+ *    4
  * 3  6
  * 1  2
  * 11   14

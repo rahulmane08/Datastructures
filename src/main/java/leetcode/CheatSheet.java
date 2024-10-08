@@ -1,5 +1,6 @@
 package leetcode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -72,5 +73,6 @@ public class CheatSheet {
     stack.push('C');
     String result = stack.stream().map(String::valueOf).collect(Collectors.joining());
     System.out.println(result);
+    System.out.println(new ArrayList<>(stack));
   }
 }
