@@ -18,8 +18,7 @@ public class LongestPalindromicNumber {
     String right = "";
     String middle = "";
     PriorityQueue<Character> singleElementsQ = new PriorityQueue<>(Comparator.reverseOrder());
-    Comparator<int[]> comparator = Comparator.comparingInt(a -> a[0]);
-    PriorityQueue<int[]> multiElementsQ = new PriorityQueue<>(comparator.reversed());
+    PriorityQueue<int[]> multiElementsQ = new PriorityQueue<>(Comparator.comparingInt((int[] a) -> a[0]).reversed());
     for (Map.Entry<Character, Integer> entry : frequencies.entrySet()) {
       int digit = entry.getKey() - '0';
       Integer freq = entry.getValue();

@@ -29,6 +29,7 @@ public class Graph {
 
   /**
    * Space Complexity = O(2E) , since for every edge we are storing the nodes twice.
+   *
    * @param edge
    */
   public void addEdge(int[] edge) {
@@ -90,7 +91,7 @@ public class Graph {
   }
 
   public Graph reverse() {
-    if (!isDirected()) {
+    if (!directed) {
       return this;
     }
     Graph graph = new Graph(true);

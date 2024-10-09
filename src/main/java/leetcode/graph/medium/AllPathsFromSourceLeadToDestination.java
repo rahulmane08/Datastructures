@@ -76,5 +76,7 @@ public class AllPathsFromSourceLeadToDestination {
     System.out.println(util.leadsToDestination(5, edges, 0, 3));
     edges = new int[][] {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {1, 4}, {4, 3}};
     System.out.println(util.leadsToDestination(6, edges, 0, 3));
+    edges = new int[][] {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {1, 2}};
+    System.out.println(util.leadsToDestination(5, edges, 0, 3));
   }
 }

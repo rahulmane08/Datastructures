@@ -114,7 +114,7 @@ public class CycleDetectionUtil {
           return true;
         }
       }
-      // no cycle found for current node, move it to black set.
+      // move to greySet indicating, end of DFS.
       moveSet(curr, greySet, blackSet);
       return false;
     }
