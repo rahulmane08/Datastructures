@@ -31,7 +31,7 @@ public class SingleElementInSortedArray {
       }
 
       if ((mid % 2 == 1 && nums[mid - 1] == nums[mid]) || (mid % 2 == 0 && nums[mid] == nums[mid + 1])) {
-        // this part of the array is clean, so move to the next half.
+        // low to mid array is clean, so move to the next half.
         low = mid + 1;
       } else {
         high = mid - 1;
