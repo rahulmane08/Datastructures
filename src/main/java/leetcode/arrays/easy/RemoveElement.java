@@ -5,24 +5,24 @@ public class RemoveElement {
     if (nums == null) {
       return -1;
     }
-    int i = 0;
-    int j = nums.length - 1;
-    while (i <= j) {
-      if (nums[i] != val) {
-        i++;
+    int start = 0;
+    int end = nums.length - 1;
+    while (start <= end) {
+      if (nums[start] != val) {
+        start++;
         continue;
       }
 
-      if (nums[j] == val) {
-        j--;
+      if (nums[end] == val) {
+        end--;
         continue;
       }
 
-      swap(nums, i, j);
-      i++;
-      j--;
+      swap(nums, start, end);
+      start++;
+      end--;
     }
-    return j + 1;
+    return end + 1;
   }
 
   void swap(int[] nums, int i, int j) {

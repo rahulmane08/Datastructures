@@ -6,6 +6,8 @@ import java.util.Arrays;
  * Check if the knight can cover all tiles on the board.
  *
  * https://leetcode.com/problems/the-knights-tour/description/
+ *
+ * Time complexity = O(M x N)
  */
 public class KnightsTour {
 

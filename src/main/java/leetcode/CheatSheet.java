@@ -76,6 +76,22 @@ public class CheatSheet {
     System.out.println(result);
     System.out.println(new ArrayList<>(stack));
 
+    // random int between range. = minVal + new Random().nextInt(maxVal - minVal + 1);
     System.out.println(1 + new Random().nextInt(100 - 1 + 1));
+
+    // Stack sum
+    Stack<Integer> numStack = new Stack<>();
+    for (int i = 0; i < 5; i++) {
+      numStack.push(i);
+    }
+    System.out.println(numStack.stream().mapToInt(i -> i).sum());
+
+    // 2d arrayfill
+    int[][] arr = new int[4][4];
+    for (int i = 0; i < arr.length; i++) {
+      Arrays.fill(arr[i], -1);
+    }
+
+    System.out.println(Arrays.deepToString(arr));
   }
 }
