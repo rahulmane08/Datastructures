@@ -37,7 +37,6 @@ package leetcode.binarysearch.easy;
 public class FindPivotIndex {
 
   public static void main(String[] args) {
-    Test t = new Test();
     FindPivotIndex util = new FindPivotIndex();
     System.out.println(util.pivotIndex(new int[] {1, 7, 3, 6, 5, 6}));
     System.out.println(util.pivotIndex(new int[] {1, 2, 3}));
@@ -66,9 +65,5 @@ public class FindPivotIndex {
     }
 
     return -1;
-  }
-
-  static class Test {
-
   }
 }

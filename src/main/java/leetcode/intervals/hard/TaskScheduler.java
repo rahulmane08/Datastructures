@@ -1,4 +1,4 @@
-package leetcode.arrays.hard;
+package leetcode.intervals.hard;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ public class TaskScheduler {
     int currentTime = 0;
     while (!maxHeap.isEmpty() || !waitQ.isEmpty()) {
       currentTime++;
-      Task currentTask = null;
+      Task currentTask;
       if (!maxHeap.isEmpty()) {
         currentTask = maxHeap.poll();
       } else {
