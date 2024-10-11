@@ -23,6 +23,11 @@ public class AllPathsFromSourceLeadToDestination {
 
   /**
    * 1-----> 2-----> 3*
+   *        3
+   *    /   |   \
+   * 1  --  2 --- 4
+   *        |
+   *        5
    *
    * @param graph
    * @param curr

@@ -21,7 +21,7 @@ public class ZeroOneMatrix {
     Queue<int[]> bfs = new LinkedList<>();
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
-        if (mat[i][j] == 0) {
+        if (mat[i][j] == 0) { // gather all 0's to the bfs, mark them visited so they never get picked up again.
           bfs.offer(new int[] {i, j, 0});
           visited[i][j] = true;
         }
@@ -35,6 +35,7 @@ public class ZeroOneMatrix {
         int neighborX = curr[0] + move[0];
         int neighborY = curr[1] + move[1];
         if (isValid(mat, visited, neighborX, neighborY, rows, cols)) {
+          // get the neighbor 1's
           visited[neighborX][neighborY] = true;
           bfs.offer(new int[] {neighborX, neighborY, curr[2] + 1});
         }
