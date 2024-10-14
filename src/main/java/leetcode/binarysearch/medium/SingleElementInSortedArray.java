@@ -1,6 +1,18 @@
 package leetcode.binarysearch.medium;
 
 public class SingleElementInSortedArray {
+  public static void main(String[] args) {
+    int[] nums = {1, 1, 2, 2, 3, 4, 4};
+    SingleElementInSortedArray util = new SingleElementInSortedArray();
+    System.out.println(util.singleNonDuplicate(nums));
+    nums = new int[] {1, 2, 2, 3, 3, 4, 4};
+    System.out.println(util.singleNonDuplicate(nums));
+    nums = new int[] {1, 1, 2, 2, 3, 3, 4};
+    System.out.println(util.singleNonDuplicate(nums));
+    nums = new int[] {1, 1, 2, 2, 3};
+    System.out.println(util.singleNonDuplicate(nums));
+  }
+
   public int singleNonDuplicate(int[] nums) {
     // all elements occur in pairs except 1 element, hence length of array should be odd.
     // if the single element is not present, then every element will appear at even and odd-th index.
@@ -38,17 +50,5 @@ public class SingleElementInSortedArray {
       }
     }
     return -1;
-  }
-
-  public static void main(String[] args) {
-    int[] nums = {1, 1, 2, 2, 3, 4, 4};
-    SingleElementInSortedArray util = new SingleElementInSortedArray();
-    System.out.println(util.singleNonDuplicate(nums));
-    nums = new int[] {1, 2, 2, 3, 3, 4, 4};
-    System.out.println(util.singleNonDuplicate(nums));
-    nums = new int[] {1, 1, 2, 2, 3, 3, 4};
-    System.out.println(util.singleNonDuplicate(nums));
-    nums = new int[] {1, 1, 2, 2, 3};
-    System.out.println(util.singleNonDuplicate(nums));
   }
 }

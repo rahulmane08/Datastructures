@@ -6,6 +6,55 @@ import java.util.Queue;
 public class NoOfIslands {
   int[][] moves = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
+  public static void main(String[] args) {
+    NoOfIslands util = new NoOfIslands();
+
+    char[][] grid = {
+        {'1', '1', '1', '1', '0'},
+        {'1', '1', '0', '1', '0'},
+        {'1', '1', '0', '0', '0'},
+        {'0', '0', '0', '0', '0'}
+    };
+
+    System.out.println(util.numIslandsDfs(grid));
+
+    grid = new char[][] {
+        {'1', '1', '1', '1', '0'},
+        {'1', '1', '0', '1', '0'},
+        {'1', '1', '0', '0', '0'},
+        {'0', '0', '0', '0', '0'}
+    };
+    System.out.println(util.numIslands(grid));
+
+    grid = new char[][] {
+        {'1', '1', '0', '0', '0'},
+        {'1', '1', '0', '0', '0'},
+        {'0', '0', '1', '0', '0'},
+        {'0', '0', '0', '1', '1'}
+    };
+    System.out.println(util.numIslandsDfs(grid));
+    grid = new char[][] {
+        {'1', '1', '0', '0', '0'},
+        {'1', '1', '0', '0', '0'},
+        {'0', '0', '1', '0', '0'},
+        {'0', '0', '0', '1', '1'}
+    };
+    System.out.println(util.numIslands(grid));
+
+    grid = new char[][] {
+        {'1', '1', '1'},
+        {'0', '1', '0'},
+        {'1', '1', '1'}
+    };
+    System.out.println(util.numIslandsDfs(grid));
+    grid = new char[][] {
+        {'1', '1', '1'},
+        {'0', '1', '0'},
+        {'1', '1', '1'}
+    };
+    System.out.println(util.numIslands(grid));
+  }
+
   public int numIslands(char[][] grid) {
     if (grid == null || grid.length == 0) {
       return 0;
@@ -64,54 +113,5 @@ public class NoOfIslands {
 
   boolean isValid(char[][] grid, int i, int j, int rows, int cols) {
     return i >= 0 && i < rows && j >= 0 && j < cols && grid[i][j] == '1';
-  }
-
-  public static void main(String[] args) {
-    NoOfIslands util = new NoOfIslands();
-
-    char[][] grid = {
-        {'1', '1', '1', '1', '0'},
-        {'1', '1', '0', '1', '0'},
-        {'1', '1', '0', '0', '0'},
-        {'0', '0', '0', '0', '0'}
-    };
-
-    System.out.println(util.numIslandsDfs(grid));
-
-    grid = new char[][] {
-        {'1', '1', '1', '1', '0'},
-        {'1', '1', '0', '1', '0'},
-        {'1', '1', '0', '0', '0'},
-        {'0', '0', '0', '0', '0'}
-    };
-    System.out.println(util.numIslands(grid));
-
-    grid = new char[][] {
-        {'1', '1', '0', '0', '0'},
-        {'1', '1', '0', '0', '0'},
-        {'0', '0', '1', '0', '0'},
-        {'0', '0', '0', '1', '1'}
-    };
-    System.out.println(util.numIslandsDfs(grid));
-    grid = new char[][] {
-        {'1', '1', '0', '0', '0'},
-        {'1', '1', '0', '0', '0'},
-        {'0', '0', '1', '0', '0'},
-        {'0', '0', '0', '1', '1'}
-    };
-    System.out.println(util.numIslands(grid));
-
-    grid = new char[][] {
-        {'1', '1', '1'},
-        {'0', '1', '0'},
-        {'1', '1', '1'}
-    };
-    System.out.println(util.numIslandsDfs(grid));
-    grid = new char[][] {
-        {'1', '1', '1'},
-        {'0', '1', '0'},
-        {'1', '1', '1'}
-    };
-    System.out.println(util.numIslands(grid));
   }
 }

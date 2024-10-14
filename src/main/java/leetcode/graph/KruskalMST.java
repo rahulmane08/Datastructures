@@ -7,6 +7,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public class KruskalMST {
+  public static void main(String[] args) {
+    int[][] edges = {{1, 2, 3}, {2, 3, 1}, {3, 4, 1}, {1, 4, 1}, {4, 5, 6}, {5, 6, 2}, {3, 5, 5}, {3, 6, 4}};
+    KruskalMST kruskalMST = new KruskalMST();
+    List<int[]> mst = kruskalMST.mst(edges);
+    for (int[] edge : mst) {
+      System.out.println(Arrays.toString(edge));
+    }
+  }
+
   public List<int[]> mst(int[][] edges) {
     DisjointSet<Integer> disjointSet = new DisjointSet();
     // sort the edges : E * log(E)
@@ -27,14 +36,5 @@ public class KruskalMST {
       minimumSpanningPath.add(edge);
     }
     return minimumSpanningPath;
-  }
-
-  public static void main(String[] args) {
-    int[][] edges = {{1, 2, 3}, {2, 3, 1}, {3, 4, 1}, {1, 4, 1}, {4, 5, 6}, {5, 6, 2}, {3, 5, 5}, {3, 6, 4}};
-    KruskalMST kruskalMST = new KruskalMST();
-    List<int[]> mst = kruskalMST.mst(edges);
-    for (int[] edge : mst) {
-      System.out.println(Arrays.toString(edge));
-    }
   }
 }

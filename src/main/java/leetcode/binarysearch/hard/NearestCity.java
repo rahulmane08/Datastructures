@@ -41,13 +41,6 @@ import lombok.Data;
  */
 public class NearestCity {
 
-  @Data
-  @AllArgsConstructor
-  class City {
-    String city;
-    int rowMajor;
-  }
-
   public List<String> closestStraightCity1(String[] cities, int[] x, int[] y, String[] queries) {
     int n = x.length;
     City[] allCities = new City[n];
@@ -173,5 +166,12 @@ public class NearestCity {
     } else {
       return search(list, start, mid - 1, target);
     }
+  }
+
+  @Data
+  @AllArgsConstructor
+  class City {
+    String city;
+    int rowMajor;
   }
 }

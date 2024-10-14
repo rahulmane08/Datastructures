@@ -8,6 +8,14 @@ import java.util.Map;
 
 public class PrintStringWithNonRepeatingChars {
 
+  public static void main(String[] args) {
+    PrintStringWithNonRepeatingChars util = new PrintStringWithNonRepeatingChars();
+    System.out.println(util.printStringWithNonRepeatingChars("aaabc"));
+    System.out.println(util.printStringWithNonRepeatingChars("aaabb"));
+    System.out.println(util.printStringWithNonRepeatingChars("aa"));
+    System.out.println(util.printStringWithNonRepeatingChars("aaaabc"));
+  }
+
   /**
    * Input: aaabc
    * Output: abaca
@@ -53,13 +61,5 @@ public class PrintStringWithNonRepeatingChars {
       return "Not possible";
     }
     return output;
-  }
-
-  public static void main(String[] args) {
-    PrintStringWithNonRepeatingChars util = new PrintStringWithNonRepeatingChars();
-    System.out.println(util.printStringWithNonRepeatingChars("aaabc"));
-    System.out.println(util.printStringWithNonRepeatingChars("aaabb"));
-    System.out.println(util.printStringWithNonRepeatingChars("aa"));
-    System.out.println(util.printStringWithNonRepeatingChars("aaaabc"));
   }
 }

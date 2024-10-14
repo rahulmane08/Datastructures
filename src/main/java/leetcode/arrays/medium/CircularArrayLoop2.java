@@ -3,6 +3,11 @@ package leetcode.arrays.medium;
 import java.util.HashSet;
 
 public class CircularArrayLoop2 {
+  public static void main(String[] args) {
+    CircularArrayLoop2 util = new CircularArrayLoop2();
+    System.out.println(util.circularArrayLoop(new int[] {-1, -2, -3, -4, -5, 6}));
+  }
+
   public boolean circularArrayLoop(int[] nums) {
     int n = nums.length;
     int slow = 0;
@@ -52,10 +57,5 @@ public class CircularArrayLoop2 {
       return -1; // self cycle.
     }
     return nextIndex;
-  }
-
-  public static void main(String[] args) {
-    CircularArrayLoop2 util = new CircularArrayLoop2();
-    System.out.println(util.circularArrayLoop(new int[] {-1, -2, -3, -4, -5, 6}));
   }
 }

@@ -43,7 +43,7 @@ public class AddBinary {
       carry = carry / 2;
     }
 
-    return carry == 1 ? carry + result.toString() : result.toString();
+    return carry == 1 ? carry + result : result;
   }
 
   private int toDigit(char x) {

@@ -7,11 +7,17 @@ public class LongestIncreasingPathInMatrix {
 
   int[][] moves = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
+  public static void main(String[] args) {
+    int[][] matrix = {{9, 9, 4}, {6, 6, 8}, {2, 1, 1}};
+    LongestIncreasingPathInMatrix util = new LongestIncreasingPathInMatrix();
+    System.out.println(util.longestIncreasingPath(matrix));
+  }
+
   public int longestIncreasingPath(int[][] matrix) {
     int length = -1;
     int rows = matrix.length;
     int cols = matrix[0].length;
-    int [][] dp = new int[rows][cols];
+    int[][] dp = new int[rows][cols];
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         int vertexLength = compute(matrix, dp, i, j, rows, cols);
@@ -40,11 +46,5 @@ public class LongestIncreasingPathInMatrix {
 
   boolean isValid(int[][] matrix, int curr, int row, int col, int rows, int cols) {
     return 0 <= row && row < rows && 0 <= col && col < cols && matrix[row][col] > curr;
-  }
-
-  public static void main(String[] args) {
-    int[][] matrix = {{9, 9, 4}, {6, 6, 8}, {2, 1, 1}};
-    LongestIncreasingPathInMatrix util = new LongestIncreasingPathInMatrix();
-    System.out.println(util.longestIncreasingPath(matrix));
   }
 }

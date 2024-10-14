@@ -5,6 +5,11 @@ import java.util.Map;
 
 public class MaximumSumIncreasingSubsequence {
 
+  public static void main(String[] args) {
+    MaximumSumIncreasingSubsequence util = new MaximumSumIncreasingSubsequence();
+    System.out.println(util.maxSum(new int[] {4, 1, 2, 10}));
+  }
+
   public int maxSum(int[] nums) {
     return solveTopDown(nums, -1, 0, 0, new HashMap<>());
   }
@@ -23,10 +28,5 @@ public class MaximumSumIncreasingSubsequence {
       dp.put(key, Math.max(sum1, sum2));
     }
     return dp.get(key);
-  }
-
-  public static void main(String[] args) {
-    MaximumSumIncreasingSubsequence util = new MaximumSumIncreasingSubsequence();
-    System.out.println(util.maxSum(new int[] {4, 1, 2, 10}));
   }
 }

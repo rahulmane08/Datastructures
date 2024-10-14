@@ -5,6 +5,10 @@ import java.util.Queue;
 import leetcode.trees.TreeNode;
 
 public class LevelWithMaxSum {
+  public static void main(String[] args) {
+
+  }
+
   public int maxLevelSum(TreeNode root) {
     if (root == null) {
       return -1;
@@ -43,9 +47,5 @@ public class LevelWithMaxSum {
       }
     }
     return maxLevel;
-  }
-
-  public static void main(String[] args) {
-
   }
 }

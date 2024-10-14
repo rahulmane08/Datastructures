@@ -10,6 +10,16 @@ import java.util.TreeSet;
 
 public class AccountsMerge {
 
+  public static void main(String[] args) {
+    List<List<String>> accounts = asList(
+        asList("John", "johnsmith@mail.com", "john_newyork@mail.com"),
+        asList("John", "johnsmith@mail.com", "john00@mail.com"),
+        asList("Mary", "mary@mail.com"),
+        asList("John", "johnnybravo@mail.com"));
+    AccountsMerge util = new AccountsMerge();
+    System.out.println(util.accountsMerge(accounts));
+  }
+
   /**
    * 0 x -> (A, B)
    * 1 x -> (C, D)
@@ -49,15 +59,5 @@ public class AccountsMerge {
       result.add(mergedDetails);
     }
     return result;
-  }
-
-  public static void main(String[] args) {
-    List<List<String>> accounts = asList(
-        asList("John", "johnsmith@mail.com", "john_newyork@mail.com"),
-        asList("John", "johnsmith@mail.com", "john00@mail.com"),
-        asList("Mary", "mary@mail.com"),
-        asList("John", "johnnybravo@mail.com"));
-    AccountsMerge util = new AccountsMerge();
-    System.out.println(util.accountsMerge(accounts));
   }
 }

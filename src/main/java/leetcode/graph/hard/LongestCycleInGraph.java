@@ -13,6 +13,20 @@ import java.util.Map;
  * [1, 2, -1] -> 0
  */
 public class LongestCycleInGraph {
+  public static void main(String[] args) {
+    LongestCycleInGraph util = new LongestCycleInGraph();
+    System.out.println(util.longestCycle(new int[] {1, 2, 0}));
+    System.out.println(util.longestCycle(new int[] {1, 2, -1}));
+    System.out.println(util.longestCycle(new int[] {3, 3, 4, 2, 5, 3}));
+    /**
+     *  1-----|
+     *       |
+     *  0 -> 3 - > 2
+     *       |    |
+     *       5 <- 4
+     */
+  }
+
   public int longestCycle(int[] edges) {
     Map<Integer, List<Integer>> graph = new HashMap<>();
     for (int i = 0; i < edges.length; i++) {
@@ -35,7 +49,6 @@ public class LongestCycleInGraph {
     return max[0];
   }
 
-
   private void dfsCycleLength(Map<Integer, List<Integer>> graph,
                               HashSet<Integer> visited, int vertex,
                               Map<Integer, Integer> visitTimes,
@@ -55,19 +68,5 @@ public class LongestCycleInGraph {
       }
     }
     max[0] = Math.max(max[0], cycleLengths);
-  }
-
-  public static void main(String[] args) {
-    LongestCycleInGraph util = new LongestCycleInGraph();
-    System.out.println(util.longestCycle(new int[] {1, 2, 0}));
-    System.out.println(util.longestCycle(new int[] {1, 2, -1}));
-    System.out.println(util.longestCycle(new int[] {3, 3, 4, 2, 5, 3}));
-    /**
-     *  1-----|
-     *       |
-     *  0 -> 3 - > 2
-     *       |    |
-     *       5 <- 4
-     */
   }
 }

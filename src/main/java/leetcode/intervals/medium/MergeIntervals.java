@@ -17,6 +17,7 @@ public class MergeIntervals {
   /**
    * T(n) = O(n)
    * S(n) = O(n)
+   *
    * @param intervals
    * @return
    */

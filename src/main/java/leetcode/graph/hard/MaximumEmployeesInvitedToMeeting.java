@@ -10,6 +10,12 @@ import leetcode.graph.KosarajuSCC;
  * https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/description/?envType=problem-list-v2&envId=topological-sort&difficulty=HARD
  */
 public class MaximumEmployeesInvitedToMeeting {
+  public static void main(String[] args) {
+    int[] favorite = new int[] {2, 2, 1, 2};
+    MaximumEmployeesInvitedToMeeting util = new MaximumEmployeesInvitedToMeeting();
+    System.out.println(util.maximumInvitations(favorite));
+  }
+
   public int maximumInvitations(int[] favorite) {
     Graph graph = new Graph(true);
     for (int i = 0; i < favorite.length; i++) {
@@ -20,11 +26,5 @@ public class MaximumEmployeesInvitedToMeeting {
     Integer sccWithMaxLength =
         allStronglyConnectedComponents.stream().map(Stack::size).max(Comparator.naturalOrder()).get();
     return sccWithMaxLength + Math.min(graph.size() - sccWithMaxLength, sccWithMaxLength / 2);
-  }
-
-  public static void main(String[] args) {
-    int[] favorite = new int[] {2, 2, 1, 2};
-    MaximumEmployeesInvitedToMeeting util = new MaximumEmployeesInvitedToMeeting();
-    System.out.println(util.maximumInvitations(favorite));
   }
 }

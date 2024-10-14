@@ -4,6 +4,12 @@ package leetcode.binarysearch.easy;
  * https://leetcode.com/problems/search-insert-position/description/
  */
 public class SearchInsertPosition {
+  public static void main(String[] args) {
+    SearchInsertPosition util = new SearchInsertPosition();
+    int[] nums = {1, 2, 5, 7, 10};
+    System.out.println(util.searchInsert(nums, 100));
+  }
+
   public int searchInsert(int[] nums, int target) {
     return searchInsert(nums, target, 0, nums.length - 1);
   }
@@ -46,11 +52,5 @@ public class SearchInsertPosition {
       }
     }
     return low + 1;
-  }
-
-  public static void main(String[] args) {
-    SearchInsertPosition util = new SearchInsertPosition();
-    int[] nums = {1, 2, 5, 7, 10};
-    System.out.println(util.searchInsert(nums, 100));
   }
 }

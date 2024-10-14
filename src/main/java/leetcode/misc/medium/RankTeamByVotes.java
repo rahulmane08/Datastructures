@@ -17,6 +17,18 @@ import java.util.stream.Collectors;
  */
 public class RankTeamByVotes {
 
+  public static void main(String[] args) {
+    RankTeamByVotes util = new RankTeamByVotes();
+    String[] votes = new String[] {"ABC", "BAC", "ABC", "BAC", "CAB"};
+    System.out.println(util.rankTeams(votes));
+    votes = new String[] {"ABC", "BAC", "ABC", "BAC", "CBA"};
+    System.out.println(util.rankTeams(votes));
+    votes = new String[] {"ABC", "BAC", "BAC", "BAC", "CAB"};
+    System.out.println(util.rankTeams(votes));
+    votes = new String[] {"ABC", "BAC", "BAC", "ABC"};
+    System.out.println(util.rankBasedOnFirstArrival(votes));
+  }
+
   /**
    * Character -> rank -> votes
    *
@@ -120,17 +132,5 @@ public class RankTeamByVotes {
       voteResult.append(c);
     }
     return voteResult.toString();
-  }
-
-  public static void main(String[] args) {
-    RankTeamByVotes util = new RankTeamByVotes();
-    String[] votes = new String[] {"ABC", "BAC", "ABC", "BAC", "CAB"};
-    System.out.println(util.rankTeams(votes));
-    votes = new String[] {"ABC", "BAC", "ABC", "BAC", "CBA"};
-    System.out.println(util.rankTeams(votes));
-    votes = new String[] {"ABC", "BAC", "BAC", "BAC", "CAB"};
-    System.out.println(util.rankTeams(votes));
-    votes = new String[] {"ABC", "BAC", "BAC", "ABC"};
-    System.out.println(util.rankBasedOnFirstArrival(votes));
   }
 }

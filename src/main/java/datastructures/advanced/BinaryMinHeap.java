@@ -21,16 +21,27 @@ import lombok.ToString;
 
 public class BinaryMinHeap<T> {
 
-  @Data
-  @AllArgsConstructor
-  @ToString
-  private class Node<T> {
-    T key;
-    int weight;
-  }
-
   private final List<Node<T>> elements = new ArrayList<>();
   private final Map<T, Integer> positions = new HashMap<>();
+
+  public static void main(String[] args) {
+    BinaryMinHeap heap = new BinaryMinHeap();
+    System.out.println(heap);
+    heap.add("A", 10);
+    System.out.println(heap);
+    heap.add("B", 2);
+    System.out.println(heap);
+    System.out.println("extractMin = " + heap.extractMin());
+    System.out.println(heap);
+    heap.add("C", 2);
+    System.out.println(heap);
+    heap.decreaseKey("A", 9);
+    System.out.println(heap);
+    System.out.println("extractMin = " + heap.extractMin());
+    System.out.println(heap);
+    System.out.println("extractMin = " + heap.extractMin());
+    System.out.println(heap);
+  }
 
   /**
    * T(n) = O(1)
@@ -190,22 +201,11 @@ public class BinaryMinHeap<T> {
     return String.format("size = %s, min = %s, positions = %s", size(), min(), positions);
   }
 
-  public static void main(String[] args) {
-    BinaryMinHeap heap = new BinaryMinHeap();
-    System.out.println(heap);
-    heap.add("A", 10);
-    System.out.println(heap);
-    heap.add("B", 2);
-    System.out.println(heap);
-    System.out.println("extractMin = " + heap.extractMin());
-    System.out.println(heap);
-    heap.add("C", 2);
-    System.out.println(heap);
-    heap.decreaseKey("A", 9);
-    System.out.println(heap);
-    System.out.println("extractMin = " + heap.extractMin());
-    System.out.println(heap);
-    System.out.println("extractMin = " + heap.extractMin());
-    System.out.println(heap);
+  @Data
+  @AllArgsConstructor
+  @ToString
+  private class Node<T> {
+    T key;
+    int weight;
   }
 }

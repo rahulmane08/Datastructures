@@ -1,6 +1,12 @@
 package leetcode.arrays.medium;
 
 public class SortColors {
+  public static void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+
   public void sortColors(int[] nums) {
     int p0 = 0;
     int p2 = nums.length - 1;
@@ -15,11 +21,5 @@ public class SortColors {
         curr++;
       }
     }
-  }
-
-  public static void swap(int[] arr, int i, int j) {
-    int temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
   }
 }

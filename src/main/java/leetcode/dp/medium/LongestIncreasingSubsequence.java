@@ -7,6 +7,12 @@ import java.util.Map;
  */
 public class LongestIncreasingSubsequence {
 
+  public static void main(String[] args) {
+    LongestIncreasingSubsequence lis = new LongestIncreasingSubsequence();
+    int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+    System.out.println(lis.lengthOfLIS(nums));
+  }
+
   public int lengthOfLIS(int[] nums) {
     return solveBottomUp(nums);
   }
@@ -51,11 +57,5 @@ public class LongestIncreasingSubsequence {
       max = Math.max(max, dp[i]);
     }
     return max;
-  }
-
-  public static void main(String[] args) {
-    LongestIncreasingSubsequence lis = new LongestIncreasingSubsequence();
-    int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
-    System.out.println(lis.lengthOfLIS(nums));
   }
 }

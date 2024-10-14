@@ -7,6 +7,14 @@ import datastructures.advanced.DisjointSet;
  * 0 <= xi, yi <= 104
  */
 public class MostStonesRemovedWithSameRowOrColumn {
+  public static void main(String[] args) {
+    int[][] stones = {{0, 0}, {0, 1}, {1, 0}, {1, 2}, {2, 1}, {2, 2}};
+    MostStonesRemovedWithSameRowOrColumn util = new MostStonesRemovedWithSameRowOrColumn();
+    System.out.println(util.removeStones(stones));
+    stones = new int[][] {{0, 0}, {0, 2}, {1, 1}, {2, 0}, {2, 2}};
+    System.out.println(util.removeStones(stones));
+  }
+
   public int removeStones(int[][] stones) {
     int totalStones = stones.length;
     if (totalStones == 1) {
@@ -23,13 +31,5 @@ public class MostStonesRemovedWithSameRowOrColumn {
       set.union(x, y);
     }
     return totalStones - set.getSize();
-  }
-
-  public static void main(String[] args) {
-    int[][] stones = {{0, 0}, {0, 1}, {1, 0}, {1, 2}, {2, 1}, {2, 2}};
-    MostStonesRemovedWithSameRowOrColumn util = new MostStonesRemovedWithSameRowOrColumn();
-    System.out.println(util.removeStones(stones));
-    stones = new int[][] {{0, 0}, {0, 2}, {1, 1}, {2, 0}, {2, 2}};
-    System.out.println(util.removeStones(stones));
   }
 }

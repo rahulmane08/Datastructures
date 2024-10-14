@@ -1,6 +1,11 @@
 package leetcode.arrays.hard;
 
 public class TrappingRainWater {
+  public static void main(String[] args) {
+    TrappingRainWater util = new TrappingRainWater();
+    System.out.println(util.trap(new int[] {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
+  }
+
   public int trap(int[] arr) {
     if (arr == null) {
       return 0;
@@ -25,10 +30,5 @@ public class TrappingRainWater {
       totalCapacity += (maxWaterCapacity[i] - arr[i]);
     }
     return totalCapacity;
-  }
-
-  public static void main(String[] args) {
-    TrappingRainWater util = new TrappingRainWater();
-    System.out.println(util.trap(new int[] {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
   }
 }

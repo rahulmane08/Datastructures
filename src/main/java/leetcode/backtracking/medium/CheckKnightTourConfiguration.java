@@ -4,7 +4,13 @@ package leetcode.backtracking.medium;
  * https://leetcode.com/problems/check-knight-tour-configuration/description/
  */
 public class CheckKnightTourConfiguration {
-  private int[][] moves = {{1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}};
+  private final int[][] moves = {{1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}};
+
+  public static void main(String[] args) {
+    int[][] grid = new int[][] {{0, 3, 6}, {5, 8, 1}, {2, 7, 4}};
+    CheckKnightTourConfiguration util = new CheckKnightTourConfiguration();
+    System.out.println(util.checkValidGrid(grid));
+  }
 
   public boolean checkValidGrid(int[][] grid) {
     int rows = grid.length;
@@ -41,11 +47,5 @@ public class CheckKnightTourConfiguration {
 
   private boolean isValid(int[][] grid, int row, int col, int rows, int cols, int moveNumber) {
     return row >= 0 && row < rows && col >= 0 && col < cols && grid[row][col] == moveNumber;
-  }
-
-  public static void main(String[] args) {
-    int[][] grid = new int[][] {{0, 3, 6}, {5, 8, 1}, {2, 7, 4}};
-    CheckKnightTourConfiguration util = new CheckKnightTourConfiguration();
-    System.out.println(util.checkValidGrid(grid));
   }
 }

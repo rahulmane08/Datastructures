@@ -1,10 +1,14 @@
 package leetcode.backtracking.medium;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class LetterTilePossibilities1 {
+  public static void main(String[] args) {
+    LetterTilePossibilities1 util = new LetterTilePossibilities1();
+    System.out.println(util.numTilePossibilities("AAB"));
+  }
+
   public int numTilePossibilities(String tiles) {
     Set<String> set = new LinkedHashSet<>();
     boolean[] vis = new boolean[tiles.length()];
@@ -22,10 +26,5 @@ public class LetterTilePossibilities1 {
         vis[i] = false;
       }
     }
-  }
-
-  public static void main(String[] args) {
-    LetterTilePossibilities1 util = new LetterTilePossibilities1();
-    System.out.println(util.numTilePossibilities("AAB"));;
   }
 }

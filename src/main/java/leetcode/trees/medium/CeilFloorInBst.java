@@ -9,6 +9,25 @@ import leetcode.trees.TreeNode;
  * https://leetcode.com/problems/closest-nodes-queries-in-a-binary-search-tree/description/
  */
 public class CeilFloorInBst {
+  public static void main(String[] args) {
+    TreeNode root = new TreeNode(7);
+    TreeNode _4 = new TreeNode(4);
+    TreeNode _10 = new TreeNode(10);
+    root.left = _4;
+    root.right = _10;
+    TreeNode _2 = new TreeNode(2);
+    TreeNode _6 = new TreeNode(6);
+    _4.left = _2;
+    _4.right = _6;
+    TreeNode _9 = new TreeNode(9);
+    TreeNode _11 = new TreeNode(11);
+    _10.left = _9;
+    _10.right = _11;
+
+    CeilFloorInBst util = new CeilFloorInBst();
+    System.out.println(util.closestNodes(root, Arrays.asList(3, 6, 8, 12)));
+  }
+
   public List<List<Integer>> closestNodes(TreeNode root, List<Integer> queries) {
     List<List<Integer>> result = new ArrayList<>();
     for (Integer x : queries) {
@@ -75,24 +94,5 @@ public class CeilFloorInBst {
       ceil = root.val;
     }
     return ceil;
-  }
-
-  public static void main(String[] args) {
-    TreeNode root = new TreeNode(7);
-    TreeNode _4 = new TreeNode(4);
-    TreeNode _10 = new TreeNode(10);
-    root.left = _4;
-    root.right = _10;
-    TreeNode _2 = new TreeNode(2);
-    TreeNode _6 = new TreeNode(6);
-    _4.left = _2;
-    _4.right = _6;
-    TreeNode _9 = new TreeNode(9);
-    TreeNode _11 = new TreeNode(11);
-    _10.left = _9;
-    _10.right = _11;
-
-    CeilFloorInBst util = new CeilFloorInBst();
-    System.out.println(util.closestNodes(root, Arrays.asList(3, 6, 8, 12)));
   }
 }

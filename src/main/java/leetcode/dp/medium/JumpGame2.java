@@ -6,6 +6,11 @@ import static java.lang.Integer.min;
 import java.util.Arrays;
 
 public class JumpGame2 {
+  public static void main(String[] args) {
+    JumpGame2 util = new JumpGame2();
+    System.out.println(util.jump(new int[] {3, 1, 1, 0, 4}));
+  }
+
   public int jump(int[] nums) {
     Integer[] dp = new Integer[nums.length];
     Arrays.fill(dp, -1);
@@ -72,10 +77,5 @@ public class JumpGame2 {
       }
     }
     return dp[index];
-  }
-
-  public static void main(String[] args) {
-    JumpGame2 util = new JumpGame2();
-    System.out.println(util.jump(new int[] {3, 1, 1, 0, 4}));
   }
 }

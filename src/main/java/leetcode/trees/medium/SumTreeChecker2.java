@@ -4,11 +4,11 @@ import datastructures.tree.Node;
 import datastructures.tree.TreeUtils;
 
 /**
- *        10
- *     4      6
- *   1   3   2   4
- *
- *   Each non leaf node is sum of immediate children.
+ * 10
+ * 4      6
+ * 1   3   2   4
+ * <p>
+ * Each non leaf node is sum of immediate children.
  */
 public class SumTreeChecker2 {
   private boolean check = true;

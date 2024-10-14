@@ -16,12 +16,20 @@ package leetcode.greedy.medium;
  */
 public class GasStation {
 
+  public static void main(String[] args) {
+    int[] gas = {1, 2, 3, 4, 5};
+    int[] cost = {3, 4, 5, 1, 1};
+    GasStation util = new GasStation();
+    System.out.println(util.canCompleteCircuit(gas, cost));
+  }
+
   /**
    * gas = {1, 2, 3, 4, 5}
    * cost= {3, 4, 5, 1, 2}
-   *
+   * <p>
    * T(n) = n
    * S(n) = 1
+   *
    * @param gas
    * @param cost
    * @return
@@ -40,12 +48,5 @@ public class GasStation {
       }
     }
     return totalTripCost < 0 ? -1 : start;
-  }
-
-  public static void main(String[] args) {
-    int[] gas = {1, 2, 3, 4, 5};
-    int[] cost = {3, 4, 5, 1, 1};
-    GasStation util = new GasStation();
-    System.out.println(util.canCompleteCircuit(gas, cost));
   }
 }

@@ -19,13 +19,23 @@ import java.util.Map;
  */
 public class RatInMaze {
 
-  private Map<String, int[]> moves = new HashMap<>();
+  private final Map<String, int[]> moves = new HashMap<>();
 
   public RatInMaze() {
     moves.put("R", new int[] {0, 1});
     moves.put("L", new int[] {0, -1});
     moves.put("D", new int[] {1, 0});
     moves.put("U", new int[] {-1, 0});
+  }
+
+  public static void main(String[] args) {
+    int[][] maze = {
+        {1, 0, 0},
+        {1, 1, 1},
+        {0, 1, 1}
+    };
+    RatInMaze util = new RatInMaze();
+    System.out.println(util.findAllPaths(maze));
   }
 
   public List<String> findAllPaths(int[][] maze) {
@@ -59,15 +69,5 @@ public class RatInMaze {
 
   private boolean isValid(int[][] maze, int row, int col, int rows, int cols, int[][] visited) {
     return row >= 0 && row != rows && col >= 0 && col != cols && maze[row][col] == 1 && visited[row][col] != 1;
-  }
-
-  public static void main(String[] args) {
-    int[][] maze = {
-        {1, 0, 0},
-        {1, 1, 1},
-        {0, 1, 1}
-    };
-    RatInMaze util = new RatInMaze();
-    System.out.println(util.findAllPaths(maze));
   }
 }

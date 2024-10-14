@@ -12,6 +12,12 @@ import java.util.Queue;
 public class ZeroOneMatrix {
   int[][] moves = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
+  public static void main(String[] args) {
+    int[][] matrix = {{0, 0, 0}, {0, 1, 0}, {1, 1, 1}, {1, 1, 1}};
+    ZeroOneMatrix util = new ZeroOneMatrix();
+    System.out.println(Arrays.deepToString(util.updateMatrix(matrix)));
+  }
+
   public int[][] updateMatrix(int[][] mat) {
     int rows = mat.length;
     int cols = mat[0].length;
@@ -45,12 +51,6 @@ public class ZeroOneMatrix {
   }
 
   boolean isValid(int[][] mat, boolean[][] visited, int row, int col, int rows, int cols) {
-    return 0 <= row && row < rows && 0 <= col && col < cols && mat[row][col] == 1 && visited[row][col] == false;
-  }
-
-  public static void main(String[] args) {
-    int[][] matrix = {{0, 0, 0}, {0, 1, 0}, {1, 1, 1}, {1, 1, 1}};
-    ZeroOneMatrix util = new ZeroOneMatrix();
-    System.out.println(Arrays.deepToString(util.updateMatrix(matrix)));
+    return 0 <= row && row < rows && 0 <= col && col < cols && mat[row][col] == 1 && !visited[row][col];
   }
 }

@@ -8,6 +8,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FindKClosestElementsInSortedArray {
+  public static void main(String[] args) {
+    int[] arr = {1, 2, 6, 7, 8};
+    FindKClosestElementsInSortedArray util = new FindKClosestElementsInSortedArray();
+    System.out.println(util.findClosestElements1(arr, 4, 0));
+    System.out.println(util.findClosestElements1(arr, 4, 6));
+    System.out.println(util.findClosestElements1(arr, 4, 5));
+    System.out.println(util.findClosestElements1(arr, 2, 3));
+  }
+
   public List<Integer> findClosestElements(int[] arr, int k, int x) {
     int n = arr.length;
     int[] range = {-1, -1};
@@ -87,14 +96,5 @@ public class FindKClosestElementsInSortedArray {
       }
     }
     return low + 1;
-  }
-
-  public static void main(String[] args) {
-    int[] arr = {1, 2, 6, 7, 8};
-    FindKClosestElementsInSortedArray util = new FindKClosestElementsInSortedArray();
-    System.out.println(util.findClosestElements1(arr, 4, 0));
-    System.out.println(util.findClosestElements1(arr, 4, 6));
-    System.out.println(util.findClosestElements1(arr, 4, 5));
-    System.out.println(util.findClosestElements1(arr, 2, 3));
   }
 }

@@ -10,9 +10,15 @@ import java.util.Map;
 import java.util.Queue;
 
 public class CourseSchedule2 {
+  public static void main(String[] args) {
+    CourseSchedule2 util = new CourseSchedule2();
+    System.out.println(Arrays.toString(util.findOrder(4, new int[][] {{1, 0}, {2, 0}, {3, 1}, {3, 2}})));
+    System.out.println(Arrays.toString(util.findOrder(4, new int[][] {{1, 0}, {3, 2}})));
+  }
+
   public int[] findOrder(int numCourses, int[][] prerequisites) {
     if (prerequisites == null || prerequisites.length == 0) {
-      return new int[]{0};
+      return new int[] {0};
     }
     int[] courseOrder = new int[numCourses];
     Map<Integer, List<Integer>> graph = new HashMap<>();
@@ -38,8 +44,8 @@ public class CourseSchedule2 {
   }
 
   int populateGraph(int[][] prerequisites,
-                                            final Map<Integer, List<Integer>> graph,
-                                            final Map<Integer, Integer> inDegrees) {
+                    final Map<Integer, List<Integer>> graph,
+                    final Map<Integer, Integer> inDegrees) {
     int maxCourses = 0;
     for (int[] a : prerequisites) {
       graph.compute(a[1], (pre, courses) -> courses == null ? new ArrayList<>() : courses).add(a[0]);
@@ -47,11 +53,5 @@ public class CourseSchedule2 {
       maxCourses++;
     }
     return maxCourses;
-  }
-
-  public static void main(String[] args) {
-    CourseSchedule2 util = new CourseSchedule2();
-    System.out.println(Arrays.toString(util.findOrder(4, new int[][] {{1, 0}, {2, 0}, {3, 1}, {3, 2}})));
-    System.out.println(Arrays.toString(util.findOrder(4, new int[][] {{1, 0}, {3, 2}})));
   }
 }

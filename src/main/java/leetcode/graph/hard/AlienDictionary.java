@@ -8,14 +8,27 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- *
  * 1 <= words.length <= 100
  * 1 <= words[i].length <= 100
  * words[i] consists of only lowercase English letters.
- *
+ * <p>
  * https://leetcode.com/problems/alien-dictionary/description/?envType=problem-list-v2&envId=topological-sort
  */
 public class AlienDictionary {
+  public static void main(String[] args) {
+    String[] words = {"wrt", "wrf", "er", "ett", "rftt"};
+    AlienDictionary util = new AlienDictionary();
+    System.out.println(util.alienOrder(words));
+    words = new String[] {"z", "x"};
+    System.out.println(util.alienOrder(words));
+    words = new String[] {"z", "x", "z"};
+    System.out.println(util.alienOrder(words));
+    words = new String[] {"z", "z"};
+    System.out.println(util.alienOrder(words));
+    words = new String[] {"zy", "zx"};
+    System.out.println(util.alienOrder(words));
+  }
+
   public String alienOrder(String[] words) {
     // graph + indegree map
     Map<Character, Set<Character>> graph = new HashMap<>();
@@ -50,7 +63,7 @@ public class AlienDictionary {
   }
 
   private String createAlienOrder(Map<Character, Set<Character>> graph, Map<Character, Integer> inDegrees) {
-    StringBuilder alienOrder = new StringBuilder("");
+    StringBuilder alienOrder = new StringBuilder();
     Queue<Character> bfs = new LinkedList<>();
     inDegrees.entrySet().stream().filter(e -> e.getValue() == 0)
         .map(e -> e.getKey())
@@ -66,19 +79,5 @@ public class AlienDictionary {
       alienOrder.append(curr);
     }
     return alienOrder.length() == graph.keySet().size() ? alienOrder.toString() : "";
-  }
-
-  public static void main(String[] args) {
-    String[] words = {"wrt", "wrf", "er", "ett", "rftt"};
-    AlienDictionary util = new AlienDictionary();
-    System.out.println(util.alienOrder(words));
-    words = new String[] {"z", "x"};
-    System.out.println(util.alienOrder(words));
-    words = new String[] {"z", "x", "z"};
-    System.out.println(util.alienOrder(words));
-    words = new String[] {"z", "z"};
-    System.out.println(util.alienOrder(words));
-    words = new String[] {"zy", "zx"};
-    System.out.println(util.alienOrder(words));
   }
 }

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StringCombinations {
+  public static void main(String[] args) {
+    StringCombinations util = new StringCombinations();
+    System.out.println(util.combinations("ABC"));
+    System.out.println(util.sameLengthCombinations("ABC"));
+  }
+
   public List<String> combinations(String str) {
     List<String> combinations = new ArrayList<>();
     compute(str.toCharArray(), 0, "", combinations);
@@ -36,11 +42,5 @@ public class StringCombinations {
     }
     computeSameLength(chars, index + 1, prefix + chars[index], combinations);
     computeSameLength(chars, index + 1, prefix, combinations);
-  }
-
-  public static void main(String[] args) {
-    StringCombinations util = new StringCombinations();
-    System.out.println(util.combinations("ABC"));
-    System.out.println(util.sameLengthCombinations("ABC"));
   }
 }

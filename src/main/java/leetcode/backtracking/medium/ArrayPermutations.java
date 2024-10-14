@@ -12,6 +12,7 @@ public class ArrayPermutations {
 
   /**
    * T(n) = n*T(n-1) + 1
+   *
    * @param nums
    * @return
    */

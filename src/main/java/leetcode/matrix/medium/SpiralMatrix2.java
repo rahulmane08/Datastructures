@@ -3,6 +3,11 @@ package leetcode.matrix.medium;
 import java.util.Arrays;
 
 public class SpiralMatrix2 {
+  public static void main(String[] args) {
+    SpiralMatrix2 util = new SpiralMatrix2();
+    System.out.println(Arrays.deepToString(util.generateMatrix(3)));
+  }
+
   public int[][] generateMatrix(int n) {
     int[][] matrix = new int[n][n];
     int x = 0;
@@ -26,10 +31,5 @@ public class SpiralMatrix2 {
 
   boolean isInvalid(int[][] matrix, int row, int col, int n) {
     return (row < 0 || row == n) || (col < 0 || col == n) || matrix[row][col] != 0;
-  }
-
-  public static void main(String[] args) {
-    SpiralMatrix2 util = new SpiralMatrix2();
-    System.out.println(Arrays.deepToString(util.generateMatrix(3)));
   }
 }

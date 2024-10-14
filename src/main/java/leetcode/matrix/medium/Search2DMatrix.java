@@ -1,6 +1,14 @@
 package leetcode.matrix.medium;
 
 public class Search2DMatrix {
+  public static void main(String[] args) {
+    int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    Search2DMatrix util = new Search2DMatrix();
+    for (int i = 0; i < 11; i++) {
+      System.out.println(util.searchRecursively(matrix, i));
+    }
+  }
+
   public boolean searchMatrix(int[][] matrix, int target) {
     int m = matrix.length; // rows
     if (m == 0) {
@@ -28,7 +36,6 @@ public class Search2DMatrix {
 
   public boolean searchRecursively(int[][] matrix, int target) {
     int rows = matrix.length;
-    ;
     int cols = matrix[0].length; // columns
 
     int left = 0;
@@ -49,14 +56,6 @@ public class Search2DMatrix {
       return search(matrix, left, mid - 1, target, cols);
     } else {
       return search(matrix, mid + 1, right, target, cols);
-    }
-  }
-
-  public static void main(String[] args) {
-    int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    Search2DMatrix util = new Search2DMatrix();
-    for (int i = 0; i < 11; i++) {
-      System.out.println(util.searchRecursively(matrix, i));
     }
   }
 }

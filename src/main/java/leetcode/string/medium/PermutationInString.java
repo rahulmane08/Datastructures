@@ -5,6 +5,11 @@ import java.util.Map;
 
 public class PermutationInString {
 
+  public static void main(String[] args) {
+    PermutationInString util = new PermutationInString();
+    System.out.println(util.checkInclusion1("adc", "adxcda"));
+  }
+
   /**
    * Example 1:
    * <p>
@@ -56,10 +61,5 @@ public class PermutationInString {
       });
     }
     return (int) checker.entrySet().stream().filter(e -> e.getValue() != 0).count();
-  }
-
-  public static void main(String[] args) {
-    PermutationInString util = new PermutationInString();
-    System.out.println(util.checkInclusion1("adc", "adxcda"));
   }
 }

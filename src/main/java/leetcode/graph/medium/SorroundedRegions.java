@@ -6,6 +6,10 @@ import java.util.Queue;
 public class SorroundedRegions {
   int[][] moves = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
+  public static void main(String[] args) {
+
+  }
+
   public void solve(char[][] board) {
     int rows = board.length;
     int cols = board[0].length;
@@ -56,10 +60,6 @@ public class SorroundedRegions {
   }
 
   boolean isValid(char[][] board, boolean[][] visited, int row, int col, int rows, int cols) {
-    return 0 <= row && row < rows && 0 <= col && col < cols && visited[row][col] == false;
-  }
-
-  public static void main(String[] args) {
-
+    return 0 <= row && row < rows && 0 <= col && col < cols && !visited[row][col];
   }
 }

@@ -10,6 +10,24 @@ import java.util.Map;
 
 public class AllPathsFromSourceLeadToDestination {
 
+  public static void main(String[] args) {
+    int[][] edges = {{0, 1}, {0, 2}, {1, 3}, {2, 3}};
+    AllPathsFromSourceLeadToDestination util = new AllPathsFromSourceLeadToDestination();
+    System.out.println(util.leadsToDestination(4, edges, 0, 3));
+    edges = new int[][] {{0, 1}, {0, 3}, {1, 2}, {2, 1}};
+    System.out.println(util.leadsToDestination(4, edges, 0, 3));
+    edges = new int[][] {{0, 1}, {0, 2}};
+    System.out.println(util.leadsToDestination(3, edges, 0, 2));
+    edges = new int[][] {{0, 1}, {1, 1}};
+    System.out.println(util.leadsToDestination(2, edges, 0, 1));
+    edges = new int[][] {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {1, 4}};
+    System.out.println(util.leadsToDestination(5, edges, 0, 3));
+    edges = new int[][] {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {1, 4}, {4, 3}};
+    System.out.println(util.leadsToDestination(6, edges, 0, 3));
+    edges = new int[][] {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {1, 2}};
+    System.out.println(util.leadsToDestination(5, edges, 0, 3));
+  }
+
   public boolean leadsToDestination(int n, int[][] edges, int source, int destination) {
     Map<Integer, List<Integer>> graph = new HashMap<>();
 
@@ -23,11 +41,11 @@ public class AllPathsFromSourceLeadToDestination {
 
   /**
    * 1-----> 2-----> 3*
-   *        3
-   *    /   |   \
+   * 3
+   * /   |   \
    * 1  --  2 --- 4
-   *        |
-   *        5
+   * |
+   * 5
    *
    * @param graph
    * @param curr
@@ -65,23 +83,5 @@ public class AllPathsFromSourceLeadToDestination {
     ongoing.remove(curr);
     visited.add(curr);
     return leadsToDestination; // check terminal node is destination
-  }
-
-  public static void main(String[] args) {
-    int[][] edges = {{0, 1}, {0, 2}, {1, 3}, {2, 3}};
-    AllPathsFromSourceLeadToDestination util = new AllPathsFromSourceLeadToDestination();
-    System.out.println(util.leadsToDestination(4, edges, 0, 3));
-    edges = new int[][] {{0, 1}, {0, 3}, {1, 2}, {2, 1}};
-    System.out.println(util.leadsToDestination(4, edges, 0, 3));
-    edges = new int[][] {{0, 1}, {0, 2}};
-    System.out.println(util.leadsToDestination(3, edges, 0, 2));
-    edges = new int[][] {{0, 1}, {1, 1}};
-    System.out.println(util.leadsToDestination(2, edges, 0, 1));
-    edges = new int[][] {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {1, 4}};
-    System.out.println(util.leadsToDestination(5, edges, 0, 3));
-    edges = new int[][] {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {1, 4}, {4, 3}};
-    System.out.println(util.leadsToDestination(6, edges, 0, 3));
-    edges = new int[][] {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {1, 2}};
-    System.out.println(util.leadsToDestination(5, edges, 0, 3));
   }
 }

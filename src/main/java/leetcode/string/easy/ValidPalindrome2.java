@@ -2,6 +2,14 @@ package leetcode.string.easy;
 
 public class ValidPalindrome2 {
 
+  public static void main(String[] args) {
+    ValidPalindrome2 util = new ValidPalindrome2();
+    System.out.println(util.validPalindrome1("aba"));
+    System.out.println(util.validPalindrome1("abxda"));
+    System.out.println(util.validPalindrome1("abda"));
+    System.out.println(util.validPalindrome1("eeccccbebaeeabebccceea"));
+  }
+
   /**
    * acbc[d]a
    * a[d]cbca
@@ -50,7 +58,6 @@ public class ValidPalindrome2 {
    * Input: s = "abc"
    * Output: false
    *
-   *
    * @param s
    * @return
    */
@@ -72,13 +79,5 @@ public class ValidPalindrome2 {
       }
     }
     return true;
-  }
-
-  public static void main(String[] args) {
-    ValidPalindrome2 util = new ValidPalindrome2();
-    System.out.println(util.validPalindrome1("aba"));
-    System.out.println(util.validPalindrome1("abxda"));
-    System.out.println(util.validPalindrome1("abda"));
-    System.out.println(util.validPalindrome1("eeccccbebaeeabebccceea"));
   }
 }

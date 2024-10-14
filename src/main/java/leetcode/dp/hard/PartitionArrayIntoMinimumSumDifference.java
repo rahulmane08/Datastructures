@@ -3,6 +3,11 @@ package leetcode.dp.hard;
 import java.util.Arrays;
 
 public class PartitionArrayIntoMinimumSumDifference {
+  public static void main(String[] args) {
+    PartitionArrayIntoMinimumSumDifference util = new PartitionArrayIntoMinimumSumDifference();
+    System.out.println(util.minimumDifference(new int[] {-36, 36}));
+  }
+
   public int minimumDifference(int[] nums) {
     int sum = Arrays.stream(nums).map(Math::abs).sum();
     Integer[][] dp = new Integer[nums.length][sum + 1];
@@ -20,10 +25,5 @@ public class PartitionArrayIntoMinimumSumDifference {
       dp[index][Math.abs(sum1)] = Math.min(leftSum, rightSum);
     }
     return dp[index][Math.abs(sum1)];
-  }
-
-  public static void main(String[] args) {
-    PartitionArrayIntoMinimumSumDifference util = new PartitionArrayIntoMinimumSumDifference();
-    System.out.println(util.minimumDifference(new int[] {-36, 36}));
   }
 }

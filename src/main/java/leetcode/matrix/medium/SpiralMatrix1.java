@@ -8,6 +8,12 @@ import java.util.List;
  */
 public class SpiralMatrix1 {
 
+  public static void main(String[] args) {
+    int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    SpiralMatrix1 util = new SpiralMatrix1();
+    System.out.println(util.spiralOrder(matrix));
+  }
+
   /**
    * https://www.youtube.com/watch?v=RSjo4A8WfQ8
    * <p>
@@ -41,11 +47,5 @@ public class SpiralMatrix1 {
     }
 
     return res;
-  }
-
-  public static void main(String[] args) {
-    int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    SpiralMatrix1 util = new SpiralMatrix1();
-    System.out.println(util.spiralOrder(matrix));
   }
 }

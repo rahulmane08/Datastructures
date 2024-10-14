@@ -12,6 +12,13 @@ public class MaximumPathSum {
 
   private int maxSum = Integer.MIN_VALUE;
 
+  public static void main(String[] args) {
+    Integer[] arr = new Integer[] {-10, 9, 20, null, null, 15, 7};
+    System.out.println(new MaximumPathSum().maxPathSum(ArrayToTreeUtil.compute(arr)));
+    arr = new Integer[] {2, -1, -2};
+    System.out.println(new MaximumPathSum().maxPathSum(ArrayToTreeUtil.compute(arr)));
+  }
+
   public int maxPathSum(TreeNode root) {
     compute(root);
     return maxSum;
@@ -36,12 +43,5 @@ public class MaximumPathSum {
 
   private int max(int... nums) {
     return Arrays.stream(nums).max().getAsInt();
-  }
-
-  public static void main(String[] args) {
-    Integer[] arr = new Integer[] {-10, 9, 20, null, null, 15, 7};
-    System.out.println(new MaximumPathSum().maxPathSum(ArrayToTreeUtil.compute(arr)));
-    arr = new Integer[] {2, -1, -2};
-    System.out.println(new MaximumPathSum().maxPathSum(ArrayToTreeUtil.compute(arr)));
   }
 }

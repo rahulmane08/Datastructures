@@ -4,6 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class LongestSubstringWithRepeatingCharacters {
+  public static void main(String[] args) {
+    LongestSubstringWithRepeatingCharacters util = new LongestSubstringWithRepeatingCharacters();
+    System.out.println(util.lengthOfLongestSubstring("pwwkew"));
+  }
+
   public int lengthOfLongestSubstring(String s) {
     if (s == null || s.isEmpty()) {
       return 0;
@@ -25,10 +30,5 @@ public class LongestSubstringWithRepeatingCharacters {
       }
     }
     return maxLength;
-  }
-
-  public static void main(String[] args) {
-    LongestSubstringWithRepeatingCharacters util = new LongestSubstringWithRepeatingCharacters();
-    System.out.println(util.lengthOfLongestSubstring("pwwkew"));
   }
 }

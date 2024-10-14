@@ -1,6 +1,15 @@
 package leetcode.string.easy;
 
 public class ValidWordAbbreviation {
+  public static void main(String[] args) {
+    ValidWordAbbreviation util = new ValidWordAbbreviation();
+    System.out.println(util.validWordAbbreviation("rahul", "r4l"));
+    System.out.println(util.validWordAbbreviation("rahul", "r3l"));
+    System.out.println(util.validWordAbbreviation("rahul", "r2l"));
+    System.out.println(util.validWordAbbreviation("rahul", "r03l"));
+    System.out.println(util.validWordAbbreviation("rahul", "r0ahul"));
+  }
+
   public boolean validWordAbbreviation(String word, String abbr) {
     int w = 0;
     int a = 0;
@@ -21,14 +30,5 @@ public class ValidWordAbbreviation {
       }
     }
     return w == word.length() && a == abbr.length();
-  }
-
-  public static void main(String[] args) {
-    ValidWordAbbreviation util = new ValidWordAbbreviation();
-    System.out.println(util.validWordAbbreviation("rahul", "r4l"));
-    System.out.println(util.validWordAbbreviation("rahul", "r3l"));
-    System.out.println(util.validWordAbbreviation("rahul", "r2l"));
-    System.out.println(util.validWordAbbreviation("rahul", "r03l"));
-    System.out.println(util.validWordAbbreviation("rahul", "r0ahul"));
   }
 }

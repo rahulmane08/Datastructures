@@ -15,8 +15,8 @@ public class SnakeGame {
 
   private int snakeLength;
   private int foodIndex;
-  private int[] head;
-  private int[] tail;
+  private final int[] head;
+  private final int[] tail;
   private boolean alive;
 
   public SnakeGame(int width, int height, int[][] food) {
@@ -36,6 +36,26 @@ public class SnakeGame {
     alive = true;
     // place the first food.
     placeFood();
+  }
+
+  public static void main(String[] args) {
+    SnakeGame snakeGame = new SnakeGame(3, 3, new int[][] {{1, 2}, {0, 1}});
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("R"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("D"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("R"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("U"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("L"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("L"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("L"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("D"));
   }
 
   public int move(String direction) {
@@ -126,25 +146,5 @@ public class SnakeGame {
       str.append(String.format("%s,%n", Arrays.toString(grid[i])));
     }
     return str.toString();
-  }
-
-  public static void main(String[] args) {
-    SnakeGame snakeGame = new SnakeGame(3, 3, new int[][] {{1, 2}, {0, 1}});
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("R"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("D"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("R"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("U"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("L"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("L"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("L"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("D"));
   }
 }

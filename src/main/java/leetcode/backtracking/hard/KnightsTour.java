@@ -4,14 +4,19 @@ import java.util.Arrays;
 
 /**
  * Check if the knight can cover all tiles on the board.
- *
+ * <p>
  * https://leetcode.com/problems/the-knights-tour/description/
- *
+ * <p>
  * Time complexity = O(M x N)
  */
 public class KnightsTour {
 
-  private int[][] moves = {{1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}};
+  private final int[][] moves = {{1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}};
+
+  public static void main(String[] args) {
+    KnightsTour util = new KnightsTour();
+    System.out.println(Arrays.deepToString(util.tourOfKnight(5, 5, 0, 0)));
+  }
 
   public int[][] tourOfKnight(int m, int n, int r, int c) {
     int rows = m;
@@ -50,10 +55,5 @@ public class KnightsTour {
 
   private boolean isValid(int[][] board, int row, int col, int rows, int cols) {
     return row >= 0 && row < rows && col >= 0 && col < cols && board[row][col] == -1;
-  }
-
-  public static void main(String[] args) {
-    KnightsTour util = new KnightsTour();
-    System.out.println(Arrays.deepToString(util.tourOfKnight(5, 5, 0, 0)));
   }
 }

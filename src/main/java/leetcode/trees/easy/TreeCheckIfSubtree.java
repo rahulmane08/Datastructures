@@ -1,8 +1,6 @@
 package leetcode.trees.easy;
 
 import leetcode.trees.TreeNode;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 public class TreeCheckIfSubtree {
   public boolean isSubtree(TreeNode root, TreeNode subRoot) {

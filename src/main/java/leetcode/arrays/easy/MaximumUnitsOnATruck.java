@@ -4,6 +4,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class MaximumUnitsOnATruck {
+  public static void main(String[] args) {
+    MaximumUnitsOnATruck util = new MaximumUnitsOnATruck();
+    System.out.println(util.maximumUnits(new int[][] {{1, 3}, {2, 2}, {3, 1}}, 4));
+  }
+
   public int maximumUnits(int[][] boxTypes, int truckSize) {
     Arrays.sort(boxTypes, Comparator.comparingInt((int[] a) -> a[1]).reversed());
     int totalUnits = 0;
@@ -14,10 +19,5 @@ public class MaximumUnitsOnATruck {
       index++;
     }
     return totalUnits;
-  }
-
-  public static void main(String[] args) {
-    MaximumUnitsOnATruck util = new MaximumUnitsOnATruck();
-    System.out.println(util.maximumUnits(new int[][] {{1, 3}, {2, 2}, {3, 1}}, 4));
   }
 }

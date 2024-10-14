@@ -4,6 +4,11 @@ package leetcode.backtracking.hard;
  *
  */
 public class KthPermutationSequence {
+  public static void main(String[] args) {
+    KthPermutationSequence util = new KthPermutationSequence();
+    System.out.println(util.getPermutation(3, 1));
+  }
+
   public String getPermutation(int n, int k) {
     return new KthPermutationUtil(n, k).getOutput();
   }
@@ -51,10 +56,5 @@ public class KthPermutationSequence {
         sequence[j] = temp;
       }
     }
-  }
-
-  public static void main(String[] args) {
-    KthPermutationSequence util = new KthPermutationSequence();
-    System.out.println(util.getPermutation(3, 1));
   }
 }

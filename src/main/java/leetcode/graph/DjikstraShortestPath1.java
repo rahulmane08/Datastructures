@@ -12,6 +12,43 @@ import lombok.Data;
 public class DjikstraShortestPath1 {
   private static final int INF = Integer.MAX_VALUE;
 
+  public static void main(String[] args) throws JsonProcessingException {
+    ObjectMapper mapper = new ObjectMapper();
+    /**
+     * (4)       (1)
+     * 1 -------- 2------- 3
+     * |          |
+     * |(1)       |(1)
+     * 4----------5
+     * (1)
+     */
+    int[][] edges = {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}, {5, 2, 1}};
+    DjikstraShortestPath1 util = new DjikstraShortestPath1();
+    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
+
+    /**
+     * (4)       (1)
+     * 1 -------- 2------- 3
+     * |
+     * |(1)
+     * 4----------5
+     * (1)
+     */
+    edges = new int[][] {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}};
+    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
+
+    /**
+     * (4)       (1)
+     * 1 -------- 2------- 3
+     * |   \(1)
+     * |(1)  \
+     * 4----------5
+     * (1)
+     */
+    edges = new int[][] {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}, {5, 1, 1}};
+    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
+  }
+
   public Map<Integer, Node> shortestPath(int[][] edges, Integer source) {
     WeightedGraph graph = new WeightedGraph(edges, false); // O(V+E)
 
@@ -60,42 +97,5 @@ public class DjikstraShortestPath1 {
     public Node(int vertex) {
       this.vertex = vertex;
     }
-  }
-
-  public static void main(String[] args) throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
-    /**
-     * (4)       (1)
-     * 1 -------- 2------- 3
-     * |          |
-     * |(1)       |(1)
-     * 4----------5
-     * (1)
-     */
-    int[][] edges = {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}, {5, 2, 1}};
-    DjikstraShortestPath1 util = new DjikstraShortestPath1();
-    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
-
-    /**
-     * (4)       (1)
-     * 1 -------- 2------- 3
-     * |
-     * |(1)
-     * 4----------5
-     * (1)
-     */
-    edges = new int[][] {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}};
-    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
-
-    /**
-     * (4)       (1)
-     * 1 -------- 2------- 3
-     * |   \(1)
-     * |(1)  \
-     * 4----------5
-     * (1)
-     */
-    edges = new int[][] {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}, {5, 1, 1}};
-    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
   }
 }

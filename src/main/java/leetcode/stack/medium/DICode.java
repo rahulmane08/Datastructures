@@ -3,6 +3,12 @@ package leetcode.stack.medium;
 import java.util.Stack;
 
 public class DICode {
+  public static void main(String[] args) {
+    DICode util = new DICode();
+    System.out.println(util.smallestNumber("ID"));
+    System.out.println(util.smallestNumber("IDD"));
+  }
+
   public String smallestNumber(String pattern) {
     if (pattern == null || pattern.isEmpty()) {
       return pattern;
@@ -33,11 +39,5 @@ public class DICode {
     int top = stack.pop();
     sortedInsert(pattern, stack, count, index - 1);
     stack.push(top);
-  }
-
-  public static void main(String[] args) {
-    DICode util = new DICode();
-    System.out.println(util.smallestNumber("ID"));
-    System.out.println(util.smallestNumber("IDD"));
   }
 }

@@ -4,7 +4,12 @@ package leetcode.dp.medium;
  * sum of combinations
  */
 public class RobotUniquePaths {
-  private int[][] moves = {{0, 1}, {1, 0}}; // R,D
+  private final int[][] moves = {{0, 1}, {1, 0}}; // R,D
+
+  public static void main(String[] args) {
+    RobotUniquePaths util = new RobotUniquePaths();
+    System.out.println(util.uniquePaths(3, 3));
+  }
 
   public int uniquePaths(int m, int n) {
     Integer[][] dp = new Integer[m][n];
@@ -30,10 +35,5 @@ public class RobotUniquePaths {
 
   private boolean isValid(int i, int j, int m, int n) {
     return 0 <= i && i < m && 0 <= j && j < n;
-  }
-
-  public static void main(String[] args) {
-    RobotUniquePaths util = new RobotUniquePaths();
-    System.out.println(util.uniquePaths(3, 3));
   }
 }

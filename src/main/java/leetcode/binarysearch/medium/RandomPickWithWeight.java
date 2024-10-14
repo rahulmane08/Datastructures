@@ -14,6 +14,13 @@ public class RandomPickWithWeight {
     this.max = runningWeights[w.length - 1];
   }
 
+  public static void main(String[] args) {
+    RandomPickWithWeight util = new RandomPickWithWeight(new int[] {1, 3});
+    for (int i = 0; i < 8; i++) {
+      System.out.println(util.pickIndex());
+    }
+  }
+
   private void initializeRunningWeights(int[] w) {
     int sum = 0;
     for (int i = 0; i < w.length; i++) {
@@ -42,12 +49,5 @@ public class RandomPickWithWeight {
       }
     }
     return low + 1;
-  }
-
-  public static void main(String[] args) {
-    RandomPickWithWeight util = new RandomPickWithWeight(new int[] {1, 3});
-    for (int i = 0; i < 8; i++) {
-      System.out.println(util.pickIndex());
-    }
   }
 }

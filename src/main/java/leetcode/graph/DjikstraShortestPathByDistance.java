@@ -12,15 +12,19 @@ import lombok.Data;
 public class DjikstraShortestPathByDistance {
   private static final int INF = Integer.MAX_VALUE;
 
-  @Data
-  private class Node {
-    private final int vertex;
-    int distanceFromSource = INF;
-    int parent = -1;
-
-    public Node(int vertex) {
-      this.vertex = vertex;
-    }
+  public static void main(String[] args) throws JsonProcessingException {
+    ObjectMapper mapper = new ObjectMapper();
+    /**
+     * (4)       (1)
+     * 1 -------- 2------- 3
+     * |          |
+     * |(1)       |(1)
+     * 4----------5
+     * (1)
+     */
+    int[][] edges = {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}, {5, 2, 1}};
+    DjikstraShortestPathByDistance util = new DjikstraShortestPathByDistance();
+    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
   }
 
   public Map<Integer, Node> shortestPath(int[][] edges, Integer source) {
@@ -47,18 +51,14 @@ public class DjikstraShortestPathByDistance {
     return shortestDistanceInfo;
   }
 
-  public static void main(String[] args) throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
-    /**
-     * (4)       (1)
-     * 1 -------- 2------- 3
-     * |          |
-     * |(1)       |(1)
-     * 4----------5
-     * (1)
-     */
-    int[][] edges = {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}, {5, 2, 1}};
-    DjikstraShortestPathByDistance util = new DjikstraShortestPathByDistance();
-    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
+  @Data
+  private class Node {
+    private final int vertex;
+    int distanceFromSource = INF;
+    int parent = -1;
+
+    public Node(int vertex) {
+      this.vertex = vertex;
+    }
   }
 }

@@ -21,6 +21,7 @@ public class GenerateParentheses {
   /**
    * T(n) = 2T(n - 1) + 1 , a = 2, b = 1
    * O(n) = 2 ^ n , case 1.3 decreasing function.
+   *
    * @param n
    * @param left
    * @param right

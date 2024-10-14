@@ -12,10 +12,10 @@ import java.util.Queue;
  */
 public class TaskScheduler {
 
-  class Task {
-    Character id;
-    Integer freq;
-    Integer scheduleTime;
+  public static void main(String[] args) {
+    TaskScheduler util = new TaskScheduler();
+    char[] tasks = {'A', 'C', 'A', 'B', 'D', 'B'};
+    System.out.println(util.leastInterval(tasks, 5));
   }
 
   /**
@@ -73,9 +73,9 @@ public class TaskScheduler {
     return currentTime - 1;
   }
 
-  public static void main(String[] args) {
-    TaskScheduler util = new TaskScheduler();
-    char[] tasks = {'A', 'C', 'A', 'B', 'D', 'B'};
-    System.out.println(util.leastInterval(tasks, 5));
+  class Task {
+    Character id;
+    Integer freq;
+    Integer scheduleTime;
   }
 }

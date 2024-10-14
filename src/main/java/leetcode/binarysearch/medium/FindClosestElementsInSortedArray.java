@@ -3,6 +3,15 @@ package leetcode.binarysearch.medium;
 import java.util.Arrays;
 
 public class FindClosestElementsInSortedArray {
+  public static void main(String[] args) {
+    int[] nums = new int[] {1, 2, 3, 4, 6, 7};
+    FindClosestElementsInSortedArray util = new FindClosestElementsInSortedArray();
+    System.out.println(Arrays.toString(util.findClosestElementsInSortedArray(nums, 5)));
+    System.out.println(Arrays.toString(util.findClosestElementsInSortedArray(nums, 6)));
+    System.out.println(Arrays.toString(util.findClosestElementsInSortedArray(nums, 8)));
+    System.out.println(Arrays.toString(util.findClosestElementsInSortedArray(nums, 0)));
+  }
+
   int[] findClosestElementsInSortedArray(int[] nums, int target) {
     if (nums == null) {
       return null;
@@ -27,14 +36,5 @@ public class FindClosestElementsInSortedArray {
       closest[0] = nums[mid];
       compute(nums, mid + 1, high, target, closest);
     }
-  }
-
-  public static void main(String[] args) {
-    int[] nums = new int[] {1, 2, 3, 4, 6, 7};
-    FindClosestElementsInSortedArray util = new FindClosestElementsInSortedArray();
-    System.out.println(Arrays.toString(util.findClosestElementsInSortedArray(nums, 5)));
-    System.out.println(Arrays.toString(util.findClosestElementsInSortedArray(nums, 6)));
-    System.out.println(Arrays.toString(util.findClosestElementsInSortedArray(nums, 8)));
-    System.out.println(Arrays.toString(util.findClosestElementsInSortedArray(nums, 0)));
   }
 }

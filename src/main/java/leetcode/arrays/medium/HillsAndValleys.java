@@ -27,7 +27,9 @@ public class HillsAndValleys {
       return true;
     } else if (i == 0 && A[j] > A[j + 1]) {
       return true;
-    } else return j == n - 1 && A[i - 1] < A[i];
+    } else {
+      return j == n - 1 && A[i - 1] < A[i];
+    }
   }
 
   private boolean isValley(int[] A, int n, int i, int j) {
@@ -38,6 +40,8 @@ public class HillsAndValleys {
       return true;
     } else if (i == 0 && A[j] < A[j + 1]) {
       return true;
-    } else return j == n - 1 && A[i - 1] > A[i];
+    } else {
+      return j == n - 1 && A[i - 1] > A[i];
+    }
   }
 }

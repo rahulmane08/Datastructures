@@ -7,14 +7,14 @@ import java.util.PriorityQueue;
 
 /**
  * Example 1:
- *
+ * <p>
  * Input: num = "444947137"
  * Output: "7449447"
  * Explanation:
  * Use the digits "4449477" from "444947137" to form the palindromic integer "7449447".
  * It can be shown that "7449447" is the largest palindromic integer that can be formed.
  * Example 2:
- *
+ * <p>
  * Input: num = "00009"
  * Output: "9"
  * Explanation:
@@ -22,6 +22,12 @@ import java.util.PriorityQueue;
  * Note that the integer returned should not contain leading zeroes.
  */
 public class LongestPalindromicNumber {
+  public static void main(String[] args) {
+    LongestPalindromicNumber util = new LongestPalindromicNumber();
+    System.out.println(util.largestPalindromic("444947137"));
+    System.out.println(util.largestPalindromic("000099"));
+  }
+
   public String largestPalindromic(String num) {
     Map<Character, Integer> frequencies = new HashMap<>(); //S(n)
     int i = 0;
@@ -64,11 +70,5 @@ public class LongestPalindromicNumber {
       middle = "" + singleElementsQ.poll();
     }
     return left + middle + right;
-  }
-
-  public static void main(String[] args) {
-    LongestPalindromicNumber util = new LongestPalindromicNumber();
-    System.out.println(util.largestPalindromic("444947137"));
-    System.out.println(util.largestPalindromic("000099"));
   }
 }

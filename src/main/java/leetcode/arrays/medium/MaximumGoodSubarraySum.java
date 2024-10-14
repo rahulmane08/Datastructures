@@ -4,6 +4,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MaximumGoodSubarraySum {
+  public static void main(String[] args) {
+    MaximumGoodSubarraySum util = new MaximumGoodSubarraySum();
+    int[] nums = new int[] {1, 2, 3, 4, 5, 6};
+    System.out.println(util.maximumSubarraySum(nums, 1));
+    nums = new int[] {-1, 3, 2, 4, 5};
+    System.out.println(util.maximumSubarraySum(nums, 3));
+    nums = new int[] {-1, -2, -3, -4};
+    System.out.println(util.maximumSubarraySum(nums, 2));
+    nums = new int[] {1, 5};
+    System.out.println(util.maximumSubarraySum(nums, 2));
+  }
+
   /**
    * nums = [1,2,3,4,5,6], k = 1
    * nums = [-1,3,2,4,5], k = 3
@@ -47,17 +59,5 @@ public class MaximumGoodSubarraySum {
       }
     }
     return maxSubarraySum;
-  }
-
-  public static void main(String[] args) {
-    MaximumGoodSubarraySum util = new MaximumGoodSubarraySum();
-    int[] nums = new int[] {1, 2, 3, 4, 5, 6};
-    System.out.println(util.maximumSubarraySum(nums, 1));
-    nums = new int[] {-1, 3, 2, 4, 5};
-    System.out.println(util.maximumSubarraySum(nums, 3));
-    nums = new int[] {-1, -2, -3, -4};
-    System.out.println(util.maximumSubarraySum(nums, 2));
-    nums = new int[] {1, 5};
-    System.out.println(util.maximumSubarraySum(nums, 2));
   }
 }

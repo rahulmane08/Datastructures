@@ -1,7 +1,5 @@
 package leetcode.dp.medium;
 
-import java.util.Arrays;
-
 /**
  * Let’s say you have a knapsack capacity of 5 and a list of items with weights and values as follows:
  * <p>
@@ -23,6 +21,15 @@ import java.util.Arrays;
  * Problem: Find the combination of items that can fit in the knapsack of capacity = 5, such that sum of prices is max.
  */
 public class BoundedKnapsack {
+  public static void main(String[] args) {
+    int[] weights = {1, 2, 3, 5};
+    int[] costs = {10, 5, 4, 8};
+    BoundedKnapsack util = new BoundedKnapsack();
+    System.out.println(util.findMax(weights, costs, 5));
+    System.out.println(util.findMax(weights, costs, 10));
+    System.out.println(util.findMax(weights, costs, 10));
+  }
+
   public int findMax(int[] weights, int[] costs, int capacity) {
     int n = weights.length;
     int[][] dp = new int[n][capacity + 1];
@@ -36,6 +43,7 @@ public class BoundedKnapsack {
 
   /**
    * T(n) = O(n)
+   *
    * @param weights
    * @param costs
    * @param capacity
@@ -56,14 +64,5 @@ public class BoundedKnapsack {
       dp[index][capacity] = Math.max(leftMax, rightMax);
     }
     return dp[index][capacity];
-  }
-
-  public static void main(String[] args) {
-    int[] weights = {1, 2, 3, 5};
-    int[] costs = {10, 5, 4, 8};
-    BoundedKnapsack util = new BoundedKnapsack();
-    System.out.println(util.findMax(weights, costs, 5));
-    System.out.println(util.findMax(weights, costs, 10));
-    System.out.println(util.findMax(weights, costs, 10));
   }
 }

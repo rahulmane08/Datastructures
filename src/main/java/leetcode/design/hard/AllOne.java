@@ -15,6 +15,7 @@ class AllOne {
   private Node maxNode;
   @ToString.Include
   private Node minNode;
+
   public AllOne() {
     map = new HashMap<>();
   }

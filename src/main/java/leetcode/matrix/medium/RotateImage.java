@@ -3,6 +3,13 @@ package leetcode.matrix.medium;
 import java.util.Arrays;
 
 public class RotateImage {
+  public static void main(String[] args) {
+    int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    RotateImage util = new RotateImage();
+    util.rotate1(matrix);
+    System.out.println(Arrays.deepToString(matrix));
+  }
+
   public void rotate(int[][] matrix) {
     int N = matrix.length;
     for (int x = 0; x < N / 2; x++) {
@@ -34,12 +41,5 @@ public class RotateImage {
         matrix[i][b] = temp;
       }
     }
-  }
-
-  public static void main(String[] args) {
-    int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    RotateImage util = new RotateImage();
-    util.rotate1(matrix);
-    System.out.println(Arrays.deepToString(matrix));
   }
 }

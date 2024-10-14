@@ -3,6 +3,13 @@ package leetcode.dp.easy;
 import java.util.Map;
 
 public class Fibonacci {
+  public static void main(String[] args) {
+    Fibonacci util = new Fibonacci();
+    for (int i = 2; i <= 5; i++) {
+      System.out.println(util.fib(i));
+    }
+  }
+
   public int fib(int n) {
     return bottomUp(n);
   }
@@ -32,12 +39,5 @@ public class Fibonacci {
       dp[i] = dp[i - 1] + dp[i - 2];
     }
     return dp[n];
-  }
-
-  public static void main(String[] args) {
-    Fibonacci util = new Fibonacci();
-    for (int i = 2; i <= 5; i++) {
-      System.out.println(util.fib(i));
-    }
   }
 }

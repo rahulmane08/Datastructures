@@ -2,7 +2,24 @@ package leetcode.dp.medium;
 
 public class CountSquareSubmatricesWithAllOnes {
 
-  private int[][] moves = {{0, 1}, {1, 0}, {1, 1}};
+  private final int[][] moves = {{0, 1}, {1, 0}, {1, 1}};
+
+  public static void main(String[] args) {
+    CountSquareSubmatricesWithAllOnes util = new CountSquareSubmatricesWithAllOnes();
+    int[][] matrix = {
+        {0, 1, 1, 1},
+        {1, 1, 1, 1},
+        {0, 1, 1, 1}
+    };
+    System.out.println(util.countSquares(matrix));
+
+    matrix = new int[][] {
+        {1, 0, 1},
+        {1, 1, 0},
+        {1, 1, 0}
+    };
+    System.out.println(util.countSquares(matrix));
+  }
 
   public int countSquares(int[][] matrix) {
     int rows = matrix.length;
@@ -50,22 +67,5 @@ public class CountSquareSubmatricesWithAllOnes {
 
   private boolean isValid(int[][] matrix, int i, int j, int rows, int cols) {
     return i < rows && j < cols && matrix[i][j] == 1;
-  }
-
-  public static void main(String[] args) {
-    CountSquareSubmatricesWithAllOnes util = new CountSquareSubmatricesWithAllOnes();
-    int[][] matrix = {
-        {0, 1, 1, 1},
-        {1, 1, 1, 1},
-        {0, 1, 1, 1}
-    };
-    System.out.println(util.countSquares(matrix));
-
-    matrix = new int[][] {
-        {1, 0, 1},
-        {1, 1, 0},
-        {1, 1, 0}
-    };
-    System.out.println(util.countSquares(matrix));
   }
 }

@@ -3,6 +3,16 @@ package leetcode.binarysearch.medium;
 import java.util.Arrays;
 
 public class FindRange {
+  public static void main(String[] args) {
+    int[] nums = {1, 2, 6, 7, 8, 9};
+    FindRange util = new FindRange();
+    System.out.println(Arrays.toString(util.findRange(nums, 3)));
+    System.out.println(Arrays.toString(util.findRange(nums, 0)));
+    System.out.println(Arrays.toString(util.findRange(nums, 10)));
+    System.out.println(Arrays.toString(util.findRange(nums, 6)));
+    System.out.println(Arrays.toString(util.findRange(nums, 5)));
+  }
+
   /**
    * [1,2, 6,7,8, 9] , target = 5.
    * <p>
@@ -32,15 +42,5 @@ public class FindRange {
       range[0] = mid;
       populateUsingBinarySearch(nums, target, mid + 1, high, range);
     }
-  }
-
-  public static void main(String[] args) {
-    int[] nums = {1, 2, 6, 7, 8, 9};
-    FindRange util = new FindRange();
-    System.out.println(Arrays.toString(util.findRange(nums, 3)));
-    System.out.println(Arrays.toString(util.findRange(nums, 0)));
-    System.out.println(Arrays.toString(util.findRange(nums, 10)));
-    System.out.println(Arrays.toString(util.findRange(nums, 6)));
-    System.out.println(Arrays.toString(util.findRange(nums, 5)));
   }
 }

@@ -6,6 +6,13 @@ import java.util.Arrays;
  * Maximum sum of non adjacent elements
  */
 public class HouseThief {
+  public static void main(String[] args) {
+    HouseThief util = new HouseThief();
+    System.out.println(util.rob(new int[] {1, 2, 3, 1}));
+    System.out.println(util.rob(new int[] {2, 7, 9, 3, 1}));
+    System.out.println(util.rob(new int[] {1, 2, 1, 1}));
+  }
+
   public int rob(int[] nums) {
     int[] dp = new int[nums.length];
     Arrays.fill(dp, -1);
@@ -22,12 +29,5 @@ public class HouseThief {
       dp[index] = Math.max(sum1, sum2);
     }
     return dp[index];
-  }
-
-  public static void main(String[] args) {
-    HouseThief util = new HouseThief();
-    System.out.println(util.rob(new int[] {1, 2, 3, 1}));
-    System.out.println(util.rob(new int[] {2, 7, 9, 3, 1}));
-    System.out.println(util.rob(new int[] {1, 2, 1, 1}));
   }
 }

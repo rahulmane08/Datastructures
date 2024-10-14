@@ -10,6 +10,34 @@ import java.util.Queue;
 
 public class BipartiteUtil {
 
+  public static void main(String[] args) {
+    BipartiteUtil util = new BipartiteUtil();
+    int[][] edges = new int[][] {{1, 2}, {2, 3}, {2, 4}};
+    System.out.printf("Graph with no cycle: %s, isBipartiteUsingBfs: %s%n", deepToString(edges),
+        util.isBipartiteUsingBfs(edges));
+    System.out.printf("Graph with no cycle: %s, isBipartiteUsingDfs: %s%n", deepToString(edges),
+        util.isBipartiteUsingDfs(edges));
+
+
+    edges = new int[][] {{1, 2}, {2, 3}, {3, 4}, {4, 1}};
+    System.out.printf("Graph with even cycle: %s, isBipartiteUsingBfs: %s%n", deepToString(edges),
+        util.isBipartiteUsingBfs(edges));
+    System.out.printf("Graph with even cycle: %s, isBipartiteUsingDfs: %s%n", deepToString(edges),
+        util.isBipartiteUsingDfs(edges));
+
+    edges = new int[][] {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 1}};
+    System.out.printf("Graph with odd cycle: %s, isBipartiteUsingBfs: %s%n", deepToString(edges),
+        util.isBipartiteUsingBfs(edges));
+    System.out.printf("Graph with odd cycle: %s, isBipartiteUsingDfs: %s%n", deepToString(edges),
+        util.isBipartiteUsingDfs(edges));
+
+    edges = new int[][] {{1, 2}, {2, 3}, {3, 3}};
+    System.out.printf("Graph with self cycle: %s, isBipartiteUsingBfs: %s%n", deepToString(edges),
+        util.isBipartiteUsingBfs(edges));
+    System.out.printf("Graph with self cycle: %s, isBipartiteUsingDfs: %s%n", deepToString(edges),
+        util.isBipartiteUsingDfs(edges));
+  }
+
   public boolean isBipartiteUsingBfs(int[][] edges) {
     Graph graph = new Graph(false);
     Arrays.stream(edges).forEach(graph::addEdge);
@@ -69,33 +97,5 @@ public class BipartiteUtil {
       }
     }
     return true;
-  }
-
-  public static void main(String[] args) {
-    BipartiteUtil util = new BipartiteUtil();
-    int[][] edges = new int[][] {{1, 2}, {2, 3}, {2, 4}};
-    System.out.printf("Graph with no cycle: %s, isBipartiteUsingBfs: %s%n", deepToString(edges),
-        util.isBipartiteUsingBfs(edges));
-    System.out.printf("Graph with no cycle: %s, isBipartiteUsingDfs: %s%n", deepToString(edges),
-        util.isBipartiteUsingDfs(edges));
-
-
-    edges = new int[][] {{1, 2}, {2, 3}, {3, 4}, {4, 1}};
-    System.out.printf("Graph with even cycle: %s, isBipartiteUsingBfs: %s%n", deepToString(edges),
-        util.isBipartiteUsingBfs(edges));
-    System.out.printf("Graph with even cycle: %s, isBipartiteUsingDfs: %s%n", deepToString(edges),
-        util.isBipartiteUsingDfs(edges));
-
-    edges = new int[][] {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 1}};
-    System.out.printf("Graph with odd cycle: %s, isBipartiteUsingBfs: %s%n", deepToString(edges),
-        util.isBipartiteUsingBfs(edges));
-    System.out.printf("Graph with odd cycle: %s, isBipartiteUsingDfs: %s%n", deepToString(edges),
-        util.isBipartiteUsingDfs(edges));
-
-    edges = new int[][] {{1, 2}, {2, 3}, {3, 3}};
-    System.out.printf("Graph with self cycle: %s, isBipartiteUsingBfs: %s%n", deepToString(edges),
-        util.isBipartiteUsingBfs(edges));
-    System.out.printf("Graph with self cycle: %s, isBipartiteUsingDfs: %s%n", deepToString(edges),
-        util.isBipartiteUsingDfs(edges));
   }
 }

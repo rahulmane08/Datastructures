@@ -3,6 +3,11 @@ package leetcode.dp.easy;
 import java.util.Map;
 
 public class ClimbStairs {
+  public static void main(String[] args) {
+    ClimbStairs util = new ClimbStairs();
+    System.out.println(util.climbStairs(0));
+  }
+
   public int climbStairs(int n) {
     // return topDown(n, new HashMap<>());
     return bottomUp(n);
@@ -35,10 +40,5 @@ public class ClimbStairs {
       dp[i] = dp[i - 1] + dp[i - 2];
     }
     return dp[n];
-  }
-
-  public static void main(String[] args) {
-    ClimbStairs util = new ClimbStairs();
-    System.out.println(util.climbStairs(0));
   }
 }

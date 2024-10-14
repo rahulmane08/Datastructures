@@ -12,38 +12,6 @@ import java.util.Stack;
 public class TopologicalSortUtil {
 
   /**
-   * This algo works only for DAG as the for UDG we will never have the vertex with inDegree = 0.
-   * Each node is traversed only once, thru the outgoing edges.
-   * S(n) = O(n) for the graph.
-   * T(n) = O(V+E)
-   */
-  public static class KahnsAlgo {
-    public static Queue<Integer> topSortBfs(int[][] edges) {
-      return topSortBfs(new Graph(edges, true));
-    }
-
-    public static Queue<Integer> topSortBfs(Graph graph) {
-      // initialize the indegrees
-      Map<Integer, Integer> inDegrees = graph.getInDegrees();
-      // get the indegree = 0 vertexes.
-      Map<Integer, Integer> zeroInDegreeMap = vertexesWithInDegree(graph, 0);
-      Queue<Integer> traversalQueue = new LinkedList<>(zeroInDegreeMap.keySet());
-      Queue<Integer> topSort = new LinkedList<>();
-      while (!traversalQueue.isEmpty()) {
-        Integer current = traversalQueue.poll();
-        for (Integer neighbor : graph.getNeighbors(current)) {
-          Integer neighborInDegree = inDegrees.compute(neighbor, (v, degree) -> degree - 1);
-          if (neighborInDegree == 0) {
-            traversalQueue.offer(neighbor);
-          }
-        }
-        topSort.offer(current);
-      }
-      return topSort;
-    }
-  }
-
-  /**
    * This algo works for DG and UDG.
    * Each node is traversed only once, thru the outgoing edges.
    * T(n) = O(V+E)
@@ -107,5 +75,37 @@ public class TopologicalSortUtil {
     System.out.println("DG dfs (stack): " + topSortDfs(edges, true));
     System.out.println("DG bfs (queue): " + KahnsAlgo.topSortBfs(edges));
     System.out.println();
+  }
+
+  /**
+   * This algo works only for DAG as the for UDG we will never have the vertex with inDegree = 0.
+   * Each node is traversed only once, thru the outgoing edges.
+   * S(n) = O(n) for the graph.
+   * T(n) = O(V+E)
+   */
+  public static class KahnsAlgo {
+    public static Queue<Integer> topSortBfs(int[][] edges) {
+      return topSortBfs(new Graph(edges, true));
+    }
+
+    public static Queue<Integer> topSortBfs(Graph graph) {
+      // initialize the indegrees
+      Map<Integer, Integer> inDegrees = graph.getInDegrees();
+      // get the indegree = 0 vertexes.
+      Map<Integer, Integer> zeroInDegreeMap = vertexesWithInDegree(graph, 0);
+      Queue<Integer> traversalQueue = new LinkedList<>(zeroInDegreeMap.keySet());
+      Queue<Integer> topSort = new LinkedList<>();
+      while (!traversalQueue.isEmpty()) {
+        Integer current = traversalQueue.poll();
+        for (Integer neighbor : graph.getNeighbors(current)) {
+          Integer neighborInDegree = inDegrees.compute(neighbor, (v, degree) -> degree - 1);
+          if (neighborInDegree == 0) {
+            traversalQueue.offer(neighbor);
+          }
+        }
+        topSort.offer(current);
+      }
+      return topSort;
+    }
   }
 }

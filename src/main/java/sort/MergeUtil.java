@@ -7,7 +7,7 @@ public class MergeUtil {
     int[] LEFT = new int[M];
     int[] RIGHT = new int[N];
 
-    System.arraycopy(arr, l + 0, LEFT, 0, M);
+    System.arraycopy(arr, l, LEFT, 0, M);
 
     for (int j = 0; j < N; j++) {
       RIGHT[j] = arr[m + 1 + j];

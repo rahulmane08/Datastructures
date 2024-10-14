@@ -35,7 +35,7 @@ public class MergeSortOptimised {
     int[] L = new int[size1];
     int[] R = new int[size2];
 
-    System.arraycopy(arr, low + 0, L, 0, size1);
+    System.arraycopy(arr, low, L, 0, size1);
     for (int j = 0; j < size2; j++) {
       R[j] = arr[mid + 1 + j];
     }

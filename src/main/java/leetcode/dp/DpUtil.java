@@ -5,6 +5,17 @@ import java.util.Map;
 
 public class DpUtil {
 
+  public static void main(String[] args) {
+    int[] nums = {1, 2, -3, 4};
+    DpUtil util = new DpUtil();
+    util.traverse(nums, "", 0);
+    System.out.println(util.maxCount(nums, 0, new HashMap<>()));
+    System.out.println(util.maxSum(nums, 0, new HashMap<>()));
+
+    nums = new int[] {1, 2, 3};
+    util.subArraySums(nums);
+  }
+
   /**
    * T(n) = 2T(n-1) + 1
    * case 1.3 -> a ^ (n/b) = 2^n
@@ -65,13 +76,14 @@ public class DpUtil {
 
   /**
    * [1,2,3]
+   *
    * @param nums
    */
   void subArraySums(int[] nums) {
     int start = -1;
     int end = -1;
     int max = Integer.MIN_VALUE;
-    for(int i = 0; i < nums.length; i++) {
+    for (int i = 0; i < nums.length; i++) {
       int sum = 0;
       for (int j = i; j < nums.length; j++) {
         sum += nums[j];
@@ -84,16 +96,5 @@ public class DpUtil {
       }
     }
     System.out.printf("[%s,%s] , max = %s%n", start, end, max);
-  }
-
-  public static void main(String[] args) {
-    int[] nums = {1, 2, -3, 4};
-    DpUtil util = new DpUtil();
-    util.traverse(nums, "", 0);
-    System.out.println(util.maxCount(nums, 0, new HashMap<>()));
-    System.out.println(util.maxSum(nums, 0, new HashMap<>()));
-
-    nums = new int[] {1,2,3};
-    util.subArraySums(nums);
   }
 }

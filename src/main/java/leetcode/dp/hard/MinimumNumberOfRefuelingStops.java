@@ -14,6 +14,23 @@ import java.util.PriorityQueue;
  * [1,1][1,1][2,1]
  */
 public class MinimumNumberOfRefuelingStops {
+  /**
+   * Intuition:
+   * with the current fuel in car, we try to figure out how many stations we can cover witout refuelling and add the
+   * fuel of each such station within range in a maxPQ. So that we can take the best station providing max fuel.
+   * When we reach a station that we cant reach with the current fuel then we take the pump that provides the max fuel,
+   * polling the max from PQ, and increment the count. We do this until our maxReach is less than next station distance.
+   * While doing so if we already have filled enough to cross the target then we return the count without considering next station.
+   * Else will all the fuel captured if we can still make it to the next station or target we return -1.
+   *
+   * @param args
+   */
+  public static void main(String[] args) {
+    MinimumNumberOfRefuelingStops util = new MinimumNumberOfRefuelingStops();
+    System.out.println(util.minRefuelStops(100, 25, new int[][] {{25, 25}, {50, 25}, {75, 25}}));
+
+  }
+
   public int minRefuelStops(int target, int startFuel, int[][] stations) {
     // return greedy(target, startFuel, stations);
     return dp(target, startFuel, stations);
@@ -79,22 +96,5 @@ public class MinimumNumberOfRefuelingStops {
       count++;
     }
     return currentMaxDistanceCarCanTravel >= target ? count : -1;
-  }
-
-  /**
-   * Intuition:
-   * with the current fuel in car, we try to figure out how many stations we can cover witout refuelling and add the
-   * fuel of each such station within range in a maxPQ. So that we can take the best station providing max fuel.
-   * When we reach a station that we cant reach with the current fuel then we take the pump that provides the max fuel,
-   * polling the max from PQ, and increment the count. We do this until our maxReach is less than next station distance.
-   * While doing so if we already have filled enough to cross the target then we return the count without considering next station.
-   * Else will all the fuel captured if we can still make it to the next station or target we return -1.
-   *
-   * @param args
-   */
-  public static void main(String[] args) {
-    MinimumNumberOfRefuelingStops util = new MinimumNumberOfRefuelingStops();
-    System.out.println(util.minRefuelStops(100, 25, new int[][] {{25, 25}, {50, 25}, {75, 25}}));
-
   }
 }

@@ -4,6 +4,11 @@ package leetcode.dp.medium;
  * https://leetcode.com/problems/coin-change/description/
  */
 public class MinCoinChange {
+  public static void main(String[] args) {
+    MinCoinChange coinChange = new MinCoinChange();
+    System.out.println(coinChange.coinChange(new int[] {1, 2}, 6));
+  }
+
   public int coinChange(int[] coins, int amount) {
     Integer[][] dp = new Integer[coins.length][amount + 1];
     int minCoins = solve(coins, amount, 0, 0, dp);
@@ -28,10 +33,5 @@ public class MinCoinChange {
       dp[index][amount] = Math.min(count1, count2);
     }
     return dp[index][amount];
-  }
-
-  public static void main(String[] args) {
-    MinCoinChange coinChange = new MinCoinChange();
-    System.out.println(coinChange.coinChange(new int[] {1, 2}, 6));
   }
 }

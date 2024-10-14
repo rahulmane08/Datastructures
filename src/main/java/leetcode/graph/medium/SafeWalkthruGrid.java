@@ -16,6 +16,17 @@ import java.util.Map;
 public class SafeWalkthruGrid {
   private final int[][] moves = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
+  private static String getKey(int row, int col, int health) {
+    String key = row + "-" + col + "-" + health;
+    return key;
+  }
+
+  public static void main(String[] args) {
+    List<List<Integer>> grid = asList(asList(0, 0, 0), asList(1, 1, 1), asList(0, 0, 0));
+    SafeWalkthruGrid util = new SafeWalkthruGrid();
+    System.out.println(util.findSafeWalk(grid, 1));
+  }
+
   public boolean findSafeWalk(List<List<Integer>> grid, int health) {
     int rows = grid.size();
     int cols = grid.get(0).size();
@@ -58,21 +69,10 @@ public class SafeWalkthruGrid {
     return cache.get(key);
   }
 
-  private static String getKey(int row, int col, int health) {
-    String key = row + "-" + col + "-" + health;
-    return key;
-  }
-
   private boolean isValid(int row,
                           int col,
                           int rows,
                           int cols) {
     return row >= 0 && row < rows && col >= 0 && col < cols;
-  }
-
-  public static void main(String[] args) {
-    List<List<Integer>> grid = asList(asList(0, 0, 0), asList(1, 1, 1), asList(0, 0, 0));
-    SafeWalkthruGrid util = new SafeWalkthruGrid();
-    System.out.println(util.findSafeWalk(grid, 1));
   }
 }

@@ -50,35 +50,6 @@ public class ArrayUtils {
     return i + 1;
   }
 
-  public void splitIntoEqualSumSubArrays(int[] arr) {
-    java.util.Arrays.sort(arr); // nlog(n)
-    int sum = 0;
-    for (int i : arr) {
-      sum += i;
-    }
-    int halfSum = sum / 2;
-    int end = 0;
-    for (end = 0; end < arr.length; end++) {
-      sum = sum - arr[end];
-      if (sum < halfSum) {
-        System.out.println("no equal sum sub arrays found");
-        return;
-      } else if (sum == halfSum) {
-        break;
-      }
-    }
-    System.out.println(java.util.Arrays.toString(java.util.Arrays.copyOfRange(arr, 0, end + 1)));
-    System.out.println(java.util.Arrays.toString(java.util.Arrays.copyOfRange(arr, end + 1, arr.length - 1)));
-  }
-
-  public void printNonRepeatingElement(int[] arr) {
-    int elem = 0;
-    for (int i : arr) {
-      elem = elem ^ i;
-    }
-    System.out.println("dupe = " + elem);
-  }
-
   static public void printXOR(int[] arr) {
     int xorSum = 0;
     for (int i : arr) {
@@ -364,54 +335,6 @@ public class ArrayUtils {
   }
 
   /**
-   * A majority element in an array A[] of size n is an element that appears more than n/2 times
-   * (and hence there is at most one such element).
-   * <p>
-   * MOORES VOTING ALGO:
-   *
-   * @param arr
-   * @return
-   */
-  @Important
-  @Medium
-  public int findMajorityElement(int[] arr) {
-    if (arr == null) {
-      throw new IllegalArgumentException("null array");
-    }
-
-    int n = arr.length;
-    int count = 1;
-    int majorityIndex = 0;
-    for (int i = 1; i < n; i++) {
-      if (arr[i] == arr[majorityIndex]) {
-        count++;
-      } else {
-        if (--count == 0) {
-          majorityIndex = i;
-          count = 1;
-        }
-      }
-    }
-
-    if (count > n / 2) {
-      return majorityIndex;
-    }
-
-    count = 0;
-    for (int i = 0; i < n; i++) {
-      if (arr[i] == arr[majorityIndex]) {
-        count++;
-      }
-    }
-
-    if (count > n / 2) {
-      return majorityIndex;
-    }
-
-    return -1;
-  }
-
-  /**
    * since all elements lie between 0 and N-1
    * Negate the element at arr[abs(i)] if its positive.
    * If arr[abs(i)] is negative then its a repetition.
@@ -627,6 +550,83 @@ public class ArrayUtils {
       totalCapacity += (maxWaterCapacity[i] - arr[i]);
     }
     return totalCapacity;
+  }
+
+  public void splitIntoEqualSumSubArrays(int[] arr) {
+    java.util.Arrays.sort(arr); // nlog(n)
+    int sum = 0;
+    for (int i : arr) {
+      sum += i;
+    }
+    int halfSum = sum / 2;
+    int end = 0;
+    for (end = 0; end < arr.length; end++) {
+      sum = sum - arr[end];
+      if (sum < halfSum) {
+        System.out.println("no equal sum sub arrays found");
+        return;
+      } else if (sum == halfSum) {
+        break;
+      }
+    }
+    System.out.println(java.util.Arrays.toString(java.util.Arrays.copyOfRange(arr, 0, end + 1)));
+    System.out.println(java.util.Arrays.toString(java.util.Arrays.copyOfRange(arr, end + 1, arr.length - 1)));
+  }
+
+  public void printNonRepeatingElement(int[] arr) {
+    int elem = 0;
+    for (int i : arr) {
+      elem = elem ^ i;
+    }
+    System.out.println("dupe = " + elem);
+  }
+
+  /**
+   * A majority element in an array A[] of size n is an element that appears more than n/2 times
+   * (and hence there is at most one such element).
+   * <p>
+   * MOORES VOTING ALGO:
+   *
+   * @param arr
+   * @return
+   */
+  @Important
+  @Medium
+  public int findMajorityElement(int[] arr) {
+    if (arr == null) {
+      throw new IllegalArgumentException("null array");
+    }
+
+    int n = arr.length;
+    int count = 1;
+    int majorityIndex = 0;
+    for (int i = 1; i < n; i++) {
+      if (arr[i] == arr[majorityIndex]) {
+        count++;
+      } else {
+        if (--count == 0) {
+          majorityIndex = i;
+          count = 1;
+        }
+      }
+    }
+
+    if (count > n / 2) {
+      return majorityIndex;
+    }
+
+    count = 0;
+    for (int i = 0; i < n; i++) {
+      if (arr[i] == arr[majorityIndex]) {
+        count++;
+      }
+    }
+
+    if (count > n / 2) {
+      return majorityIndex;
+    }
+
+    return -1;
   }
 
   public int[] intersect(int[] nums1, int[] nums2) {

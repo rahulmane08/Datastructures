@@ -14,14 +14,11 @@ interface RateLimitingPolicy {
 
 class FixedWindowRateLimitingPolicy implements RateLimitingPolicy {
 
-  // Each clientId has a queue containing window objects.
-  private Map<String, Queue<FixedWindowRateLimitingPolicy.Window>> rateLimiterConfig = new HashMap<>();
-
   private static final int MAX_REQUESTS_PER_WINDOW = 10;
-
   private static final long MAX_EXPIRY_PER_WINDOW = 20 * 1_000;
-
   private final boolean useCredits;
+  // Each clientId has a queue containing window objects.
+  private final Map<String, Queue<FixedWindowRateLimitingPolicy.Window>> rateLimiterConfig = new HashMap<>();
 
   public FixedWindowRateLimitingPolicy() {
     this(false);
@@ -117,11 +114,9 @@ class FixedWindowRateLimitingPolicy implements RateLimitingPolicy {
 
 class SlidingWindowRateLimitingPolicy implements RateLimitingPolicy {
 
-  private Map<String, Queue<Long>> rateLimiterConfig = new HashMap<>();
-
   private static final int MAX_REQUESTS_PER_WINDOW = 10;
-
   private static final long MAX_EXPIRY_PER_WINDOW = 20 * 1_000;
+  private final Map<String, Queue<Long>> rateLimiterConfig = new HashMap<>();
 
   @Override
   public boolean limit(String clientId) {
@@ -150,10 +145,6 @@ public class RateLimiter {
     this.policy = policy;
   }
 
-  public boolean limit(String clientId) {
-    return policy.limit(clientId);
-  }
-
   public static void main(String[] args) throws InterruptedException {
     final RateLimiter limiter = new RateLimiter(new FixedWindowRateLimitingPolicy());
     Thread test = new Thread(() -> {
@@ -179,5 +170,9 @@ public class RateLimiter {
     });
     test.run();
     test.join();
+  }
+
+  public boolean limit(String clientId) {
+    return policy.limit(clientId);
   }
 }

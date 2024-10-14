@@ -1,15 +1,27 @@
 package leetcode.graph.medium;
 
+import datastructures.advanced.DisjointSet;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import datastructures.advanced.DisjointSet;
 
 /**
  * https://leetcode.com/problems/redundant-connection/
  */
 public class RedundantConnection {
   Map<Integer, Integer> parents = new HashMap<>();
+
+  public static void main(String[] args) {
+    int[][] edges = new int[][] {{1, 2}, {1, 3}, {2, 3}};
+    RedundantConnection redundantConnection = new RedundantConnection();
+    System.out.println(Arrays.toString(redundantConnection.findRedundantConnection(edges)));
+    edges = new int[][] {{1, 2}, {2, 3}, {1, 3}};
+    System.out.println(Arrays.toString(redundantConnection.findRedundantConnection(edges)));
+    edges = new int[][] {{1, 2}, {2, 3}, {3, 4}};
+    System.out.println(Arrays.toString(redundantConnection.findRedundantConnection(edges)));
+    edges = new int[][] {{1, 2}, {2, 3}, {3, 4}, {1, 4}};
+    System.out.println(Arrays.toString(redundantConnection.findRedundantConnection(edges)));
+  }
 
   public int[] findRedundantConnection(int[][] edges) {
     DisjointSet<Integer> disjointSet = new DisjointSet();
@@ -29,17 +41,5 @@ public class RedundantConnection {
       disjointSet.union(vertex1, vertex2);
     }
     return new int[0];
-  }
-
-  public static void main(String[] args) {
-    int[][] edges = new int[][] {{1, 2}, {1, 3}, {2, 3}};
-    RedundantConnection redundantConnection = new RedundantConnection();
-    System.out.println(Arrays.toString(redundantConnection.findRedundantConnection(edges)));
-    edges = new int[][] {{1, 2}, {2, 3}, {1, 3}};
-    System.out.println(Arrays.toString(redundantConnection.findRedundantConnection(edges)));
-    edges = new int[][] {{1, 2}, {2, 3}, {3, 4}};
-    System.out.println(Arrays.toString(redundantConnection.findRedundantConnection(edges)));
-    edges = new int[][] {{1, 2}, {2, 3}, {3, 4}, {1, 4}};
-    System.out.println(Arrays.toString(redundantConnection.findRedundantConnection(edges)));
   }
 }

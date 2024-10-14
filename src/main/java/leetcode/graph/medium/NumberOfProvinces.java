@@ -7,6 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 public class NumberOfProvinces {
+  public static void main(String[] args) {
+    int[][] isConnected = new int[][] {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}};
+    NumberOfProvinces util = new NumberOfProvinces();
+    System.out.println(util.findCircleNum(isConnected));
+    isConnected = new int[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    System.out.println(util.findCircleNum(isConnected));
+  }
+
   public int findCircleNum(int[][] isConnected) {
     Map<Integer, List<Integer>> graph = new HashMap<>();
     for (int i = 0; i < isConnected.length; i++) {
@@ -40,13 +48,5 @@ public class NumberOfProvinces {
         dfs(graph, visited, neighbor);
       }
     }
-  }
-
-  public static void main(String[] args) {
-    int[][] isConnected = new int[][] {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}};
-    NumberOfProvinces util = new NumberOfProvinces();
-    System.out.println(util.findCircleNum(isConnected));
-    isConnected = new int[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
-    System.out.println(util.findCircleNum(isConnected));
   }
 }

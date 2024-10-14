@@ -6,6 +6,11 @@ import java.util.Arrays;
  * [1,2 4,6,7], t = 5
  */
 public class MinimumTimeToCompleteTrips {
+  public static void main(String[] args) {
+    MinimumTimeToCompleteTrips util = new MinimumTimeToCompleteTrips();
+    System.out.println(util.minimumTime(new int[] {1, 2, 3}, 5));
+  }
+
   public long minimumTime(int[] time, int totalTrips) {
     Arrays.sort(time);
 
@@ -30,10 +35,5 @@ public class MinimumTimeToCompleteTrips {
     }
 
     return minTime;  // Return minTime directly as long
-  }
-
-  public static void main(String[] args) {
-    MinimumTimeToCompleteTrips util = new MinimumTimeToCompleteTrips();
-    System.out.println(util.minimumTime(new int[] {1,2,3}, 5));
   }
 }

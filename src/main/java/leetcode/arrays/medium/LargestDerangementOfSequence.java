@@ -9,6 +9,17 @@ import java.util.PriorityQueue;
  */
 public class LargestDerangementOfSequence {
 
+  public static void main(String[] args) {
+    LargestDerangementOfSequence util = new LargestDerangementOfSequence();
+    int[] arr = new int[] {5, 4, 3, 2, 1};
+    util.derange(arr);
+    System.out.println(Arrays.toString(arr));
+
+    arr = new int[] {1, 2, 3};
+    util.derange(arr);
+    System.out.println(Arrays.toString(arr));
+  }
+
   public void derange(int[] arr) {
     if (arr == null) {
       return;
@@ -33,16 +44,5 @@ public class LargestDerangementOfSequence {
         prev = curr;
       }
     }
-  }
-
-  public static void main(String[] args) {
-    LargestDerangementOfSequence util = new LargestDerangementOfSequence();
-    int[] arr = new int[] {5, 4, 3, 2, 1};
-    util.derange(arr);
-    System.out.println(Arrays.toString(arr));
-
-    arr = new int[] {1, 2, 3};
-    util.derange(arr);
-    System.out.println(Arrays.toString(arr));
   }
 }

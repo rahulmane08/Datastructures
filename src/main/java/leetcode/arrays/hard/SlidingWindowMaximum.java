@@ -1,10 +1,8 @@
 package leetcode.arrays.hard;
 
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * https://leetcode.com/problems/sliding-window-maximum/description/
@@ -16,6 +14,14 @@ import java.util.Queue;
  * 1 <= k <= nums.length
  */
 public class SlidingWindowMaximum {
+  public static void main(String[] args) {
+    int[] nums = {3, 2, 1, 0, 4};
+    SlidingWindowMaximum util = new SlidingWindowMaximum();
+    System.out.println(Arrays.toString(util.maxSlidingWindow(nums, 3)));
+    System.out.println(Arrays.toString(util.maxSlidingWindow(nums, 2)));
+    System.out.println(Arrays.toString(util.maxSlidingWindow(nums, 1)));
+  }
+
   public int[] maxSlidingWindow(int[] nums, int k) {
     int n = nums.length;
     int[] result = new int[n - k + 1];
@@ -50,13 +56,5 @@ public class SlidingWindowMaximum {
       result[index++] = nums[window.peekFirst()];
     }
     return result;
-  }
-
-  public static void main(String[] args) {
-    int [] nums = {3, 2, 1, 0, 4};
-    SlidingWindowMaximum util = new SlidingWindowMaximum();
-    System.out.println(Arrays.toString(util.maxSlidingWindow(nums, 3)));
-    System.out.println(Arrays.toString(util.maxSlidingWindow(nums, 2)));
-    System.out.println(Arrays.toString(util.maxSlidingWindow(nums, 1)));
   }
 }

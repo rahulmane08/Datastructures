@@ -3,9 +3,18 @@ package leetcode.trees.medium;
 import java.util.ArrayList;
 import java.util.List;
 import leetcode.trees.TreeNode;
-import leetcode.trees.easy.AllRootToLeafPaths;
 
 public class FirstRootToLeafPath {
+  public static void main(String[] args) {
+    TreeNode root = new TreeNode(1);
+    TreeNode _2 = new TreeNode(2);
+    _2.right = new TreeNode(5);
+    root.left = _2;
+    root.right = new TreeNode(3);
+    FirstRootToLeafPath util = new FirstRootToLeafPath();
+    System.out.println(util.firstRootToLeafTreePath(root));
+  }
+
   public String firstRootToLeafTreePath(TreeNode root) {
     List<String> paths = new ArrayList<>();
     compute(root, "", paths);
@@ -29,15 +38,5 @@ public class FirstRootToLeafPath {
     }
 
     return compute(root.left, currPath, paths) || compute(root.right, currPath, paths);
-  }
-
-  public static void main(String[] args) {
-    TreeNode root = new TreeNode(1);
-    TreeNode _2 = new TreeNode(2);
-    _2.right = new TreeNode(5);
-    root.left = _2;
-    root.right = new TreeNode(3);
-    FirstRootToLeafPath util = new FirstRootToLeafPath();
-    System.out.println(util.firstRootToLeafTreePath(root));
   }
 }

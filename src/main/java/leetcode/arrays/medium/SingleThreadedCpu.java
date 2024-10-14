@@ -29,6 +29,11 @@ class Task {
 }
 
 public class SingleThreadedCpu {
+  public static void main(String[] args) {
+    SingleThreadedCpu util = new SingleThreadedCpu();
+    System.out.println(Arrays.toString(util.getOrder(new int[][] {{1, 2}, {2, 4}, {3, 2}, {4, 1}})));
+  }
+
   public int[] getOrderWrong(int[][] tasks) {
     int n = tasks.length;
     int[] executionOrder = new int[n];
@@ -94,10 +99,5 @@ public class SingleThreadedCpu {
       currentTime += executingTask.getExecutionTime();
     }
     return executionOrder;
-  }
-
-  public static void main(String[] args) {
-    SingleThreadedCpu util = new SingleThreadedCpu();
-    System.out.println(Arrays.toString(util.getOrder(new int[][] {{1, 2}, {2, 4}, {3, 2}, {4, 1}})));
   }
 }

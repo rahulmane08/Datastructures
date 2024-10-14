@@ -4,6 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TargetSum {
+  public static void main(String[] args) {
+    int[] nums = {1, 1, 1, 1, 1};
+    TargetSum util = new TargetSum();
+    System.out.println(util.findTargetSumWays(nums, 3));
+    System.out.println(util.findTargetSumWays(nums, 5));
+    System.out.println(util.findTargetSumWays(nums, 10));
+    System.out.println(util.findTargetSumWays(new int[] {1}, 1));
+  }
+
   public int findTargetSumWays(int[] nums, int target) {
     Map<String, Integer> dp = new HashMap<>();
     return topDown(nums, target, 0, dp);
@@ -24,14 +33,5 @@ public class TargetSum {
     }
 
     return dp.get(key);
-  }
-
-  public static void main(String[] args) {
-    int[] nums = {1, 1, 1, 1, 1};
-    TargetSum util = new TargetSum();
-    System.out.println(util.findTargetSumWays(nums, 3));
-    System.out.println(util.findTargetSumWays(nums, 5));
-    System.out.println(util.findTargetSumWays(nums, 10));
-    System.out.println(util.findTargetSumWays(new int[] {1}, 1));
   }
 }

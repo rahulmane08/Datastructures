@@ -6,6 +6,22 @@ import java.util.List;
 import leetcode.trees.TreeNode;
 
 public class TreeToArrays {
+  public static void main(String[] args) {
+    TreeNode _1 = new TreeNode(1);
+    TreeNode _2 = new TreeNode(2);
+    TreeNode _3 = new TreeNode(3);
+    TreeNode _4 = new TreeNode(4);
+    TreeNode _5 = new TreeNode(5);
+    _1.left = _2;
+    _1.right = _3;
+    _2.left = _4;
+    _2.right = _5;
+    TreeToArrays util = new TreeToArrays();
+    System.out.println(Arrays.toString(util.inorderArray(_1)));
+    System.out.println(Arrays.toString(util.preorderArray(_1)));
+    System.out.println(Arrays.toString(util.postorderArray(_1)));
+  }
+
   public Integer[] inorderArray(TreeNode root) {
     List<Integer> inorderList = new ArrayList<>();
     fillInorder(root, inorderList);
@@ -49,21 +65,5 @@ public class TreeToArrays {
     fillPostorder(root.left, postorderList);
     fillPostorder(root.right, postorderList);
     postorderList.add(root.val);
-  }
-
-  public static void main(String[] args) {
-    TreeNode _1 = new TreeNode(1);
-    TreeNode _2 = new TreeNode(2);
-    TreeNode _3 = new TreeNode(3);
-    TreeNode _4 = new TreeNode(4);
-    TreeNode _5 = new TreeNode(5);
-    _1.left = _2;
-    _1.right = _3;
-    _2.left = _4;
-    _2.right = _5;
-    TreeToArrays util = new TreeToArrays();
-    System.out.println(Arrays.toString(util.inorderArray(_1)));
-    System.out.println(Arrays.toString(util.preorderArray(_1)));
-    System.out.println(Arrays.toString(util.postorderArray(_1)));
   }
 }

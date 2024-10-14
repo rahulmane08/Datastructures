@@ -17,6 +17,11 @@ public class RottingOranges {
     System.out.println(util.orangesRottingBfs(new int[][] {{0}}));
   }
 
+  private static boolean isValid(int[][] grid, int i, int j, int rows, int cols) {
+    return i > -1 && i < rows && j > -1 && j < cols &&
+        grid[i][j] == 1;
+  }
+
   /**
    * T(n) = m*n
    *
@@ -66,10 +71,5 @@ public class RottingOranges {
     }
 
     return freshOranges == 0 ? totalMinutes : -1;
-  }
-
-  private static boolean isValid(int[][] grid, int i, int j, int rows, int cols) {
-    return i > -1 && i < rows && j > -1 && j < cols &&
-        grid[i][j] == 1;
   }
 }

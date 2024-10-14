@@ -7,13 +7,13 @@ import java.util.Set;
 
 public class TarjanArticulationPoint {
 
-  private int time;
   private final Set<Integer> articulationPoints;
   private final HashSet<Integer> visited;
   private final Map<Integer, Integer> visitTimes;
   private final Map<Integer, Integer> lowTimes;
   private final Map<Integer, Integer> parents;
   private final Graph graph;
+  private int time;
 
   public TarjanArticulationPoint(int[][] edges) {
     this.graph = new Graph(edges, false);

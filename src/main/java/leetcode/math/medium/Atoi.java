@@ -5,6 +5,13 @@ package leetcode.math.medium;
  */
 public class Atoi {
 
+  public static void main(String[] args) {
+    Atoi atoi = new Atoi();
+    System.out.println(atoi.myAtoi("123"));
+    System.out.println(atoi.myAtoi(Integer.MAX_VALUE + "2"));
+    System.out.println(Integer.parseInt(Integer.MAX_VALUE + "2"));
+  }
+
   /**
    * Lets suppose the max value of an integer is 333
    * maxValue = 33
@@ -45,12 +52,5 @@ public class Atoi {
     }
 
     return sign * result;
-  }
-
-  public static void main(String[] args) {
-    Atoi atoi = new Atoi();
-    System.out.println(atoi.myAtoi("123"));
-    System.out.println(atoi.myAtoi(Integer.MAX_VALUE + "2"));
-    System.out.println(Integer.parseInt(Integer.MAX_VALUE + "2"));
   }
 }

@@ -10,7 +10,7 @@ public class PlusOne {
     for (int i = n - 1; i >= 0; i--) {
       int result = digits[i] + carry;
       digits[i] = result % 10;
-      carry = (int) (result / 10);
+      carry = result / 10;
       if (carry == 0) {
         break;
       }
@@ -18,9 +18,7 @@ public class PlusOne {
     if (carry == 1) {
       int[] result = new int[n + 1];
       result[0] = 1;
-      for (int i = 1; i < n; i++) {
-        result[i] = digits[i - 1];
-      }
+      System.arraycopy(digits, 0, result, 1, n - 1);
       return result;
     }
     return digits;

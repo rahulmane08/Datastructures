@@ -1,6 +1,11 @@
 package leetcode.greedy.hard;
 
 public class MinimumIncrementsOnSubarraysToFormTargetArray {
+  public static void main(String[] args) {
+    MinimumIncrementsOnSubarraysToFormTargetArray util = new MinimumIncrementsOnSubarraysToFormTargetArray();
+    System.out.println(util.minNumberOperations(new int[] {3, 1, 5}));
+  }
+
   public int minNumberOperations(int[] target) {
     int cnt = 0, prev = 0;
 
@@ -11,10 +16,5 @@ public class MinimumIncrementsOnSubarraysToFormTargetArray {
       prev = target[i];
     }
     return cnt;
-  }
-
-  public static void main(String[] args) {
-    MinimumIncrementsOnSubarraysToFormTargetArray util = new MinimumIncrementsOnSubarraysToFormTargetArray();
-    System.out.println(util.minNumberOperations(new int[] {3, 1, 5}));
   }
 }

@@ -9,6 +9,20 @@ package leetcode.arrays.medium;
  * [1,2,3,3,2]
  */
 public class LongestMountainInArray {
+  public static void main(String[] args) {
+    int[] arr = {3, 2, 1, 4, 7, 3, 2, 5};
+    LongestMountainInArray util = new LongestMountainInArray();
+    System.out.println(util.longestMountain(arr));
+    arr = new int[] {2, 2, 2};
+    System.out.println(util.longestMountain(arr));
+    arr = new int[] {3, 2, 1};
+    System.out.println(util.longestMountain(arr));
+    arr = new int[] {1, 2, 3};
+    System.out.println(util.longestMountain(arr));
+    arr = new int[] {2, 1, 2, 1, 2, 3, 2, 1};
+    System.out.println(util.longestMountain(arr));
+  }
+
   public int longestMountain(int[] arr) {
     int length = 0;
     int peak = 1;
@@ -23,19 +37,5 @@ public class LongestMountainInArray {
       peak++;
     }
     return length;
-  }
-
-  public static void main(String[] args) {
-    int[] arr = {3, 2, 1, 4, 7, 3, 2, 5};
-    LongestMountainInArray util = new LongestMountainInArray();
-    System.out.println(util.longestMountain(arr));
-    arr = new int[] {2, 2, 2};
-    System.out.println(util.longestMountain(arr));
-    arr = new int[] {3, 2, 1};
-    System.out.println(util.longestMountain(arr));
-    arr = new int[] {1, 2, 3};
-    System.out.println(util.longestMountain(arr));
-    arr = new int[] {2, 1, 2, 1, 2, 3, 2, 1};
-    System.out.println(util.longestMountain(arr));
   }
 }

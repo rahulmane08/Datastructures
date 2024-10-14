@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- *  * A directed graph is strongly connected if there is a path between all pairs of vertices.
- *  * <p>
- *  * Its a 2 pass algorithm.
- *  * 1. Time Complexity: O(V+E)
- *  * 2. Space Complexity: O(V)
- *
+ * * A directed graph is strongly connected if there is a path between all pairs of vertices.
+ * * <p>
+ * * Its a 2 pass algorithm.
+ * * 1. Time Complexity: O(V+E)
+ * * 2. Space Complexity: O(V)
+ * <p>
  * Kosaraju SCC
  * 1. topsort graph.
  * 2. reverse graph.
@@ -22,6 +22,12 @@ import java.util.Stack;
  * SCC.
  */
 public class KosarajuSCC {
+  public static void main(String[] args) {
+    int[][] edges = {{1, 2}, {2, 3}, {3, 1}, {1, 4}};
+    KosarajuSCC util = new KosarajuSCC();
+    System.out.println(util.getAllStronglyConnectedComponents(edges));
+  }
+
   public List<Stack<Integer>> getAllStronglyConnectedComponents(int[][] edges) {
     Graph graph = new Graph(edges, true);
     return getAllStronglyConnectedComponents(graph);
@@ -46,11 +52,5 @@ public class KosarajuSCC {
       }
     }
     return strongyConnectedComponents;
-  }
-
-  public static void main(String[] args) {
-    int [][] edges = {{1,2}, {2,3}, {3,1}, {1,4}};
-    KosarajuSCC util = new KosarajuSCC();
-    System.out.println(util.getAllStronglyConnectedComponents(edges));
   }
 }

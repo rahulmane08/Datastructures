@@ -3,6 +3,11 @@ package leetcode.stack.hard;
 import java.util.Stack;
 
 public class LargestHistogram {
+  public static void main(String[] args) {
+    LargestHistogram util = new LargestHistogram();
+    System.out.println(util.largestRectangleArea(new int[] {2, 3}));
+  }
+
   public int largestRectangleArea(int[] heights) {
     if (heights == null || heights.length == 0) {
       return 0;
@@ -55,10 +60,5 @@ public class LargestHistogram {
       s.push(i);
     }
     return pgse;
-  }
-
-  public static void main(String[] args) {
-    LargestHistogram util = new LargestHistogram();
-    System.out.println(util.largestRectangleArea(new int[] {2, 3}));
   }
 }
