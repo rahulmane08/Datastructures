@@ -52,6 +52,7 @@ public class SafeWalkthruGrid {
           }
         }
       }
+      // dfs didnt yeild true, hence backtrack.
       visited[row][col] = false;
       cache.put(key, false);
     }

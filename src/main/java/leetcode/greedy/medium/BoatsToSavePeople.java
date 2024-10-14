@@ -2,6 +2,11 @@ package leetcode.greedy.medium;
 
 import java.util.Arrays;
 
+/**
+ * T(n) = O(n log(n))
+ * S(n) = O(1)
+ */
+
 public class BoatsToSavePeople {
   /**
    * people = [1,2,2,3,5,6], limit = 5

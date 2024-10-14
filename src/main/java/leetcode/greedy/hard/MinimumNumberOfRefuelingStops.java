@@ -48,11 +48,10 @@ public class MinimumNumberOfRefuelingStops {
       int nextStationDistFromStart = stations[i][0];
       int fuelAtNextStation = stations[i][1];
 
-      if (currentMaxDistanceCarCanTravel >= nextStationDistFromStart) {
-        // greedily capture all reachable stations and put their fuel capacities in pq.
-        maxPQ.offer(fuelAtNextStation);
-      } else {
-        // found a station that cant be reached with currentMaxDistanceCarCanTravel.
+      // With the current fuel check if we can reach the next station?
+      if (currentMaxDistanceCarCanTravel < nextStationDistFromStart) {
+        // We can reach the next station with current fuel, hence consider the options queued up.
+        // Found a station that cant be reached with currentMaxDistanceCarCanTravel.
         // now amongst available options , keep picking the best stations providing max fuel.
         while (!maxPQ.isEmpty() && currentMaxDistanceCarCanTravel < nextStationDistFromStart) {
           currentMaxDistanceCarCanTravel += maxPQ.poll();
@@ -69,8 +68,8 @@ public class MinimumNumberOfRefuelingStops {
         if (currentMaxDistanceCarCanTravel < nextStationDistFromStart) {
           return -1;
         }
-        maxPQ.offer(fuelAtNextStation);
       }
+      maxPQ.offer(fuelAtNextStation);
     }
 
     // If we covered all stations and havent reached the target yet, check the spare petrol and see if we can reach target.

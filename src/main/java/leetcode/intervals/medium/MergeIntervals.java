@@ -14,6 +14,12 @@ public class MergeIntervals {
     System.out.println(Arrays.deepToString(merge1(intervals)));
   }
 
+  /**
+   * T(n) = O(n)
+   * S(n) = O(n)
+   * @param intervals
+   * @return
+   */
   public static int[][] merge(int[][] intervals) {
     if (intervals == null || intervals.length < 2) {
       return intervals;

@@ -6,6 +6,8 @@ import java.util.Stack;
 
 /**
  * https://leetcode.com/problems/combination-sum/description/
+ *
+ * O(2^n)
  */
 public class CombinationSum {
   public static void main(String[] args) {

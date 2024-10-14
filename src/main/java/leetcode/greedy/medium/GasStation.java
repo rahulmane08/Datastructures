@@ -20,6 +20,8 @@ public class GasStation {
    * gas = {1, 2, 3, 4, 5}
    * cost= {3, 4, 5, 1, 2}
    *
+   * T(n) = n
+   * S(n) = 1
    * @param gas
    * @param cost
    * @return
@@ -37,10 +39,7 @@ public class GasStation {
         tank = 0;
       }
     }
-    if (totalTripCost < 0) {
-      return -1;
-    }
-    return start;
+    return totalTripCost < 0 ? -1 : start;
   }
 
   public static void main(String[] args) {

@@ -12,6 +12,9 @@ import java.util.Stack;
  * 1 <= candidates.length <= 100
  * 1 <= candidates[i] <= 50
  * 1 <= target <= 30
+ *
+ * Decreasing function : 2T(n-1) + 1
+ * Case 2.2 : a^n/b = 2^n
  */
 public class CombinationSum2 {
   public static void main(String[] args) {
