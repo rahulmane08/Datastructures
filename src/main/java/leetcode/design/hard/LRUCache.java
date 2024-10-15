@@ -65,8 +65,7 @@ public class LRUCache<K, V> {
     } else {
       if (cache.size() == this.capacity) {
         evictEldestEntry();
-        cacheNode = new CacheNode<>(key, value);
-        addCacheNode(cacheNode);
+        addCacheNode(new CacheNode<>(key, value));
       }
     }
   }
@@ -83,8 +82,7 @@ public class LRUCache<K, V> {
    */
   protected void evictEldestEntry() {
     if (tail.prev != head) {
-      CacheNode<K, V> oldNode = tail.prev;
-      removeCacheNode(oldNode);
+      removeCacheNode(tail.prev);
     }
   }
 

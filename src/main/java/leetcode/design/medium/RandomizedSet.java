@@ -1,4 +1,4 @@
-package leetcode.design.hard;
+package leetcode.design.medium;
 
 import java.util.ArrayList;
 import java.util.HashMap;

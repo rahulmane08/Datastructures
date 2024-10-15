@@ -17,6 +17,7 @@ public class LRUCacheWIthExpiry<K, V> extends LRUCache<K, V> {
         removeCacheNode(cacheNode);
         return null;
       }
+      cacheNode.updateAccessTime();
       moveToHead(cacheNode);
       return cacheNode.value;
     }
@@ -28,15 +29,16 @@ public class LRUCacheWIthExpiry<K, V> extends LRUCache<K, V> {
     CacheNode<K, V> cacheNode = cache.get(key);
     if (cacheNode != null) {
       if (cacheNode.isExpired()) {
+        removeCacheNode(cacheNode);
         return;
       }
-      moveToHead(cacheNode);
       cacheNode.value = value;
+      cacheNode.updateAccessTime();
+      moveToHead(cacheNode);
     } else {
       if (cache.size() == this.capacity) {
         evictEldestEntry();
-        cacheNode = new CacheNode<>(key, value);
-        addCacheNode(cacheNode);
+        addCacheNode(new CacheNode<>(key, value));
       }
     }
   }

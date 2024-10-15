@@ -65,9 +65,9 @@ public class BinaryMinHeap<T> {
     }
     Node elem = new Node(key, weight);
     elements.add(elem); // add at the end.
-    int position = size() - 1 != 0 ? size() - 1 : 0;
+    int position = size() - 1;
     positions.put(key, position);
-    heapifyUp(position, elem);
+    heapifyUp(position);
   }
 
   /**
@@ -83,7 +83,7 @@ public class BinaryMinHeap<T> {
     if (position != -1) {
       Node<T> elem = elements.get(position);
       elem.setWeight(elem.getWeight() - decreaseBy);
-      heapifyUp(position, elem);
+      heapifyUp(position);
     }
   }
 
@@ -107,7 +107,7 @@ public class BinaryMinHeap<T> {
       elements.set(0, last);
       positions.put(last.key, 0);
       elements.remove(size - 1);
-      heapifyDown(0, last);
+      heapifyDown(0);
     }
     return elem.key;
   }
@@ -142,7 +142,7 @@ public class BinaryMinHeap<T> {
   }
 
   // Heapification functions.
-  private void heapifyUp(int position, Node<T> elem) {
+  private void heapifyUp(int position) {
     if (!isValidPosition(position)) {
       return;
     }
@@ -150,34 +150,36 @@ public class BinaryMinHeap<T> {
     int parent = (position - 1) / 2;
     // compare with parent.
     if (isValidPosition(parent)) {
+      Node<T> curr = elements.get(position);
       Node<T> parentElem = elements.get(parent);
-      if (parentElem != null && parentElem.weight > elem.weight) {
+      if (parentElem != null && parentElem.weight > curr.weight) {
         swap(position, parent);
-        heapifyUp(parent, elem);
+        heapifyUp(parent);
       }
     }
   }
 
-  private void heapifyDown(int position, Node<T> elem) {
+  private void heapifyDown(int position) {
     if (!isValidPosition(position)) {
       return;
     }
 
+    Node<T> curr = elements.get(position);
     int left = 2 * position + 1;
     int right = 2 * position + 2;
-    int largest = position;
+    int smallest = position;
 
-    if (isValidPosition(left) && elements.get(left).weight < elem.weight) {
-      largest = left;
+    if (isValidPosition(left) && elements.get(left).weight < curr.weight) {
+      smallest = left;
     }
 
-    if (isValidPosition(left) && elements.get(right).weight < elem.weight) {
-      largest = right;
+    if (isValidPosition(right) && elements.get(right).weight < curr.weight) {
+      smallest = right;
     }
 
-    if (largest != position) {
-      swap(position, largest);
-      heapifyDown(largest, elem);
+    if (smallest != position) {
+      swap(position, smallest);
+      heapifyDown(smallest);
     }
   }
 

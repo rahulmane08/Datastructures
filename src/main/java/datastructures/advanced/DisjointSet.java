@@ -85,7 +85,7 @@ public class DisjointSet<T> {
       ranks.put(parent2, rank2 + rank1);
       ranks.put(parent1, 1);
     }
-    this.size--;
+    this.size--; // union will reduce the # of disjoint sets.
   }
 
   public boolean contains(T elem) {
