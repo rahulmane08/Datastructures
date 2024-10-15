@@ -5,15 +5,15 @@ import java.util.PriorityQueue;
 
 public class MaximalScoreAfterKOperations {
   public long maxKelements(int[] nums, int k) {
-    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
+    PriorityQueue<Long> maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
     for (int i = 0; i < nums.length; i++) {
-      maxHeap.offer(nums[i]);
+      maxHeap.offer(Long.valueOf(nums[i]));
     }
 
     int ops = 0;
-    int score = 0;
+    long score = 0;
     while (!maxHeap.isEmpty() && ops < k) {
-      int max = maxHeap.poll();
+      long max = maxHeap.poll();
       score += max;
       max = ceil(max, 3);
       if (max != 1) {
@@ -24,7 +24,7 @@ public class MaximalScoreAfterKOperations {
     return score;
   }
 
-  private int ceil(int x, int y) {
+  private long ceil(long x, long y) {
     if (x % y == 0) {
       return x / y;
     }
