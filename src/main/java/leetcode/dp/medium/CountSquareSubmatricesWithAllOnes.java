@@ -7,6 +7,12 @@ public class CountSquareSubmatricesWithAllOnes {
   public static void main(String[] args) {
     CountSquareSubmatricesWithAllOnes util = new CountSquareSubmatricesWithAllOnes();
     int[][] matrix = {
+        {1, 1},
+        {1, 1}
+    };
+    System.out.println(util.countSquares(matrix));
+
+    matrix = new int[][] {
         {0, 1, 1, 1},
         {1, 1, 1, 1},
         {0, 1, 1, 1}
@@ -20,6 +26,20 @@ public class CountSquareSubmatricesWithAllOnes {
     };
     System.out.println(util.countSquares(matrix));
   }
+
+  /**
+   * matrix =
+   * {1, 1},
+   * {1, 1}
+   *
+   * in this case we do a dfs starting from 0,0 in 3 directions.
+   * for (1,1) -> all 3 paths give 0, so count = 1, dp(1,1) = 1
+   * for (0,1) -> gives 0, 0, 1 for 3 paths, min = 0, dp(0,1) = 1
+   * for (1,0) -> gives 1, 0, 0 for 3 paths, min = 0, dp(1,0) = 1
+   * for(0,0) -> gives 1,1,1 for 3 paths, min = 1, dp(0,0) = 2
+   * @param matrix
+   * @return
+   */
 
   public int countSquares(int[][] matrix) {
     int rows = matrix.length;
