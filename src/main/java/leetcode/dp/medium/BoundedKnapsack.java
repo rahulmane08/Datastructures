@@ -27,7 +27,6 @@ public class BoundedKnapsack {
     BoundedKnapsack util = new BoundedKnapsack();
     System.out.println(util.findMax(weights, costs, 5));
     System.out.println(util.findMax(weights, costs, 10));
-    System.out.println(util.findMax(weights, costs, 10));
   }
 
   public int findMax(int[] weights, int[] costs, int capacity) {
@@ -57,7 +56,7 @@ public class BoundedKnapsack {
     }
     if (dp[index][capacity] == -1) {
       int leftMax = 0;
-      if (weights[index] < capacity) {
+      if (weights[index] <= capacity) {
         leftMax = costs[index] + topDown(weights, costs, capacity - weights[index], index + 1, dp); // include.
       }
       int rightMax = topDown(weights, costs, weights[index], index + 1, dp); // exclude

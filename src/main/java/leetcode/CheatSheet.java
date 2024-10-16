@@ -91,11 +91,8 @@ public class CheatSheet {
     for (int i = 0; i < arr.length; i++) {
       Arrays.fill(arr[i], -1);
     }
-
     System.out.println(Arrays.deepToString(arr));
 
-
-    arr = new int[][] {{4, 5}, {6, 7}, {1, 3}, {1, 2}};
     Arrays.sort(arr, Comparator.comparingInt(a -> a[0]));
     System.out.println(Arrays.deepToString(arr));
   }
