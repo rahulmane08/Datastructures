@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LongestCommonSubsequence {
-  public int lcs(String s1, String s2) {
+  public int lengthOfLcs(String s1, String s2) {
     Map<String, Integer> dp = new HashMap<>();
     return topDown(s1, s2, 0, 0, dp);
   }
@@ -28,6 +28,6 @@ public class LongestCommonSubsequence {
 
   public static void main(String[] args) {
     LongestCommonSubsequence lcs = new LongestCommonSubsequence();
-    System.out.println(lcs.lcs("bcdx123", "cd"));
+    System.out.println(lcs.lengthOfLcs("bcdx123", "cdy123"));
   }
 }

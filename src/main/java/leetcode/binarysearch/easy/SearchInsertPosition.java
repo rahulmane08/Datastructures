@@ -7,10 +7,13 @@ public class SearchInsertPosition {
   public static void main(String[] args) {
     SearchInsertPosition util = new SearchInsertPosition();
     int[] nums = {1, 2, 5, 7, 10};
-    System.out.println(util.searchInsert(nums, 100));
+    /*System.out.println(util.searchInsert(nums, 100));
     System.out.println(util.searchInsert(nums, 0));
     System.out.println(util.searchInsert(nums, 3));
-    System.out.println(util.searchInsert(nums, 9));
+    System.out.println(util.searchInsert(nums, 9));*/
+
+    nums = new int[] {1, 2, 5, 7, 10};
+    System.out.println();
   }
 
   public int searchInsert(int[] nums, int target) {
