@@ -31,14 +31,7 @@ public class SingleElementInSortedArray {
     int high = n - 1;
     while (low <= high) {
       int mid = (low + high) >>> 1;
-      int freq = 0;
-      if (mid + 1 < n && nums[mid] == nums[mid + 1]) {
-        freq++;
-      }
-      if (mid - 1 > -1 && nums[mid] == nums[mid - 1]) {
-        freq++;
-      }
-      if (freq == 0) {
+      if (checkIfSingleElement(nums, mid)) {
         return nums[mid];
       }
 
@@ -50,5 +43,16 @@ public class SingleElementInSortedArray {
       }
     }
     return -1;
+  }
+
+  private boolean checkIfSingleElement(int[] nums, int index) {
+    int freq = 0;
+    if (index - 1 > -1 && nums[index] == nums[index - 1]) {
+      freq++;
+    }
+    if (index + 1 < nums.length && nums[index] == nums[index + 1]) {
+      freq++;
+    }
+    return freq == 0;
   }
 }
