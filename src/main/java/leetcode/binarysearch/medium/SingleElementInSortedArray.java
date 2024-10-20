@@ -31,7 +31,7 @@ public class SingleElementInSortedArray {
     int high = n - 1;
     while (low <= high) {
       int mid = (low + high) >>> 1;
-      if (checkIfSingleElement(nums, mid)) {
+      if (isSingleElement(nums, mid)) {
         return nums[mid];
       }
 
@@ -45,7 +45,7 @@ public class SingleElementInSortedArray {
     return -1;
   }
 
-  private boolean checkIfSingleElement(int[] nums, int index) {
+  private boolean isSingleElement(int[] nums, int index) {
     int freq = 0;
     if (index - 1 > -1 && nums[index] == nums[index - 1]) {
       freq++;
