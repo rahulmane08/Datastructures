@@ -1,4 +1,6 @@
-package leetcode.math.medium;
+package leetcode.math.easy;
+
+import leetcode.math.medium.Power;
 
 public class NthRoot {
   public int nthRoot(int x, int n) {
