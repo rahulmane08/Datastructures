@@ -21,11 +21,11 @@ public class MagneticForceBetweenTwoBalls {
     return maxDist;
   }
 
-  private boolean canPlaceBalls(int[] position, int m, int dist) {
+  private boolean canPlaceBalls(int[] position, int m, int minDistBetween2Balls) {
     int prev = 0;
     m--;
     for (int i = 1; i < position.length; i++) {
-      if (position[i] - position[prev] >= dist) {
+      if (position[i] - position[prev] >= minDistBetween2Balls) {
         prev = i;
         if (--m <= 0) {
           return true;
