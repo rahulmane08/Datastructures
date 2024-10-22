@@ -30,6 +30,6 @@ public class MostStonesRemovedWithSameRowOrColumn {
       set.makeSet(y);
       set.union(x, y);
     }
-    return totalStones - set.getSize();
+    return totalStones - set.getCount();
   }
 }

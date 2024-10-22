@@ -12,6 +12,7 @@ import java.util.Map;
 public class DisjointSet<T> {
   private final Map<T, T> parents;
   private final Map<T, Integer> ranks;
+  private int count;
   private int size;
 
   public DisjointSet() {
@@ -28,6 +29,7 @@ public class DisjointSet<T> {
     if (!parents.containsKey(vertex)) {
       parents.putIfAbsent(vertex, vertex);
       ranks.putIfAbsent(vertex, 1);
+      this.count++;
       this.size++;
     }
   }
@@ -85,7 +87,7 @@ public class DisjointSet<T> {
       ranks.put(parent2, rank2 + rank1);
       ranks.put(parent1, 1);
     }
-    this.size--; // union will reduce the # of disjoint sets.
+    this.count--; // union will reduce the # of disjoint sets.
   }
 
   public boolean contains(T elem) {
@@ -102,6 +104,10 @@ public class DisjointSet<T> {
 
   public Map<T, Integer> getRanks() {
     return ranks;
+  }
+
+  public int getCount() {
+    return count;
   }
 
   public int getSize() {
