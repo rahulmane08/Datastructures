@@ -1,14 +1,13 @@
 package leetcode.binarysearch.medium;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
+import leetcode.binarysearch.BinarySearchUtil;
+import leetcode.binarysearch.BinarySearchUtil.LowerBoundUtil;
 
 public class RangeSearch {
 
-  public boolean search(int[][] ranges, int[] target) {
+  public int search(int[][] ranges, int[] target) {
     Arrays.sort(ranges, Comparator.comparingInt(a -> a[0]));
     int low = 0;
     int high = ranges.length - 1;
@@ -16,14 +15,35 @@ public class RangeSearch {
       int mid = (low + high) >>> 1;
       int[] midInterval = ranges[mid];
       if (isOverlapping(midInterval, target)) {
-        return true;
+        return mid;
       } else if (target[1] < midInterval[0]) {
         high = mid - 1;
       } else {
         low = mid + 1;
       }
     }
-    return false;
+    return -1;
+  }
+
+  public int[] getRange(int[][] ranges, int[] target) {
+    Arrays.sort(ranges, Comparator.comparingInt(a -> a[0]));
+    int[] starts = new int[ranges.length];
+    int[] ends = new int[ranges.length];
+    for (int i = 0; i < ranges.length; i++) {
+      starts[i] = ranges[i][0];
+      ends[i] = ranges[i][1];
+    }
+    int low = new LowerBoundUtil(starts).lowerBound(target[0]);
+    int high = new BinarySearchUtil.UpperBoundUtil(starts).upperBound(target[1]);
+    // case 1: if target eclipses entire intervals, low = 0, hight = n, hence range = (0, n-1)
+    // case 2: if target start is not present in intervals, then low = high = index of next higher element.
+    // case 3: if target start or end is present in intervals, low = that index, high = index of next higher element.
+    if (low == high && low != 0) {
+      // case 2
+      low = low - 1;
+    }
+
+    return new int[] {low, high - 1};
   }
 
   private boolean isOverlapping(int[] curr, int[] next) {
@@ -33,58 +53,14 @@ public class RangeSearch {
         || (curr[0] <= next[1] && next[1] <= curr[1]);
   }
 
-  public List<int[]> getOverlappingIntervals(int[][] ranges, int[] target) {
-    Arrays.sort(ranges, Comparator.comparingInt(a -> a[0]));
-    List<Integer> overlappingIntervalIndexes = getOverlappingIntervals(ranges, target, 0, ranges.length - 1);
-    return overlappingIntervalIndexes.stream().map(i -> ranges[i]).collect(Collectors.toList());
-  }
-
-  private List<Integer> getOverlappingIntervals(int[][] ranges, int[] target, int low, int high) {
-    List<Integer> result = new ArrayList<>();
-    while (low <= high) {
-      int mid = (low + high) >>> 1;
-      int[] midInterval = ranges[mid];
-      if (isOverlapping(midInterval, target)) {
-        result.add(mid);
-
-        if (midInterval[0] <= target[0] && target[1] <= midInterval[1]) {
-          //subset
-          break;
-        }
-
-        if (target[0] < midInterval[0]) {
-          high = mid - 1;
-        } else {
-          low = mid + 1;
-        }
-      } else if (target[1] < midInterval[0]) {
-        high = mid - 1;
-      } else {
-        low = mid + 1;
-      }
-    }
-    return result;
-  }
-
   public static void main(String[] args) {
-    int[][] ranges = new int[][] {{17, 19}, {1, 3}, {6, 10}, {12, 15}};
+    int[][] ranges = new int[][] {{1, 3}, {6, 10}, {12, 15}, {17, 19}, {19, 24}};
+    // [1,6,12,17] [3, 10, 15, 19]
     RangeSearch util = new RangeSearch();
-    System.out.println(util.search(ranges, new int[] {2, 5}));
-    System.out.println(util.search(ranges, new int[] {4, 5}));
-
-    List<int[]> overlappingIntervals = util.getOverlappingIntervals(ranges, new int[] {2, 5});
-    overlappingIntervals.forEach(interval -> System.out.println(Arrays.toString(interval)));
-    System.out.println("====");
-    overlappingIntervals = util.getOverlappingIntervals(ranges, new int[] {2, 7});
-    overlappingIntervals.forEach(interval -> System.out.println(Arrays.toString(interval)));
-    System.out.println("====");
-    overlappingIntervals = util.getOverlappingIntervals(ranges, new int[] {7, 9});
-    overlappingIntervals.forEach(interval -> System.out.println(Arrays.toString(interval)));
-    System.out.println("====");
-    overlappingIntervals = util.getOverlappingIntervals(ranges, new int[] {5, 11});
-    overlappingIntervals.forEach(interval -> System.out.println(Arrays.toString(interval)));
-    System.out.println("====");
-    overlappingIntervals = util.getOverlappingIntervals(ranges, new int[] {5, 13});
-    overlappingIntervals.forEach(interval -> System.out.println(Arrays.toString(interval)));
+    System.out.println(Arrays.toString(util.getRange(ranges, new int[] {2, 5}))); // spans multiple intervals
+    System.out.println(Arrays.toString(util.getRange(ranges, new int[] {4, 5}))); // lies in the middle doesnt overlap
+    System.out.println(Arrays.toString(util.getRange(ranges, new int[] {0, 30}))); // eclipses entire range
+    System.out.println(Arrays.toString(util.getRange(ranges, new int[] {0, 13}))); // eclipses left, right in middle
+    System.out.println(Arrays.toString(util.getRange(ranges, new int[] {0, 11}))); // eclipses left, right in middle
   }
 }

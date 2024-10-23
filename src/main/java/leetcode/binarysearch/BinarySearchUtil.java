@@ -1,5 +1,6 @@
 package leetcode.binarysearch;
 
+import java.util.Arrays;
 import lombok.ToString;
 
 public class BinarySearchUtil {
@@ -35,13 +36,13 @@ public class BinarySearchUtil {
   }
 
   @ToString
-  static class LowerBoundUtil {
+  public static class LowerBoundUtil {
     final int[] nums;
     int low;
     int high;
     int mid;
 
-    LowerBoundUtil(int[] nums) {
+    public LowerBoundUtil(int[] nums) {
       low = 0;
       high = nums.length - 1;
       this.nums = nums;
@@ -61,13 +62,13 @@ public class BinarySearchUtil {
   }
 
   @ToString
-  static class UpperBoundUtil {
+  public static class UpperBoundUtil {
     final int[] nums;
     int low;
     int high;
     int mid;
 
-    UpperBoundUtil(int[] nums) {
+    public UpperBoundUtil(int[] nums) {
       low = 0;
       high = nums.length - 1;
       this.nums = nums;
@@ -87,53 +88,26 @@ public class BinarySearchUtil {
   }
 
   public static void main(String[] args) {
-    System.out.println("Even length array");
-    int[] nums = new int[] {1, 4, 5, 7, 10, 14};
-    searchInsertPosition(nums, 0);
-    searchInsertPosition(nums, 3);
-    searchInsertPosition(nums, 12);
-    searchInsertPosition(nums, 20);
-    System.out.println("========================================================================");
-
-    System.out.println("Odd length array");
-    nums = new int[] {1, 4, 5, 7, 10, 14, 18};
-    searchInsertPosition(nums, 0);
-    searchInsertPosition(nums, 3);
-    searchInsertPosition(nums, 12);
-    searchInsertPosition(nums, 20);
-    System.out.println("========================================================================");
-
-
-    nums = new int[] {1, 1, 1, 3, 5, 8, 15, 19, 19, 19};
-    lowerBound(nums, 0);
-    lowerBound(nums, 1);
-    lowerBound(nums, 5);
-    lowerBound(nums, 25);
-    lowerBound(nums, 19);
-    System.out.println("========================================================================");
-
-    upperBound(nums, 0);
-    upperBound(nums, 1);
-    upperBound(nums, 5);
-    upperBound(nums, 25);
-    upperBound(nums, 19);
+    int[] nums = new int[] {1, 1, 1, 3, 5, 8, 15, 19, 19, 19};
+    System.out.printf("array : %s, length = %s%n", Arrays.toString(nums), nums.length);
+    for (int elem : new int[] {0, 1, 3, 5, 6, 19, 25}) {
+      System.out.printf("elem: %s, insertPos: %s, lowerBound:%s, upperBound: %s%n", elem,
+          searchInsertPosition(nums, elem), lowerBound(nums, elem), upperBound(nums, elem));
+    }
   }
 
-  private static void searchInsertPosition(int[] nums, int elem) {
+  private static int searchInsertPosition(int[] nums, int elem) {
     SearchInsertPositionUtil util = new SearchInsertPositionUtil(nums);
-    int pos = util.search(elem);
-    System.out.printf("elem  = %s, pos = %s, util = %s%n", elem, pos, util);
+    return util.search(elem);
   }
 
-  private static void lowerBound(int[] nums, int elem) {
+  private static int lowerBound(int[] nums, int elem) {
     LowerBoundUtil util = new LowerBoundUtil(nums);
-    int pos = util.lowerBound(elem);
-    System.out.printf("elem  = %s, lowerBound = %s, util = %s%n", elem, pos, util);
+    return util.lowerBound(elem);
   }
 
-  private static void upperBound(int[] nums, int elem) {
+  private static int upperBound(int[] nums, int elem) {
     UpperBoundUtil util = new UpperBoundUtil(nums);
-    int pos = util.upperBound(elem);
-    System.out.printf("elem  = %s, upperBound = %s, util = %s%n", elem, pos, util);
+    return util.upperBound(elem);
   }
 }
