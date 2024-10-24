@@ -2,6 +2,7 @@ package datastructures.advanced;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.ToString;
 
 /**
  * Space complexity = O(n)
@@ -9,6 +10,7 @@ import java.util.Map;
  * https://cs.stackexchange.com/questions/105652/what-does-o-alphan-amortized-time-mean
  * Refer to Tushar Roy video : https://www.youtube.com/watch?v=ID00PMy0-vE
  */
+@ToString
 public class DisjointSet<T> {
   private final Map<T, T> parents;
   private final Map<T, Integer> ranks;
@@ -112,5 +114,41 @@ public class DisjointSet<T> {
 
   public int getSize() {
     return size;
+  }
+
+  public static void main(String[] args) {
+    DisjointSet<Integer> set = new DisjointSet<>();
+    for (int i = 1; i <= 9; i++) {
+      set.makeSet(i);
+    }
+    System.out.println(set);
+
+    set.union(2, 3);
+    set.union(1, 3);
+    System.out.println(set);
+
+    set.union(5, 6);
+    set.union(4, 5);
+    System.out.println(set);
+
+    set.union(7, 8);
+    set.union(8, 9);
+    System.out.println(set);
+
+    set.union(1, 6);
+    System.out.println(set);
+
+    for (int i = 1 ; i <=6; i++) {
+      set.findSet(i);
+    }
+    System.out.println(set);
+
+    set.union(4, 8);
+    System.out.println(set);
+
+    for (int i = 1 ; i <= 9; i++) {
+      set.findSet(i);
+    }
+    System.out.println(set);
   }
 }

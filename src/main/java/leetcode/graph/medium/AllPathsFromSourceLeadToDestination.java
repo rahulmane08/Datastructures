@@ -36,7 +36,7 @@ public class AllPathsFromSourceLeadToDestination {
           graph.compute(edge[0], (v, list) -> list == null ? new ArrayList<>() : list).add(edge[1]);
           graph.compute(edge[1], (v, list) -> list == null ? new ArrayList<>() : list);
         });
-    return leadsToDestination(graph, source, destination, new HashSet<>(), new HashSet<>());
+    return leadsToDestination1(graph, source, destination, new HashSet<>(), new HashSet<>());
   }
 
   /**
@@ -51,37 +51,67 @@ public class AllPathsFromSourceLeadToDestination {
    * @param curr
    * @param destination
    * @param ongoing
-   * @param visited
+   * @param completed
    * @return
    */
   boolean leadsToDestination(Map<Integer, List<Integer>> graph,
                              int curr,
                              int destination,
                              HashSet<Integer> ongoing,
-                             HashSet<Integer> visited) {
+                             HashSet<Integer> completed) {
     ongoing.add(curr);
     boolean leadsToDestination = true;
     if (graph.getOrDefault(curr, Collections.emptyList()).isEmpty()) {
+      // there can be other destination nodes, so need to make sure its the right one.
       leadsToDestination = (curr == destination);
     } else {
       for (int neighbor : graph.get(curr)) {
-        if (visited.contains(neighbor)) {
-          continue;
+        //
+        if (completed.contains(neighbor)) {
+          leadsToDestination = true; // found a node which has a path to destination.
+          break;
         }
 
-        if (ongoing.contains(neighbor)) {
-          return false; // cycle present
-        }
-
-        leadsToDestination = leadsToDestination(graph, neighbor, destination, ongoing, visited);
-        if (!leadsToDestination) {
-          return false;
+        // ongoing checks for cycle.
+        if (ongoing.contains(neighbor) || !leadsToDestination(graph, neighbor, destination, ongoing, completed)) {
+          leadsToDestination = false;
+          break; // cycle present
         }
       }
     }
 
-    ongoing.remove(curr);
-    visited.add(curr);
+    ongoing.remove(curr); // backtrack
+    completed.add(curr); // nodes finishing are the ones who have a path till destination.
     return leadsToDestination; // check terminal node is destination
+  }
+
+  /**
+   * This fails when destination has a self cycle.
+   */
+  boolean leadsToDestination1(Map<Integer, List<Integer>> graph,
+                              int source,
+                              int destination,
+                              HashSet<Integer> ongoing,
+                              HashSet<Integer> completed) {
+    if (source == destination) {
+      return true;
+    } else {
+      ongoing.add(source);
+      List<Integer> neighbors = graph.get(source);
+      if (neighbors.isEmpty()) {
+        return source == destination;
+      }
+
+      for (Integer neighbor : neighbors) {
+        if (completed.contains(neighbor)) {
+          break;
+        }
+        if (ongoing.contains(neighbor) || !leadsToDestination1(graph, neighbor, destination, ongoing, completed)) {
+          return false;
+        }
+      }
+      completed.add(source);
+      return true;
+    }
   }
 }

@@ -52,7 +52,7 @@ public class CycleDetectionUtil {
 
   public static boolean detectCycleInUDGUsingBfs(Graph graph, Integer vertex, HashSet<Integer> visited) {
     Queue<int[]> bfs = new LinkedList<>();
-    bfs.offer(new int[] {vertex, -1});
+    bfs.offer(new int[] {vertex, -1}); // set the first vertex's parent as -1.
     visited.add(vertex);
     while (!bfs.isEmpty()) {
       int[] currentElem = bfs.poll();
@@ -71,37 +71,6 @@ public class CycleDetectionUtil {
   }
 
   // ============================= DIRECTED GRAPHS=======================================
-
-  public static void main(String[] args) {
-    int[][] edges = {{1, 2}, {2, 3}};
-    System.out.println("Case 1: graph with no cycle, graph: " + Arrays.deepToString(edges));
-    System.out.println("UDG DisjoinSet: " + detectCycle(edges, false)); // DJ
-    System.out.println("DG GraphColoring: " + detectCycle(edges, true)); // GC
-    System.out.println("DG KahnsAlgo: " + KahnsAlgo.detectCycleInDG(edges)); // KA
-    System.out.println();
-
-    edges = new int[][] {{1, 2}, {2, 3}, {3, 1}};
-    System.out.println("Case 2: graph with cycle, graph: " + Arrays.deepToString(edges));
-    System.out.println("UDG DisjoinSet: " + detectCycle(edges, false)); // DJ
-    System.out.println("DG GraphColoring: " + detectCycle(edges, true)); // GC
-    System.out.println("DG KahnsAlgo: " + KahnsAlgo.detectCycleInDG(edges)); // KA
-    System.out.println();
-
-    edges = new int[][] {{1, 2}, {2, 3}, {1, 3}};
-    System.out.println(
-        "Case 3: Graph with no cycle in DG, but becomes cyclic in UDG, graph: " + Arrays.deepToString(edges));
-    System.out.println("UDG DisjoinSet: " + detectCycle(edges, false)); // DJ
-    System.out.println("DG GraphColoring: " + detectCycle(edges, true)); // GC
-    System.out.println("DG KahnsAlgo: " + KahnsAlgo.detectCycleInDG(edges)); // KA
-    System.out.println();
-
-    edges = new int[][] {{1, 2}, {2, 3}, {3, 3}};
-    System.out.println("Case 4: Graph with a self edge, graph: " + Arrays.deepToString(edges));
-    System.out.println("UDG DisjoinSet: " + detectCycle(edges, false)); // DJ
-    System.out.println("DG GraphColoring: " + detectCycle(edges, true)); // GC
-    System.out.println("DG KahnsAlgo: " + KahnsAlgo.detectCycleInDG(edges)); // KA
-    System.out.println();
-  }
 
   /**
    * This algo works only for DG.
@@ -165,5 +134,36 @@ public class CycleDetectionUtil {
       Queue<Integer> topSort = TopologicalSortUtil.KahnsAlgo.topSortBfs(graph);
       return topSort.size() != graph.size();
     }
+  }
+
+  public static void main(String[] args) {
+    int[][] edges = {{1, 2}, {2, 3}};
+    System.out.println("Case 1: graph with no cycle, graph: " + Arrays.deepToString(edges));
+    System.out.println("UDG DisjoinSet: " + detectCycle(edges, false)); // DJ
+    System.out.println("DG GraphColoring: " + detectCycle(edges, true)); // GC
+    System.out.println("DG KahnsAlgo: " + KahnsAlgo.detectCycleInDG(edges)); // KA
+    System.out.println();
+
+    edges = new int[][] {{1, 2}, {2, 3}, {3, 1}};
+    System.out.println("Case 2: graph with cycle, graph: " + Arrays.deepToString(edges));
+    System.out.println("UDG DisjoinSet: " + detectCycle(edges, false)); // DJ
+    System.out.println("DG GraphColoring: " + detectCycle(edges, true)); // GC
+    System.out.println("DG KahnsAlgo: " + KahnsAlgo.detectCycleInDG(edges)); // KA
+    System.out.println();
+
+    edges = new int[][] {{1, 2}, {2, 3}, {1, 3}};
+    System.out.println(
+        "Case 3: Graph with no cycle in DG, but becomes cyclic in UDG, graph: " + Arrays.deepToString(edges));
+    System.out.println("UDG DisjoinSet: " + detectCycle(edges, false)); // DJ
+    System.out.println("DG GraphColoring: " + detectCycle(edges, true)); // GC
+    System.out.println("DG KahnsAlgo: " + KahnsAlgo.detectCycleInDG(edges)); // KA
+    System.out.println();
+
+    edges = new int[][] {{1, 2}, {2, 3}, {3, 3}};
+    System.out.println("Case 4: Graph with a self edge, graph: " + Arrays.deepToString(edges));
+    System.out.println("UDG DisjoinSet: " + detectCycle(edges, false)); // DJ
+    System.out.println("DG GraphColoring: " + detectCycle(edges, true)); // GC
+    System.out.println("DG KahnsAlgo: " + KahnsAlgo.detectCycleInDG(edges)); // KA
+    System.out.println();
   }
 }

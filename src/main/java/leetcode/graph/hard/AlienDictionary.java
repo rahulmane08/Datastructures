@@ -19,7 +19,7 @@ public class AlienDictionary {
     String[] words = {"wrt", "wrf", "er", "ett", "rftt"};
     AlienDictionary util = new AlienDictionary();
     System.out.println(util.alienOrder(words));
-    words = new String[] {"z", "x"};
+    words = new String[] {"z", "z"};
     System.out.println(util.alienOrder(words));
     words = new String[] {"z", "x", "z"};
     System.out.println(util.alienOrder(words));
@@ -54,9 +54,6 @@ public class AlienDictionary {
           inDegrees.compute(from, (vertex, degree) -> degree == null ? 0 : degree);
         }
       }
-    }
-    if (graph.isEmpty()) {
-      return words[0];
     }
 
     return createAlienOrder(graph, inDegrees);

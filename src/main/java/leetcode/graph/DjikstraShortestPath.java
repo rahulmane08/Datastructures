@@ -37,7 +37,7 @@ public class DjikstraShortestPath {
      */
     int[][] edges = {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}, {5, 2, 1}};
     DjikstraShortestPath util = new DjikstraShortestPath();
-    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, false, 1)));
+    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
 
     /**
      * (4)       (1)
@@ -48,7 +48,7 @@ public class DjikstraShortestPath {
      * (1)
      */
     edges = new int[][] {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}};
-    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, false, 1)));
+    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
 
     /**
      * (4)       (1)
@@ -59,10 +59,10 @@ public class DjikstraShortestPath {
      * (1)
      */
     edges = new int[][] {{1, 2, 4}, {2, 3, 1}, {1, 4, 1}, {4, 5, 1}, {5, 1, 1}};
-    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, false, 1)));
+    System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(util.shortestPath(edges, 1)));
   }
 
-  public Map<Integer, int[]> shortestPath(int[][] edges, boolean directed, Integer source) {
+  public Map<Integer, int[]> shortestPath(int[][] edges, Integer source) {
     WeightedGraph graph = new WeightedGraph(edges, false); // O(V+E)
 
     // Map that records the min distanceAndParent from the source.
