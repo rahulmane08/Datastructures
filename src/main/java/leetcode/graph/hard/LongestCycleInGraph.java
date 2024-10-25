@@ -19,7 +19,7 @@ public class LongestCycleInGraph {
     System.out.println(util.longestCycle(new int[] {1, 2, -1}));
     System.out.println(util.longestCycle(new int[] {3, 3, 4, 2, 5, 3}));
     /**
-     *  1-----|
+     *       1
      *       |
      *  0 -> 3 - > 2
      *       |    |

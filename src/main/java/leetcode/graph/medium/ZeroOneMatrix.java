@@ -36,14 +36,18 @@ public class ZeroOneMatrix {
 
     while (!bfs.isEmpty()) {
       int[] curr = bfs.poll();
-      result[curr[0]][curr[1]] = curr[2];
+      int row = curr[0];
+      int col = curr[1];
+      int dist = curr[2];
+      result[row][col] = dist;
+
       for (int[] move : moves) {
-        int neighborX = curr[0] + move[0];
-        int neighborY = curr[1] + move[1];
+        int neighborX = row + move[0];
+        int neighborY = col + move[1];
         if (isValid(mat, visited, neighborX, neighborY, rows, cols)) {
           // get the neighbor 1's
           visited[neighborX][neighborY] = true;
-          bfs.offer(new int[] {neighborX, neighborY, curr[2] + 1});
+          bfs.offer(new int[] {neighborX, neighborY, dist + 1});
         }
       }
     }
