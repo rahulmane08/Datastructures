@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.Random;
 
 public class RandomizedSet {
-  private final ArrayList<Integer> list;
+  private final ArrayList<Integer> elements;
   private final Map<Integer, Integer> map;
 
   public RandomizedSet() {
-    list = new ArrayList<>();
+    elements = new ArrayList<>();
     map = new HashMap<>();
   }
 
@@ -23,8 +23,8 @@ public class RandomizedSet {
       return false;
     }
 
-    list.add(val);
-    map.put(val, list.size() - 1);
+    elements.add(val);
+    map.put(val, elements.size() - 1);
     return true;
   }
 
@@ -34,9 +34,9 @@ public class RandomizedSet {
     }
 
     int index = map.get(val);
-    list.set(index, list.get(list.size() - 1));
-    map.put(list.get(index), index);
-    list.remove(list.size() - 1);
+    elements.set(index, elements.get(elements.size() - 1));
+    map.put(elements.get(index), index);
+    elements.remove(elements.size() - 1);
     map.remove(val);
 
     return true;
@@ -44,6 +44,6 @@ public class RandomizedSet {
 
   public int getRandom() {
     Random rand = new Random();
-    return list.get(rand.nextInt(list.size()));
+    return elements.get(rand.nextInt(elements.size()));
   }
 }

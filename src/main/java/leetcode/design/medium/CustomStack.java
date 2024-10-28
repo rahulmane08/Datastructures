@@ -1,7 +1,5 @@
 package leetcode.design.medium;
 
-import java.util.Random;
-
 public class CustomStack {
   private int[] elements;
   private final int capacity;

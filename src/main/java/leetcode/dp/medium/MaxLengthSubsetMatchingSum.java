@@ -12,15 +12,14 @@ public class MaxLengthSubsetMatchingSum {
     Map<String, List<Integer>> dp = new HashMap<>();
     List<Integer> result = new ArrayList<>();
     Stack<Integer> stack = new Stack<>();
-    return topDown(nums, target, 0, dp, stack, result);
+    return topDown(nums, target, 0, dp, stack);
   }
 
   private List<Integer> topDown(int[] nums,
                                 int target,
                                 int index,
                                 Map<String, List<Integer>> dp,
-                                Stack<Integer> stack,
-                                List<Integer> result) {
+                                Stack<Integer> stack) {
     if (target == 0) {
       return new ArrayList<>(stack);
     }
@@ -33,10 +32,10 @@ public class MaxLengthSubsetMatchingSum {
       List<Integer> left = new ArrayList<>();
       if (nums[index] <= target) {
         stack.push(nums[index]);
-        left.addAll(topDown(nums, target - nums[index], index + 1, dp, stack, result));
+        left.addAll(topDown(nums, target - nums[index], index + 1, dp, stack));
         stack.pop();
       }
-      List<Integer> right = topDown(nums, target, index + 1, dp, stack, result);
+      List<Integer> right = topDown(nums, target, index + 1, dp, stack);
       if (left.size() > right.size()) {
         dp.put(key, left);
       } else {

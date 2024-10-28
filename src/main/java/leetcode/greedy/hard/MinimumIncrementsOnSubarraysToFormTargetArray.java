@@ -10,10 +10,11 @@ public class MinimumIncrementsOnSubarraysToFormTargetArray {
     int cnt = 0, prev = 0;
 
     for (int i = 0; i < target.length; i++) {
-      if (target[i] > prev) {
-        cnt += (target[i] - prev);
+      int current = target[i];
+      if (current > prev) {
+        cnt += (current - prev);
       }
-      prev = target[i];
+      prev = current;
     }
     return cnt;
   }

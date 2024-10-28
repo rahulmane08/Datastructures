@@ -24,25 +24,6 @@ public class BinaryMinHeap<T> {
   private final List<Node<T>> elements = new ArrayList<>();
   private final Map<T, Integer> positions = new HashMap<>();
 
-  public static void main(String[] args) {
-    BinaryMinHeap heap = new BinaryMinHeap();
-    System.out.println(heap);
-    heap.add("A", 10);
-    System.out.println(heap);
-    heap.add("B", 2);
-    System.out.println(heap);
-    System.out.println("extractMin = " + heap.extractMin());
-    System.out.println(heap);
-    heap.add("C", 2);
-    System.out.println(heap);
-    heap.decreaseKey("A", 9);
-    System.out.println(heap);
-    System.out.println("extractMin = " + heap.extractMin());
-    System.out.println(heap);
-    System.out.println("extractMin = " + heap.extractMin());
-    System.out.println(heap);
-  }
-
   /**
    * T(n) = O(1)
    *
@@ -75,16 +56,17 @@ public class BinaryMinHeap<T> {
    *
    * @param key
    */
-  public void decreaseKey(T key, int decreaseBy) {
+  public void decreaseKey(T key, int decreaseTo) {
     if (!containsKey(key)) {
       return;
     }
     int position = getPosition(key);
-    if (position != -1) {
-      Node<T> elem = elements.get(position);
-      elem.setWeight(elem.getWeight() - decreaseBy);
-      heapifyUp(position);
+    Node<T> elem = elements.get(position);
+    if (elem.weight < decreaseTo) {
+      return;
     }
+    elem.setWeight(decreaseTo);
+    heapifyUp(position);
   }
 
   /**
@@ -147,14 +129,14 @@ public class BinaryMinHeap<T> {
       return;
     }
 
-    int parent = (position - 1) / 2;
-    // compare with parent.
-    if (isValidPosition(parent)) {
+    int parentIdx = (position - 1) / 2;
+    // compare with parentIdx.
+    if (isValidPosition(parentIdx)) {
       Node<T> curr = elements.get(position);
-      Node<T> parentElem = elements.get(parent);
+      Node<T> parentElem = elements.get(parentIdx);
       if (parentElem != null && parentElem.weight > curr.weight) {
-        swap(position, parent);
-        heapifyUp(parent);
+        swap(position, parentIdx);
+        heapifyUp(parentIdx);
       }
     }
   }
@@ -167,19 +149,19 @@ public class BinaryMinHeap<T> {
     Node<T> curr = elements.get(position);
     int left = 2 * position + 1;
     int right = 2 * position + 2;
-    int smallest = position;
+    int smallestIdx = position;
 
     if (isValidPosition(left) && elements.get(left).weight < curr.weight) {
-      smallest = left;
+      smallestIdx = left;
     }
 
     if (isValidPosition(right) && elements.get(right).weight < curr.weight) {
-      smallest = right;
+      smallestIdx = right;
     }
 
-    if (smallest != position) {
-      swap(position, smallest);
-      heapifyDown(smallest);
+    if (smallestIdx != position) {
+      swap(position, smallestIdx);
+      heapifyDown(smallestIdx);
     }
   }
 
@@ -209,5 +191,24 @@ public class BinaryMinHeap<T> {
   private class Node<T> {
     T key;
     int weight;
+  }
+
+  public static void main(String[] args) {
+    BinaryMinHeap heap = new BinaryMinHeap();
+    System.out.println(heap);
+    heap.add("A", 10);
+    System.out.println(heap);
+    heap.add("B", 2);
+    System.out.println(heap);
+    System.out.println("extractMin = " + heap.extractMin());
+    System.out.println(heap);
+    heap.add("C", 2);
+    System.out.println(heap);
+    heap.decreaseKey("A", 9);
+    System.out.println(heap);
+    System.out.println("extractMin = " + heap.extractMin());
+    System.out.println(heap);
+    System.out.println("extractMin = " + heap.extractMin());
+    System.out.println(heap);
   }
 }

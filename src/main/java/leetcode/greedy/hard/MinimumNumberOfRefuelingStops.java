@@ -67,7 +67,7 @@ public class MinimumNumberOfRefuelingStops {
 
       // With the current fuel check if we can reach the next station?
       if (currentMaxDistanceCarCanTravel < nextStationDistFromStart) {
-        // We can reach the next station with current fuel, hence consider the options queued up.
+        // We can NOT reach the next station with current fuel, hence consider the options queued up.
         // Found a station that cant be reached with currentMaxDistanceCarCanTravel.
         // now amongst available options , keep picking the best stations providing max fuel.
         while (!maxPQ.isEmpty() && currentMaxDistanceCarCanTravel < nextStationDistFromStart) {

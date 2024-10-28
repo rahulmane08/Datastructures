@@ -35,10 +35,9 @@ public class MaximumPathSum {
     int rightPathSumIncludingRoot = rightMaxSum + root.val; // 27
     int allPathSumIncludingRoot = root.val + leftMaxSum + rightMaxSum; // 42
     int currentMaxSum =
-        Math.max(root.val,
-            Math.max(allPathSumIncludingRoot, Math.max(leftPathSumIncludingRoot, rightPathSumIncludingRoot))); // 42
+        max(root.val, allPathSumIncludingRoot, leftPathSumIncludingRoot, rightPathSumIncludingRoot); // 42
     maxSum = Math.max(maxSum, currentMaxSum); // 42
-    return Math.max(root.val, Math.max(leftPathSumIncludingRoot, rightPathSumIncludingRoot)); // 35
+    return max(root.val, leftPathSumIncludingRoot, rightPathSumIncludingRoot); // 35
   }
 
   private int max(int... nums) {

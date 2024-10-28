@@ -28,7 +28,7 @@ public class DisjointSet<T> {
    * @param vertex
    */
   public void makeSet(T vertex) {
-    if (!parents.containsKey(vertex)) {
+    if (!contains(vertex)) {
       parents.putIfAbsent(vertex, vertex);
       ranks.putIfAbsent(vertex, 1);
       this.count++;
@@ -44,7 +44,7 @@ public class DisjointSet<T> {
    * @return
    */
   public T findSet(T vertex) {
-    if (!parents.containsKey(vertex)) {
+    if (!contains(vertex)) {
       makeSet(vertex);
       return vertex;
     }
@@ -138,7 +138,7 @@ public class DisjointSet<T> {
     set.union(1, 6);
     System.out.println(set);
 
-    for (int i = 1 ; i <=6; i++) {
+    for (int i = 1; i <= 6; i++) {
       set.findSet(i);
     }
     System.out.println(set);
@@ -146,7 +146,7 @@ public class DisjointSet<T> {
     set.union(4, 8);
     System.out.println(set);
 
-    for (int i = 1 ; i <= 9; i++) {
+    for (int i = 1; i <= 9; i++) {
       set.findSet(i);
     }
     System.out.println(set);

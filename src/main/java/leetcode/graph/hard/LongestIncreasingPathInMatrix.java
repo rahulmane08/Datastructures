@@ -14,18 +14,17 @@ public class LongestIncreasingPathInMatrix {
   }
 
   public int longestIncreasingPath(int[][] matrix) {
-    int length = -1;
     int rows = matrix.length;
     int cols = matrix[0].length;
     int[][] dp = new int[rows][cols];
+
+    int maxLength = 0;
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
-        int vertexLength = compute(matrix, dp, i, j, rows, cols);
-        System.out.printf("[%d, %d]: %d, vertexLength: %d%n", i, j, matrix[i][j], vertexLength);
-        length = Math.max(length, vertexLength);
+        maxLength = Math.max(maxLength, compute(matrix, dp, i, j, rows, cols));
       }
     }
-    return length;
+    return maxLength;
   }
 
   int compute(int[][] matrix, int[][] dp, int row, int col, int rows, int cols) {

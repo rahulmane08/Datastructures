@@ -30,6 +30,6 @@ public class JobScheduling {
 
   public static void main(String[] args) {
     JobScheduling util = new JobScheduling();
-    System.out.println(util.maxProfit(new int[][] {{10, 1}, {15, 3}, {20, 1}}));
+    System.out.println(util.maxProfit(new int[][] {{10, 1}, {15, 2}, {20, 3}}));
   }
 }

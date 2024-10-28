@@ -10,7 +10,8 @@ package leetcode.greedy.medium;
  * Greedy Approach:
  * We use a greedy approach to find the first valid starting point:
  * We maintain a tank variable to track how much gas is left after each station.
- * If at any point the tank becomes negative, it means that starting from the current station isn't possible. We reset the tank to 0 and move the starting station to the next one.
+ * If at any point the tank becomes negative, it means that starting from the current station isn't possible.
+ * We reset the tank to 0 and move the starting station to the next one.
  * Final check:
  * If the total gas is greater than or equal to the total cost, the last value of start will be the correct starting point.
  */

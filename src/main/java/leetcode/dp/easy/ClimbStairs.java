@@ -34,8 +34,8 @@ public class ClimbStairs {
     }
 
     int[] dp = new int[n + 1];
-    dp[0] = 1;
-    dp[1] = 1;
+    dp[0] = 1; // already at the end
+    dp[1] = 1; // 1 way by taking 1 step.
     for (int i = 2; i <= n; i++) {
       dp[i] = dp[i - 1] + dp[i - 2];
     }

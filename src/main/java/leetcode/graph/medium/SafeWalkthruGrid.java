@@ -46,7 +46,7 @@ public class SafeWalkthruGrid {
                                        int rows, int cols,
                                        boolean[][] visited,
                                        Map<String, Boolean> cache) {
-    String key = getKey(row, col, health);
+    String key = getKey(row, col, health); //check in cache that at current cell with given health is it poss to reach end.
     if (!cache.containsKey(key)) {
       visited[row][col] = true;
       if (row == rows - 1 && col == cols - 1) {
@@ -63,7 +63,7 @@ public class SafeWalkthruGrid {
           }
         }
       }
-      visited[row][col] = false;
+      visited[row][col] = false; // backtrack as this node needs to be available thru a different path.
       cache.put(key, false);
     }
     return cache.get(key);
