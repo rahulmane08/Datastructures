@@ -38,26 +38,6 @@ public class SnakeGame {
     placeFood();
   }
 
-  public static void main(String[] args) {
-    SnakeGame snakeGame = new SnakeGame(3, 3, new int[][] {{1, 2}, {0, 1}});
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("R"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("D"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("R"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("U"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("L"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("L"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("L"));
-    System.out.println(snakeGame);
-    System.out.println(snakeGame.move("D"));
-  }
-
   public int move(String direction) {
     if (!alive) {
       return -1;
@@ -146,5 +126,25 @@ public class SnakeGame {
       str.append(String.format("%s,%n", Arrays.toString(grid[i])));
     }
     return str.toString();
+  }
+
+  public static void main(String[] args) {
+    SnakeGame snakeGame = new SnakeGame(3, 3, new int[][] {{1, 2}, {0, 1}});
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("R"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("D"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("R"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("U"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("L"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("L"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("L"));
+    System.out.println(snakeGame);
+    System.out.println(snakeGame.move("D"));
   }
 }
