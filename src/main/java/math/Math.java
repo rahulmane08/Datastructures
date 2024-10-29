@@ -6,10 +6,10 @@ import interfaces.Important;
 public class Math {
   static public int gcd(int a, int b) {
     if (a == 0) {
-      return b;
+      return b; // Every number is a divisor of 0.
     }
     if (a == 1) {
-      return a;
+      return a; // 1 is a divisor of every number.
     }
     if (a > b) {
       return gcd(a % b, b);

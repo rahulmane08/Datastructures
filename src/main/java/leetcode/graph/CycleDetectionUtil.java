@@ -78,7 +78,7 @@ public class CycleDetectionUtil {
   public static class GraphColoringUtil {
     public static boolean detectCycleInDG(int[][] edges) {
       Graph graph = new Graph(edges, true);
-      HashSet<Integer> whiteSet = new HashSet<>();
+      HashSet<Integer> whiteSet = new HashSet<>(); // not really needed
       HashSet<Integer> greySet = new HashSet<>();
       HashSet<Integer> blackSet = new HashSet<>();
 

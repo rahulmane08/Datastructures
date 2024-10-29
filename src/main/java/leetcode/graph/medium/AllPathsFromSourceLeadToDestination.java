@@ -66,7 +66,7 @@ public class AllPathsFromSourceLeadToDestination {
       leadsToDestination = (curr == destination);
     } else {
       for (int neighbor : graph.get(curr)) {
-        //
+
         if (completed.contains(neighbor)) {
           leadsToDestination = true; // found a node which has a path to destination.
           break;

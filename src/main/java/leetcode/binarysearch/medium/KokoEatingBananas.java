@@ -28,9 +28,11 @@ public class KokoEatingBananas {
       int mid = (low + high) >>> 1;
       int totalHours = hoursToEatBanana(piles, mid);
       if (totalHours <= h) {
+        // this means there can be a better lower speed available on the left.
         minSpeed = mid;
         high = mid - 1;
       } else {
+        // current eating speed is breaching the deadline "h", so move to right for a higher mid.
         low = mid + 1;
       }
     }

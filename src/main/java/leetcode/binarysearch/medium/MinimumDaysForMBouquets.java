@@ -16,7 +16,8 @@ import java.util.Arrays;
  * <p>
  * Input: bloomDay = [1,10,3,10,2], m = 3, k = 2
  * Output: -1
- * Explanation: We need 3 bouquets each has 2 flowers, that means we need 6 flowers. We only have 5 flowers so it is impossible to get the needed bouquets and we return -1.
+ * Explanation: We need 3 bouquets each has 2 flowers, that means we need 6 flowers.
+ * We only have 5 flowers so it is impossible to get the needed bouquets and we return -1.
  * Example 3:
  * <p>
  * Input: bloomDay = [7,7,7,7,12,7,7], m = 2, k = 3
@@ -24,7 +25,8 @@ import java.util.Arrays;
  * Explanation: We need 2 bouquets each should have 3 flowers.
  * Here is the garden after the 7 and 12 days:
  * After day 7: [x, x, x, x, _, x, x]
- * We can make one bouquet of the first three flowers that bloomed. We cannot make another bouquet from the last three flowers that bloomed because they are not adjacent.
+ * We can make one bouquet of the first three flowers that bloomed.
+ * We cannot make another bouquet from the last three flowers that bloomed because they are not adjacent.
  * After day 12: [x, x, x, x, x, x, x]
  * It is obvious that we can make two bouquets in different ways.
  */
@@ -48,7 +50,8 @@ public class MinimumDaysForMBouquets {
     int minDays = -1;
     while (low <= high) {
       int mid = (low + high) >>> 1;
-      if (canBloom(bloomDay, m, k, mid)) {
+      if (canFormBouquets(bloomDay, m, k, mid)) {
+        // For the current day we can form m bouquets, greedily check for the min such day.
         minDays = mid;
         high = mid - 1;
       } else {
@@ -58,7 +61,7 @@ public class MinimumDaysForMBouquets {
     return minDays;
   }
 
-  private boolean canBloom(int[] bloomDay, int m, int k, int day) {
+  private boolean canFormBouquets(int[] bloomDay, int m, int k, int day) {
     for (int i = 0, j = 0; i < bloomDay.length; i++) {
       if (bloomDay[i] <= day) {
         j++;

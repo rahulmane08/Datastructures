@@ -25,6 +25,6 @@ public class NthRoot {
 
   public static void main(String[] args) {
     NthRoot util = new NthRoot();
-    System.out.println(util.nthRoot(64, 4));
+    System.out.println(util.nthRoot(64, 3));
   }
 }

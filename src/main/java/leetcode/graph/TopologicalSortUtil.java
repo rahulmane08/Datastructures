@@ -62,15 +62,15 @@ public class TopologicalSortUtil {
       Map<Integer, Integer> inDegrees = graph.getInDegrees();
       // get the indegree = 0 vertexes.
       Map<Integer, Integer> zeroInDegreeMap = vertexesWithInDegree(graph, 0);
-      Queue<Integer> traversalQueue = new LinkedList<>(zeroInDegreeMap.keySet());
+      Queue<Integer> bfs = new LinkedList<>(zeroInDegreeMap.keySet());
       Queue<Integer> topSort = new LinkedList<>();
-      while (!traversalQueue.isEmpty()) {
-        Integer current = traversalQueue.poll();
+      while (!bfs.isEmpty()) {
+        Integer current = bfs.poll();
         // visit neighbors reduce indegree by 1.
         for (Integer neighbor : graph.getNeighbors(current)) {
           Integer neighborInDegree = inDegrees.compute(neighbor, (v, degree) -> degree - 1);
           if (neighborInDegree == 0) {
-            traversalQueue.offer(neighbor);
+            bfs.offer(neighbor);
           }
         }
         topSort.offer(current);

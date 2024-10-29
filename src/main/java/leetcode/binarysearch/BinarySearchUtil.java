@@ -87,6 +87,58 @@ public class BinarySearchUtil {
     }
   }
 
+  public static class FindPivotIndexUtil {
+    public int findPivotIndex(int[] nums) {
+      int low = 0;
+      int high = nums.length - 1;
+      while (low <= high && nums[low] > nums[high]) {
+        int mid = (low + high) >>> 1;
+        if (isLeftPivot(nums, mid)) {
+          return mid;
+        }
+        if (isRightPivot(nums, mid)) {
+          return mid + 1;
+        }
+
+        if (nums[mid + 1] < nums[high]) {
+          // right space is sorted.
+          high = mid - 1;
+        } else {
+          low = mid + 1;
+        }
+      }
+      return -1;
+    }
+
+    public int findPivotIndexRecursively(int[] nums, int low, int high) {
+      if (low <= high && nums[low] > nums[high]) {
+        int mid = (low + high) >>> 1;
+        if (isLeftPivot(nums, mid)) {
+          return mid;
+        }
+        if (isRightPivot(nums, mid)) {
+          return mid + 1;
+        }
+
+        int left = findPivotIndexRecursively(nums, low, mid - 1);
+        int right = findPivotIndexRecursively(nums, mid + 1, high);
+        if (left == -1 && right == -1) {
+          return mid;
+        }
+        return left != -1 ? left : right;
+      }
+      return -1;
+    }
+
+    private boolean isRightPivot(int[] nums, int index) {
+      return nums[index] > nums[index + 1];
+    }
+
+    private static boolean isLeftPivot(int[] nums, int index) {
+      return nums[index - 1] > nums[index];
+    }
+  }
+
   public static void main(String[] args) {
     int[] nums = new int[] {1, 1, 1, 3, 5, 8, 15, 19, 19, 19};
     System.out.printf("array : %s, length = %s%n", Arrays.toString(nums), nums.length);
