@@ -38,13 +38,14 @@ public class TaskScheduler {
     if (n == 0) {
       return tasks.length;
     }
+
+    // create a tasks PQ with the
+    Comparator<Task> comparator = Comparator.comparing((Task t) -> t.freq);
+    PriorityQueue<Task> maxHeap = new PriorityQueue<>(comparator.reversed());
     Map<Character, Integer> frequencies = new HashMap<>();
     for (char c : tasks) {
       frequencies.compute(c, (task, freq) -> freq == null ? 1 : freq + 1);
     }
-    Comparator<Task> comparator = Comparator.comparing((Task t) -> t.freq);
-    PriorityQueue<Task> maxHeap = new PriorityQueue<>(comparator.reversed());
-    Queue<Task> waitQ = new LinkedList<>();
     for (Map.Entry<Character, Integer> entry : frequencies.entrySet()) {
       Task task = new Task();
       task.scheduleTime = 0;
@@ -52,6 +53,8 @@ public class TaskScheduler {
       task.id = entry.getKey();
       maxHeap.offer(task);
     }
+
+    Queue<Task> waitQ = new LinkedList<>(); // store the waiting tasks
     int currentTime = 0;
     while (!maxHeap.isEmpty() || !waitQ.isEmpty()) {
       currentTime++;

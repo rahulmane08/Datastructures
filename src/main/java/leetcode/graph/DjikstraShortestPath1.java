@@ -64,6 +64,7 @@ public class DjikstraShortestPath1 {
     // add the source in PQ and update its distance as 0 and self reference as parent.
     Node start = shortestPathInfo.compute(source, (v, vd) -> {
       vd.weightFromSource = 0;
+      vd.parent = source;
       return vd;
     });
     minHeap.offer(start);
