@@ -27,7 +27,6 @@ public class Atoi {
   public int myAtoi(String s) {
     int n = s.length();
     int sign = 1;
-    int result = 0;
     int i = 0;
     for (; i < n && s.charAt(i) == ' '; i++) ; // skip blanks
 
@@ -39,6 +38,7 @@ public class Atoi {
       i++;
     }
 
+    int result = 0;
     int maxValue = Integer.MAX_VALUE / 10;
     int maxLSD = Integer.MAX_VALUE % 10;
 

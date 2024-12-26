@@ -9,6 +9,12 @@ public class Power {
     return power;
   }
 
+  /**
+   * a = 1, b = 2
+   * @param x
+   * @param n
+   * @return
+   */
   private double power3(double x, int n) {
     if (n == 0) {
       return 1;

@@ -5,6 +5,9 @@ public class Stack<T> {
   private int top;
 
   public Stack(int capacity) {
+    if (capacity < 1) {
+      throw new IllegalArgumentException("capacity < 1");
+    }
     array = new Object[capacity];
     top = -1;
   }

@@ -2,6 +2,7 @@ package leetcode.backtracking.medium;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
@@ -19,7 +20,7 @@ import java.util.Stack;
 public class CombinationSum2 {
   public static void main(String[] args) {
     CombinationSum2 util = new CombinationSum2();
-    System.out.println(util.combinationSum(new int[] {2, 3, 6, 7}, 7));
+    System.out.println(util.combinationSum(new int[] {10, 1, 2, 7, 6, 1, 5}, 8));
   }
 
   /**
@@ -33,7 +34,8 @@ public class CombinationSum2 {
   public List<List<Integer>> combinationSum(int[] candidates, int target) {
     Arrays.sort(candidates);
     List<List<Integer>> output = new ArrayList<>();
-    combinationSum(candidates, output, new Stack<>(), 0, target);
+    // combinationSum(candidates, output, new Stack<>(), 0, target);
+    combinationSum2(candidates, output, new HashSet<>(), "", 0, target);
     return output;
   }
 
@@ -53,5 +55,32 @@ public class CombinationSum2 {
     combinationSum(candidates, output, current, index, sum - candidates[index]); // include curr
     current.pop(); // backtrack
     combinationSum(candidates, output, current, index + 1, sum); // exclude curr
+  }
+
+  private void combinationSum2(int[] candidates,
+                               List<List<Integer>> output,
+                               HashSet<String> answers,
+                               String answer,
+                               int index,
+                               int sum) {
+    if (sum == 0 && !answers.contains(answer)) {
+      answers.add(answer);
+      String[] digits = answer.split(",");
+      List<Integer> solution = new ArrayList<>();
+      for (int i = 0; i < digits.length; i++) {
+        solution.add(Integer.parseInt(digits[i]));
+      }
+      output.add(solution);
+    }
+
+    if (sum < 0 || index == candidates.length) {
+      return;
+    }
+
+    // include
+    combinationSum2(candidates, output, answers,
+        answer + candidates[index] + ",", index + 1, sum - candidates[index]);
+    // exclude
+    combinationSum2(candidates, output, answers, answer, index + 1, sum);
   }
 }
