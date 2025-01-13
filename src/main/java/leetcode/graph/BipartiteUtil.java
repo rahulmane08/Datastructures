@@ -53,9 +53,10 @@ public class BipartiteUtil {
   }
 
   public boolean isBipartiteUsingBfs(Graph graph, Integer vertex, Map<Integer, Integer> vertexColors) {
+    vertexColors.put(vertex, 0);
+
     Queue<Integer> bfs = new LinkedList<>();
     bfs.offer(vertex);
-    vertexColors.put(vertex, 0);
     while (!bfs.isEmpty()) {
       Integer curr = bfs.poll();
       Integer color = vertexColors.get(curr);
