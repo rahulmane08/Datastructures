@@ -1,13 +1,15 @@
 package leetcode.backtracking.hard;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NQueens {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws JsonProcessingException {
     NQueens util = new NQueens();
-    System.out.println(util.solveNQueens(4));
+    System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(util.solveNQueens(4)));
   }
 
   public List<List<String>> solveNQueens(int n) {
@@ -39,9 +41,9 @@ public class NQueens {
       StringBuilder row = new StringBuilder();
       for (int j = 0; j < n; j++) {
         if (board[i][j] == 1) {
-          row.append("Q");
+          row.append("Q ");
         } else {
-          row.append(".");
+          row.append("X ");
         }
       }
       result.add(row.toString());

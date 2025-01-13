@@ -65,9 +65,10 @@ public class GraphTraversal {
   }
 
   public static void bfs(Graph graph, Integer vertex, HashSet<Integer> visited) {
+    visited.add(vertex);
+
     Queue<Integer> bfs = new LinkedList<>();
     bfs.offer(vertex);
-    visited.add(vertex);
     while (!bfs.isEmpty()) {
       Integer curr = bfs.poll();
       for (Integer neighbor : graph.getNeighbors(curr)) {

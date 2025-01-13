@@ -3,8 +3,8 @@ package leetcode.trees.medium;
 import leetcode.trees.TreeNode;
 
 /**
- *        5
- *    3         8
+ * 5
+ * 3         8
  * 1    4    7      10
  * <p>
  * p = 3, min(3.right) = 4
@@ -19,14 +19,13 @@ public class InorderSuccessorBst {
       return null;
     }
 
-    if (root == p) {
-      return min(p.right);
-    }
     TreeNode successor = null;
     if (p.val < root.val) {
       successor = inorderSuccessor(root.left, p);
-    } else {
+    } else if (p.val > root.val) {
       successor = inorderSuccessor(root.right, p);
+    } else {
+      successor = min(p.right);
     }
 
     if (successor == null && root.val > p.val) {

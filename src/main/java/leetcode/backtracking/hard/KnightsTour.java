@@ -15,7 +15,7 @@ public class KnightsTour {
 
   public static void main(String[] args) {
     KnightsTour util = new KnightsTour();
-    System.out.println(Arrays.deepToString(util.tourOfKnight(5, 5, 0, 0)));
+    System.out.println(Arrays.deepToString(util.tourOfKnight(3, 3, 0, 0)));
   }
 
   public int[][] tourOfKnight(int m, int n, int r, int c) {

@@ -230,16 +230,7 @@ public class TreeUtils {
     if (leftLca != null && rightLca != null) {
       return root;
     }
-
-    // Only left key present, its the LCA
-    if (leftLca != null) {
-      return leftLca;
-    }
-
-    // Only right key present, its the LCA
-    return rightLca;
-
-    // both keys absent.
+    return leftLca != null ? leftLca : rightLca;
   }
 
   /**
